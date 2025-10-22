@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="author" content="Connor Lau" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Star Chef</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+  href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Asap+Condensed:wght@200;300;400&family=Birthstone&display=swap"
+  rel="stylesheet"
+/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <header class="main-header">
+      <nav class="main-nav">
+        <a href="index.html" class="logo-link">
+          <img src="graphics/logo.jpeg" alt="Star Chef Logo" />
+        </a>
+        <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="menu.html">MENU</a></li>
+          <li><a href="reservation.html">RESERVATION</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="splash-image">
+      <img src="graphics/menuSplash.jpg" alt="blackgound" />
+      <div class="menu-splash-text">
+        <h1>Menus</h1>
+        <p class="subtitle">---------</p>
+        <p class="subtitle">Explore from our finest picks</p>
+      </div>
+    </div>
+    <main>
+    
+    <div class="menu-nav"> 
+        <a href="#Popular">POPULAR</a>
+        <a href="#Specials">SPECIALS</a>
+        <a href="#Sides">SIDES</a>
+        <a href="#Noodles">NOODLES</a>
+        <a href="#Rice">RICE</a>
+        <a href="#Soups">SOUPS</a>
+        <a href="#Comfort">COMFORT</a>
+        <a href="#Deserts">DESERT</a>
+        <a href="#Beverages">BEVERAGES</a>
+     
+
+    </div>
+    <div class="temp">
+        
+    </div>
+    
+    <button id="submitBttn" aria-label="submit">SUBMIT</button>
+    <button id="increaseBttn" aria-label="add">+</button>
+    <button id="decreaseBttn" aria-label="subtract">-</button>
+    <p id="quantity-display">0</p>
+    
+    <pre id="cart-output">Cart is empty.</pre>
+    
+    
+    </main>
+
+    
+    
+    <script type="module" src="main.js"></script>
+    <script type="module" src="animation.js"></script>
+    
+  </body>
+</html>

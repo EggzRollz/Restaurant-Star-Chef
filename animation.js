@@ -1,78 +1,69 @@
 console.log("The script is running!");
-/*https://www.youtube.com/watch?v=QRrPE9aj3wI*/
-/*
-let lastScrollTop = 0;
-const header = document.querySelector('.gallery');
 
-if (window.pageYOffset <= 100) {
-    header.style.opacity = '0';
-} else {
-    header.style.opacity = '1';
-}
-window.addEventListener('scroll', function() {
-    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    if (scrollTop <= 100) {
-        
-        header.style.opacity  = '0';
-    } else if (scrollTop > lastScrollTop) {
-        header.style.opacity  = '1';
-       
-    } else {
-        
-        header.style.opacity  = '1';
-        
-    }
-    
-    lastScrollTop = scrollTop;
-});
-*/
 const gallery = document.querySelector('.gallery');
 const images = document.querySelectorAll('.gallery img');
-const texts = document.querySelectorAll('.minor-splash-1-quote,.minor-splash-2-quote'); 
+const texts = document.querySelectorAll('.minor-splash-1-quote,.minor-splash-2-quote');
+const navLinks = document.querySelector('.nav-links');
+const menuToggle = document.querySelector('.menu-toggle');
+const overlay = document.querySelector('.overlay');
 
+// Mobile menu - check elements exist first
+if (menuToggle && navLinks && overlay) {
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuToggle.classList.remove('active');
+      overlay.classList.remove('active');
+    });
+  });
 
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    overlay.classList.toggle('active');
+  });
+  
+  overlay.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+}
+
+// Show everything instantly on load (prevents flicker)
+if (images.length > 0) {
+  images.forEach(img => img.classList.add('visible'));
+}
+if (texts.length > 0) {
+  texts.forEach(el => el.classList.add('visible'));
+}
+
+// Helper function
 function isInView(el) {
+  if (!el) return false;
   const rect = el.getBoundingClientRect();
   return rect.top <= window.innerHeight && rect.bottom >= 0;
 }
 
-function revealImages() {
-  if (isInView(gallery)) {
-    images.forEach((img, index) => {
-      setTimeout(() => {
+// Scroll animations only if gallery exists
+if (gallery && images.length > 0) {
+  function revealImages() {
+    if (isInView(gallery)) {
+      images.forEach(img => {
         img.classList.add('visible');
-      }, index * 250);
-    });
-  } else {
-    images.forEach(img => {
-      img.classList.remove('visible');
+      });
+    }
+  }
+
+  function revealText() {
+    texts.forEach(el => {
+      if (isInView(el)) {
+        el.classList.add('visible');
+      }
     });
   }
-}
 
-function revealText() {
-  texts.forEach(el => {
-    if (isInView(el)) {
-      el.classList.add('visible');
-    } else {
-      el.classList.remove('visible');
-    }
+  window.addEventListener('scroll', () => {
+    revealImages();
+    revealText();
   });
 }
-
-window.addEventListener('scroll', () => {
-  revealImages();
-  revealText();
-});
-window.addEventListener('load', () => {
-  revealImages();
-  revealText();
-});
-
-const toggle = document.getElementById('menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
-
-  toggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-  });
