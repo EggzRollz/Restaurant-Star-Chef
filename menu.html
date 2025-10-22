@@ -42,16 +42,24 @@
     </div>
     <main>
     
-    <div class="menu-nav"> 
-        <a href="#Popular">POPULAR</a>
-        <a href="#Specials">SPECIALS</a>
-        <a href="#Sides">SIDES</a>
-        <a href="#Noodles">NOODLES</a>
-        <a href="#Rice">RICE</a>
-        <a href="#Soups">SOUPS</a>
-        <a href="#Comfort">COMFORT</a>
-        <a href="#Deserts">DESERT</a>
-        <a href="#Beverages">BEVERAGES</a>
+    <div class="menu-nav-wrapper">
+    <div id="menuNav" class="menu-nav"> 
+      <ul>
+  <li><a href="#All" data-category="All">ALL</a></li>
+  <li><a href="#Popular" data-category="Popular">POPULAR</a></li>
+  <li><a href="#Specials" data-category="Specials">SPECIALS</a></li>
+  <li><a href="#Noodles" data-category="Noodles">FRIED NOODLES</a></li>
+  <li><a href="#Rice" data-category="Rice">RICE</a></li>
+  <li><a href="#StirFry" data-category="StirFry">STIR FRY</a></li>
+  <li><a href="#Soup" data-category="Soup">SOUP/NOODLES</a></li>
+  <li><a href="#Sides" data-category="Sides">SIDES</a></li>
+  <li><a href="#Desserts" data-category="Desserts">DESSERTS</a></li> 
+  <li><a href="#Congee" data-category="Congee">CONGEE</a></li>
+  <li><a href="#Beverages" data-category="Beverages">BEVERAGES</a></li>
+</ul>
+      
+    </div>
+    <div class="menu-placeholder"></div>
      
 
     </div>
@@ -65,7 +73,7 @@
     <p id="quantity-display">0</p>
     
     <pre id="cart-output">Cart is empty.</pre>
-    
+    <div id="menu-items-container"></div>
     
     </main>
 

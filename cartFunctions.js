@@ -1,3 +1,4 @@
+import { mergeSort } from './algorithms.js';
 export class Cart {
   
   constructor() {
@@ -35,8 +36,6 @@ export class Cart {
   } 
 
 
-  removeItem(){
-    
-  }
+  
 
 } 

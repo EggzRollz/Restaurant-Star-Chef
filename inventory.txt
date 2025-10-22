@@ -1,2 +1,98 @@
-Chicken,12.35
-Apple,10
+Chicken Chow Mein, 12.99, Noodles,Popular
+Beef Lo Mein, 13.50, Noodles,StirFry
+Shrimp Pad Thai, 14.75, Noodles,Specials
+Vegetable Lo Mein, 11.25, Noodles,Vegetarian
+Singapore Noodles, 13.00, Noodles,Spicy
+Beef Fried Rice, 12.50, Rice,Popular
+Chicken Fried Rice, 11.75, Rice,Popular
+Shrimp Fried Rice, 13.50, Rice,Seafood
+Vegetable Fried Rice, 10.25, Rice,Vegetarian
+Pineapple Fried Rice, 12.00, Rice,Specials
+Kung Pao Chicken, 14.25, StirFry,Spicy
+Mongolian Beef, 15.00, StirFry,Popular
+Sweet and Sour Pork, 13.00, StirFry,Specials
+General Tso's Chicken, 14.50, StirFry,Popular
+Spicy Mapo Tofu, 12.00, StirFry,Vegetarian,Spicy
+Hot and Sour Soup, 6.50, Soup,Popular
+Wonton Soup, 6.00, Soup,Popular
+Egg Drop Soup, 5.75, Soup,Popular
+Chicken Noodle Soup, 7.50, Soup,Popular
+Seafood Tofu Soup, 8.25, Soup,Seafood
+Steamed Dumplings (6), 7.25, Sides,Popular
+Spring Rolls (2), 5.00, Sides,Popular
+BBQ Pork Buns, 6.50, Sides,Popular
+Fried Wontons, 6.00, Sides
+Edamame, 5.50, Sides,Vegetarian
+Mango Pudding, 4.25, Desserts,Popular
+Egg Custard Tart, 3.50, Desserts,Popular
+Sesame Balls, 4.00, Desserts,Popular
+Red Bean Soup, 4.50, Desserts,Vegetarian
+Almond Jelly, 4.25, Desserts
+Chicken Congee, 7.50, Congee,Popular
+Pork Congee, 7.00, Congee,Popular
+Century Egg Congee, 8.00, Congee,Specials
+Seafood Congee, 9.50, Congee,Seafood
+Plain Congee, 6.00, Congee,Vegetarian
+Jasmine Tea, 2.50, Beverages,Popular
+Iced Lemon Tea, 3.00, Beverages,Popular,Cold
+Hot Green Tea, 2.75, Beverages
+Lychee Soda, 3.50, Beverages,Cold
+Tsingtao Beer, 5.50, Beverages,Alcohol
+Szechuan Beef, 15.00, StirFry,Spicy
+Crispy Duck, 18.00, Specials,Popular
+Salt and Pepper Squid, 14.50, Specials,Seafood
+Beef Brisket Noodle Soup, 14.00, Soup,Noodles,Popular
+Fish Ball Noodle Soup, 12.50, Soup,Noodles,Seafood
+Vegetable Stir Fry, 11.00, StirFry,Vegetarian
+Char Siu Pork, 13.75, Specials,Popular
+Honey Walnut Shrimp, 16.00, Specials,Seafood
+Mapo Eggplant, 11.25, StirFry,Vegetarian,Spicy
+Chicken Satay Skewers, 9.50, Sides
+Fried Tofu, 7.25, Sides,Vegetarian
+Chinese Broccoli with Oyster Sauce, 8.00, Sides,Vegetarian
+Sesame Chicken, 13.50, Specials,Popular
+Orange Chicken, 14.00, Specials,Popular
+Beef with Broccoli, 14.25, StirFry,Popular
+Shrimp with Lobster Sauce, 16.50, Specials,Seafood
+Pork Egg Foo Young, 12.00, Specials
+Cantonese Roast Pork, 14.00, Specials
+Chinese BBQ Ribs, 17.00, Specials
+Pork Dumplings (6), 7.00, Sides,Popular
+Vegetable Spring Rolls (2), 5.50, Sides,Vegetarian
+Miso Soup, 4.00, Soup,Vegetarian
+Seaweed Soup, 4.50, Soup,Vegetarian
+Lotus Leaf Rice, 13.00, Rice,Specials
+Sticky Rice in Lotus Leaf, 13.50, Rice,Specials
+Sweet Red Bean Pancakes, 5.00, Desserts
+Mochi Ice Cream, 5.50, Desserts
+Fried Banana, 4.75, Desserts
+Chinese Donuts, 4.50, Desserts
+Lychee Martini, 8.00, Beverages,Alcohol
+Plum Wine, 7.50, Beverages,Alcohol
+Bubble Milk Tea, 4.50, Beverages,Popular
+Coconut Juice, 3.75, Beverages,Cold
+Chinese Herbal Tea, 3.00, Beverages,Hot
+Steamed Fish with Ginger, 16.00, Specials,Seafood
+Salted Egg Yolk Prawns, 17.50, Specials,Seafood
+Braised Tofu with Vegetables, 11.50, StirFry,Vegetarian
+Peking Duck, 20.00, Specials,Popular
+Chicken with Cashew Nuts, 14.50, StirFry
+Beef with Snow Peas, 15.00, StirFry
+Shrimp with Garlic Sauce, 16.00, StirFry,Seafood
+Vegetable Fried Rice, 10.50, Rice,Vegetarian
+XO Sauce Fried Rice, 13.00, Rice,Specials
+Hot Pot, 18.00, Specials
+Lamb Skewers, 14.00, Specials
+Sesame Noodles, 11.00, Noodles,Vegetarian
+Dan Dan Noodles, 12.00, Noodles,Spicy
+Sichuan Cold Noodles, 11.50, Noodles,Spicy
+Soy Sauce Chicken, 13.00, Specials
+Beef Tendon Noodles, 15.50, Soup,Noodles
+Fish Maw Soup, 18.00, Soup,Seafood
+Chicken and Corn Soup, 7.00, Soup
+Fried Rice Cake, 12.00, Rice
+Tofu Skin Rolls, 8.50, Sides,Vegetarian
+Crab Rangoon, 7.50, Sides
+Eggplant with Garlic Sauce, 11.00, StirFry,Vegetarian,Spicy
+Boba Tea, 4.50, Beverages,Popular
+Hot Chocolate, 3.00, Beverages

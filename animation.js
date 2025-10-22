@@ -29,41 +29,81 @@ if (menuToggle && navLinks && overlay) {
   });
 }
 
-// Show everything instantly on load (prevents flicker)
-if (images.length > 0) {
-  images.forEach(img => img.classList.add('visible'));
-}
-if (texts.length > 0) {
-  texts.forEach(el => el.classList.add('visible'));
-}
 
-// Helper function
 function isInView(el) {
   if (!el) return false;
   const rect = el.getBoundingClientRect();
-  return rect.top <= window.innerHeight && rect.bottom >= 0;
+  const inView = rect.top <= window.innerHeight && rect.bottom >= 0;
+  return inView;
 }
 
-// Scroll animations only if gallery exists
-if (gallery && images.length > 0) {
-  function revealImages() {
-    if (isInView(gallery)) {
-      images.forEach(img => {
-        img.classList.add('visible');
-      });
-    }
-  }
 
-  function revealText() {
-    texts.forEach(el => {
-      if (isInView(el)) {
-        el.classList.add('visible');
+function revealImages() {
+  images.forEach((img, index) => {
+    if (isInView(img)) {
+      if (!img.classList.contains('visible')) {
+        setTimeout(() => {
+          img.classList.add('visible');
+        }, index * 300);
       }
-    });
+    } else {
+      
+      img.classList.remove('visible');
+    }
+  });
+}
+
+function revealText() {
+  texts.forEach((el, index) => {
+    if (isInView(el)) {
+      if (!el.classList.contains('visible')) {
+        
+        setTimeout(() => {
+          el.classList.add('visible');
+        }, index * 300);
+      }
+    } else {
+      el.classList.remove('visible');
+    }
+  });
+}
+
+window.addEventListener('load', () => {
+  revealImages();
+  revealText();
+});
+
+window.addEventListener('scroll', () => {
+  revealImages();
+  revealText();
+});
+
+const menuNav = document.querySelector('.menu-nav');
+const wrapper = document.querySelector('.menu-nav-wrapper');
+const placeholder = document.querySelector('.menu-placeholder');
+
+if (menuNav && wrapper && placeholder) {
+  let stickyOffset;
+  
+  function updateOffset() {
+    const isMobile = window.innerWidth <= 480;
+    const headerHeight = isMobile ? 40 : 80;
+    const menuTop = menuNav.getBoundingClientRect().top + window.scrollY;
+    stickyOffset = menuTop - headerHeight;
+    console.log('Menu top:', menuTop, 'Header:', headerHeight, 'Offset:', stickyOffset);
   }
+  
+  window.addEventListener('load', updateOffset);
+  window.addEventListener('resize', updateOffset);
+  updateOffset();
 
   window.addEventListener('scroll', () => {
-    revealImages();
-    revealText();
+    if (window.scrollY >= stickyOffset) {
+      menuNav.classList.add('fixed');
+      placeholder.classList.add('active');
+    } else {
+      menuNav.classList.remove('fixed');
+      placeholder.classList.remove('active');
+    }
   });
 }

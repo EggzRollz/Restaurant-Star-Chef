@@ -439,6 +439,10 @@ p{
     color: white;
     
 }
+.menu-nav-wrapper {
+  padding-top: 80px; 
+  position: relative;
+}
 
 .menu-splash-text {
     position: absolute;
@@ -449,6 +453,7 @@ p{
     text-align: center;
     z-index: 10;
     width: 80%;
+    
 }
 .menu-splash-text h1 {
     font-family: "Great Vibes", cursive;
@@ -468,21 +473,34 @@ p{
 
 
 .menu-nav {
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    justify-content: center;
-    margin-top:200px;
-    margin-bottom:100px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 20%;
-    color:white;
-    list-style : none;
+  width: 100%;
+  overflow-x: auto;
+
+  margin-bottom:100px;
+  background:transparent; 
+  padding: 10px 0;
+  transition: all 0.3s ease;
+}
+.menu-nav ul {
+  display: flex;
+  gap: 70px; 
+  padding: 0 20px;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap; 
+  padding-bottom: 20px;
+}
+.menu-nav li {
+  flex: 0 0 auto;
+}
+.menu-nav a:hover,
+.menu-nav a:focus {
+  color: #A2956B; /* tomato accent on hover */
+  outline: none;
 }
 .menu-nav a{
     color: rgb(255, 255, 255);
+    margin-right:20px;
     text-decoration: none;
     font-family: "Noto Sans Display", sans-serif;
     font-optical-sizing: auto;
@@ -491,4 +509,70 @@ p{
     font-variation-settings:
     "wdth" 100;
 }
+.menu-nav::-webkit-scrollbar {
+  height: 6px;
+}
 
+.menu-nav::-webkit-scrollbar-thumb {  
+  background-color: #A2956B;
+  border-radius: 20px;
+}
+
+.menu-nav.fixed {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  background-color: #000000;
+  z-index: 10000;
+  padding-bottom: 20px; 
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+
+@media (max-width: 480px) {
+    .menu-nav.fixed {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background-color: #000000;
+  z-index: 20;
+  padding-top:20px;
+  padding-bottom: 20px; 
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+}
+.menu-placeholder {
+  display: none;
+}
+
+.menu-placeholder.active {
+  display: block;
+  height: 170px;
+}
+.menu-item{
+    color: rgb(255, 255, 255);
+    margin-right:20px;
+    text-decoration: none;
+    font-family: "Noto Sans Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: thin 100;
+    font-variation-settings:
+    "wdth" 100;
+}
+.menu-group{
+    color: rgb(255, 255, 255);
+    margin-right:20px;
+    text-decoration: none;
+    font-family: "Noto Sans Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: thin 100;
+    font-variation-settings:
+    "wdth" 100;
+}
