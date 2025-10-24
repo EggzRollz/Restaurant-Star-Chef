@@ -27,25 +27,32 @@ fetch('inventory.txt')
   .then(text => {         
     inventory = text.trim().split(/\r?\n/).map(line => {
       const parts = line.split(",");
-      const nameRaw = parts[0];
-      const priceStrRaw = parts[1];
-      const tagsRaw = parts.slice(2, -1); // all but last
-      const imageRaw = parts[parts.length - 1]?.trim();
-      const hasSizeOption = tagsRaw.includes("Size");
-      const hasHotColdOption = tagsRaw.includes("HotCold");
+      const name = parts[0].trim();
+      const price = parseFloat(parts[1].trim().replace(/^\$/, ''));
+      const tags = [];
+      const options = {};
+      //const img = null;
+      
+      for(let i = 2; i < parts.length; i++){
+        const part = parts[i].trim();
+        if (part.includes(':')) {
+          const [optName, optValues] = part.split(':');
+          options[optName.trim()] = optValues.split('|').map(v => {
+          const match = v.match(/(.+?)(\(([\d.]+)\))?$/); // capture name and optional price
+          return {
+            name: match[1].trim(),
+            price: match[3] ? parseFloat(match[3]) : price // fallback to base price
+            };
+          });
+        } else {
+            tags.push(part);
+          }
+        }
 
-
-      return {
-        name: nameRaw.trim(),
-        price: parseFloat(priceStrRaw.trim().replace(/^\$/, '')),
-        tags: tagsRaw.filter(tag => tag !== "Size" && tag !== "HotCold").map(tag => tag.trim()),
-        image: imageRaw || null,
-        options: {
-          size: hasSizeOption,
-          temp: hasHotColdOption
-        }  
-      };
-    });
+        return{
+          name, price, tags, options
+        };
+      });
 
     if (inventory.length > 0) {
       currentName = inventory[0].name;
@@ -56,7 +63,7 @@ fetch('inventory.txt')
     handleCategoryClick('All');
   });
 
-function setupCategoryButtons(item) {
+function setupCategoryButtons() {
   const categoryLinks = document.querySelectorAll('[data-category]');
   categoryLinks.forEach(link => {
     const tag = link.getAttribute('data-category');
@@ -207,43 +214,22 @@ function openCustomizeModal(item) {
   ammount = 0;
   updateQuantityDisplay();
   submitBttn.textContent = 'ADD TO CART - $0.00';
-  const openCustomize = document.getElementById('customize');
   const title = document.getElementById('customize-title');
+  const modal = document.getElementById('modal-content');
   title.textContent = `${item.name}`;
   const optionsContainer = document.getElementById('customOptions');
   title.textContent = item.name;
   optionsContainer.innerHTML = '';
-  openCustomize.classList.remove('hidden');
+  const modalPrice = document.createElement('div');
+  modalPrice.textContent =  `$${item.price.toFixed(2)}`;
+  modalPrice.classList.add('modal-price')
 
-  if(item.options.size){
-    const sizeLabel = document.createElement('p')
-    sizeLabel.textContent = "Choose Size:";
-    const smallBtn = document.createElement('button');
-    smallBtn.textContent = 'Small';
-    const largeBtn = document.createElement('button');
-    largeBtn.textContent = 'Large';
-    optionsContainer.append(sizeLabel, smallBtn, largeBtn);
-  }
-  if (item.options.temp) {
-    console.log("here")
-    const tempLabel = document.createElement('p');
-    tempLabel.textContent = 'Choose Temperature:';
+  console.log(`${item.name}` + `$${item.price.toFixed(2)}` + item.options["Size"][1].name);
+  console.log("here");
 
-    const hotBtn = document.createElement('button');
-    hotBtn.textContent = 'Hot';
-    const coldBtn = document.createElement('button');
-    coldBtn.textContent = 'Cold';
 
-    hotBtn.addEventListener('click', () => {
-      currentTag = 'Hot';
-    });
-    coldBtn.addEventListener('click', () => {
-      currentTag = 'Cold';
-    });
 
-    optionsContainer.append(tempLabel, hotBtn, coldBtn);
-  }
-
+  title.appendChild(modalPrice);
   customize.classList.remove('hidden');
 }
 function closeCustomizeModal() {
