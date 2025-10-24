@@ -420,12 +420,7 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-.food1 {
-    width: 300px;
-    height: auto;
-    border-radius: 20px;
 
-}
 p{  
     border-top: 100px;
     font-family: "Asap Condensed", sans-serif;
@@ -434,10 +429,6 @@ p{
     font-size: 18px;
     line-height: 1.6;
     color:white;
-}
-.quantity-display {
-    color: white;
-    
 }
 .menu-nav-wrapper {
   padding-top: 80px; 
@@ -554,7 +545,7 @@ p{
   display: block;
   height: 170px;
 }
-.menu-item{
+.menu-item a{
     color: rgb(255, 255, 255);
     margin-right:20px;
     text-decoration: none;
@@ -566,7 +557,7 @@ p{
     "wdth" 100;
 }
 .menu-group{
-    color: rgb(255, 255, 255);
+    color: #A2956B;
     margin-right:20px;
     text-decoration: none;
     font-family: "Noto Sans Display", sans-serif;
@@ -575,4 +566,100 @@ p{
     font-style: thin 100;
     font-variation-settings:
     "wdth" 100;
+}
+
+.menu-item a:hover{
+  background-color: #A2956B; 
+  cursor: pointer;
+}
+#menu-items-container ul{
+  list-style: none;
+}
+
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.customOptionsContainer {
+  display: flex;
+  flex-direction: row;
+}
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  min-width: 70%;
+  max-width: 70%;
+  min-height: 60vh;
+}
+
+.modal:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.submitBttn{
+  padding: 0.4em 1em;
+  list-style : none;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  border-radius: 1000px;
+  z-index: 100;
+  min-width: 80px;
+}
+
+
+
+.submitBttn:hover{
+  background-color: #A2956B;
+  color: #ffffff;
+  transition: background-color 0.3s, color 0.3s;
+  
+}
+.quantity-display {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  width: 30px;
+  text-align: center;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.quantityBttn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #000;
+  transition: transform 0.2s, color 0.2s;
+}
+.quantityBttn:hover {
+  transform: scale(1.2);
+  color: #a2956b;
+}
+
+
+.custom-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }

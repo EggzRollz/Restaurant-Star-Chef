@@ -60,6 +60,7 @@
       
     </div>
     <div class="menu-placeholder"></div>
+      
      
 
     </div>
@@ -67,14 +68,28 @@
         
     </div>
     
-    <button id="submitBttn" aria-label="submit">SUBMIT</button>
-    <button id="increaseBttn" aria-label="add">+</button>
-    <button id="decreaseBttn" aria-label="subtract">-</button>
-    <p id="quantity-display">0</p>
+    
     
     <pre id="cart-output">Cart is empty.</pre>
-    <div id="menu-items-container"></div>
-    
+    <ul id="menu-items-container"></ul>
+    <div id="customize" class="modal hidden">
+  <div class="modal-content">
+    <button id="close-modal">X</button>
+    <h2 id="customize-title"></h2>
+
+    <!-- This container will be cleared and refilled with size/temp options -->
+    <div id="customOptions" class="custom-options"></div>
+
+    <!-- Move these OUTSIDE customOptions so they don't get deleted -->
+    <div class="quantity-controls">
+      <button id="decreaseBttn" class="quantityBttn" aria-label="subtract">-</button>
+      <p id="quantity-display" class="quantity-display">0</p>
+      <button id="increaseBttn" class="quantityBttn" aria-label="add">+</button>
+    </div>
+
+    <button id="submitBttn" class="submitBttn" aria-label="submit">ADD TO CART</button>
+  </div>
+</div>
     </main>
 
     
