@@ -1,7 +1,188 @@
-Chicken Noodle Soup,$10.00,Soup,Popular,Size:Small|Medium(11.50)|Large(13.00),Temperature:Hot|Cold
-Shrimp Fried Rice,$12.00,Rice,Specials,Protein:Shrimp|Chicken|Beef|Pork,Size:Regular|Large(14.50)
-Beef Stir Fry,$14.00,StirFry,Popular,Protein:Beef|Chicken,Spice:None|Mild|Medium|Hot
-Vegetable Congee,$9.00,Congee,Healthy,Size:Small|Medium(10.00)|Large(11.00),Temperature:Hot|Cold
-Mango Pudding,$5.50,Desserts,Popular,Size:Single|Double(9.50)
-Iced Lemon Tea,$3.00,Beverages,Popular,Temperature:Cold|Hot(3.50),Size:Regular|Large(4.00)
-Pork Dumplings,$8.00,Sides,Popular,Quantity:4pcs|6pcs(11.00)|8pcs(14.50)
+B3 | 芥蘭炒牛/雞/臘肉 Sautéed Chinese Broccoli with Beef | 18.99 | StirFry/Popular/Special/Spicy | Size:S:18.99/L:23.99,Meat:Beef/Chicken/Pork | Spicy/notSpicy | https://img
+
+
+西蘭花 Broccoli with Garlic Sauce, $15.75, StirFry, Popular
+豉椒炒牛肉/雞柳 Beef or Chicken with Black Bean Sauce, $15.99, StirFry, Popular
+涼瓜炒牛肉/雞柳 Beef or Chicken with Bitter Melon, $15.99, StirFry
+雜菌炒三蔬 Sautéed Vegetable with Mixed Mushroom, $15.99, StirFry, Popular
+鹹魚雞粒茄子煲 Diced Chicken & Salted Fish with Eggplant in Hot Pot, $17.99, StirFry, Specials
+避風塘魚柳/蝦/魷魚 Fried Fish Fillet/Shrimp/Squid with Spicy Garlic, $16.50, StirFry, Specials
+薑蔥魚柳煲 Fish Fillet with Ginger & Green Onion in Hot Pot, $15.75, StirFry
+粟米魚柳 Fish Fillet with Cream Corn Sauce, $15.75, StirFry
+魚香茄子煲 Sautéed Eggplant with Minced Pork & Salted Fish in Spicy Sauce, $15.99, StirFry
+鹹魚雞粒豆腐煲 Diced Chicken & Salted Fish with Tofu in Hot Pot, $15.99, StirFry
+麻婆豆腐 Braised Tofu & Minced Pork in Spicy Sauce, $14.99, StirFry, Popular
+紅燒豆腐 Fried Tofu & Vegetable, $14.99, StirFry
+乾煸四季豆 Fried Green Bean with Minced Pork & Preserved Vegetable, $14.25, StirFry
+欖菜肉鬆四季豆 Fried Green Bean with Minced Pork & Olive, $14.25, StirFry
+XO醬銀魚仔炒四季豆 Fried Green Bean with White Bait in XO Sauce, $16.99, StirFry, Specials
+沙爹牛柳絲炒腸粉 Fried Rice Noodle Roll with Sliced Beef Tenderloin in Satay Sauce, $14.50, StirFry, Noodles
+星廚小炒皇 House Special Crispy Stir Fry, $16.50, StirFry, Specials
+XO醬啫啫炒芥蘭/白菜苗 Stir-fried Chinese Broccoli/Bok Choy with XO sauce, $18.25, StirFry, Specials
+蒜蓉炒芥蘭/白菜苗 Stir-fried Chinese Broccoli/Bok Choy with Garlic, $16.50, StirFry
+辣子雞丁 Spicy Diced Chicken, $14.75, StirFry
+椒鹽雞翼 Spicy & Pepper Chicken Wing with Noodle, $12.99, StirFry, Sides
+椒鹽豬扒 Spicy & Pepper Pork Chop, $14.75, StirFry, Specials
+京都豬扒 Peking Pork Chop with Onion in Sweet Sauce, $15.99, StirFry
+千島豬扒 Pork Chop with Thousand Island Sauce, $15.99, StirFry
+椒鹽鮮魷 Spicy & Pepper Salt Squid, $16.50, StirFry, Specials
+椒鹽豆腐 Spicy & Pepper Salt Tofu, $10.50, StirFry, Sides
+咕嚕肉/雞/魚柳 Sweet & Sour Chicken or Pork, $14.75, StirFry, Popular
+滑蛋炒蝦仁 Stir-fried Shrimp with Scrambled Egg, $17.25, StirFry, Specials
+滑蛋炒牛肉/雞片 Stir-fried Sliced Beef or Chicken with Scrambled Egg, $16.99, StirFry
+手撕雞 Hand Shredded Chicken, Half $17.99 | Whole $33.99, Specials, Popular
+香茅豬扒 Lemongrass Pork Chop, $17.99, Specials
+貴妃雞 Steamed Chicken with Special Sauce, Half $17.99 | Whole $33.99, Specials
+炸子雞 Crispy Fried Chicken, Half $15.99 | Whole $28.99, Specials, Popular
+XO醬炒腸粉 Fried Rice Noodle with XO Sauce, $11.50, Noodles
+沙爹牛柳絲炒腸粉 Fried Rice Noodle Roll with Sliced Beef Tenderloin in Satay Sauce, $14.50, Noodles, StirFry
+菜脯煎蛋 Preserved Vegetable Omelette, $16.50, Sides
+涼瓜煎蛋 Bitter Melon Omelette, $16.50, Sides
+蔬菜春卷 Vegetable Spring Roll - 1 roll, $5.99, Sides
+炸物拼盤 Crispy Assorted Dough Fritter/Sweet Potato/Fish Cake, $3.00, Sides
+炸物拼盤 Deep Fried Chicken Wingtip - pair, $11.50, Sides
+三菇豆腐泡 Fried Tofu with Mixed Mushroom, $17.25, Sides, Specials
+京都豬扒 Deep Fried Pork Chop, $11.99, Sides
+港式奶茶 HK Style Milk Tea, Hot $3.25 | Cold $4.25, Beverages, Popular
+咖啡 Coffee, temp: Hot $3.25 | Cold $4.25, Beverages
+鴛鴦 Milk Tea & Coffee, Hot $3.25 | Cold $4.25, Beverages
+檸檬茶 Lemon Tea, Hot $3.25 | Cold $4.25, Beverages
+檸檬水 Lemon Water, Hot $3.25 | Cold $4.25, Beverages
+檸檬蜜糖 Lemon Honey, Hot $3.25 | Cold $4.25, Beverages
+阿華田 Ovaltine, Hot $3.25 | Cold $4.25, Beverages
+檸檬可樂/雪碧 Lemon Coke/Sprite, Cold $4.25, Beverages
+豆漿 Soya Milk, Hot $3.25 | Cold $4.25, Beverages
+鮮奶 Milk, Hot $3.25 | Cold $4.50, Beverages
+紅豆冰 Red Bean Freeze, Cold $5.25, Beverages, Desserts
+鴛鴦紅豆冰 Red Bean Freeze with Ice-cream, Cold $6.50, Beverages, Desserts
+涼粉冰 Grass Jelly Freeze, Cold $5.50, Beverages, Desserts
+鴛鴦涼粉冰 Grass Jelly Freeze with Ice-cream, Cold $6.50, Beverages, Desserts
+菠蘿紅豆冰 Red Bean and Grass Jelly Freeze, Cold $6.25, Beverages, Desserts
+鴛鴦菠蘿紅豆冰 Red Bean and Grass Jelly Freeze with Ice-cream, Cold $6.75, Beverages, Desserts
+奶昔(芒果/士多啤梨) Milkshake - Mango/Strawberry, Cold $6.25, Beverages, Desserts
+冰沙(芒果/士多啤梨) Smoothie - Mango/Strawberry, Cold $6.25, Beverages, Desserts
+汽水 Coke/Diet Coke/Ginger Ale, Cold $2.75, Beverages
+樽裝水 Bottled Water, $3.00, Beverages
+生滾龍蝦粥 Lobster Super Bowl Congee, $27.25, Congee, Specials
+海鮮大粥 Seafood Super Bowl Congee, $18.50, Congee, Specials
+雞鴨粥 Chicken & Duck Congee, S $9.00| L $17.25, Congee
+帶子蝦球粥 Scallop & Tiger Shrimp Congee, S $10.25| L $19.25, Congee
+三文魚粥 Salmon Congee, S $10.25| L $19.25, Congee
+生滾蝦球粥 Tiger Shrimp Congee, S $10.25| L $19.25, Congee
+香茜魚片粥 Sliced Fish Congee, S $8.99| L $17.25, Congee
+魚片牛肉粥 Sliced Fish & Beef Congee, S $8.99| L $17.25, Congee
+菜乾豬骨粥 Dried Cabbage & Pork Bone Congee, S $8.25| L $15.99, Congee
+皮蛋瘦肉粥 Preserved Egg & Shredded Pork Congee, S $8.25| L $15.99, Congee
+粟米牛肉粥 Corn & Beef Congee, S $8.25| L $15.99, Congee
+窩蛋牛肉粥 Beef Congee with Egg, S $8.25| L $15.99, Congee
+鹹蛋瘦肉粥 Shredded Pork with Preserved Mustard Congee, S $8.25| L $15.99, Congee
+香菇粟米粥 Mushroom & Corn Congee, S $8.00| L $15.50, Congee
+瑤柱白粥 Plain Congee with Dried Scallop, S $8.00| L $15.50, Congee
+荔灣艇仔粥 Assorted Meat & Seafood Congee, S $9.00| L $17.75, Congee
+蟹肉魚肚羹 Crab Meat & Fish Maw Thick Soup, S $11.99| L $21.99, Soup
+酸辣湯 Hot & Sour Soup with Shrimp And Pork, S $11.25| L $19.99, Soup
+蟹肉粟米羹 Crab Meat & Corn Thick Soup, S $10.99| L $19.99, Soup
+海皇豆腐羹 Seafood & Tofu Thick Soup, S $10.99| L $19.99, Soup
+西湖牛肉羹 Thick Soup with Egg White, S $10.99| L $19.99, Soup
+雞茸粟米羹 Chicken & Corn Thick Soup, S $10.99| L $19.99, Soup
+豆腐粟米羹 Tofu & Corn Thick Soup, S $10.25| L $19.00, Soup
+蘑菇花膠湯 Fish Maw Thick Soup with Mushroom, S $10.00| L $21.99 Soup
+雪菜火鴨絲 Shredded Duck & Preserved Cabbage, S $11.99| L $21.99, Soup, Noodles
+雪菜肉絲 Shredded Pork & Preserved Cabbage, S $10.99| L $19.99, Soup, Noodles
+沙爹牛/雞 Chicken or Beef & Satay Sauce, S $10.99| Soup, Noodles
+鮮菜牛/雞 Chicken or Beef with Vegetable, S $10.99| L $19.99, Soup, Noodles
+牛筋腩 Beef Tendon & Brisket, S $10.99| L $19.99, Soup, Noodles
+香茅豬扒 Deep Fried Pork Chop, $11.00, Soup, Noodles
+薑蔥龍蝦伊麵 Lobster with Ginger & Green Onion, $18.25, Noodles
+避風塘炒麵 Fried Noodle with Dried Shrimp and Chili, $17.75, Noodles
+羅漢齋炒麵 Buddha's Delight Fried Noodle, $17.25, Noodles
+七彩雞竹米粉 Colorful Chicken and Rice Vermicelli, $17.99, Noodles
+豉油皇炒麵 Soy Sauce Chow Mein, $17.75, Noodles
+海鮮炒烏冬 Seafood Chow Udon, $17.75, Noodles
+XO醬炒牛河 Fried Rice Noodle with Beef & XO Sauce, $17.75, Noodles
+雪菜火鴨絲炆米 Braised Rice Vermicelli with Shredded Duck and Preserved Cabbage, $16.50, Noodles
+蟹肉扒菜膽麵 Braised Noodle with Crab Meat, $16.50, Noodles
+雪菜肉絲炆米 Braised Rice Vermicelli with Shredded Pork & Preserved Cabbage, $15.25, Noodles
+乾炒牛/雞烏冬 Fried Udon Noodle with Beef and Onion, $17.25, Noodles
+乾燒伊麵 Braised E-Fu Noodle with Soya Sauce, $15.50, Noodles
+沙爹牛/雞炒河粉 Fried Rice Noodle with Chicken or Beef & Satay Sauce, $14.75, Noodles
+雞/牛炒河粉 Fried Rice Noodles with Chicken or Beef in Chiu Chow Style, $15.25, Noodles
+三絲炒麵 Stir-fried Shredded Meat Chow Mein, $14.99, Noodles
+時菜牛/雞炒麵 Chicken or Beef & Vegetable Chow Mein, $14.25, Noodles
+肉絲炒麵 Shredded Pork Chow Mein, $14.25, Noodles
+豉椒牛/雞河 Stir Fried Beef/Chicken with Black Bean Sauce on Rice Noodle, $14.25, Noodles
+時菜牛/雞河 Beef/Chicken with Vegetable on Rice Noodle, $14.25, Noodles
+滑蛋牛/雞河 Fried Rice Noodle with Scrambled Egg with Beef/Chicken, $14.25, Noodles
+滑蛋蝦仁河 Fried Rice Noodle with Scrambled Egg with Shrimp, $14.75, Noodles
+乾炒牛/雞河 Beef/Chicken with Soya Sauce, $14.25, Noodles
+滑蛋蝦仁炒麵 Scrambled Egg with Shrimp on Fried Noodle, $15.50, Noodles
+上海粗炒 Shanghai Style Fried Thick Noodle, $15.25, Noodles
+廈門炒米 Fried Rice Vermicelli with Shrimp & Pork, $14.50, Noodles
+星洲炒米 Singapore Style Fried Rice Vermicelli, $14.50, Noodles
+揚州炒飯 Yeung Chow Style Fried Rice with Shrimp & Pork, $14.50, Noodles
+鹹魚雞粒炒飯 Fried Rice with Diced Chicken & Salted Fish, $14.25, Noodles
+瑤柱蛋白炒飯 Fried Rice with Dried Scallop & Egg White, $17.25, Noodles
+生炒牛肉飯 Stir Fried Beef Fried Rice, $14.25, Noodles
+西洋菜炒飯 Fried Rice with Watercress and Tofu, $15.99, Noodles
+避風塘炒龍蝦 Stir Fried Lobster with Hong Kong Style, $46.99, StirFry, Specials
+薑蔥炒龍蝦 Stir Fried Lobster with Ginger & Green Onion, $37.99, StirFry, Specials
+美極焗龍蝦 Stir Fried Lobster with Maggi Sauce, $18.09, StirFry, Specials
+馬拉盞通菜 Stir Fried Ong Choy with Belacan Sauce, $27.99, StirFry
+薑蔥生蠔 Stir Fried Oyster with Ginger & Green Onion, $22.99, StirFry
+潮州煎蠔烙 Oyster Omelette, $18.50, StirFry, Specials
+海鮮粉絲煲 Seafood & Vermicelli with Chinese Cabbage, $23.50, StirFry
+涼瓜炒石斑 Stir Fried Grouper with Bitter Melon, $23.50, StirFry
+豉汁炒石斑球 Stir Fried Grouper with Black Bean Sauce, $18.25, StirFry
+魚香茄子石斑煲 Eggplant with Fish in Hot Pot, $18.99, StirFry
+椒鹽鮮魷 Salt & Pepper Squid, $18.75, StirFry
+上湯豆苗 Pea Leaves in Soup with Garlic, $18.75, StirFry
+蒜蓉豆苗 Stir-fried Pea Leaves & Soup with Garlic, $18.75, StirFry
+魚湯浸豆苗 Pea Leaves & Fish Soup with Garlic, $18.75, StirFry
+蝦球/雞球 Shrimp & Chicken with Broccoli, $23.50, StirFry
+煎/焗/蒸龍利球 Pan-fried, Baked, Steamed Sole Fish, $18.99, StirFry
+百花釀豆腐 Steamed Tofu with Shrimp, $18.99, StirFry
+涼瓜炆排骨 Braised Spareribs with Bitter Melon in Hot Pot, $18.50, StirFry
+蒜香牛仔骨 Garlic & Beef Short Ribs, $18.25, StirFry
+椒鹽牛仔骨 Salt & Pepper Beef Short Ribs, $18.50, StirFry
+欖菜四季豆 String Beans with Minced Pork & Chinese Olive, $16.99, StirFry, Rice
+鐵板黑椒牛/雞/豬扒 Sizzling Plate with Black Sauce on Beef, Chicken, Pork, $17.99, StirFry
+鐵板中式牛/雞/豬扒 Sizzling Plate with Chinese Style Sauce on Beef, Chicken, Pork, $17.99, StirFry
+魚香茄子煲 Sautéed Eggplant with Minced Pork & Salted Fish in Spicy Sauce, $18.25, StirFry
+芥蘭炒牛/雞/臘肉 Sautéed Chinese Broccoli with Beef, Chicken, Cured Pork, $18.99, StirFry
+豉椒炒牛/雞/鮮魷 Stir-fried Beef, Chicken, Squid with Black Bean Sauce, $16.25, StirFry
+廣式小炒皇 Stir Fried Clam with Chili Black Bean, $18.99, StirFry
+避風塘炒蜆 Fried Clams with Spicy Garlic, $19.99, StirFry
+四川魚片/牛肉 Fish or Chicken in Szechuan Style, $16.25, StirFry
+招牌京都骨 General Tso's Chicken, $15.99, StirFry, Specials
+福建豆腐 Fried Bean Curd with Fukien Style, $16.99, StirFry
+西蘭花炒牛肉 Stir Fried Beef with Canadian Broccoli, $15.99, StirFry
+皇太子龍蝦炒飯 Lobster Fried Rice, $18.25, Rice, Specials
+瑤柱蛋白炒飯 Fried Rice with Dried Scallop & Egg White, $18.75, Rice
+鹹魚雞粒炒飯 Fried Rice with Diced Chicken & Salted Fish, $18.25, Rice
+欖菜肉鬆四季豆飯 Minced Pork & Chinese Olives with String Beans on Rice, $17.25, Rice
+福建炒飯 Fukien Fried Rice, $17.25, Rice
+菠蘿海鮮炒飯 Seafood & Pineapple Fried Rice, $17.25, Rice
+菠蘿雞粒炒飯 Pineapple & Chicken Fried Rice, $17.25, Rice
+鴛鴦炒飯 Shrimp & Chicken Fried Rice, $18.25, Rice
+鹹魚雞粒茄子飯 Diced Chicken & Salted Fish with Eggplant on Rice, $18.25, Rice
+鮮茄牛肉飯 Beef with Tomato on Rice, $14.25, Rice
+滑蛋蝦仁飯 Scrambled Egg with Shrimp on Rice, $14.25, Rice
+滑蛋牛肉飯 Scrambled Egg with Beef on Rice, $15.50, Rice
+揚州炒飯 Yeung Chow Fried Rice with Shrimp & Pork, $14.50, Rice
+生炒雞絲/牛肉飯 Chicken or Beef Fried Rice, $13.99, Rice
+咖喱牛腩飯 Curry Beef Brisket on Rice, $16.99, Rice, Specials
+涼瓜排骨飯 Bitter Melon & Spareribs on Rice, $17.99, Rice
+粟米海鮮飯 Seafood with Corn Sauce on Rice, $19.25, Rice
+左宗雞飯 General Tso Chicken on Rice, $12.50, Rice
+涼瓜牛肉/雞肉片飯 Bitter Melon with Beef Chicken on Rice, $12.75, Rice
+涼瓜石斑飯 Bitter Melon with Fish Fillet on Rice, $12.50, Rice
+麻婆豆腐飯 Ma Po Tofu with Minced Pork on Rice, $12.50, Rice
+滑蛋蝦仁飯 Scrambled Egg & Shrimp on Rice, $13.25, Rice
+鮮茄牛肉/雞肉/肉片飯 Tomato with Beef/Chicken/Pork on Rice, $13.25, Rice
+沙爹牛肉/雞肉/肉片飯 Satay Beef/Chicken/Pork on Rice, $13.25, Rice
+豉椒牛肉/雞肉/肉片飯 Black Bean Sauce with Beef, Chicken, Pork on Rice, $12.50, Rice
+時菜牛肉/雞肉/肉片飯 Seasonal Vegetable with Beef, Chicken, Pork on Rice, $12.50, Rice
+窩蛋牛肉飯 Beef with Raw Egg on Rice, $14.25, Rice
+鹹蛋蒸肉餅, 牛筋飯 Steamed Pork Patty with Salted Egg, Beef Tendon on Rice, $13.75, Rice
+生炒糯米飯 Sticky Rice with Preserved Meat, $2.25, Rice, Sides
+白飯 Steamed Rice, $1.00, Rice, Sides

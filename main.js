@@ -1,6 +1,11 @@
 import { Cart } from './cartFunctions.js';  
 import { mergeSort } from './algorithms.js';
 import { filterBy } from './algorithms.js';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+
 document.addEventListener("DOMContentLoaded", () => {
 const cart = new Cart();
 const increaseBttn = document.getElementById("increaseBttn");
@@ -8,7 +13,15 @@ const decreaseBttn = document.getElementById("decreaseBttn");
 const submitBttn = document.getElementById("submitBttn");
 const customize = document.getElementById('customize');
 const modalContent = document.querySelector('.modal-content');
-
+const firebaseConfig = {
+  apiKey: "AIzaSyAd-LuABfQtKfugGXYY20_S1uwwyNV6ZVw",
+  authDomain: "star-chef-restaurant.firebaseapp.com",
+  projectId: "star-chef-restaurant",
+  storageBucket: "star-chef-restaurant.firebasestorage.app",
+  messagingSenderId: "924721320321",
+  appId: "1:924721320321:web:41644950fe66ee58eed880",
+  measurementId: "G-BKD21L9889"
+};
 
 
 let currentName = '';
@@ -17,51 +30,32 @@ let ammount = 0;
 let currentTag = '';
 let inventory = [];
 
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
 
 modalContent.addEventListener('click', (e) => {
   e.stopPropagation();
 });
-fetch('inventory.txt')
-  .then(res => res.text())  
-  .then(text => {         
-    inventory = text.trim().split(/\r?\n/).map(line => {
-      const parts = line.split(",");
-      const name = parts[0].trim();
-      const price = parseFloat(parts[1].trim().replace(/^\$/, ''));
-      const tags = [];
-      const options = {};
-      //const img = null;
-      
-      for(let i = 2; i < parts.length; i++){
-        const part = parts[i].trim();
-        if (part.includes(':')) {
-          const [optName, optValues] = part.split(':');
-          options[optName.trim()] = optValues.split('|').map(v => {
-          const match = v.match(/(.+?)(\(([\d.]+)\))?$/); // capture name and optional price
-          return {
-            name: match[1].trim(),
-            price: match[3] ? parseFloat(match[3]) : price // fallback to base price
-            };
-          });
-        } else {
-            tags.push(part);
-          }
-        }
+async function loadInventory() {
+  const querySnapshot = await getDocs(collection(db, "inventory"));
+  inventory = querySnapshot.docs.map(doc => doc.data());
 
-        return{
-          name, price, tags, options
-        };
-      });
+  if (inventory.length > 0) {
+    currentName = inventory[0].name;
+    currentPrice = inventory[0].price;
+    currentTag = inventory[0].tags?.[0] || '';
+  }
 
-    if (inventory.length > 0) {
-      currentName = inventory[0].name;
-      currentPrice = inventory[0].price;
-      currentTag = inventory[0].tags[0];
-    }
-    setupCategoryButtons();
-    handleCategoryClick('All');
-  });
+  setupCategoryButtons();
+  handleCategoryClick('All');
+}
+
+loadInventory();
+
+
+
 
 function setupCategoryButtons() {
   const categoryLinks = document.querySelectorAll('[data-category]');
