@@ -231,12 +231,15 @@ function renderAllItemsByCategory() {
     const title = document.getElementById('customize-title');
     const optionsContainer = document.getElementById('customOptions');
     const defaultPrice = document.getElementById('default-price');
-    defaultPrice.textContent = ("$ " + item.price);
 
+    defaultPrice.textContent = ("$ " + item.price);
     title.textContent = item.name;
     optionsContainer.innerHTML = '';
-
-    if (item.pricing && item.pricing.length > 0) {
+    
+    if (item.pricing.length === 1) {
+      currentPrice = item.pricing[0].price;
+    }
+    else if (item.pricing && item.pricing.length > 0) {
       const pricingGroup = document.createElement('div');
       pricingGroup.className = 'option-group';
       const pricingTitle = document.createElement('h4');

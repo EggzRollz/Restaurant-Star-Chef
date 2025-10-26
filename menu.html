@@ -73,21 +73,23 @@
     <ul id="menu-items-container"></ul>
     <div id="customize" class="modal hidden">
   <div class="modal-content">
-    <button id="close-modal">X</button>
-    <h2 id="customize-title"></h2>
-    <h3 id="default-price"></h3>
+    <div class="scroll-area">
+    <button id="close-modal" class="closeModalBttn">X</button>
+    <h2 id="customize-title" class="itemName"></h2>
+    <h3 id="default-price" class="defaultPrice"></h3>
 
     <!-- This container will be cleared and refilled with size/temp options -->
     <div id="customOptions" class="custom-options"></div>
-
+    </div>
     <!-- Move these OUTSIDE customOptions so they don't get deleted -->
     <div class="quantity-controls">
       <button id="decreaseBttn" class="quantityBttn" aria-label="subtract">-</button>
       <p id="quantity-display" class="quantity-display">0</p>
       <button id="increaseBttn" class="quantityBttn" aria-label="add">+</button>
+      <button id="submitBttn" class="submitBttn" aria-label="submit">ADD TO CART</button>
+    
     </div>
-
-    <button id="submitBttn" class="submitBttn" aria-label="submit">ADD TO CART</button>
+    
   </div>
 </div>
     </main>
