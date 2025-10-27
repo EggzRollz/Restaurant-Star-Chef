@@ -33,7 +33,7 @@ try {
   const container = document.getElementById('menu-items-container');
   if(container) container.innerHTML = "<h1>Error: Could not connect to the menu database.</h1>";
 }
-
+export { db };
 
 // --- Main Application Logic ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -257,19 +257,23 @@ function renderAllItemsByCategory() {
         const radio = document.createElement('input');
         radio.type = 'radio';
         radio.name = 'priceOption';
-        radio.value = p.price;
+        radio.value = p.size; // store the size name
+
         if (index === 0) {
           radio.checked = true;
-          currentPrice = p.price;
+          currentPrice = p.price; // price is a number
         }
+
         radio.addEventListener('change', () => {
-          currentPrice = parseFloat(radio.value);
+          currentPrice = p.price; // update the price when selected
           updateCartButtonPrice();
         });
+
         label.appendChild(radio);
         label.append(` ${p.size} - $${p.price.toFixed(2)}`);
         pricingGroup.appendChild(label);
       });
+
       optionsContainer.appendChild(pricingGroup);
     }
     
@@ -334,9 +338,10 @@ function renderAllItemsByCategory() {
       });
       
       console.log("User's full customization choices:", customizations);
-      cart.addItem(currentItem.name, currentItem.id, currentItem.price, amount, customizations); 
+      cart.addItem(currentItem.name, currentItem.id, currentPrice, amount, customizations);
       console.log(`${amount} of ${currentItem.name} added to cart.`);
       updateCartQuantityDisplay()
+      localStorage.setItem('cart', JSON.stringify(cart.getItems()));
     }
     closeCustomizeModal();
 
@@ -344,7 +349,6 @@ function renderAllItemsByCategory() {
   if (cartButton) {
     cartButton.addEventListener('click', () => {
       window.location.href = 'checkout.html'; // Change to your cart page filename
-      console.log("here")
     });
   }
   function closeCustomizeModal() {

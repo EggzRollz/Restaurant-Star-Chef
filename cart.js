@@ -3,30 +3,28 @@ export class Cart {
   constructor() {
     this.shoppingCart = [];
     this.abbreviationMap = {
-      // Sizes (lowercase)
-      'Small': 's',
-      'Medium': 'm',
-      'Large': 'l',
-      // Spice Levels (uppercase)
-      'Mild': 'M',
-      'Spicy': 'S',
-      'Hot': 'H',
-      // Proteins
-      'Chicken': 'C',
-      'Beef': 'B',
-      'Pork': 'P',
+    // Sizes - use the actual values from Firebase
+    'S': 's',
+    'M': 'm',
+    'L': 'l',
+    // Spice Levels
+    'Mild': 'M',
+    'Spicy': 'S',
+    'Hot': 'H',
+    // Proteins
+    'Chicken': 'C',
+    'Beef': 'B',
+    'Pork': 'P',
     };
   }
   
-   _generateItemId(baseId, customizations) {
-    const chosenValues = Object.values(customizations);
-    // Map values to codes, sort them, and join them into a string
-    const codes = chosenValues
-      .map(value => this.abbreviationMap[value] || '') // Look up the code, return '' if not found
-      .sort() // Sorts the codes to ensure consistency (e.g., 'Ss' not 'sS')
-      .join(''); // Joins them: ['S', 's'] -> 'Ss'
-    return `${baseId}${codes}`;
-  }
+  _generateItemId(baseId, customizations) {
+  const keys = ['Size', 'Spice Level', 'Protein']; // all possible keys
+  const codes = keys
+    .map(key => `${key[0]}${this.abbreviationMap[customizations[key]] || ''}`)
+    .join('');
+  return `${baseId}${codes}`;
+}
 
   
   addItem(item, id, finalPrice, quantity, customizations = {}) {
@@ -54,5 +52,9 @@ export class Cart {
       count = count + this.shoppingCart[i].quantity;
     }
     return count;
+  }
+
+  getItems(){
+    return this.shoppingCart;
   }
 }
