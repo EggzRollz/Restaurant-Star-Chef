@@ -167,23 +167,25 @@ body {
     margin: 10px 0;
     text-align: center;
   }
-  .overlay {
+  
+}
+.overlay {
   position: fixed;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100vw;
   height: 100vh;
   background: rgba(0,0,0,0.5);
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none; /* BY DEFAULT, it is NOT clickable */
   transition: opacity 0.3s ease;
-  z-index: 50;
-  }
+  z-index: 50; /* A relatively low z-index is fine for the default state */
+}
 
-  .overlay.active {
+/* This rule should ONLY be applied via JavaScript when the mobile menu is opened */
+.overlay.active {
   opacity: 1;
-  pointer-events: all;
-  }
-
+  pointer-events: all; /* WHEN ACTIVE, it becomes clickable to block content */
 }
 
 .logo-link img {
@@ -894,14 +896,14 @@ p{
     width: 100vw;
     min-height: 100vh;
     position: relative;
-    z-index: -1;
+    z-index: 0;
 }
 
 .checkout-bar-container {
     background-color: white;
     width: 60%;
     max-width: 90%; /* Responsive consideration for smaller screens */
-    height: 100vh; /* Set a specific height */
+    min-height: 100vh; /* Set a specific height */
     /* Allow for some responsiveness */
     overflow-y:auto; /* Enable scrolling for content if it exceeds height */
 
@@ -912,6 +914,8 @@ p{
     
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     color: black; /* Default text color for contents of this bar */
+    position: relative; /* Ensure proper stacking */
+    z-index: 1; /* Above the background */
 }
 
 
@@ -949,35 +953,23 @@ p{
 
     border-bottom: 1px solid #ccc;
 }
-@media (max-width: 480px){
-  .cart-item {
-    display: flex; /* allows items to sit in a row */
-    justify-content: space-between; /* spreads children apart */
-    padding-top: 30px;
-    padding-bottom:10px;
-    border-bottom: 1px solid #ccc;
-  }
-}
+
 .cart-item-name {
     flex: 2; /* takes up more space */
     font-weight: bold;
 }
 
-@media (max-width: 480px){
-  .cart-item-name {
-    flex: 1; /* takes up more space */
-    font-weight: bold;
-}
-}
+
 /* Horizontal layout for quantity and price underneath the name */
 .cart-item-subinfo {
     display: flex;
     flex-direction: column;
+    align-items: flex-start; 
     gap: 1em;
     max-width: 12em;
      /* small spacing under name */
 }
-.cart-item-quantity{
+.cart-item-defaultPrice{
     font-weight: normal;
 }
 .cart-item-customization {
@@ -988,4 +980,70 @@ p{
 .cart-item-price {
     flex: 1;
     text-align: right;
+}
+
+@media (max-width: 768px) {
+
+  /* 1. Make the main white bar take up more screen width */
+  .checkout-bar-container {
+    width: 70%;
+  }
+
+  /* 2. Fix the title's width */
+  .checkout-title {
+    width: 90%;
+  }
+
+  /* 3. THIS IS THE KEY FIX: Stack the cart item content */
+  .cart-item {
+    flex-direction: column; /* Change from a row to a column */
+    align-items: flex-start; /* Align everything to the left */
+    gap: 0.5rem;             /* Use a small, fixed gap instead of 15vw */
+  }
+
+  /* 4. Reset the children so they behave in a column */
+  .cart-item-subinfo,
+  .cart-item-customization
+  .cart-item-price{
+    text-align: left; /* Align all text to the left for consistency */
+    width: 100%;      /* Allow them to take the full width */
+    flex: none;       /* Reset the flex-grow/shrink properties */
+  }
+}
+
+  
+  /* 5. Optional: Add a little space and clarity to the price */
+  .cart-item-price {
+    font-weight: bold;
+    margin-top: 8px; /* Add some space above the price */
+  }
+
+.quantity-mod-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative; /* Ensure buttons are in the stacking context */
+    z-index: 10; /* Ensure buttons are clickable */
+}
+
+.increase-buttn, .decrease-buttn {
+    background-color: transparent;
+    color: #A2956B;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+}
+
+.increase-buttn:hover, .decrease-buttn:hover {
+    background-color: #eadec1;
+}
+
+.quantity-value {
+    min-width: 30px;
+    text-align: center;
+    font-weight: bold;
 }

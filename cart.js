@@ -57,4 +57,11 @@ export class Cart {
   getItems(){
     return this.shoppingCart;
   }
+
+  loadFromStorage(savedItems) {
+    if (savedItems && Array.isArray(savedItems)) {
+        this.shoppingCart = savedItems;
+        console.log('Cart has been hydrated from localStorage.');
+    }
+  }
 }

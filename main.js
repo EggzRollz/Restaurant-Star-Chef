@@ -38,7 +38,6 @@ export { db };
 // --- Main Application Logic ---
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM content loaded. Starting application.");
-
   // --- Get references to all necessary DOM elements ---
   const cart = new Cart();
   const increaseBttn = document.getElementById("increaseBttn");
@@ -53,8 +52,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPrice = 0;
   let amount = 0;
   let menuInventory = [];
+  const savedCartStr = localStorage.getItem('cart');
+    
+    
+  if (savedCartStr) {
+      const savedCartItems = JSON.parse(savedCartStr);
+      cart.loadFromStorage(savedCartItems);
+  }
+  updateCartQuantityDisplay(); 
 
-  // Stop clicks inside the modal from closing it
   if(modalContent) modalContent.addEventListener('click', (e) => e.stopPropagation());
 
   // --- Fetch data from Firebase ---
@@ -340,8 +346,9 @@ function renderAllItemsByCategory() {
       console.log("User's full customization choices:", customizations);
       cart.addItem(currentItem.name, currentItem.id, currentPrice, amount, customizations);
       console.log(`${amount} of ${currentItem.name} added to cart.`);
-      updateCartQuantityDisplay()
       localStorage.setItem('cart', JSON.stringify(cart.getItems()));
+      
+      updateCartQuantityDisplay()
     }
     closeCustomizeModal();
 
@@ -356,7 +363,6 @@ function renderAllItemsByCategory() {
   }
   
   function updateQuantityDisplay() {
-    
     const quantityDisplay = document.getElementById('quantity-display');
     if(quantityDisplay) quantityDisplay.textContent = amount; 
   }
