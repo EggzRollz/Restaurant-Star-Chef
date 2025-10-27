@@ -823,3 +823,117 @@ p{
   font-size: 16px;
   letter-spacing: 0.5px;
 }
+
+.site-header {
+  position: relative;
+}
+
+.cart-button {
+  position: fixed;
+  top: 5%;
+  right: 5rem !important;
+  background: transparent;
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+  z-index: 2000;
+  font-size: 1.3rem;
+  display: inline-flex; /* keeps icon + count inline */
+  align-items: center;
+  justify-content: center;
+}
+.cart-button i {
+  position: relative;
+}
+
+/* The red circular badge */
+.cart-quantity-display {
+  position: absolute;
+  top: -5px;    /* adjust for your icon size */
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 0 3px rgba(0,0,0,0.6);
+}
+
+
+@media (max-width: 480px) {
+  .cart-button {
+    position: fixed;
+    top: 1.1rem;
+    right: 100px !important; /* Move it LEFT of the menu toggle */
+    z-index: 1100; /* Same as menu toggle */
+  }
+  
+  .menu-toggle {
+    right: 16px;
+    z-index: 1100;
+  }
+}
+
+.checkout-background {
+    background-image: url('graphics/restaurant3.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center 60%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centers the white bar vertically */
+
+    width: 100vw;
+    min-height: 100vh;
+    position: relative;
+    z-index: -1;
+}
+
+.checkout-bar-container {
+    background-color: white;
+    width: 60%;
+    max-width: 90%; /* Responsive consideration for smaller screens */
+    height: 100vh; /* Set a specific height */
+    /* Allow for some responsiveness */
+    overflow-y:auto; /* Enable scrolling for content if it exceeds height */
+
+    display: flex;
+    flex-direction: column; /* Stack children (logo, content) vertically */
+    align-items: center;    /* Horizontally centers children within this white bar */
+    padding: 20px;
+    
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: black; /* Default text color for contents of this bar */
+}
+
+/* Remove or redefine your original .checkout-modal if it's meant for a different purpose
+   or if it was a generic modal style you tried to reuse.
+   If you DO need a modal *inside* the bar container, its CSS would be different.
+*/
+/*
+.checkout-modal {
+  // If this specific styling for absolute positioning is needed for something else, keep it.
+  // But it's conflicting with its current nested HTML structure.
+}
+*/
+
+.checkout-logo {
+    background-image: url('graphics/Star-Chef-Logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    /* Give the div explicit dimensions */
+    width: 150px;
+    height: 150px; /* Adjust this height for your logo's aspect ratio */
+
+    margin-bottom: 20px;
+    margin-top: 10px;
+}

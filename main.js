@@ -1,7 +1,7 @@
 // main.js
 
 // --- Import functions from your existing files ---
-import { Cart } from './cartFunctions.js';  
+import { Cart } from './cart.js';  
 import { mergeSort, filterBy } from './algorithms.js';
 
 // --- Import the V9 Firebase modules ---
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const customizeModal = document.getElementById('customize');
   const modalContent = document.querySelector('.modal-content');
   const menuContainer = document.getElementById('menu-items-container');
-  
+  const cartButton = document.querySelector('.cart-button');
   // --- State variables ---
   let currentItem = null; // Store the whole item object
   let currentPrice = 0;
@@ -59,6 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Fetch data from Firebase ---
   async function fetchMenuData() {
+    if (!menuContainer) {
+      console.log("Not on menu page, skipping menu data fetch.");
+      return;
+    }
     console.log("Attempting to fetch menu data from Firestore...");
     if (!db) {
         console.error("Firestore database is not available.");
@@ -84,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
       });
 
-      console.log("Processed menu inventory:", menuInventory);
+      
 
       if (menuInventory.length > 0) {
         setupCategoryButtons();
@@ -147,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   function renderItems(items) {
+    if (!menuContainer) return;
     menuContainer.innerHTML = '';
     const list = document.createElement('ul');
     items.forEach(item => list.appendChild(createMenuItemElement(item)));
@@ -156,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // main.js - FINAL REPLACEMENT FUNCTION
 
 function renderAllItemsByCategory() {
+  if (!menuContainer) return;
   menuContainer.innerHTML = ''; // Clear the container first
 
   // Human-readable display order. The case here is for display only.
@@ -310,20 +316,50 @@ function renderAllItemsByCategory() {
   });
   
   if(submitBttn) submitBttn.addEventListener("click", () => {
-    if (amount > 0 && currentItem) {
-      cart.addItem(currentItem.name, currentPrice, amount);
+    if (amount > 0 && currentItem) {  
+      const customizations = {};
+      // Find all the option groups within the modal
+      const optionGroups = document.querySelectorAll('#customOptions .option-group');
+
+      optionGroups.forEach(group => {
+        // Find the title (h4) of the group
+        const groupTitle = group.querySelector('h4').textContent;
+        // Find the checked radio button WITHIN that group
+        const selectedOption = group.querySelector('input[type="radio"]:checked');
+        
+        if (selectedOption) {
+            // Store the selected value using the group title as the key
+            customizations[groupTitle] = selectedOption.value;
+        }
+      });
+      
+      console.log("User's full customization choices:", customizations);
+      cart.addItem(currentItem.name, currentItem.id, currentItem.price, amount, customizations); 
       console.log(`${amount} of ${currentItem.name} added to cart.`);
+      updateCartQuantityDisplay()
     }
     closeCustomizeModal();
-  });
-  
+
+});
+  if (cartButton) {
+    cartButton.addEventListener('click', () => {
+      window.location.href = 'checkout.html'; // Change to your cart page filename
+      console.log("here")
+    });
+  }
   function closeCustomizeModal() {
     if(customizeModal) customizeModal.classList.add('hidden');
   }
   
   function updateQuantityDisplay() {
+    
     const quantityDisplay = document.getElementById('quantity-display');
     if(quantityDisplay) quantityDisplay.textContent = amount; 
+  }
+
+  function updateCartQuantityDisplay() {
+    const cartQuantityDisplay = document.getElementById('cartQuantityDisplay');
+    if(cartQuantityDisplay) cartQuantityDisplay.textContent = cart.cartLength(); 
   }
 
   document.getElementById('close-modal')?.addEventListener('click', closeCustomizeModal);
