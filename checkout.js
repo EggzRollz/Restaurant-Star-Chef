@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get the main container and the element for the total price
     const cartContainer = document.getElementById('checkoutItemContainer');
     // You'll need an element in your HTML to show the total, e.g., <div id="cart-total"></div>
+    const cartSubTotalElement = document.getElementById('cart-subtotal');
+    const cartHST = document.getElementById('hst'); 
     const cartTotalElement = document.getElementById('cart-total'); 
 
     // Load the cart from localStorage
@@ -12,19 +14,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- Function to update the total price display ---
-    function updateCartTotal() {
-        // Use reduce to calculate the total price of all items in the cart
-        const total = savedCart.reduce((sum, item) => {
+    function updateTotals() {
+
+        
+        const subtotal = savedCart.reduce((sum, item) => {
             return sum + (item.price * item.quantity);
         }, 0);
-
+        const hstAmount = subtotal * 0.13;
+        const finalTotal = subtotal + hstAmount;
         // Update the HTML element with the formatted total
+        if (cartSubTotalElement) {
+        // Format the subtotal number to a string
+            cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
+
+        }
+        if (cartHST) {
+            // Format the HST number to a string
+            cartHST.textContent = `$${hstAmount.toFixed(2)}`;
+        }
         if (cartTotalElement) {
-            cartTotalElement.textContent = `Total: $${total.toFixed(2)}`;
+            // Format the final total number to a string
+            cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
         }
         
-        // Also a good idea to update the cart count in the header, if you have one
     }
+    
 
     // --- Function to save the cart and update the total ---
     function saveCartAndRender() {
@@ -42,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // If the cart is empty, show a message
         if (savedCart.length === 0) {
             cartContainer.innerHTML = '<p>Your cart is empty.</p>';
-            updateCartTotal(); // Ensure total shows $0.00
+            updateTotals(); // Ensure total shows $0.00
             return;
         }
 
@@ -117,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // After the loop, update the grand total
-        updateCartTotal();
+        updateTotals();
     }
 
     // Initial call to render the cart when the page loads

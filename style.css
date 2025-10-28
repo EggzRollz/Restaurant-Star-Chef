@@ -466,12 +466,20 @@ p{
     font-size: 4rem;
     margin: 0 0 -5px 0;
 }
-.menu-splash-text p {
-    font-family: serif;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: white;
-    margin-top: 0;
+hr.divider {
+  width: 8%; /* Adjust the width of the line */
+  margin: 30px auto; /* Adds 30px space above/below and centers the line */
+  border: 0;
+  border-top: 2px solid white;
+}
+
+/* You might need to add a class to your subtitle for specific spacing */
+.menu-splash-text p.subtitle {
+  font-family: serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: white;
+  margin-bottom: 0; /* Remove default bottom margin from the paragraph */
 }
 
 
@@ -905,18 +913,37 @@ p{
     max-width: 90%; /* Responsive consideration for smaller screens */
     min-height: 100vh; /* Set a specific height */
     /* Allow for some responsiveness */
-    overflow-y:auto; /* Enable scrolling for content if it exceeds height */
 
     display: flex;
     flex-direction: column; /* Stack children (logo, content) vertically */
-    align-items: center;    /* Horizontally centers children within this white bar */
     padding: 20px;
     
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     color: black; /* Default text color for contents of this bar */
-    position: relative; /* Ensure proper stacking */
     z-index: 1; /* Above the background */
 }
+.top-container{
+  color:black;
+  min-height: 20vh; /* Set a specific height */
+  display: flex;
+  flex-direction: column; /* Stack children (logo, content) vertically */
+  align-items: center;
+  padding: 20px;
+}
+.bottom-container{
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
+  justify-content:space-between;
+}
+.checkout-item-list {
+  width: 60%; /* Occupies the left portion of the container */
+  max-width: 100%; /* Prevents overflow issues */
+  min-height: auto; /* Let content determine height */
+  padding: 0 20px;
+  /* Removed flex properties as they are not needed here */
+}
+
 
 
 .checkout-logo {
@@ -947,10 +974,9 @@ p{
 .cart-item {
     display: flex; /* allows items to sit in a row */
     justify-content: space-between; /* spreads children apart */
-    gap: 15vw;
+    gap: 2vw;
     padding-top: 30px;
     padding-bottom:10px;
-
     border-bottom: 1px solid #ccc;
 }
 
@@ -1021,7 +1047,7 @@ p{
 .quantity-mod-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    
     position: relative; /* Ensure buttons are in the stacking context */
     z-index: 10; /* Ensure buttons are clickable */
 }
@@ -1030,7 +1056,7 @@ p{
     background-color: transparent;
     color: #A2956B;
     border: none;
-    border-radius: 50%;
+    border-radius: 30%;
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -1046,4 +1072,56 @@ p{
     min-width: 30px;
     text-align: center;
     font-weight: bold;
+}
+
+.cart-total-summary {
+  position: fixed; /* KEEP THIS! This is what you want. */
+  
+  /* --- POSITIONING LOGIC --- */
+  /* This value needs to be adjusted to clear your logo and title header */
+  top: 40%; 
+  right: calc(18% + 5px);
+  /* --- SIZING AND STYLING --- */
+  width: 25%; /* Give it a clear width */
+  max-width: 150px; /* Stop it from getting too wide on large screens */
+  padding: 20px;
+  background-color: white; /* Give it a solid background */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 8px; /* Optional: adds a nice rounded corner */
+  z-index: 10;
+}
+
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 1em;
+  font-family: 'Asap Condensed', sans-serif;
+}
+
+.summary-title {
+  color: #555;
+}
+
+.summary-price {
+  color: #111;
+  font-weight: bold;
+}
+
+.summary-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 15px 0;
+}
+
+.total-row {
+  font-size: 1.2em;
+  margin-top: 15px;
+}
+
+.total-row .summary-title,
+.total-row .summary-price {
+    font-weight: bold;
+    color: #000;
 }

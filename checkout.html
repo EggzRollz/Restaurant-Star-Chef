@@ -24,15 +24,41 @@
   
     <body>
     <div class="checkout-background"> <!-- New container for the fixed background -->
-    <div class="checkout-bar-container"> <!-- Your large bar -->    
-            <div class="checkout-logo"> </div>
-            <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
-            <div id="checkoutItemContainer" class="checkout-info"></div>
+      <div class="checkout-bar-container"> <!-- Your large bar -->  
+        <div class="top-container">
+          <div class="checkout-logo"> </div>
+          <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
+        </div> 
+        <div class="bottom-container">
+          <div class="checkout-item-list">
+                <div id="checkoutItemContainer" class="checkout-info"></div>
+          </div> 
+
             <div class="cart-total-summary">
-              <h3 id="cart-total">Total: $0.00</h3>
+            <!-- Subtotal Row -->
+            <div class="summary-row">
+              <span class="summary-title">Subtotal</span>
+              <span id="cart-subtotal" class="summary-price">$0.00</span>
             </div>
-    </div>
-    </div>
+
+            <!-- HST Row -->
+            <div class="summary-row">
+              <span class="summary-title">HST</span>
+              <span id="hst" class="summary-price">$0.00</span>
+            </div>
+
+            <!-- Divider -->
+            <hr class="summary-divider">
+
+            <!-- Total Row -->
+            <div class="summary-row total-row">
+              <span class="summary-title">Total</span>
+              <span id="cart-total" class="summary-price">$0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
     <script type="module" src="checkout.js"></script>
 </body>
 </html>
