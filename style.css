@@ -928,13 +928,16 @@ hr.divider {
   display: flex;
   flex-direction: column; /* Stack children (logo, content) vertically */
   align-items: center;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
-.bottom-container{
+.bottom-container {
   display: flex;
   flex-direction: row;
-  padding-top: 20px;
-  justify-content:space-between;
+  
+  justify-content: space-between;
+  position: relative; /* <-- THIS IS VERY IMPORTANT */
+  min-height: 500px; /* Give it some height so there's room to scroll */
 }
 .checkout-item-list {
   width: 60%; /* Occupies the left portion of the container */
@@ -947,7 +950,7 @@ hr.divider {
 
 
 .checkout-logo {
-    background-image: url('graphics/Star-Chef-Logo.png');
+    background-image: url('graphics/Star-Chef-Logo-Vert.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -1013,6 +1016,9 @@ hr.divider {
   /* 1. Make the main white bar take up more screen width */
   .checkout-bar-container {
     width: 70%;
+    font-size: 1em;
+    font-family: "Noto Sans Display", sans-serif;
+    font-weight: 400;
   }
 
   /* 2. Fix the title's width */
@@ -1040,7 +1046,7 @@ hr.divider {
   
   /* 5. Optional: Add a little space and clarity to the price */
   .cart-item-price {
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 8px; /* Add some space above the price */
   }
 
@@ -1071,25 +1077,41 @@ hr.divider {
 .quantity-value {
     min-width: 30px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .cart-total-summary {
-  position: fixed; /* KEEP THIS! This is what you want. */
+  /* This is its starting state: positioned at the top-right of the parent */
+  position: absolute;
+  top: 25px;
+  right: 0;
   
-  /* --- POSITIONING LOGIC --- */
-  /* This value needs to be adjusted to clear your logo and title header */
-  top: 40%; 
-  right: calc(18% + 5px);
-  /* --- SIZING AND STYLING --- */
-  width: 25%; /* Give it a clear width */
-  max-width: 150px; /* Stop it from getting too wide on large screens */
+  /* Your existing styling */
+  min-width: 200px;
+  max-width: 200px; /* Adjusted for better visuals */
   padding: 20px;
-  background-color: white; /* Give it a solid background */
+  background-color: white;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  border-radius: 8px; /* Optional: adds a nice rounded corner */
+  border-radius: 8px;
   z-index: 10;
 }
+
+.cart-total-summary.is-sticky-middle {
+    position: fixed;
+    top: 37%;
+    transform: translateX(6.5%); /* This perfectly centers it vertically */
+    /* right will be set dynamically via JavaScript */
+}
+
+
+/* --- ADDITION 2: Class for the "stuck at the bottom" state --- */
+.cart-total-summary.is-sticky-bottom {
+    position: absolute;
+    bottom: 0;
+    top: auto; /* Important to override the 'top: 0' from the default state */
+    right: 0; /* Ensure it stays aligned with the container */
+}
+
 
 
 .summary-row {
@@ -1097,7 +1119,7 @@ hr.divider {
   justify-content: space-between;
   margin-bottom: 12px;
   font-size: 1em;
-  font-family: 'Asap Condensed', sans-serif;
+  font-family: "Noto Sans Display", sans-serif;
 }
 
 .summary-title {
@@ -1106,7 +1128,7 @@ hr.divider {
 
 .summary-price {
   color: #111;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .summary-divider {
@@ -1122,6 +1144,32 @@ hr.divider {
 
 .total-row .summary-title,
 .total-row .summary-price {
-    font-weight: bold;
+    font-weight: 700;
     color: #000;
+}
+
+@media (max-width: 480px) {
+
+  /* 1. Change the parent container to a vertical layout */
+  .bottom-container {
+    flex-direction: column;
+  }
+
+  /* 2. Make the item list and summary take the full width */
+  .checkout-item-list,
+  .cart-total-summary {
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't add to the width */
+  }
+
+  /* 3. Reset the summary box to behave like a normal element */
+  .cart-total-summary {
+    position: static;   /* VERY IMPORTANT: This puts it back in the normal document flow */
+    max-width: none;    /* Remove the max-width for mobile */
+    margin-top: 40px;   /* Add some space between the item list and the summary */
+    box-shadow: none;   /* Optional: remove the shadow for a flatter mobile look */
+    border-top: 1px solid #e0e0e0; /* Optional: Add a separator line */
+    padding-top: 20px;
+    border-radius: 0;   /* Optional: Full-width elements often look better without rounded corners */
+  }
 }

@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartSubTotalElement = document.getElementById('cart-subtotal');
     const cartHST = document.getElementById('hst'); 
     const cartTotalElement = document.getElementById('cart-total'); 
+    const placeOrderBttn = document.getElementById("place-order-button");
 
     // Load the cart from localStorage
     let savedCart = [];
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
 
-    // --- Function to save the cart and update the total ---
+    
     function saveCartAndRender() {
         // Save the updated cart array back to localStorage
         localStorage.setItem('cart', JSON.stringify(savedCart));
@@ -99,11 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
             increaseBttn.classList.add('increase-buttn');
             increaseBttn.textContent = "+";
             
-            // *** THE IMPORTANT PART: ADDING EVENT LISTENERS INSIDE THE LOOP ***
+            
 
             increaseBttn.addEventListener("click", () => {
-                // Increase the quantity for this specific item
-                console.log('Increase button clicked for item:', item.name); 
+                
                 item.quantity++;
                 // Save the changes and re-render the entire cart
                 saveCartAndRender();
@@ -136,4 +136,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial call to render the cart when the page loads
     renderCartItems();
+    const summaryBox = document.querySelector('.cart-total-summary');
+    const parentContainer = document.querySelector('.bottom-container');
+    const mainWhiteBar = document.querySelector('.checkout-bar-container');
+
+    // This function will run every time the user scrolls
+    function handleStickySummary() {
+        if (window.innerWidth <= 480) {
+        // Ensure any sticky classes/styles are removed in case the user resized the window down.
+        summaryBox.classList.remove('is-sticky-middle', 'is-sticky-bottom');
+        summaryBox.style.right = '';
+        return; // Exit the function immediately.
+    }
+    // === END OF MOBILE CHECK ===
+
+    // The rest of the function is the same as before.
+    if (!summaryBox || !parentContainer || !mainWhiteBar || parentContainer.offsetHeight <= summaryBox.offsetHeight) {
+        return; 
+    }
+
+    const parentRect = parentContainer.getBoundingClientRect();
+    const summaryHeight = summaryBox.offsetHeight;
+
+    const stickyStartThreshold = (window.innerHeight - summaryHeight) / 2;
+    const stickyEndThreshold = (window.innerHeight + summaryHeight) / 2;
+
+    if (parentRect.bottom <= stickyEndThreshold) {
+        summaryBox.classList.remove('is-sticky-middle');
+        summaryBox.classList.add('is-sticky-bottom');
+        summaryBox.style.right = '';
+    }
+    else if (parentRect.top <= stickyStartThreshold) {
+        summaryBox.classList.remove('is-sticky-bottom');
+        summaryBox.classList.add('is-sticky-middle');
+
+        const rightOffset = window.innerWidth - parentRect.right;
+        summaryBox.style.right = `${rightOffset}px`;
+    }
+    else {
+        summaryBox.classList.remove('is-sticky-middle');
+        summaryBox.classList.remove('is-sticky-bottom');
+        summaryBox.style.right = ''; 
+    }
+}
+
+    window.addEventListener('scroll', handleStickySummary);
+
+    // Attach it to the resize event for responsiveness.
+    window.addEventListener('resize', handleStickySummary);
+
+    // Run the function once on page load to set the correct initial state.
+    handleStickySummary();
+    if (savedCart.length === 0){
+        console.log("nothing in cart")
+    } else if (placeOrderBttn) {
+        placeOrderBttn.addEventListener('click', () => {
+            console.log("order placed")
+        });
+    }     
 });
