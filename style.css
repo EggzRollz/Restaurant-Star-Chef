@@ -714,17 +714,18 @@ hr.divider {
   color: #000;
   width: 30px;
   text-align: center;
+  margin: 0;
 }
 
 .quantity-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
   padding: 0.4rem 1rem;
   border-top: 1px solid #ddd;
   background: white;
   flex-shrink: 0;          /* prevents it from shrinking */
+  gap: 2rem;
 }
 
 
@@ -733,11 +734,24 @@ hr.divider {
   padding: 0.3rem 0.6rem;  
   font-size: 1rem;
 }
-#quantity-display {
-  font-size: 1.1rem;
-  min-width: 2ch;
-  text-align: center;
+
+@media (max-width: 480px) {
+  .quantity-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Add a small vertical gap between the rows */
+    row-gap: 10px; 
+    /* Adjust padding to be more compact */
+    padding-left:  1rem; 
+    padding-right:  1rem; 
+  }
+
+  .quantity-controls .submitBttn {
+    flex-basis: 100%;
+  }
 }
+
+
 
 
 .quantityBttn {
