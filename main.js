@@ -45,8 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitBttn = document.getElementById("submitBttn");
   const customizeModal = document.getElementById('customize');
   const modalContent = document.querySelector('.modal-content');
-  const menuContainer = document.getElementById('menu-items-container');
+  const menuContainer = document.querySelector('.menu-grid');
   const cartButton = document.querySelector('.cart-button');
+  const menuNavSlider = document.getElementById('menuNav');
   // --- State variables ---
   let currentItem = null; // Store the whole item object
   let currentPrice = 0;
@@ -117,6 +118,25 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('[data-category]').forEach(link => {
       link.addEventListener("click", event => {
         event.preventDefault(); 
+        
+        // --- NEW: Add the centering logic here ---
+        if (menuNavSlider) {
+            const sliderWidth = menuNavSlider.offsetWidth;
+            // The link is inside an <li>, which is what we need to measure.
+            const linkListItem = link.parentElement;
+            
+            // Calculate the target scroll position to center the clicked list item.
+            const targetScrollLeft = linkListItem.offsetLeft + (linkListItem.offsetWidth / 2) - (sliderWidth / 2);
+    
+            // Animate the scroll
+            menuNavSlider.scrollTo({
+              left: targetScrollLeft,
+              behavior: 'smooth'
+            });
+        }
+        // --- END of new logic ---
+
+        // The original logic continues as before
         handleCategoryClick(link.dataset.category);
       });
     });
@@ -139,34 +159,96 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function createMenuItemElement(item) {
+// --- In main.js ---
+
+function createMenuItemElement(item) {
+    // 1. DEFINE ALL POSSIBLE MODIFIERS HERE
+    // This is our "dictionary". Key is the tag to look for (lowercase).
+    // Value is an object with the emoji and the hover-text.
+    const MODIFIERS = {
+        spicy: { emoji: '🌶️', title: 'Spicy' },
+        cold: { emoji: '❄️', title: 'Cold/Iced' },
+        vegan: { emoji: '🌱', title: 'Vegan' },
+        popular: { emoji: '⭐', title: 'Popular' }
+        // Add more here easily! e.g., gluten-free: { emoji: '🚫🌾', title: 'Gluten-Free'}
+    };
+
+    // --- The rest of your function structure ---
     const itemEl = document.createElement('li');
     itemEl.classList.add('menu-item');
-  
+
     const link = document.createElement('a');
     link.href = '#';
-    link.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-  
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      openCustomizeModal(item);
-    });
-  
+    link.classList.add('item-container-link');
+
+    const itemContainer = document.createElement('div');
+    itemContainer.classList.add('item-container');
+
+    const itemInfo = document.createElement('div');
+    itemInfo.classList.add("item-info");
+
+    const itemNameDiv = document.createElement('div');
+    itemNameDiv.classList.add("item-name");
+    itemNameDiv.textContent = `${item.name}`;
+
+    // 2. LOGIC TO ADD ICONS
+    // Get all of the item's tags in a lowercase array for easy checking.
+    const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
+
+    // Loop through our MODIFIERS dictionary.
+    for (const modifierKey in MODIFIERS) {
+        // Check if the item's tags include the current key (e.g., 'spicy').
+        if (lowerCaseTags.includes(modifierKey)) {
+            // If it's a match, create the icon!
+            const icon = document.createElement('span');
+            icon.classList.add('icon-indicator'); // Use a generic class for all icons
+            
+            // Get the emoji and title from our dictionary
+            icon.textContent = MODIFIERS[modifierKey].emoji;
+            icon.title = MODIFIERS[modifierKey].title;
+            
+            // Add the icon to the name div
+            itemNameDiv.appendChild(icon);
+        }
+    }
+    
+    // --- The rest of your function continues as normal ---
+    const itemPriceDiv = document.createElement('div');
+    itemPriceDiv.classList.add("item-price");
+    itemPriceDiv.textContent = `$${item.price.toFixed(2)}`;
+
+    const itemImg = document.createElement('div');
+    itemImg.classList.add("item-img");
+    itemImg.textContent = "Temporary Image";
+
+    // IMPORTANT: We now add the name and price divs to itemInfo
+    itemInfo.appendChild(itemNameDiv);
+    itemInfo.appendChild(itemPriceDiv);
+
+    itemContainer.appendChild(itemInfo);
+    itemContainer.appendChild(itemImg);
+    link.appendChild(itemContainer);
     itemEl.appendChild(link);
+
+    link.addEventListener('click', e => {
+        e.preventDefault();
+        openCustomizeModal(item);
+    });
+
     return itemEl;
-  }
+}
   
   function renderItems(items) {
     if (!menuContainer) return;
     menuContainer.innerHTML = '';
     const list = document.createElement('ul');
+    list.classList.add('item-list-grid'); 
     items.forEach(item => list.appendChild(createMenuItemElement(item)));
     menuContainer.appendChild(list);
   }
-  
-  // main.js - FINAL REPLACEMENT FUNCTION
 
 function renderAllItemsByCategory() {
+  
   if (!menuContainer) return;
   menuContainer.innerHTML = ''; // Clear the container first
 
@@ -217,6 +299,7 @@ function renderAllItemsByCategory() {
       section.appendChild(header);
       
       const list = document.createElement('ul');
+      list.classList.add('item-list-grid');
       groups[lookupKey].sort((a, b) => a.name.localeCompare(b.name));
 
       groups[lookupKey].forEach(item => {
@@ -244,7 +327,7 @@ function renderAllItemsByCategory() {
     const optionsContainer = document.getElementById('customOptions');
     const defaultPrice = document.getElementById('default-price');
 
-    defaultPrice.textContent = ("$ " + item.price);
+    defaultPrice.textContent = ("$ " + item.price.toFixed(2));
     title.textContent = item.name;
     optionsContainer.innerHTML = '';
     

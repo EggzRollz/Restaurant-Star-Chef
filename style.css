@@ -516,6 +516,8 @@ hr.divider {
   flex: 0 0 auto;
 }
 .menu-nav a:hover,
+
+
 .menu-nav a:focus {
   color: #A2956B; 
   outline: none;
@@ -530,6 +532,10 @@ hr.divider {
     font-style: thin 100;
     font-variation-settings:
     "wdth" 100;
+}
+
+.menu-nav a.active {
+  color: #A2956B; 
 }
 .menu-nav::-webkit-scrollbar {
   height: 6px;
@@ -603,8 +609,124 @@ hr.divider {
   background-color: #A2956B; 
   cursor: pointer;
 }
-#menu-items-container ul{
-  list-style: none;
+
+.menu-grid {
+  padding: 20px; /* Keeps some space around the whole menu */
+}
+
+/* 2. Style each category section */
+.menu-group {
+  margin-bottom: 60px; /* Creates vertical space between "Popular", "Specials", etc. */
+}
+
+/* 3. Style the category titles (the H2 elements) */
+.menu-group h2 {
+  font-family: 'Noto Sans Display', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+.menu-item {
+  /* This is the magic part! */
+  /* We want 2 items per row, so the base width is 50%. */
+  /* We must subtract half of the gap (25px / 2 = 12.5px) */
+  /* to make sure two items plus one gap fit perfectly on one line. */
+  flex-basis: calc(50% - 12.5px);
+}
+
+
+/* 4. MOVE the flexbox rules to the list INSIDE each category */
+.item-list-grid {
+  display: flex;
+  flex-wrap: wrap;
+  /* 'flex-start' is usually better than 'center' when inside a full-width section */
+  justify-content: flex-start; 
+  gap: 25px; /* The space between your item boxes */
+  
+  /* Reset default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+@media (max-width:480px){
+  .item-list-grid {
+    display: flex;
+    flex-direction: column;
+    /* 'flex-start' is usually better than 'center' when inside a full-width section */
+    justify-content: flex-start; 
+    gap: 25px; /* The space between your item boxes */
+    
+    /* Reset default list styling */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+}
+
+.item-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%; /* Make the white box fill the entire .menu-item space */
+  height: 150px; /* Increased height for better proportions */
+  background-color: rgb(20, 20, 20);
+  border-radius: 20px;
+  border: 1px solid #434343;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.item-container:hover{
+  width: 100%; /* Make the white box fill the entire .menu-item space */
+  height: 150px; /* Increased height for better proportions */
+  background-color: rgb(37, 37, 37);
+  border-radius: 20px;
+  border: 1px solid #434343;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+
+.item-info{
+  display:flex;
+  flex-direction:column;
+  width:70%;
+  border-right: 1px solid #434343;
+  padding: 6px;
+  
+}
+.item-info:hover{
+  display:flex;
+  flex-direction:column;
+  width:70%;
+  border-right: 1px solid #434343;
+  padding: 6px;
+  transition: color 0.3s ease;
+}
+
+.item-name {
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  transition: color 0.3s ease;
+}
+
+.spicy-indicator {
+  font-size: 1rem;
+}
+.item-price{
+  color: lightgray;
+  transition: color 0.3s ease;
+}
+.item-container:hover .item-name,
+.item-container:hover .item-price {
+  
+  color: #A2956B;
 }
 
 
