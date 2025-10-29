@@ -1216,9 +1216,10 @@ hr.divider {
 }
 
 .cart-total-summary {
-    width: 100%;
+    max-width: 200px;
+    min-width: 200px;
     position: relative;
-    top: 0;
+    top: 30px;
     padding: 20px;
     background-color: white;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -1228,8 +1229,8 @@ hr.divider {
 
 .cart-total-summary.is-sticky {
     position: fixed;
-    top: 170px;
-    width: 90%;
+    top: 230px;
+    width: 80%;
 }
 
 .cart-total-summary.is-at-bottom {
@@ -1288,7 +1289,7 @@ hr.divider {
     }
 
     .form-group {
-        width: 95%;
+        width: 100%;
     }
 
     .input-group {
@@ -1296,7 +1297,7 @@ hr.divider {
     }
 
     .checkout-title {
-        width: 90%;
+        width: 100%;
     }
 
     .cart-item {
@@ -1324,7 +1325,6 @@ hr.divider {
 
     .summary-column {
         width: 100%;
-        margin-top: 40px;
     }
 
     .checkout-item-list,
@@ -1337,7 +1337,6 @@ hr.divider {
         opacity: 1;
         position: static !important;
         max-width: none;
-        margin-top: 40px;
         box-shadow: none;
         border-top: 1px solid #e0e0e0;
         padding-top: 20px;

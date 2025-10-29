@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const wrapper = document.querySelector('.checkout-content-wrapper');
         const summaryColumn = document.querySelector('.summary-column');
 
-        // CRITICAL: Check mobile FIRST and completely disable sticky behavior
         if (window.innerWidth <= 768) {
             if (summaryBox) {
                 // Remove ALL classes and inline styles
@@ -71,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 summaryBox.style.left = '';
                 summaryBox.style.top = '';
             }
-            return; // Exit immediately - don't run any sticky logic
+            return; 
         }
 
         // Desktop-only sticky logic below this point
@@ -79,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const topOffset = 170;
+        const topOffset = 200;
         const wrapperRect = wrapper.getBoundingClientRect();
         const summaryColumnRect = summaryColumn.getBoundingClientRect();
         const summaryHeight = summaryBox.offsetHeight;
