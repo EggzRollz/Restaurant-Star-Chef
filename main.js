@@ -11,6 +11,7 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 
 // --- STEP 1: ADD YOUR FIREBASE CONFIGURATION HERE ---
 // Replace with your actual config object from the Firebase console
+
 const firebaseConfig = {
   apiKey: "AIzaSyAd-LuABfQtKfugGXYY20_S1uwwyNV6ZVw",
   authDomain: "star-chef-restaurant.firebaseapp.com",
@@ -20,7 +21,7 @@ const firebaseConfig = {
   appId: "1:924721320321:web:41644950fe66ee58eed880",
   measurementId: "G-BKD21L9889"
 };
-
+export {firebaseConfig};
 
 // --- Initialize Firebase and Firestore ---
 let db; // Declare db here in the global scope
@@ -168,7 +169,6 @@ function createMenuItemElement(item) {
     const MODIFIERS = {
         spicy: { emoji: '🌶️', title: 'Spicy' },
         cold: { emoji: '❄️', title: 'Cold/Iced' },
-        vegan: { emoji: '🌱', title: 'Vegan' },
         popular: { emoji: '⭐', title: 'Popular' }
         // Add more here easily! e.g., gluten-free: { emoji: '🚫🌾', title: 'Gluten-Free'}
     };
@@ -190,12 +190,9 @@ function createMenuItemElement(item) {
     const itemNameDiv = document.createElement('div');
     itemNameDiv.classList.add("item-name");
     itemNameDiv.textContent = `${item.name}`;
-
-    // 2. LOGIC TO ADD ICONS
-    // Get all of the item's tags in a lowercase array for easy checking.
+ 
     const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
 
-    // Loop through our MODIFIERS dictionary.
     for (const modifierKey in MODIFIERS) {
         // Check if the item's tags include the current key (e.g., 'spicy').
         if (lowerCaseTags.includes(modifierKey)) {

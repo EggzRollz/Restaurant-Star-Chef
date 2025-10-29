@@ -634,7 +634,10 @@ hr.divider {
   /* We want 2 items per row, so the base width is 50%. */
   /* We must subtract half of the gap (25px / 2 = 12.5px) */
   /* to make sure two items plus one gap fit perfectly on one line. */
-  flex-basis: calc(50% - 12.5px);
+  flex-basis: calc(33.3333% - 16.67px);
+  width: 100%; 
+  height: 150px;
+  
 }
 
 
@@ -644,7 +647,7 @@ hr.divider {
   flex-wrap: wrap;
   /* 'flex-start' is usually better than 'center' when inside a full-width section */
   justify-content: flex-start; 
-  gap: 25px; /* The space between your item boxes */
+  gap:25px;  /*he space between your item boxes */
   
   /* Reset default list styling */
   list-style-type: none;
@@ -652,12 +655,15 @@ hr.divider {
   margin: 0;
 }
 @media (max-width:480px){
+  .menu-group {
+    margin-bottom: 0px; /* Was 60px, which is too much for mobile */
+  }
   .item-list-grid {
     display: flex;
     flex-direction: column;
     /* 'flex-start' is usually better than 'center' when inside a full-width section */
     justify-content: flex-start; 
-    gap: 25px; /* The space between your item boxes */
+    gap: 0px; /* The space between your item boxes */
     
     /* Reset default list styling */
     list-style-type: none;
@@ -693,7 +699,7 @@ hr.divider {
 .item-info{
   display:flex;
   flex-direction:column;
-  width:70%;
+  width:60%;
   border-right: 1px solid #434343;
   padding: 6px;
   
@@ -701,7 +707,7 @@ hr.divider {
 .item-info:hover{
   display:flex;
   flex-direction:column;
-  width:70%;
+  width:60%;
   border-right: 1px solid #434343;
   padding: 6px;
   transition: color 0.3s ease;
@@ -1043,6 +1049,9 @@ hr.divider {
     z-index: 0;
 }
 
+
+
+
 .checkout-bar-container {
     background-color: white;
     width: 60%;
@@ -1058,32 +1067,11 @@ hr.divider {
     color: black; /* Default text color for contents of this bar */
     z-index: 1; /* Above the background */
 }
-.top-container{
-  color:black;
-  min-height: 20vh; /* Set a specific height */
-  display: flex;
-  flex-direction: column; /* Stack children (logo, content) vertically */
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-.bottom-container {
-  display: flex;
-  flex-direction: row;
-  
-  justify-content: space-between;
-  position: relative; /* <-- THIS IS VERY IMPORTANT */
-  min-height: 500px; /* Give it some height so there's room to scroll */
-}
-.checkout-item-list {
-  width: 60%; /* Occupies the left portion of the container */
-  max-width: 100%; /* Prevents overflow issues */
-  min-height: auto; /* Let content determine height */
-  padding: 0 20px;
-  /* Removed flex properties as they are not needed here */
-}
 
-
+.checkout-logo-container {
+  display:flex;
+  justify-content: center;
+}
 
 .checkout-logo {
     background-image: url('graphics/Star-Chef-Logo-Vert.png');
@@ -1099,6 +1087,81 @@ hr.divider {
     margin-top: 5px;
 }
 
+.top-container{
+  color:black;
+  min-height: 20vh; /* Set a specific height */
+  display: flex;
+  flex-direction: column; /* Stack children (logo, content) vertically */
+  align-items: left;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.bottom-container {
+  display: flex;
+  flex-direction: row;
+  
+  justify-content: space-between;
+  position: relative; /* <-- THIS IS VERY IMPORTANT */
+  min-height: 500px; /* Give it some height so there's room to scroll */
+}
+
+.checkout-item-list {
+  width: 60%; /* Occupies the left portion of the container */
+  max-width: 100%; /* Prevents overflow issues */
+  min-height: auto; /* Let content determine height */
+  padding: 0 20px;
+  /* Removed flex properties as they are not needed here */
+}
+
+
+.form-group {
+    width: 100%; /* Let it fill its parent container */
+    max-width: 500px; 
+    margin: 20px 0 40px 0; /* This removes the horizontal auto margin, aligning it left */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+/* This group holds the first and last name inputs to place them side-by-side */
+.input-group {
+    display: flex;
+    gap: 15px; /* Space between the first and last name inputs */
+}
+
+/* General styling for all text and phone inputs in the form */
+.form-group input {
+    width: 100%; /* Makes inputs fill their container */
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-family: "Noto Sans Display", sans-serif; /* Uses a font from your existing styles */
+    border: 1px solid #ccc; /* A simple, clean border */
+    border-radius: 5px; /* Slightly rounded corners */
+    box-sizing: border-box; /* Ensures padding doesn't affect the width */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Style for when a user clicks into an input field */
+.form-group input:focus {
+    outline: none; /* Removes the default browser outline */
+    border-color: #A2956B; /* Uses your theme's accent color */
+    box-shadow: 0 0 5px rgba(162, 149, 107, 0.5); /* Adds a soft glow */
+}
+
+
+/* --- Responsive Styling for Mobile --- */
+@media (max-width: 480px) {
+    .form-group {
+        width: 95%; /* Use more width on smaller screens */
+    }
+
+    /* Stack the first and last name fields vertically on mobile */
+    .input-group {
+        flex-direction: column;
+    }
+}
+
 .checkout-title {
     /* Remove absolute positioning */
     position: relative;
@@ -1107,7 +1170,8 @@ hr.divider {
     border-bottom: 2px solid lightgrey;
     font-size: 1.5em;
     text-align: center;
-    width: 50%;
+    width: 69%;
+
     padding-bottom: 10px;
 }
 .cart-item {
@@ -1309,3 +1373,4 @@ hr.divider {
     border-radius: 0;   /* Optional: Full-width elements often look better without rounded corners */
   }
 }
+

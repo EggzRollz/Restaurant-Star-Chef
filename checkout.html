@@ -25,8 +25,25 @@
     <body>
     <div class="checkout-background"> <!-- New container for the fixed background -->
       <div class="checkout-bar-container"> <!-- Your large bar -->  
-        <div class="top-container">
+        <div class="checkout-logo-container">
           <div class="checkout-logo"> </div>
+        </div>
+        <div class="top-container">
+          
+            <div class="clientInfoContainer">
+              <div id="clientInfoTitle" class="checkout-title">YOUR INFORMATION</div>
+              
+              <!-- Form for customer details -->
+              <div class="form-group">
+                  <!-- A group for first and last name to sit side-by-side -->
+                  <div class="input-group">
+                      <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+                      <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+                  </div>
+                  <!-- Phone number input -->
+                  <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+              </div>
+            </div>
           <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
         </div> 
         <div class="bottom-container">
@@ -66,5 +83,6 @@
       </div>
   </div>
     <script type="module" src="checkout.js"></script>
+    <script type="module" src="clientData.js"></script>
 </body>
 </html>
