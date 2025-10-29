@@ -28,60 +28,48 @@
         <div class="checkout-logo-container">
           <div class="checkout-logo"> </div>
         </div>
-        <div class="top-container">
-          
-            <div class="clientInfoContainer">
-              <div id="clientInfoTitle" class="checkout-title">YOUR INFORMATION</div>
-              
-              <!-- Form for customer details -->
-              <div class="form-group">
-                  <!-- A group for first and last name to sit side-by-side -->
-                  <div class="input-group">
-                      <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
-                      <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+        <div class="checkout-content-wrapper">
+
+            <!-- Column 1: All the main content that scrolls -->
+            <div class="checkout-details">
+                <div class="clientInfoContainer">
+                    <div id="clientInfoTitle" class="checkout-title">YOUR INFORMATION</div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+                            <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+                        </div>
+                        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                    </div>
+                </div>
+                <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
+                <div class="checkout-item-list">
+                    <div id="checkoutItemContainer" class="checkout-info"></div>
+                </div> 
+            </div>
+
+            <!-- Column 2: The summary box that will be sticky -->
+                  <div class="summary-column">
+              <!-- The original summary box now lives inside the placeholder -->
+              <div class="cart-total-summary">
+                  <div class="summary-row">
+                    <span class="summary-title">Subtotal</span>
+                    <span id="cart-subtotal" class="summary-price">$0.00</span>
                   </div>
-                  <!-- Phone number input -->
-                  <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                  <div class="summary-row">
+                    <span class="summary-title">HST</span>
+                    <span id="hst" class="summary-price">$0.00</span>
+                  </div>
+                  <hr class="summary-divider">
+                  <div class="summary-row total-row">
+                    <span class="summary-title">Total</span>
+                    <span id="cart-total" class="summary-price">$0.00</span>
+                  </div>
+                  <button id="place-order-button">Place Order</button>
               </div>
-            </div>
-          <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
-        </div> 
-        <div class="bottom-container">
-          <div class="checkout-item-list">
-                <div id="checkoutItemContainer" class="checkout-info"></div>
-          </div> 
-
-            <div class="cart-total-summary">
-            <!-- Subtotal Row -->
-            <div class="summary-row">
-              <span class="summary-title">Subtotal</span>
-              <span id="cart-subtotal" class="summary-price">$0.00</span>
-            </div>
-
-            <!-- HST Row -->
-            <div class="summary-row">
-              <span class="summary-title">HST</span>
-              <span id="hst" class="summary-price">$0.00</span>
-            </div>
-
-            <!-- Divider -->
-            <hr class="summary-divider">
-
-            <!-- Total Row -->
-            <div class="summary-row total-row">
-              <span class="summary-title">Total</span>
-              <span id="cart-total" class="summary-price">$0.00</span>
-            </div>
-
-           
-            <button id="place-order-button">Place Order</button>
-            
-
-
           </div>
-        </div>
+
       </div>
-  </div>
     <script type="module" src="checkout.js"></script>
     <script type="module" src="clientData.js"></script>
 </body>

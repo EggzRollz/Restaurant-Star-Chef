@@ -1032,45 +1032,37 @@ hr.divider {
     z-index: 1100;
   }
 }
-
 .checkout-background {
     background-image: url('graphics/restaurant3.jpg');
     background-size: cover;
     background-attachment: fixed;
     background-position: center 60%;
-
     display: flex;
     justify-content: center;
-    align-items: center; /* Centers the white bar vertically */
-
+    align-items: center;
     width: 100vw;
     min-height: 100vh;
     position: relative;
     z-index: 0;
 }
 
-
-
-
 .checkout-bar-container {
     background-color: white;
     width: 60%;
-    max-width: 90%; /* Responsive consideration for smaller screens */
-    min-height: 100vh; /* Set a specific height */
-    /* Allow for some responsiveness */
-
+    max-width: 90%;
+    min-height: 100vh;
     display: flex;
-    flex-direction: column; /* Stack children (logo, content) vertically */
+    flex-direction: column;
     padding: 20px;
-    
+    position: relative;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    color: black; /* Default text color for contents of this bar */
-    z-index: 1; /* Above the background */
+    color: black;
+    z-index: 1;
 }
 
 .checkout-logo-container {
-  display:flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .checkout-logo {
@@ -1078,184 +1070,127 @@ hr.divider {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
-    /* Give the div explicit dimensions */
     width: 150px;
-    height: 150px; /* Adjust this height for your logo's aspect ratio */
-
+    height: 150px;
     margin-bottom: 20px;
     margin-top: 5px;
 }
 
-.top-container{
-  color:black;
-  min-height: 20vh; /* Set a specific height */
-  display: flex;
-  flex-direction: column; /* Stack children (logo, content) vertically */
-  align-items: left;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.bottom-container {
-  display: flex;
-  flex-direction: row;
-  
-  justify-content: space-between;
-  position: relative; /* <-- THIS IS VERY IMPORTANT */
-  min-height: 500px; /* Give it some height so there's room to scroll */
+.top-container {
+    color: black;
+    min-height: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: 70%;
 }
 
 .checkout-item-list {
-  width: 60%; /* Occupies the left portion of the container */
-  max-width: 100%; /* Prevents overflow issues */
-  min-height: auto; /* Let content determine height */
-  padding: 0 20px;
-  /* Removed flex properties as they are not needed here */
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    padding: 0 20px;
 }
 
+.checkout-content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    position: relative;
+    margin-top: 50px;
+}
+
+.checkout-details {
+    flex-grow: 1;
+    min-width: 0;
+}
 
 .form-group {
-    width: 100%; /* Let it fill its parent container */
-    max-width: 500px; 
-    margin: 20px 0 40px 0; /* This removes the horizontal auto margin, aligning it left */
+    width: 100%;
+    max-width: 500px;
+    margin: 20px 0 40px 0;
     display: flex;
     flex-direction: column;
-    gap: 15px; 
+    gap: 15px;
 }
 
-/* This group holds the first and last name inputs to place them side-by-side */
 .input-group {
     display: flex;
-    gap: 15px; /* Space between the first and last name inputs */
+    gap: 15px;
 }
 
-/* General styling for all text and phone inputs in the form */
 .form-group input {
-    width: 100%; /* Makes inputs fill their container */
+    width: 100%;
     padding: 12px 15px;
     font-size: 1rem;
-    font-family: "Noto Sans Display", sans-serif; /* Uses a font from your existing styles */
-    border: 1px solid #ccc; /* A simple, clean border */
-    border-radius: 5px; /* Slightly rounded corners */
-    box-sizing: border-box; /* Ensures padding doesn't affect the width */
+    font-family: "Noto Sans Display", sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Style for when a user clicks into an input field */
 .form-group input:focus {
-    outline: none; /* Removes the default browser outline */
-    border-color: #A2956B; /* Uses your theme's accent color */
-    box-shadow: 0 0 5px rgba(162, 149, 107, 0.5); /* Adds a soft glow */
-}
-
-
-/* --- Responsive Styling for Mobile --- */
-@media (max-width: 480px) {
-    .form-group {
-        width: 95%; /* Use more width on smaller screens */
-    }
-
-    /* Stack the first and last name fields vertically on mobile */
-    .input-group {
-        flex-direction: column;
-    }
+    outline: none;
+    border-color: #A2956B;
+    box-shadow: 0 0 5px rgba(162, 149, 107, 0.5);
 }
 
 .checkout-title {
-    /* Remove absolute positioning */
     position: relative;
-    margin-top: 0;  /* or some padding if needed */
+    margin-top: 0;
     color: black;
     border-bottom: 2px solid lightgrey;
     font-size: 1.5em;
     text-align: center;
-    width: 69%;
-
+    width: 100%;
     padding-bottom: 10px;
 }
+
 .cart-item {
-    display: flex; /* allows items to sit in a row */
-    justify-content: space-between; /* spreads children apart */
+    display: flex;
+    justify-content: space-between;
     gap: 2vw;
     padding-top: 30px;
-    padding-bottom:10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #ccc;
 }
 
 .cart-item-name {
-    flex: 2; /* takes up more space */
+    flex: 2;
     font-weight: bold;
 }
 
-
-/* Horizontal layout for quantity and price underneath the name */
 .cart-item-subinfo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; 
+    align-items: flex-start;
     gap: 1em;
     max-width: 12em;
-     /* small spacing under name */
 }
-.cart-item-defaultPrice{
+
+.cart-item-defaultPrice {
     font-weight: normal;
 }
+
 .cart-item-customization {
     flex: 1;
     text-align: center;
-    color:#838383;
+    color: #838383;
 }
+
 .cart-item-price {
     flex: 1;
     text-align: right;
 }
 
-@media (max-width: 768px) {
-
-  /* 1. Make the main white bar take up more screen width */
-  .checkout-bar-container {
-    width: 70%;
-    font-size: 1em;
-    font-family: "Noto Sans Display", sans-serif;
-    font-weight: 400;
-  }
-
-  /* 2. Fix the title's width */
-  .checkout-title {
-    width: 90%;
-  }
-
-  /* 3. THIS IS THE KEY FIX: Stack the cart item content */
-  .cart-item {
-    flex-direction: column; /* Change from a row to a column */
-    align-items: flex-start; /* Align everything to the left */
-    gap: 0.5rem;             /* Use a small, fixed gap instead of 15vw */
-  }
-
-  /* 4. Reset the children so they behave in a column */
-  .cart-item-subinfo,
-  .cart-item-customization
-  .cart-item-price{
-    text-align: left; /* Align all text to the left for consistency */
-    width: 100%;      /* Allow them to take the full width */
-    flex: none;       /* Reset the flex-grow/shrink properties */
-  }
-}
-
-  
-  /* 5. Optional: Add a little space and clarity to the price */
-  .cart-item-price {
-    font-weight: 600;
-    margin-top: 8px; /* Add some space above the price */
-  }
-
 .quantity-mod-container {
     display: flex;
     align-items: center;
-    
-    position: relative; /* Ensure buttons are in the stacking context */
-    z-index: 10; /* Ensure buttons are clickable */
+    position: relative;
+    z-index: 10;
 }
 
 .increase-buttn, .decrease-buttn {
@@ -1281,65 +1216,60 @@ hr.divider {
 }
 
 .cart-total-summary {
-  /* This is its starting state: positioned at the top-right of the parent */
-  position: absolute;
-  top: 25px;
-  right: 0;
-  
-  /* Your existing styling */
-  min-width: 200px;
-  max-width: 200px; /* Adjusted for better visuals */
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  z-index: 10;
+    width: 100%;
+    position: relative;
+    top: 0;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 10;
 }
 
-.cart-total-summary.is-sticky-middle {
+.cart-total-summary.is-sticky {
     position: fixed;
-    top: 37%;
-    transform: translateX(6.5%); /* This perfectly centers it vertically */
-    /* right will be set dynamically via JavaScript */
+    top: 170px;
+    width: 90%;
 }
 
-
-/* --- ADDITION 2: Class for the "stuck at the bottom" state --- */
-.cart-total-summary.is-sticky-bottom {
+.cart-total-summary.is-at-bottom {
     position: absolute;
     bottom: 0;
-    top: auto; /* Important to override the 'top: 0' from the default state */
-    right: 0; /* Ensure it stays aligned with the container */
+    top: auto;
 }
 
-
+.summary-column {
+    width: 30%;
+    flex-shrink: 0;
+    position: relative;
+}
 
 .summary-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 1em;
-  font-family: "Noto Sans Display", sans-serif;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1em;
+    font-family: "Noto Sans Display", sans-serif;
 }
 
 .summary-title {
-  color: #555;
+    color: #555;
 }
 
 .summary-price {
-  color: #111;
-  font-weight: 600;
+    color: #111;
+    font-weight: 600;
 }
 
 .summary-divider {
-  border: none;
-  border-top: 1px solid #e0e0e0;
-  margin: 15px 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 15px 0;
 }
 
 .total-row {
-  font-size: 1.2em;
-  margin-top: 15px;
+    font-size: 1.2em;
+    margin-top: 15px;
 }
 
 .total-row .summary-title,
@@ -1348,29 +1278,72 @@ hr.divider {
     color: #000;
 }
 
-@media (max-width: 480px) {
+/* MOBILE STYLES - EVERYTHING BELOW 768px */
+@media (max-width: 768px) {
+    .checkout-bar-container {
+        width: 75%;
+        font-size: 1em;
+        font-family: "Noto Sans Display", sans-serif;
+        font-weight: 400;
+    }
 
-  /* 1. Change the parent container to a vertical layout */
-  .bottom-container {
-    flex-direction: column;
-  }
+    .form-group {
+        width: 95%;
+    }
 
-  /* 2. Make the item list and summary take the full width */
-  .checkout-item-list,
-  .cart-total-summary {
-    width: 100%;
-    box-sizing: border-box; /* Ensures padding doesn't add to the width */
-  }
+    .input-group {
+        flex-direction: column;
+    }
 
-  /* 3. Reset the summary box to behave like a normal element */
-  .cart-total-summary {
-    position: static;   /* VERY IMPORTANT: This puts it back in the normal document flow */
-    max-width: none;    /* Remove the max-width for mobile */
-    margin-top: 40px;   /* Add some space between the item list and the summary */
-    box-shadow: none;   /* Optional: remove the shadow for a flatter mobile look */
-    border-top: 1px solid #e0e0e0; /* Optional: Add a separator line */
-    padding-top: 20px;
-    border-radius: 0;   /* Optional: Full-width elements often look better without rounded corners */
-  }
+    .checkout-title {
+        width: 90%;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .cart-item-price {
+        font-weight: 600;
+        margin-top: 8px;
+    }
+
+    .checkout-content-wrapper {
+        flex-direction: column;
+    }
+
+    .cart-item-subinfo,
+    .cart-item-customization,
+    .cart-item-price {
+        text-align: left;
+        width: 100%;
+        flex: none;
+    }
+
+    .summary-column {
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .checkout-item-list,
+    .cart-total-summary {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cart-total-summary {
+        opacity: 1;
+        position: static !important;
+        max-width: none;
+        margin-top: 40px;
+        box-shadow: none;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 20px;
+        border-radius: 0;
+        width: 100% !important;
+        left: auto !important;
+        top: auto !important;
+    }
 }
-

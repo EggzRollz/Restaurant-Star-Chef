@@ -1,197 +1,135 @@
+// Replace your entire checkout.js file with this.
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Get the main container and the element for the total price
+    // Select elements
     const cartContainer = document.getElementById('checkoutItemContainer');
-    // You'll need an element in your HTML to show the total, e.g., <div id="cart-total"></div>
     const cartSubTotalElement = document.getElementById('cart-subtotal');
-    const cartHST = document.getElementById('hst'); 
-    const cartTotalElement = document.getElementById('cart-total'); 
+    const cartHST = document.getElementById('hst');
+    const cartTotalElement = document.getElementById('cart-total');
     const placeOrderBttn = document.getElementById("place-order-button");
+    const summaryBox = document.querySelector('.cart-total-summary');
+    const wrapper = document.querySelector('.checkout-content-wrapper');
 
-    // Load the cart from localStorage
-    let savedCart = [];
-    const cartStr = localStorage.getItem('cart');
-    if (cartStr) {
-        savedCart = JSON.parse(cartStr);
-    }
+    let savedCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // --- Function to update the total price display ---
     function updateTotals() {
-
-        
-        const subtotal = savedCart.reduce((sum, item) => {
-            return sum + (item.price * item.quantity);
-        }, 0);
+        const subtotal = savedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const hstAmount = subtotal * 0.13;
         const finalTotal = subtotal + hstAmount;
-        // Update the HTML element with the formatted total
-        if (cartSubTotalElement) {
-        // Format the subtotal number to a string
-            cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
 
-        }
-        if (cartHST) {
-            // Format the HST number to a string
-            cartHST.textContent = `$${hstAmount.toFixed(2)}`;
-        }
-        if (cartTotalElement) {
-            // Format the final total number to a string
-            cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
-        }
-        
+        if (cartSubTotalElement) cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
+        if (cartHST) cartHST.textContent = `$${hstAmount.toFixed(2)}`;
+        if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
     }
-    
 
-    
-    function saveCartAndRender() {
-        // Save the updated cart array back to localStorage
-        localStorage.setItem('cart', JSON.stringify(savedCart));
-        // Rerender the cart display to reflect all changes
-        renderCartItems();
-    }
-    
-    // --- Main function to render all cart items ---
     function renderCartItems() {
-        // Clear the container before re-rendering to avoid duplicates
+        if (!cartContainer) return;
         cartContainer.innerHTML = '';
-        
-        // If the cart is empty, show a message
         if (savedCart.length === 0) {
             cartContainer.innerHTML = '<p>Your cart is empty.</p>';
-            updateTotals(); // Ensure total shows $0.00
+            updateTotals();
+            return;
+        }
+        savedCart.forEach((item, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('cart-item');
+            itemDiv.innerHTML = `
+                <div class="cart-item-subinfo">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-defaultPrice">$${item.price.toFixed(2)}</div>
+                    <div class="quantity-mod-container">
+                        <button class="decrease-buttn" data-index="${index}">-</button>
+                        <span class="quantity-value">${item.quantity}</span>
+                        <button class="increase-buttn" data-index="${index}">+</button>
+                    </div>
+                </div>
+                <div class="cart-item-customization">${Object.values(item.customizations).join(', ')}</div>
+                <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+            `;
+            cartContainer.appendChild(itemDiv);
+        });
+        updateTotals();
+    }
+    
+    function saveCartAndRender() {
+        localStorage.setItem('cart', JSON.stringify(savedCart));
+        renderCartItems();
+    }
+
+    function handleStickySummary() {
+        const summaryBox = document.querySelector('.cart-total-summary');
+        const wrapper = document.querySelector('.checkout-content-wrapper');
+        const summaryColumn = document.querySelector('.summary-column');
+
+        // CRITICAL: Check mobile FIRST and completely disable sticky behavior
+        if (window.innerWidth <= 768) {
+            if (summaryBox) {
+                // Remove ALL classes and inline styles
+                summaryBox.classList.remove('is-sticky', 'is-at-bottom');
+                summaryBox.style.position = '';
+                summaryBox.style.width = '';
+                summaryBox.style.left = '';
+                summaryBox.style.top = '';
+            }
+            return; // Exit immediately - don't run any sticky logic
+        }
+
+        // Desktop-only sticky logic below this point
+        if (!summaryBox || !wrapper || !summaryColumn) {
             return;
         }
 
-        savedCart.forEach((item, index) => {
-            // Create all the elements for a single cart item
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('cart-item');
+        const topOffset = 170;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const summaryColumnRect = summaryColumn.getBoundingClientRect();
+        const summaryHeight = summaryBox.offsetHeight;
+        const bottomStickPoint = wrapperRect.bottom - summaryHeight - topOffset;
 
-            const subInfoDiv = document.createElement('div');
-            subInfoDiv.classList.add('cart-item-subinfo');
+        if (bottomStickPoint <= 0) {
+            summaryBox.classList.remove('is-sticky');
+            summaryBox.classList.add('is-at-bottom');
+            summaryBox.style.width = '';
+            summaryBox.style.left = '';
+        } else if (summaryColumnRect.top <= topOffset) {
+            summaryBox.classList.remove('is-at-bottom');
+            summaryBox.classList.add('is-sticky');
+            summaryBox.style.width = `${summaryColumnRect.width}px`;
+            summaryBox.style.left = `${summaryColumnRect.left}px`;
+        } else {
+            summaryBox.classList.remove('is-sticky', 'is-at-bottom');
+            summaryBox.style.width = '';
+            summaryBox.style.left = '';
+        }
+    }
 
-            const nameDiv = document.createElement('div');
-            nameDiv.classList.add('cart-item-name');
-            nameDiv.textContent = item.name;
-            
-            const defaultPriceDiv = document.createElement('div');
-            defaultPriceDiv.classList.add('cart-item-defaultPrice');
-            defaultPriceDiv.textContent = "  $" + item.price.toFixed(2);
-
-            const customizationDiv = document.createElement('div');
-            customizationDiv.classList.add('cart-item-customization');
-            customizationDiv.textContent = Object.values(item.customizations).join(',\u00A0');
-
-            const quantityModContainer = document.createElement('div');
-            quantityModContainer.classList.add('quantity-mod-container'); // Corrected class add
-
-            const priceDiv = document.createElement('div');
-            priceDiv.classList.add('cart-item-price');
-            priceDiv.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
-            
-            const decreaseBttn = document.createElement('button');
-            decreaseBttn.classList.add('decrease-buttn');
-            decreaseBttn.textContent = "-";
-
-            const quantitySpan = document.createElement('span');
-            quantitySpan.classList.add('quantity-value');
-            quantitySpan.textContent = item.quantity;
-
-            const increaseBttn = document.createElement('button');
-            increaseBttn.classList.add('increase-buttn');
-            increaseBttn.textContent = "+";
-            
-            
-
-            increaseBttn.addEventListener("click", () => {
-                
-                item.quantity++;
-                // Save the changes and re-render the entire cart
-                saveCartAndRender();
-            });
-        
-            decreaseBttn.addEventListener("click", () => {
-                // Decrease the quantity
-                item.quantity--;
-                console.log('Decrease button clicked for item:', item.name);
-                // If quantity drops to 0, remove the item from the cart array
-                if (item.quantity <= 0) {
-                    // The 'index' comes from the forEach loop's second argument
+    // Event Listeners
+    if (cartContainer) {
+        cartContainer.addEventListener('click', (event) => {
+            const target = event.target;
+            const index = target.dataset.index;
+            if (index === undefined) return;
+            if (target.matches('.increase-buttn')) {
+                savedCart[index].quantity++;
+            } else if (target.matches('.decrease-buttn')) {
+                savedCart[index].quantity--;
+                if (savedCart[index].quantity <= 0) {
                     savedCart.splice(index, 1);
                 }
-                
-                // Save the changes (either updated quantity or removed item) and re-render
-                saveCartAndRender();
-            });
-
-            // Append all the created elements to the DOM
-            quantityModContainer.append(decreaseBttn, quantitySpan, increaseBttn);
-            subInfoDiv.append(nameDiv, defaultPriceDiv, quantityModContainer);
-            itemDiv.append(subInfoDiv, customizationDiv, priceDiv);
-            cartContainer.appendChild(itemDiv);
+            }
+            saveCartAndRender();
         });
-
-        // After the loop, update the grand total
-        updateTotals();
     }
 
-    // Initial call to render the cart when the page loads
-    renderCartItems();
-    const summaryBox = document.querySelector('.cart-total-summary');
-    const parentContainer = document.querySelector('.bottom-container');
-    const mainWhiteBar = document.querySelector('.checkout-bar-container');
-
-    // This function will run every time the user scrolls
-    function handleStickySummary() {
-        if (window.innerWidth <= 480) {
-        // Ensure any sticky classes/styles are removed in case the user resized the window down.
-        summaryBox.classList.remove('is-sticky-middle', 'is-sticky-bottom');
-        summaryBox.style.right = '';
-        return; // Exit the function immediately.
+    if (placeOrderBttn) {
+        placeOrderBttn.addEventListener('click', () => {
+            console.log(savedCart.length > 0 ? "Order placed" : "Cannot place order, cart is empty.");
+        });
     }
-    // === END OF MOBILE CHECK ===
-
-    // The rest of the function is the same as before.
-    if (!summaryBox || !parentContainer || !mainWhiteBar || parentContainer.offsetHeight <= summaryBox.offsetHeight) {
-        return; 
-    }
-
-    const parentRect = parentContainer.getBoundingClientRect();
-    const summaryHeight = summaryBox.offsetHeight;
-
-    const stickyStartThreshold = (window.innerHeight - summaryHeight) / 2;
-    const stickyEndThreshold = (window.innerHeight + summaryHeight) / 2;
-
-    if (parentRect.bottom <= stickyEndThreshold) {
-        summaryBox.classList.remove('is-sticky-middle');
-        summaryBox.classList.add('is-sticky-bottom');
-        summaryBox.style.right = '';
-    }
-    else if (parentRect.top <= stickyStartThreshold) {
-        summaryBox.classList.remove('is-sticky-bottom');
-        summaryBox.classList.add('is-sticky-middle');
-
-        const rightOffset = window.innerWidth - parentRect.right;
-        summaryBox.style.right = `${rightOffset}px`;
-    }
-    else {
-        summaryBox.classList.remove('is-sticky-middle');
-        summaryBox.classList.remove('is-sticky-bottom');
-        summaryBox.style.right = ''; 
-    }
-}
 
     window.addEventListener('scroll', handleStickySummary);
-
-    // Attach it to the resize event for responsiveness.
     window.addEventListener('resize', handleStickySummary);
 
-    // Run the function once on page load to set the correct initial state.
+    // Initialize Page
+    renderCartItems();
     handleStickySummary();
-    if (savedCart.length === 0){
-        console.log("nothing in cart")
-    } else if (placeOrderBttn) {
-        placeOrderBttn.addEventListener('click', () => {
-            console.log("order placed")
-        });
-    }     
 });
