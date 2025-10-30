@@ -1,37 +1,86 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { firebaseConfig } from "./main.js";
 
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function writeCartData(itemIdArr, name, email, phonenumbe, time, orderNumber) {
-  set(ref(db, 'orders/' + orderNumber), {
-    itemIdArr: itemIdArr,
-    name: name,
-    email: email,
-    phonenumber: phonenumber,
-    time: time,
-    orderNumber: orderNumber,
-  });
+// Select DOM elements needed for submission
+const placeOrderBttn = document.getElementById("place-order-button");
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const phone = document.getElementById("phone");
+
+async function getOrderNumber(db) {
+    const counterRef = ref(db, "ordercount");
+    const result = await runTransaction(counterRef, (currentCount) => {
+        return (currentCount === null) ? 1000 : currentCount + 1;
+    });
+    return result.snapshot.val();
 }
 
-const link = document.getElementById("place-order-button");
-link.addEventListener("click", event => {
-    console.log("dylans a predator")
-    writeCartData(["R1","B3221C","DICK"], "Dylan", "masterbatez@gmail.com", "6479187917","12:30", "1234")
-    
-});
-
-function test(data){
-    console.log(data)
-    console.log("hi")
+/**
+ * Writes the final order data to the Firebase Realtime Database.
+ */
+function writeOrderData(orderDetails) {
+    return set(ref(db, 'orders/' + orderDetails.orderNumber), orderDetails);
 }
 
+
+if (placeOrderBttn) {
+    placeOrderBttn.addEventListener("click", async (event) => {
+        event.preventDefault(); 
+        const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
+            id: item.id, 
+            baseId: item.id.split('-')[0], 
+            quantity: item.quantity,
+            customizations: item.customizations
+        }));
+        if (finalCartForSubmission.length === 0) {
+            alert("Your cart is empty. Please add items before placing an order.");
+            return; 
+        }
+        
+        placeOrderBttn.disabled = true;
+        placeOrderBttn.textContent = "Placing Order...";
+
+        try {
+            const newOrderNumber = await getOrderNumber(db);
+            const orderDetails = {
+                orderNumber: newOrderNumber,
+                customerName: `${firstName.value} ${lastName.value}`,
+                phoneNumber: phone.value,
+                orderDate: new Date().toISOString(),
+                status: 'new'
+            };
+
+            // Write the complete order object to Firebase
+            await writeOrderData(orderDetails);
+
+            // --- Post-Submission Success ---
+            console.log("Order submitted successfully!", orderDetails);
+            
+            // Clear the cart from storage so it's empty for the next visit
+            localStorage.removeItem('cart');
+
+            // Redirect to a confirmation page
+            window.location.href = `/thank-you.html?order=${newOrderNumber}`;
+
+        } catch (error) {
+            // --- Handle Errors ---
+            console.error("Error placing order: ", error);
+            alert("There was an error placing your order. Please try again.");
+            
+            placeOrderBttn.disabled = false;
+            placeOrderBttn.textContent = "Place Order";
+        }
+    });
+}
+//read
 const ordersReceived = ref(db, 'orders/');
 onValue(ordersReceived, (snapshot) => {
 
   const data = snapshot.val();
-    test(data)
+    
 });

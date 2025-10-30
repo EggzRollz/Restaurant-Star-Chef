@@ -9,8 +9,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const placeOrderBttn = document.getElementById("place-order-button");
     const summaryBox = document.querySelector('.cart-total-summary');
     const wrapper = document.querySelector('.checkout-content-wrapper');
-
+    const firstName = document.getElementById("firstName")
+    const lastName = document.getElementById("lastName")
+    const phone = document.getElementById("phone")
     let savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+
+
+    function updateButtonState() {
+        // Trim the values to ensure fields with only spaces are considered empty
+        const isFirstNameEmpty = firstName.value.trim() === '';
+        const isLastNameEmpty = lastName.value.trim() === '';
+        const isPhoneEmpty = phone.value.trim() === '';
+        const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
+        const isCartEmpty = savedCart.length === 0;
+
+        placeOrderBttn.disabled = areAnyFieldsEmpty || isCartEmpty;
+    }
+
+    const formFields = [firstName, lastName, phone];
+    formFields.forEach(field => {
+        if (field) { 
+            field.addEventListener('input', updateButtonState);
+        }
+    });
 
     function updateTotals() {
         const subtotal = savedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -20,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cartSubTotalElement) cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
         if (cartHST) cartHST.textContent = `$${hstAmount.toFixed(2)}`;
         if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
+        updateButtonState();
     }
 
     function renderCartItems() {
@@ -100,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
             summaryBox.style.left = '';
         }
     }
+    
 
     // Event Listeners
     if (cartContainer) {
@@ -116,12 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
             saveCartAndRender();
-        });
-    }
-
-    if (placeOrderBttn) {
-        placeOrderBttn.addEventListener('click', () => {
-            console.log(savedCart.length > 0 ? "Order placed" : "Cannot place order, cart is empty.");
         });
     }
 

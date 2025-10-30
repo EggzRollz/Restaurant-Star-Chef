@@ -151,13 +151,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (newActiveLink) newActiveLink.classList.add('active');
 
     if (tag === 'All') {
-      renderAllItemsByCategory();
-    } else {
-      const sorted = mergeSort(menuInventory, item => item.price);
-      // Ensure filterBy is case-insensitive
-      const filtered = filterBy(tag.toLowerCase(), sorted.map(item => ({...item, tags: item.tags.map(t => t.toLowerCase())})));
-      renderItems(filtered);
-    }
+    // This function already creates all the titles, so it's perfect.
+    renderAllItemsByCategory();
+  } else {
+    // For any other category, call our new function that creates a single title.
+    renderSingleCategory(tag);
+  }
   }
 
 // --- In main.js ---
@@ -193,21 +192,7 @@ function createMenuItemElement(item) {
  
     const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
 
-    for (const modifierKey in MODIFIERS) {
-        // Check if the item's tags include the current key (e.g., 'spicy').
-        if (lowerCaseTags.includes(modifierKey)) {
-            // If it's a match, create the icon!
-            const icon = document.createElement('span');
-            icon.classList.add('icon-indicator'); // Use a generic class for all icons
-            
-            // Get the emoji and title from our dictionary
-            icon.textContent = MODIFIERS[modifierKey].emoji;
-            icon.title = MODIFIERS[modifierKey].title;
-            
-            // Add the icon to the name div
-            itemNameDiv.appendChild(icon);
-        }
-    }
+    
     
     // --- The rest of your function continues as normal ---
     const itemPriceDiv = document.createElement('div');
@@ -218,10 +203,26 @@ function createMenuItemElement(item) {
     itemImg.classList.add("item-img");
     itemImg.textContent = "Temporary Image";
 
+
+    
+    
     // IMPORTANT: We now add the name and price divs to itemInfo
     itemInfo.appendChild(itemNameDiv);
     itemInfo.appendChild(itemPriceDiv);
-
+    for (const modifierKey in MODIFIERS) {
+        if (lowerCaseTags.includes(modifierKey)) {
+            // If it's a match, create the icon!
+            const icon = document.createElement('span');
+            icon.classList.add('icon-indicator'); // Use a generic class for all icons
+            
+            // Get the emoji and title from our dictionary
+            icon.textContent = MODIFIERS[modifierKey].emoji;
+            icon.title = MODIFIERS[modifierKey].title;
+            
+            // Add the icon to the name div
+            itemInfo.appendChild(icon);
+        }
+    }
     itemContainer.appendChild(itemInfo);
     itemContainer.appendChild(itemImg);
     link.appendChild(itemContainer);
@@ -234,72 +235,110 @@ function createMenuItemElement(item) {
 
     return itemEl;
 }
-  
-  function renderItems(items) {
-    if (!menuContainer) return;
-    menuContainer.innerHTML = '';
-    const list = document.createElement('ul');
-    list.classList.add('item-list-grid'); 
-    items.forEach(item => list.appendChild(createMenuItemElement(item)));
-    menuContainer.appendChild(list);
+function renderSingleCategory(categoryName) {
+  // ... code to clear the container ...
+   if (!menuContainer) return;
+  menuContainer.innerHTML = '';
+  // 2. Create the title element
+  const header = document.createElement('h2');
+  // The categoryName from the HTML is already formatted correctly, so just use it.
+  header.textContent = categoryName; 
+  header.classList.add('menu-group-title');
+  menuContainer.appendChild(header);
+
+  // 3. Filter the items just like you did before
+  let filteredItems;
+  const lowerCaseCategory = categoryName.toLowerCase();
+
+  // Special case for our combined category
+  if (lowerCaseCategory === 'soup / noodles') {
+    filteredItems = menuInventory.filter(item => {
+        const primaryTag = (item.tags[0] || '').toLowerCase();
+        return primaryTag === 'soup' || primaryTag === 'soup noodle';
+    });
+  } else {
+    // Standard filtering for all other categories
+    filteredItems = menuInventory.filter(item => 
+        item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
+    );
   }
 
-function renderAllItemsByCategory() {
+  // Use the newly filtered list (which is now called filteredItems)
+  const filtered = filteredItems; 
+  // 4. Create and append the list of items
+  const list = document.createElement('ul');
+  list.classList.add('item-list-grid');
   
+  if (filtered.length > 0) {
+      filtered.forEach(item => list.appendChild(createMenuItemElement(item)));
+  } else {
+      list.innerHTML = `<p>No items found in this category.</p>`;
+  }
+  
+  menuContainer.appendChild(list);
+}
+  
+
+
+
+  
+// In main.js
+
+function renderAllItemsByCategory() {
   if (!menuContainer) return;
   menuContainer.innerHTML = ''; // Clear the container first
 
-  // Human-readable display order. The case here is for display only.
+  // This is our desired display order and the source for our titles.
   const categoryOrder = [
     "Popular", 
     "Specials", 
     "StirFry",
-    "Fried Noodle", // Matches your data "FRIED NOODLE"
+    "Fried Noodle",
     "Rice", 
-    "Soup / Noodles", // We will combine SOUP and SOUP NOODLE here
+    "Soup / Noodles",
     "Congee", 
     "Sides", 
     "Desserts", 
     "Beverages"
   ];
-  
-  // Group all items by their primary category, STANDARDIZING TO UPPERCASE.
-  const groups = menuInventory.reduce((acc, item) => {
-    let category = item.tags[0] ? item.tags[0].trim().toUpperCase() : 'OTHER';
-    
-    // Combine SOUP and SOUP NOODLE into one group for cleaner display
-    if (category === 'SOUP' || category === 'SOUP NOODLE') {
-        category = 'SOUP / NOODLES';
-    }
 
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    
-    acc[category].push(item);
-    return acc;
-  }, {});
-
-  console.log("Grouped items by standardized category:", groups);
-
-  // Loop through our display order and look for matches in our standardized groups.
+  // Loop through each category we want to display.
   categoryOrder.forEach(displayCategory => {
-    // Standardize the display category to UPPERCASE for the lookup
-    const lookupKey = displayCategory.toUpperCase();
+    const lowerCaseCategory = displayCategory.toLowerCase();
+    let filteredItems;
 
-    if (groups[lookupKey] && groups[lookupKey].length > 0) {
+    // --- Filtering Logic (similar to renderSingleCategory) ---
+    // Handle our special combined category first.
+    if (lowerCaseCategory === 'soup / noodles') {
+      filteredItems = menuInventory.filter(item => {
+          const primaryTag = (item.tags[0] || '').toLowerCase();
+          return primaryTag === 'soup' || primaryTag === 'soup noodle';
+      });
+    } else {
+      // For all other categories, check if the tag exists anywhere in the item's tags array.
+      filteredItems = menuInventory.filter(item => 
+          item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
+      );
+    }
+
+    // --- Rendering Logic ---
+    // If we found any items for this category, create the title and the list.
+    if (filteredItems.length > 0) {
       const section = document.createElement('section');
       section.classList.add('menu-group');
       
       const header = document.createElement('h2');
-      header.textContent = displayCategory; // Use the nicely formatted name for the header
+      header.textContent = displayCategory; // Use the nicely formatted name
+      header.classList.add('menu-group-title');
       section.appendChild(header);
       
       const list = document.createElement('ul');
       list.classList.add('item-list-grid');
-      groups[lookupKey].sort((a, b) => a.name.localeCompare(b.name));
+      
+      // Sort items alphabetically within their category for consistency
+      filteredItems.sort((a, b) => a.name.localeCompare(b.name));
 
-      groups[lookupKey].forEach(item => {
+      filteredItems.forEach(item => {
         list.appendChild(createMenuItemElement(item));
       });
       

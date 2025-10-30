@@ -713,6 +713,11 @@ hr.divider {
   transition: color 0.3s ease;
 }
 
+.icon-indicator{
+  display: flex;
+  align-content: start;
+}
+
 .item-name {
   color: white;
   font-weight: bold;
@@ -1041,7 +1046,6 @@ hr.divider {
     justify-content: center;
     align-items: center;
     width: 100vw;
-    
     position: relative;
     z-index: 0;
 }
@@ -1059,6 +1063,9 @@ hr.divider {
     color: black;
     z-index: 1;
 }
+
+
+
 
 .checkout-logo-container {
     display: flex;
