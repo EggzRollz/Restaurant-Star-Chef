@@ -33,11 +33,12 @@ if (placeOrderBttn) {
         event.preventDefault(); 
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
             id: item.id, 
-            baseId: item.id.split('-')[0], 
+            baseId: item.id.split('_')[0], 
             quantity: item.quantity,
             customizations: item.customizations
+            
         }));
-        if (finalCartForSubmission.length === 0) {
+        if (cartPayload.length === 0) {
             alert("Your cart is empty. Please add items before placing an order.");
             return; 
         }
@@ -49,11 +50,13 @@ if (placeOrderBttn) {
             const newOrderNumber = await getOrderNumber(db);
             const orderDetails = {
                 orderNumber: newOrderNumber,
-                customerName: `${firstName.value} ${lastName.value}`,
-                phoneNumber: phone.value,
+                customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
+                phoneNumber: phone.value.trim(),
                 orderDate: new Date().toISOString(),
-                status: 'new'
+                status: 'new',
+                items: cartPayload
             };
+
 
             // Write the complete order object to Firebase
             await writeOrderData(orderDetails);
@@ -77,6 +80,8 @@ if (placeOrderBttn) {
         }
     });
 }
+
+
 //read
 const ordersReceived = ref(db, 'orders/');
 onValue(ordersReceived, (snapshot) => {

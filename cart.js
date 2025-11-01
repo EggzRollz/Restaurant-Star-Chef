@@ -19,11 +19,17 @@ export class Cart {
   }
   
   _generateItemId(baseId, customizations) {
-  const keys = ['Size', 'Spice Level', 'Protein']; // all possible keys
-  const codes = keys
-    .map(key => `${key[0]}${this.abbreviationMap[customizations[key]] || ''}`)
-    .join('');
-  return `${baseId}${codes}`;
+  const customizationKeys = Object.keys(customizations); // Gets ONLY the keys that exist
+  customizationKeys.sort(); // Important for consistency
+
+  const customizationString = customizationKeys.map(key => {
+    const value = customizations[key];
+    const keyAbbreviation = key.substring(0, 2).toUpperCase(); // 'PR'
+    const valueAbbreviation = this.abbreviationMap[value] || value; // 'C' or 'B'
+    return `${keyAbbreviation}-${valueAbbreviation}`;
+  }).join('_');
+
+  return `${baseId}_${customizationString}`;
 }
 
   
