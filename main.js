@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Start fetching the data ---
   fetchMenuData();
-
+  
   // --- Rendering Logic (largely the same as before) ---
   
   function setupCategoryButtons() {

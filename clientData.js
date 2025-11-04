@@ -32,7 +32,7 @@ if (placeOrderBttn) {
     placeOrderBttn.addEventListener("click", async (event) => {
         event.preventDefault(); 
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
-            id: item.id, 
+            itemId: item.id, 
             baseId: item.id.split('_')[0], 
             quantity: item.quantity,
             customizations: item.customizations
@@ -82,10 +82,3 @@ if (placeOrderBttn) {
 }
 
 
-//read
-const ordersReceived = ref(db, 'orders/');
-onValue(ordersReceived, (snapshot) => {
-
-  const data = snapshot.val();
-    
-});

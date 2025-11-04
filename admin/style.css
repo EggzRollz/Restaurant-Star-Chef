@@ -1,0 +1,140 @@
+/* --- GLOBAL STYLES --- */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clear font */
+    background-color: #e9ecef; /* Light gray background for contrast */
+    color: #212529; /* Darker text for readability */
+    margin: 0; 
+    padding: 30px; 
+}
+h1 { 
+    text-align: center; 
+    color: #a2956b; /* Primary blue color */
+    margin-bottom: 30px;
+}
+
+/* --- ORDER CONTAINER --- */
+#live-orders-container { 
+    display: flex; 
+    flex-direction: column-reverse; /* Newest on top */ 
+    gap: 25px; 
+    max-width: 900px; /* Limit width for focus */
+    margin: 0 auto;
+}
+
+/* --- ORDER CARD --- */
+.order-card { 
+    background-color: #ffffff; 
+    border: 1px solid #dee2e6; /* Subtle border */
+    border-left: 8px solid #007bff; /* Highlight strip (will change per status below) */
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Stronger, smoother shadow */
+    transition: transform 0.2s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.order-card h2 { 
+    margin-top: 0; 
+    border-bottom: 1px solid #adb5bd; /* Darker separator */
+    padding-bottom: 10px; 
+    font-size: 1.5rem; 
+    display: flex; /* Flexbox for title and status span */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-card p { margin: 8px 0; font-size: 0.95rem; }
+.order-card strong { color: #495057; } /* Darker key text */
+
+
+/* --- STATUS BADGES --- */
+/* Base status style */
+.order-card h2 span.status { 
+    font-size: 0.75rem; 
+    font-weight: bold;
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    color: #fff; /* White text for all badges */
+    float: none; /* Remove float for flexbox alignment */
+    text-transform: uppercase;
+}
+
+/* Status-specific colors (You must ensure your JS adds these classes based on the order.status property) */
+.order-card[data-status="new"] { border-left-color: #dc3545; } /* Red for NEW */
+.order-card[data-status="new"] .status { background-color: #dc3545; }
+
+.order-card[data-status="in-progress"] { border-left-color: #ffc107; } /* Yellow for In Progress */
+.order-card[data-status="in-progress"] .status { background-color: #ffc107; color: #333; } /* Darker text for yellow */
+
+.order-card[data-status="ready"] { border-left-color: #28a745; } /* Green for Ready */
+.order-card[data-status="ready"] .status { background-color: #28a745; }
+
+
+/* --- ITEM LIST --- */
+.order-items-list { 
+    list-style: none; 
+    padding-left: 0; 
+    margin-top: 15px; 
+}
+.order-items-list li { 
+    border-top: 1px dashed #ced4da; /* Lighter dashed line */
+    padding: 10px 0; 
+    padding-left: 5px;
+}
+.order-items-list li:first-child { border-top: none; } /* Remove top border on first item */
+
+.item-details { 
+    font-weight: bold; 
+    margin-bottom: 5px;
+}
+.item-id-code {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin: 5px 0;
+}
+.item-customizations { 
+    color: #555; 
+    font-size: 0.9em; 
+    padding-left: 15px; 
+    border-left: 2px solid #ccc; /* Visual separation for customizations */
+    margin-left: 10px;
+    margin-top: 5px;
+}
+.order-header-container {
+    display: flex;
+    justify-content: space-between; /* Space out the H2 and the button */
+    align-items: center;
+    border-bottom: 1px solid #adb5bd; 
+    padding-bottom: 10px; 
+    margin-bottom: 10px; /* Space below the header */
+}
+
+/* Style for the actual button */
+.delete-order-btn {
+    background: #dc3545; /* Red background for delete action */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    height: 35px; /* Keep it uniform */
+    line-height: 1;
+}
+
+.delete-order-btn:hover {
+    background: #c82333; /* Darker red on hover */
+}
+
+/* To ensure the H2 inside the container doesn't have double padding/margin */
+.order-card h2 {
+    margin-bottom: 0; /* Remove margin from H2 itself */
+    border-bottom: none; /* Remove the border, as the container now handles it */
+    padding-bottom: 0;
+}

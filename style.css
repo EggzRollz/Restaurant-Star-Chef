@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+
 html, body {
     overflow-x: hidden;
     max-width: 100%;
@@ -73,9 +76,9 @@ body {
     left : 0;
     width : 100%;
     height : 60px;
-    background-color: transparent;
+    background-color: black;
     backdrop-filter: blur(20px);
-    color: white;
+    color:black;
     position: fixed;
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -681,17 +684,21 @@ hr.divider {
   background-color: rgb(20, 20, 20);
   border-radius: 20px;
   border: 1px solid #434343;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+  
+  /* Smooth Transition Effect */
+  transition: all 0.3s ease;
 }
 
 
-.item-container:hover{
-  width: 100%; /* Make the white box fill the entire .menu-item space */
-  height: 150px; /* Increased height for better proportions */
-  background-color: rgb(37, 37, 37);
-  border-radius: 20px;
-  border: 1px solid #434343;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.item-container:hover {
+  /* --- KEY CHANGE: HOVER Shadow --- */
+  /* Make the shadow larger and slightly more opaque to simulate lift */
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6), /* Deeper bottom shadow */
+              0 0 10px rgba(255, 255, 255, 0.1); /* Optional: Very subtle 'glow' on top */
+  
+  /* Slight upward movement for a dramatic lift */
+  transform: translateY(-8px); 
 }
 
 
@@ -1073,14 +1080,15 @@ hr.divider {
 }
 
 .checkout-logo {
-    background-image: url('graphics/Star-Chef-Logo-Vert.png');
+    background-image: url('graphics/Star-Chef-Logo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     width: 150px;
-    height: 150px;
-    margin-bottom: 20px;
+    height: 250px;
+    
     margin-top: 5px;
+
 }
 
 .top-container {
@@ -1106,12 +1114,12 @@ hr.divider {
     align-items: flex-start;
     gap: 40px;
     position: relative;
-    margin-top: 50px;
 }
 
 .checkout-details {
     flex-grow: 1;
     min-width: 0;
+    
 }
 
 .form-group {
@@ -1150,10 +1158,12 @@ hr.divider {
     margin-top: 0;
     color: black;
     border-bottom: 2px solid lightgrey;
+    font-family: "Noto Sans Display", sans-serif;
     font-size: 1.5em;
     text-align: center;
     width: 100%;
     padding-bottom: 10px;
+    
 }
 
 .cart-item {
@@ -1286,6 +1296,39 @@ hr.divider {
     color: #000;
 }
 
+
+#place-order-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  min-width: 200px;
+  padding: 12px 24px;
+  
+  font-size: 13px; /* You no longer need !important */
+  font-weight: bold;
+  color: white;
+  
+  background-color: #c8b883;
+  border: 2px solid #ffffff;
+  border-radius: 1000px;
+  
+  cursor: pointer;
+  z-index: 100;
+  
+  /* list-style: none; is for list items (li), not needed for a button */
+}
+
+/* You can add a hover effect for better user experience */
+#place-order-button:hover {
+  background-color: #A2956B; /* A slightly darker shade */
+}
+#place-order-button:disabled {
+  background-color: #d4cbb0; /* A muted, less saturated color */
+  cursor: not-allowed;     /* Show the 'not allowed' icon on hover */
+  opacity: 0.7;            /* Optional: Make it look faded */
+}
+
 /* MOBILE STYLES - EVERYTHING BELOW 768px */
 @media (max-width: 768px) {
     .checkout-bar-container {
@@ -1352,4 +1395,151 @@ hr.divider {
         left: auto !important;
         top: auto !important;
     }
+}
+
+/* Import luxury fonts */
+
+/* Custom CSS Variables for Luxury Restaurant */
+:root {
+    --color-primary-dark: #0f0f0f;
+    --color-accent-gold: #a2956b;
+    --color-accent-bronze: #8b6f47;
+    --color-cream: #f5f3ef;
+}
+
+.thank-you-page {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1410 100%);
+    color: var(--color-cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle ambient glow effect */
+.thank-you-page::before{
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(201, 169, 97, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+    animation: ambient-glow 20s ease-in-out infinite;
+}
+
+@keyframes ambient-glow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(5%, 5%) scale(1.05); }
+}
+
+.card {
+    background: linear-gradient(145deg, rgba(25, 20, 15, 0.95), rgba(15, 15, 15, 0.98));
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.7),
+        0 0 1px rgba(201, 169, 97, 0.3),
+        inset 0 1px 0 rgba(201, 169, 97, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    position: relative;
+    z-index: 1;
+    /* Add a subtle fade-in animation */
+    opacity: 0;
+    animation: cardFadeIn 1s 0.2s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Elegant decorative corner accents */
+.card::before,
+.card::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-accent-gold);
+    opacity: 0.4;
+}
+
+.card::before {
+    top: 16px;
+    left: 16px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.card::after {
+    bottom: 16px;
+    right: 16px;
+    border-left: none;
+    border-top: none;
+}
+
+.accent-text {
+    color: var(--color-accent-gold);
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.2);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.thank-you-page h1{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+svg.accent-text {
+    filter: drop-shadow(0 0 8px rgba(201, 169, 97, 0.3));
+    animation: check-pulse 2s ease-in-out infinite;
+}
+
+@keyframes check-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* Time display box enhancement - remove the Tailwind override */
+.bg-gray-800\/50 {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.08), rgba(139, 111, 71, 0.05)) !important;
+    border-color: rgba(201, 169, 97, 0.2) !important; /* Targeting border-color directly */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Button enhancement - use a custom class instead of overriding Tailwind */
+a.bg-white {
+    background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-bronze)) !important;
+    color: #0f0f0f !important;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.3);
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+a.bg-white:hover {
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.5);
+    transform: translateY(-2px);
+}
+
+p {
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+#ready-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    letter-spacing: 0.05em;
 }
