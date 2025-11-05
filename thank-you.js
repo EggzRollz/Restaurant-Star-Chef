@@ -1,37 +1,51 @@
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
     const timeElement = document.getElementById('ready-time');
     const confElement = document.getElementById('conf-number');
 
-    // --- Part 1: Set the readiness time ---
-    if (timeElement) {
-        const now = new Date();
-        now.setMinutes(now.getMinutes() + 30);
-        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-        const dynamicReadyTime = now.toLocaleTimeString('en-US', options);
-        timeElement.textContent = dynamicReadyTime;
-    }
-
-    // --- Part 2: Get the Order Number from the URL ---
+    // --- Part 2 is moved up because we need the order number first ---
+    let orderNumber = null; // Declare orderNumber here to use it in both parts
     if (confElement) {
-        // Get the full query string from the URL (e.g., "?order=1005")
         const queryString = window.location.search;
-
-        // Create a URLSearchParams object to easily parse it
         const urlParams = new URLSearchParams(queryString);
+        orderNumber = urlParams.get('order'); // Assign the value
 
-        // Get the value of the 'order' parameter
-        const orderNumber = urlParams.get('order');
-
-        // Update the HTML element with the retrieved order number
         if (orderNumber) {
             confElement.textContent = `#${orderNumber}`;
         } else {
-            // A fallback in case someone visits the page without an order number
             confElement.textContent = '#N/A';
         }
+    }
+
+    // --- Part 1: Set the PERMANENT readiness time ---
+    if (timeElement && orderNumber) { // Only run this if we have a time element AND an order number
+        
+        // Create a unique key for this specific order's ready time
+        const storageKey = `readyTimeForOrder_${orderNumber}`;
+        
+        // 1. Check if a ready time is already stored for this order
+        let readyTime = sessionStorage.getItem(storageKey);
+
+        if (!readyTime) {
+            // 2a. If NO time is stored, this is the first visit.
+            // So, we calculate, format, and SAVE the time.
+            console.log("No saved time found for this order. Generating a new one.");
+            
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + 30);
+            const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+            
+            readyTime = now.toLocaleTimeString('en-US', options); // Assign to our variable
+            
+            // Save this newly created time to sessionStorage
+            sessionStorage.setItem(storageKey, readyTime);
+
+        } else {
+            // 2b. If a time IS stored, we'll just use it.
+            console.log("Found a saved time in sessionStorage:", readyTime);
+        }
+
+        // 3. Display the time (either the one we just made or the one we found)
+        timeElement.textContent = readyTime;
     }
 });

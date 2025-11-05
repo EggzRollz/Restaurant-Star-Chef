@@ -236,48 +236,59 @@ function createMenuItemElement(item) {
     return itemEl;
 }
 function renderSingleCategory(categoryName) {
-  // ... code to clear the container ...
-   if (!menuContainer) return;
+  // 1. Get and clear the main container
+  if (!menuContainer) return;
   menuContainer.innerHTML = '';
-  // 2. Create the title element
-  const header = document.createElement('h2');
-  // The categoryName from the HTML is already formatted correctly, so just use it.
-  header.textContent = categoryName; 
-  header.classList.add('menu-group-title');
-  menuContainer.appendChild(header);
 
-  // 3. Filter the items just like you did before
+  // --- Filtering Logic (This part is already perfect and doesn't need to change) ---
   let filteredItems;
   const lowerCaseCategory = categoryName.toLowerCase();
 
-  // Special case for our combined category
   if (lowerCaseCategory === 'soup / noodles') {
     filteredItems = menuInventory.filter(item => {
         const primaryTag = (item.tags[0] || '').toLowerCase();
         return primaryTag === 'soup' || primaryTag === 'soup noodle';
     });
   } else {
-    // Standard filtering for all other categories
     filteredItems = menuInventory.filter(item => 
         item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
     );
   }
 
-  // Use the newly filtered list (which is now called filteredItems)
-  const filtered = filteredItems; 
-  // 4. Create and append the list of items
-  const list = document.createElement('ul');
-  list.classList.add('item-list-grid');
-  
-  if (filtered.length > 0) {
-      filtered.forEach(item => list.appendChild(createMenuItemElement(item)));
+  // --- Rendering Logic (This is where we make the change) ---
+  // Only proceed to render if we actually found items for this category
+  if (filteredItems.length > 0) {
+      
+      // 2. NEW: Create the section wrapper, just like in the 'All Items' function
+      const section = document.createElement('section');
+      section.classList.add('menu-group');
+
+      // 3. Create the title element
+      const header = document.createElement('h2');
+      header.textContent = categoryName; 
+      header.classList.add('menu-group-title');
+      
+      // 4. Create the list of items
+      const list = document.createElement('ul');
+      list.classList.add('item-list-grid');
+      
+      // Sort items for consistency (optional but good practice)
+      filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+
+      filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
+
+      // 5. NEW: Append the title AND list to the new section wrapper
+      section.appendChild(header);
+      section.appendChild(list);
+
+      // 6. NEW: Finally, append the entire completed section to the main container
+      menuContainer.appendChild(section);
+
   } else {
-      list.innerHTML = `<p>No items found in this category.</p>`;
+      // If no items were found, display a message directly in the container
+      menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
   }
-  
-  menuContainer.appendChild(list);
 }
-  
 
 
 
