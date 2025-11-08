@@ -1,0 +1,1729 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+body {
+  /* This tells the body to be exactly as tall as its parent (the html element). */
+  /* This is the key change that prevents the body from creating its own scrollbar. */
+  min-height: 100%; 
+  
+  /* The rest of your body styles are fine. */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; 
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000000;
+}
+.our-menu {
+  padding: 0.4em 1em;
+  list-style : none;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  font-size: 1.2em;
+  position: absolute; 
+  border-radius: 1000px;
+  top: 65%; 
+  left: 50%; 
+  transform: translateX(-50%);
+  z-index: 100;
+}
+.our-menu a{
+    background-color: transparent;
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-block; 
+    font-family: "Birthstone", cursive;
+    font-weight: 400;
+    font-size: 1.2em;
+    font-style: normal;
+}
+.our-menu:hover {
+  background-color: #A2956B;
+  color: #ffffff;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-toggle {
+  display: none; 
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: auto;
+  order: 3;
+}
+@media (max-width: 480px) {
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 16px;  
+    font-size: 28px;
+    z-index: 1100;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  .menu-toggle.active {
+    color: #A2956B;
+    background-color: #fffdfd20;
+    }
+}
+.main-header {
+
+    top :  0;
+    left : 0;
+    width : 100%;
+    height : 60px;
+    background-color: black;
+    backdrop-filter: blur(20px);
+    color:black;
+    position: fixed;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        position: fixed;  
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 10vh;
+        background-color: #000000;
+        color: #A2956B;
+        padding: 10px 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        z-index: 100;
+        box-sizing: border-box;
+    }
+}
+
+
+.main-nav {
+    
+    position: relative;
+    display : flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.nav-links a i {
+  color: white;
+  margin-right: 6px;
+}
+.nav-links a:hover i {
+  color: #A2956B;
+  transition: color 0.3s;
+}
+
+
+
+.nav-links{
+    display : flex;
+    list-style : none;
+    padding : 0;
+    gap: 200px;
+    flex-direction: row;
+    margin: 0px;
+    font-weight: 400;
+    font-style: normal;
+}
+.nav-links a{
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-family: 'Asap Condensed', sans-serif;
+    font-weight: 400;
+    fill: white;
+}
+.nav-links a:hover {
+    color: #A2956B;
+    transition: color 0.3s;
+}
+
+
+@media (max-width: 480px) {
+  .nav-links {
+    position: fixed;       
+    top: 40px;
+    right: 0;
+    height: calc(100vh - 40px);         
+    width: 250px;          
+    background-color: #000;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transform: translateX(100%);  
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 1000;         
+  }
+
+  .nav-links.active {
+    transform: translateX(0);  
+    opacity: 1;
+  }
+
+  .nav-links li {
+    color: #A2956B;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+}
+.overlay {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none; /* BY DEFAULT, it is NOT clickable */
+  transition: opacity 0.3s ease;
+  z-index: 50; /* A relatively low z-index is fine for the default state */
+}
+
+/* This rule should ONLY be applied via JavaScript when the mobile menu is opened */
+.overlay.active {
+  opacity: 1;
+  pointer-events: all; /* WHEN ACTIVE, it becomes clickable to block content */
+}
+
+.logo-link img {
+    height: 50px; 
+    width: auto;  
+    margin-left: 50px;
+    margin-right: 100px;
+    z-index: 1000;
+}
+@media (max-width: 480px) {
+    .logo-link img {
+        margin: 0 auto;   
+        display: flex;
+        height: 30px;
+        z-index: 100;
+    }
+}
+
+
+.splash-image {
+  position: relative; /* Needed for positioning text inside */
+  width: 100%;        /* Make the container exactly the width of the page */
+  height: 90vh;       /* Set a specific height (e.g., 90% of viewport height). Adjust as you like. */
+  overflow: hidden;   /* This is good, it will crop the image inside */
+  z-index: 1;
+ 
+}
+
+.splash-image::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, black, transparent);
+  pointer-events: none;
+  z-index: 8;
+  
+}
+
+.splash-image img {
+  width: 100%;         /* Make the image fill its container horizontally */
+  height: 100%;        /* Make the image fill its container vertically */
+  object-fit: cover;   /* This is the magic! It scales the image to cover the
+                           area without stretching or distorting it. */
+  display: block;
+  padding-bottom: 80px
+}
+
+
+.splash-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 10;
+    width: 80%;
+}
+.splash-text h1 {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 4rem;
+    margin: 0 0 -5px 0;
+}
+.splash-text p {
+    font-family: serif;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    color: white;
+    margin-top: 0;
+}
+
+
+
+
+.awards{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    margin-top:120px;
+    margin-bottom:100px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.awards h2{
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    color: white;
+    font-size: 40px;
+}
+
+.awards p{
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: white;
+    font-size: 20px;
+}
+
+.gallery {
+    display:flex;
+    gap:30px;
+    flex-direction: row;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    object-fit: cover;
+}
+.gallery img.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.gallery img {
+    max-height: 100vh;
+    width:auto;
+    display: block;
+    position:relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.minor-splash-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 200px;
+  gap: 60px;
+}
+
+/* Minor splash item - container for each row */
+.minor-splash-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+/* Reverse layout for alternating rows (desktop) */
+.minor-splash-item.reverse {
+  flex-direction: row-reverse;
+}
+
+/* Image styling */
+.minor-splash-img {
+  flex: 1;
+  width: 50%;
+}
+
+.minor-splash-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Text styling */
+.minor-splash-text {
+  flex: 1;
+  width: 50%;
+  text-align: center;
+  color: #A2956B;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.minor-splash-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile layout */
+@media (max-width: 480px) {
+  .minor-splash-container {
+    margin-top: 100px;
+    gap: 40px;
+  }
+  
+  /* All items stack vertically: text then image */
+  .minor-splash-item,
+  .minor-splash-item.reverse {
+    flex-direction: column;
+  }
+  
+  .minor-splash-img,
+  .minor-splash-text {
+    width: 100%;
+  }
+  
+  .minor-splash-text {
+    padding: 10px;
+    order: 1; /* Text comes first */
+  }
+  
+  .minor-splash-img {
+    order: 2; /* Image comes second */
+  }
+}
+.info{
+    display: flex;
+    flex-direction: row;
+    margin-top: 150px;
+    margin-left: 40px;
+    margin-bottom: 100px;
+    gap: 130px;
+    flex-wrap: wrap;
+    color: white;
+}
+.info p{
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 18px;
+    max-width: 600px;
+    line-height: 1.6;
+}
+.reservation {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    margin-top:120px;
+    margin-bottom:100px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.reservation h2{
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    color: white;
+    font-size: 40px;
+   
+}
+.reservation-button {
+    text-decoration: none;
+    appearance: none;
+    outline: none;
+    display: block; 
+    padding: 0.4em 1em;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    font-size: 1.2em;
+    border-radius: 1000px;
+    margin: 20px auto; 
+    color: #ffffff;
+    width: 200px;
+    text-align: center;
+}
+
+.reservation-button:hover {
+  background-color: #A2956B;
+  color: #ffffff;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+p{  
+    border-top: 100px;
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 1.6;
+    color:white;
+}
+
+
+.scroll-down-indicator {
+    position: absolute;
+    bottom: 2%;
+    left: 50%;
+    transform: translateX(-50%); /* Only centering is needed now */
+    z-index: 15;
+    
+    /* Set the color for the SVG inside */
+    color: white; 
+
+    /* Remove link underline */
+    text-decoration: none; 
+
+    /* Add the animation */
+    animation: bounce-svg 2s infinite;
+}
+
+/* Style the SVG itself */
+.scroll-down-indicator svg {
+    /* Control the size here */
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* A simpler animation for the new SVG setup */
+@keyframes bounce-svg {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+
+.menu-nav-wrapper {
+  position: relative;
+}
+
+.menu-splash-text {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 10;
+    width: 80%;
+    
+}
+.menu-splash-text h1 {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 4rem;
+    margin: 0 0 -5px 0;
+}
+hr.divider {
+  width: 35px; /* Adjust the width of the line */
+  margin: 10px auto; /* Adds 30px space above/below and centers the line */
+  border: 0;
+  border-top: 2px solid white;
+  border-width: 1px 0 0 0;
+}
+
+/* You might need to add a class to your subtitle for specific spacing */
+.menu-splash-text p.subtitle {
+  font-family: serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: white;
+  margin-bottom: 0; /* Remove default bottom margin from the paragraph */
+}
+
+
+.menu-nav {
+  width: 100%;
+  overflow-x: auto;
+  background:transparent; 
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: all 0.3s ease;
+}
+.menu-nav ul {
+  display: flex;
+  gap: 50px; 
+  margin: 0;
+  list-style: none;
+  white-space: nowrap; 
+  padding-bottom: 20px;
+}
+@media (max-width: 480px){
+  .menu-nav ul {
+  display: flex;
+  gap: 20px; 
+  padding: 0 20px;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap; 
+  padding-bottom: 20px;
+  }
+}
+.menu-nav li {
+  flex: 0 0 auto;
+}
+.menu-nav a:hover,
+
+
+.menu-nav a:focus {
+  color: #A2956B; 
+  outline: none;
+}
+.menu-nav a{
+    color: rgb(255, 255, 255);
+    margin-right:20px;
+    text-decoration: none;
+    font-family: "Noto Sans Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: thin 100;
+    font-variation-settings:
+    "wdth" 100;
+}
+
+.menu-nav a.active {
+  color: #A2956B; 
+}
+.menu-nav::-webkit-scrollbar {
+  height: 6px;
+}
+
+.menu-nav::-webkit-scrollbar-thumb {  
+  background-color: #A2956B;
+  border-radius: 20px;
+}
+
+.menu-nav.fixed {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  background-color: #000000;
+  z-index: 10000;
+  padding-bottom: 20px; 
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  top: var(--header-height);
+}
+
+
+
+@media (max-width: 480px) {
+    .menu-nav.fixed {
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  background-color: #000000;
+  z-index: 20;
+  padding-top:20px;
+  padding-bottom: 20px; 
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+}
+.menu-placeholder {
+  display: none;
+}
+
+.menu-placeholder.active {
+  display: block;
+}
+.menu-item a{
+    color: rgb(255, 255, 255);
+    margin-right:20px;
+    text-decoration: none;
+    font-family: "Noto Sans Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: thin 100;
+    font-variation-settings:
+    "wdth" 100;
+}
+.menu-group{
+    color: #A2956B;
+    margin-right:20px;
+    text-decoration: none;
+    font-family: "Noto Sans Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: thin 100;
+    font-variation-settings:
+    "wdth" 100;
+}
+
+.menu-item a:hover{
+  background-color: #A2956B; 
+  cursor: pointer;
+}
+
+.menu-grid {
+  padding-right: 20px; /* Keeps some space around the whole menu */
+  padding-left: 20px;
+}
+
+/* 2. Style each category section */
+.menu-group {
+  margin-bottom: 60px; /* Creates vertical space between "Popular", "Specials", etc. */
+}
+
+/* 3. Style the category titles (the H2 elements) */
+.menu-group h2 {
+  font-family: 'Noto Sans Display', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+.menu-item {
+  /* This is the magic part! */
+  /* We want 2 items per row, so the base width is 50%. */
+  /* We must subtract half of the gap (25px / 2 = 12.5px) */
+  /* to make sure two items plus one gap fit perfectly on one line. */
+  flex-basis: calc(33.3333% - 16.67px);
+  width: 100%; 
+  height: 150px;
+  
+}
+
+
+/* 4. MOVE the flexbox rules to the list INSIDE each category */
+.item-list-grid {
+  display: flex;
+  flex-wrap: wrap;
+  /* 'flex-start' is usually better than 'center' when inside a full-width section */
+  justify-content: flex-start; 
+  gap:25px;  /*he space between your item boxes */
+  
+  /* Reset default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+@media (max-width:480px){
+  .menu-group {
+    margin-bottom: 0px; /* Was 60px, which is too much for mobile */
+  }
+  .item-list-grid {
+    display: flex;
+    flex-direction: column;
+    /* 'flex-start' is usually better than 'center' when inside a full-width section */
+    justify-content: flex-start; 
+    gap: 0px; /* The space between your item boxes */
+    
+    /* Reset default list styling */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+}
+
+.item-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%; /* Make the white box fill the entire .menu-item space */
+  height: 150px; /* Increased height for better proportions */
+  background-color: rgb(20, 20, 20);
+  border-radius: 20px;
+  border: 1px solid #434343;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+  transition: all 0.3s ease;
+}
+
+
+.item-container:hover {
+  /* --- KEY CHANGE: HOVER Shadow --- */
+  /* Make the shadow larger and slightly more opaque to simulate lift */
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6), /* Deeper bottom shadow */
+              0 0 10px rgba(255, 255, 255, 0.1); /* Optional: Very subtle 'glow' on top */
+  
+  /* Slight upward movement for a dramatic lift */
+  transform: translateY(-8px); 
+}
+
+
+
+.item-info{
+  display:flex;
+  flex-direction:column;
+  width:60%;
+  border-right: 1px solid #434343;
+  padding: 6px;
+  
+}
+.item-info:hover{
+  display:flex;
+  flex-direction:column;
+  width:60%;
+  border-right: 1px solid #434343;
+  padding: 6px;
+  transition: color 0.3s ease;
+}
+
+.icon-indicator{
+  display: flex;
+  align-content: start;
+}
+
+.item-name {
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  transition: color 0.3s ease;
+}
+
+.spicy-indicator {
+  font-size: 1rem;
+}
+.item-price{
+  color: lightgray;
+  transition: color 0.3s ease;
+}
+.item-container:hover .item-name,
+.item-container:hover .item-price {
+  
+  color: #A2956B;
+}
+
+
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+.customOptionsContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.closeModalBttn{
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-height: 80vh;
+  min-height: 80vh;      
+  display: flex;
+  flex-direction: column;  /* stack scroll-area + bottom bar */
+  max-width: 50%;     /* never goes beyond this on desktop */
+  min-width: 50%;
+}
+
+@media (max-width: 480px){
+  .modal-content {
+  background: white;
+  border-radius: 8px;
+  max-height: 80vh;
+  min-height: 80vh;      
+  display: flex;
+  flex-direction: column;  /* stack scroll-area + bottom bar */
+  max-width: 80%;     /* never goes beyond this on desktop */
+  min-width: 80%;
+}
+}
+
+
+
+.modal:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-area {
+  overflow-y: auto;        /* scrollable content */
+  padding: 2rem;
+  flex: 1;                 /* takes remaining space above bottom bar */
+}
+
+.itemName{
+  color:rgb(0, 0, 0)
+}
+.defaultPrice{
+  padding-bottom: 14px;
+  display: flex;
+  color:black;
+  border-bottom: 2px solid #A2956B;
+  
+
+}
+.hidden {
+  display: none;
+}
+
+.submitBttn{
+  display:flex;
+
+  list-style : none;
+  border: 2px solid #ffffff;
+  background-color: #c8b883;
+  cursor: pointer;
+  border-radius: 1000px;
+  z-index: 100;
+  min-width: 200px;
+  font-size: 13px !important;
+  height: 48px; /* or whatever height you want */
+  min-height: 48px; /* ensures it doesn't shrink */
+  padding: 12px 24px; /* adjust padding to keep button looking proportional */
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.submitBttn:hover{
+  background-color: #A2956B;
+  color: #272727;
+  transition: background-color 0.3s, color 0.3s;
+}
+.quantity-display {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  width: 30px;
+  text-align: center;
+  margin: 0;
+}
+
+.quantity-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  border-top: 1px solid #ddd;
+  background: white;
+  flex-shrink: 0;          /* prevents it from shrinking */
+  gap: 2rem;
+}
+
+
+
+.quantity-controls button {
+  padding: 0.3rem 0.6rem;  
+  font-size: 1rem;
+}
+
+@media (max-width: 480px) {
+  .quantity-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Add a small vertical gap between the rows */
+    row-gap: 10px; 
+    /* Adjust padding to be more compact */
+    padding-left:  1rem; 
+    padding-right:  1rem; 
+  }
+
+  .quantity-controls .submitBttn {
+    flex-basis: 100%;
+  }
+}
+
+
+
+
+.quantityBttn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #000;
+  transition: transform 0.2s, color 0.2s;
+}
+.quantityBttn:hover {
+  transform: scale(1.2);
+  color: #a2956b;
+}
+
+
+
+.custom-options {
+  flex: 1;                       /* takes up remaining space */
+  overflow-y: auto;
+  padding-bottom: 80px;          /* ensures content doesn’t hide behind bottom bar */
+}
+
+/* Hide the default radio button */
+.option-group input[type="radio"] {
+  display: none;
+}
+
+/* Create custom radio button box */
+.option-group label {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  margin: 10px 0;
+  cursor: pointer;
+  position: relative;
+  border-top: 1px solid #e0e0e0;
+  transition: all 0.25s ease;
+  background-color: #fff;
+  font-size: 15px;
+}
+
+
+
+/* Create the custom checkbox square */
+.option-group label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 14px;
+  border: 1.5px solid #c0c0c0;
+  border-radius: 3px;
+  background-color: #fff;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+/* Checkmark - properly centered */
+.option-group label::after {
+  content: '✓';
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+
+/* When radio is checked - elegant color scheme */
+.option-group label:has(input[type="radio"]:checked)::before {
+  background-color: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.option-group label:has(input[type="radio"]:checked)::after {
+  transform: translateY(-50%) scale(1);
+}
+
+
+
+/* Option group container */
+.option-group {
+  margin: 20px 0;
+}
+
+.option-group h4 {
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+.site-header {
+  position: relative;
+}
+
+.cart-button {
+  position: fixed;
+  top: 30%;
+  right: 5rem !important;
+  background: transparent;
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+  z-index: 2000;
+  font-size: 1.3rem;
+  display: inline-flex; /* keeps icon + count inline */
+  align-items: center;
+  justify-content: center;
+}
+.cart-button i {
+  position: relative;
+}
+
+/* The red circular badge */
+.cart-quantity-display {
+  position: absolute;
+  top: -5px;    /* adjust for your icon size */
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 0 3px rgba(0,0,0,0.6);
+}
+
+
+@media (max-width: 480px){
+  .cart-button {
+    position: fixed;
+    top: 1.1rem;
+    right: 100px !important; /* Move it LEFT of the menu toggle */
+    z-index: 1100; /* Same as menu toggle */
+  }
+  
+  .menu-toggle {
+    right: 16px;
+    z-index: 1100;
+  }
+}
+.checkout-background {
+    background-image: url('graphics/restaurant3.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    position: relative;
+    z-index: 0;
+}
+
+.checkout-bar-container {
+    background-color: white;
+    width: 60%;
+    max-width: 90%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: black;
+    z-index: 1;
+}
+
+
+
+
+.checkout-logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.checkout-logo {
+    background-image: url('graphics/Star-Chef-Logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 150px;
+    height: 250px;
+    
+    margin-top: 5px;
+
+}
+
+.top-container {
+    color: black;
+    min-height: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: 70%;
+}
+
+.checkout-item-list {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    padding: 0 20px;
+}
+
+.checkout-content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    position: relative;
+}
+
+.checkout-details {
+    flex-grow: 1;
+    min-width: 0;
+    
+}
+
+.form-group {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px 0 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-family: "Noto Sans Display", sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #A2956B;
+    box-shadow: 0 0 5px rgba(162, 149, 107, 0.5);
+}
+
+.checkout-title {
+    position: relative;
+    margin-top: 0;
+    color: black;
+    border-bottom: 2px solid lightgrey;
+    font-family: "Noto Sans Display", sans-serif;
+    font-size: 1.5em;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 10px;
+    
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 2vw;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.cart-item-name {
+    flex: 2;
+    font-weight: bold;
+}
+
+.cart-item-subinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1em;
+    max-width: 12em;
+}
+
+.cart-item-defaultPrice {
+    font-weight: normal;
+}
+
+.cart-item-customization {
+    flex: 1;
+    text-align: center;
+    color: #838383;
+}
+
+.cart-item-price {
+    flex: 1;
+    text-align: right;
+}
+
+.quantity-mod-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.increase-buttn, .decrease-buttn {
+    background-color: transparent;
+    color: #A2956B;
+    border: none;
+    border-radius: 30%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+}
+
+.increase-buttn:hover, .decrease-buttn:hover {
+    background-color: #eadec1;
+}
+
+.quantity-value {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.cart-total-summary {
+    max-width: 200px;
+    min-width: 200px;
+    position: relative;
+    top: 30px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.cart-total-summary.is-sticky {
+    position: fixed;
+    top: 230px;
+    width: 80%;
+}
+
+.cart-total-summary.is-at-bottom {
+    position: absolute;
+    bottom: 0;
+    top: auto;
+}
+
+.summary-column {
+    width: 30%;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1em;
+    font-family: "Noto Sans Display", sans-serif;
+}
+
+.summary-title {
+    color: #555;
+}
+
+.summary-price {
+    color: #111;
+    font-weight: 600;
+}
+
+.summary-divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 15px 0;
+}
+
+.total-row {
+    font-size: 1.2em;
+    margin-top: 15px;
+}
+
+.total-row .summary-title,
+.total-row .summary-price {
+    font-weight: 700;
+    color: #000;
+}
+
+
+#place-order-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  min-width: 200px;
+  padding: 12px 24px;
+  
+  font-size: 13px; /* You no longer need !important */
+  font-weight: bold;
+  color: white;
+  
+  background-color: #c8b883;
+  border: 2px solid #ffffff;
+  border-radius: 1000px;
+  
+  cursor: pointer;
+  z-index: 100;
+  
+  /* list-style: none; is for list items (li), not needed for a button */
+}
+
+/* You can add a hover effect for better user experience */
+#place-order-button:hover {
+  background-color: #A2956B; /* A slightly darker shade */
+}
+#place-order-button:disabled {
+  background-color: #d4cbb0; /* A muted, less saturated color */
+  cursor: not-allowed;     /* Show the 'not allowed' icon on hover */
+  opacity: 0.7;            /* Optional: Make it look faded */
+}
+
+/* MOBILE STYLES - EVERYTHING BELOW 768px */
+@media (max-width: 768px) {
+    .checkout-bar-container {
+        width: 75%;
+        font-size: 1em;
+        font-family: "Noto Sans Display", sans-serif;
+        font-weight: 400;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .checkout-title {
+        width: 100%;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .cart-item-price {
+        font-weight: 600;
+        margin-top: 8px;
+    }
+
+    .checkout-content-wrapper {
+        flex-direction: column;
+    }
+
+    .cart-item-subinfo,
+    .cart-item-customization,
+    .cart-item-price {
+        text-align: left;
+        width: 100%;
+        flex: none;
+    }
+
+    .summary-column {
+        width: 100%;
+    }
+
+    .checkout-item-list,
+    .cart-total-summary {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cart-total-summary {
+        opacity: 1;
+        position: static !important;
+        max-width: none;
+        box-shadow: none;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 20px;
+        border-radius: 0;
+        width: 100% !important;
+        left: auto !important;
+        top: auto !important;
+    }
+}
+
+/* Import luxury fonts */
+
+/* Custom CSS Variables for Luxury Restaurant */
+:root {
+    --color-primary-dark: #0f0f0f;
+    --color-accent-gold: #a2956b;
+    --color-accent-bronze: #8b6f47;
+    --color-cream: #f5f3ef;
+}
+
+.thank-you-page {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1410 100%);
+    color: var(--color-cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle ambient glow effect */
+.thank-you-page::before{
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(201, 169, 97, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+    animation: ambient-glow 20s ease-in-out infinite;
+}
+
+@keyframes ambient-glow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(5%, 5%) scale(1.05); }
+}
+
+.card {
+    background: linear-gradient(145deg, rgba(25, 20, 15, 0.95), rgba(15, 15, 15, 0.98));
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.7),
+        0 0 1px rgba(201, 169, 97, 0.3),
+        inset 0 1px 0 rgba(201, 169, 97, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    position: relative;
+    z-index: 1;
+    /* Add a subtle fade-in animation */
+    opacity: 0;
+    animation: cardFadeIn 1s 0.2s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Elegant decorative corner accents */
+.card::before,
+.card::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-accent-gold);
+    opacity: 0.4;
+}
+
+.card::before {
+    top: 16px;
+    left: 16px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.card::after {
+    bottom: 16px;
+    right: 16px;
+    border-left: none;
+    border-top: none;
+}
+
+.accent-text {
+    color: var(--color-accent-gold);
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.2);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.thank-you-page h1{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+svg.accent-text {
+    filter: drop-shadow(0 0 8px rgba(201, 169, 97, 0.3));
+    animation: check-pulse 2s ease-in-out infinite;
+}
+
+@keyframes check-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* Time display box enhancement - remove the Tailwind override */
+.bg-gray-800\/50 {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.08), rgba(139, 111, 71, 0.05)) !important;
+    border-color: rgba(201, 169, 97, 0.2) !important; /* Targeting border-color directly */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Button enhancement - use a custom class instead of overriding Tailwind */
+a.bg-white {
+    background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-bronze)) !important;
+    color: #0f0f0f !important;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.3);
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+a.bg-white:hover {
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.5);
+    transform: translateY(-2px);
+}
+
+p {
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+#ready-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+/* ===== OPENING HOURS SECTION ===== */
+.opening-hours-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  padding: 40px 0;
+  margin-top: 200px;
+}
+
+.opening-hours-img {
+  flex: 1;
+  width: 50%;
+}
+
+.opening-hours-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.opening-hours-text {
+  flex: 1;
+  width: 50%;
+  text-align: center;
+  color: #A2956B;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.opening-hours-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== ABOUT SPREAD (Background Image Section) ===== */
+.about-spread {
+  height: 80vh;
+  width: 100%;
+  margin-top: 25vh;
+  margin-bottom: 25vh;
+  background-image: url('graphics/longSpread.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.about-spread img {
+  width: 100%;    
+  height: 100%;   
+  object-fit: cover; 
+}
+
+/* ===== ABOUT US SECTION ===== */
+.about-us-section {
+  display: flex;
+  flex-direction: row-reverse; /* Image on right, text on left */
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  padding: 40px 0;
+}
+
+.about-us-img {
+  flex: 1;
+  width: 40%;
+}
+
+.about-us-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  z-index: 1 !important;
+}
+
+.about-us-text {
+  flex: 1;
+  width: 60%;
+  text-align: center;
+  color: #A2956B;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.about-us-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== MOBILE LAYOUT ===== */
+@media (max-width: 480px) {
+  .opening-hours-section,
+  .about-us-section {
+    flex-direction: column;
+    margin-top: 60px;
+  }
+  
+  .opening-hours-img,
+  .about-us-img {
+    width: 100%;
+    order: 2; /* Image comes second */
+  }
+  
+  .opening-hours-text,
+  .about-us-text {
+    width: 100%;
+    padding: 10px;
+    order: 1; /* Text comes first */
+  }
+  
+  .about-spread {
+    height: 50vh;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+  }
+}

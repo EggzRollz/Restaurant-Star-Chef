@@ -1,0 +1,5 @@
+# Ignore sensitive credentials
+service-account-key.json
+
+# Ignore Node.js dependency folder
+node_modules/

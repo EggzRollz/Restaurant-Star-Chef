@@ -1,0 +1,3354 @@
+{
+  "menu": [
+    {
+      "category_name_chinese": "配菜",
+      "category_name_english": "Side Dish",
+      "items": [
+        {
+          "id": "SD1",
+          "name_chinese": "蜜汁煎餐肉",
+          "name_english": "Pan Fried Sausage with Honey Glaze",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 4.00
+            }
+          ]
+        },
+        {
+          "id": "SD2",
+          "name_chinese": "炸豬扒",
+          "name_english": "Fried Pork Chop",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 4.00
+            }
+          ]
+        },
+        {
+          "id": "SD3",
+          "name_chinese": "炸雞翼",
+          "name_english": "Deep Fried Chicken Wing",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 4.00
+            }
+          ]
+        },
+        {
+          "id": "SD4",
+          "name_chinese": "炸魚柳",
+          "name_english": "Deep Fried Fish Fillet",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 4.00
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "飲品類",
+      "category_name_english": "DRINKS",
+      "items": [
+        {
+          "id": "R1",
+          "name_chinese": "港式奶茶",
+          "name_english": "HK style Milk Tea",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "name_chinese": "咖啡",
+          "name_english": "Coffee",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R3",
+          "name_chinese": "鴛鴦",
+          "name_english": "Yin & Coffee",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R4",
+          "name_chinese": "檸檬茶",
+          "name_english": "Lemon Tea",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R5",
+          "name_chinese": "檸檬水",
+          "name_english": "Lemon Water",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R6",
+          "name_chinese": "檸檬蜜糖",
+          "name_english": "Lemon with Honey",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R7",
+          "name_chinese": "阿華田",
+          "name_english": "Ovaltine",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R8",
+          "name_chinese": "檸檬可樂/雪碧",
+          "name_english": "Lemon Coke/Sprite",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 4.75
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 5.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a drink",
+              "choices": [
+                "Coke",
+                "Sprite"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R9",
+          "name_chinese": "豆漿",
+          "name_english": "Soya Milk",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 3.99
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 4.99
+            }
+          ]
+        },
+        {
+          "id": "R10",
+          "name_chinese": "鮮奶",
+          "name_english": "Milk",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Hot",
+              "price": 4.25
+            },
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 5.25
+            }
+          ]
+        },
+        {
+          "id": "R11",
+          "name_chinese": "紅豆冰",
+          "name_english": "Red Bean Freeze",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 5.99
+            }
+          ]
+        },
+        {
+          "id": "R12",
+          "name_chinese": "雪糕紅豆冰",
+          "name_english": "Red Bean Freeze with ice-cream",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 7.25
+            }
+          ]
+        },
+        {
+          "id": "R13",
+          "name_chinese": "涼粉冰",
+          "name_english": "Grass Jelly Freeze",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 5.99
+            }
+          ]
+        },
+        {
+          "id": "R14",
+          "name_chinese": "雪糕涼粉冰",
+          "name_english": "Grass Jelly Freeze with ice-cream",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 7.25
+            }
+          ]
+        },
+        {
+          "id": "R15",
+          "name_chinese": "涼粉/紅豆冰",
+          "name_english": "Grass Jelly/Red Jelly Freeze",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 5.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a type",
+              "choices": [
+                "Grass Jelly",
+                "Red Jelly"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R16",
+          "name_chinese": "雪糕涼粉/紅豆冰",
+          "name_english": "Grass Jelly/Red Jelly Freeze with Ice-cream",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 7.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a type",
+              "choices": [
+                "Grass Jelly",
+                "Red Jelly"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R17",
+          "name_chinese": "奶昔(芒果/士多啤梨)",
+          "name_english": "Milkshake (Mango/Strawberry)",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 7.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a flavor",
+              "choices": [
+                "Mango",
+                "Strawberry"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R18",
+          "name_chinese": "冰沙(芒果/士多啤梨)",
+          "name_english": "Slush (Mango/Strawberry)",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 7.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a flavor",
+              "choices": [
+                "Mango",
+                "Strawberry"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R19",
+          "name_chinese": "汽水",
+          "name_english": "Soft Drink",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 3.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a soft drink",
+              "choices": [
+                "Coke",
+                "Sprite",
+                "Delt Coke",
+                "Ginger Ale"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "R20",
+          "name_chinese": "香港檸檬茶",
+          "name_english": "Iced tea",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "Cold",
+              "price": 3.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "啤酒類",
+      "category_name_english": "BEER",
+      "items": [
+        {
+          "id": "G1",
+          "name_chinese": "進口啤酒",
+          "name_english": "Imported Beer (Tsingtao/Heineken)",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 6.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a beer",
+              "choices": [
+                "Tsingtao",
+                "Heineken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "G2",
+          "name_chinese": "本地啤酒",
+          "name_english": "Local Beer (Coors Lite/Molson Canadian/Budweiser)",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 5.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a beer",
+              "choices": [
+                "Coors Lite",
+                "Molson Canadian",
+                "Budweiser"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "主菜",
+      "category_name_english": "Main Course",
+      "items": [
+        {
+          "id": "K19",
+          "name_chinese": "豬手(南乳/五香/麻辣/酸甜)/豉汁/椒鹽",
+          "name_english": "Pork Knuckle with various sauces",
+          "pricing": [
+            {
+              "size": "Half",
+              "temp": "default",
+              "price": 19.99
+            },
+            {
+              "size": "Whole",
+              "temp": "default",
+              "price": 39.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a style",
+              "choices": [
+                "Fermented Tofu",
+                "Five Spice",
+                "Szechuan Spicy",
+                "Sweet & Sour",
+                "Black Bean Sauce",
+                "Spicy & Pepper Salt"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "K20",
+          "name_chinese": "蒜香牛仔骨",
+          "name_english": "Garlic Short Ribs",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.50
+            }
+          ]
+        },
+        {
+          "id": "K21",
+          "name_chinese": "豉椒雞/牛",
+          "name_english": "Chicken or Beef with Black Sauce on Sizzling Hot Plate",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K22",
+          "name_chinese": "雞/牛柳/豬扒(黑椒/蒜茸/中式/洋蔥)",
+          "name_english": "Beef or Chicken & Mushroom on Sizzling Hot Plate",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef Tenderloin",
+                "Pork Chop"
+              ]
+            },
+            {
+              "title": "Choose a Sauce",
+              "choices": [
+                "Black Pepper",
+                "Garlic",
+                "Chinese Style",
+                "Onion"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K23",
+          "name_chinese": "鐵板金菇牛柳",
+          "name_english": "Beef Tenderloin with Enoki Mushroom on Sizzling Hot Plate",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "K24",
+          "name_chinese": "鐵板中式牛扒",
+          "name_english": "Chinese Style Steak with Hot Plate",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "K25",
+          "name_chinese": "西蘭花炒牛肉/雞柳",
+          "name_english": "Stir Fried Beef/Chicken with Canadian Broccoli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K26",
+          "name_chinese": "潮式芥蘭炒牛肉/雞柳",
+          "name_english": "Stir Fried Beef/Chicken with Chinese Broccoli Chiuchow Style",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K27",
+          "name_chinese": "豉椒炒蜆",
+          "name_english": "Stir Fried Clams with Chili Black Bean Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K28",
+          "name_chinese": "避風塘炒蜆",
+          "name_english": "Stir Fried Clams Typhoon Style with Minced Pork",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 21.50
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K29",
+          "name_chinese": "四川辣雞片/牛肉",
+          "name_english": "Szechuan Style Sliced Chicken/Beef",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "K30",
+          "name_chinese": "左宗棠雞",
+          "name_english": "General Tso's Chicken",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K31",
+          "name_chinese": "福建扒豆腐",
+          "name_english": "Braised Sliced Pork with Fukien Style",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.50
+            }
+          ]
+        },
+        {
+          "id": "K32",
+          "name_chinese": "西蘭花炒牛柳",
+          "name_english": "Stir Fried Beef with Canadian Broccoli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "K33",
+          "name_chinese": "檸檬雞",
+          "name_english": "Chicken with Lemon Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.75
+            }
+          ]
+        },
+        {
+          "id": "K34",
+          "name_chinese": "豉椒涼瓜牛肉/雞柳",
+          "name_english": "Beef or Chicken with Chili Black Bean Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K35",
+          "name_chinese": "涼瓜炒牛肉/雞柳",
+          "name_english": "Beef or Chicken with Bitter Melon",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K36",
+          "name_chinese": "粟米斑塊",
+          "name_english": "Fish Fillet with Corn",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "K37",
+          "name_chinese": "欖菜肉鬆/蝦醬/XO醬/蒜茸/馬拉盞 通菜",
+          "name_english": "Stir Fried Tung Choy with a choice of sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Sauce",
+              "choices": [
+                "Minced Pork with Preserved Olive",
+                "Shrimp Paste",
+                "XO Sauce",
+                "Garlic",
+                "Belacan"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K38",
+          "name_chinese": "椒絲腐乳 /蝦醬/蒜蓉/馬拉盞 西生菜",
+          "name_english": "Stir Fried Lettuce with a choice of sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Sauce",
+              "choices": [
+                "Fermented Bean Curd Sauce",
+                "Shrimp Paste",
+                "Garlic",
+                "Belacan"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K39",
+          "name_chinese": "薑蔥魚雲煲",
+          "name_english": "Fish Head with Ginger & Green Onion in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.75
+            }
+          ]
+        },
+        {
+          "id": "K40",
+          "name_chinese": "魚香茄子",
+          "name_english": "Eggplant with Minced Pork in Garlic Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.75
+            }
+          ]
+        },
+        {
+          "id": "K41",
+          "name_chinese": "鹹魚雞粒豆腐煲",
+          "name_english": "Diced Chicken with Minced Pork & Salted Fish in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.75
+            }
+          ]
+        },
+        {
+          "id": "K42",
+          "name_chinese": "鹹魚肉鬆茄子煲",
+          "name_english": "Eggplant with Diced Pork & Salted Fish in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.50
+            }
+          ]
+        },
+        {
+          "id": "K43",
+          "name_chinese": "麻婆豆腐",
+          "name_english": "Minced Pork in Spicy Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K44",
+          "name_chinese": "紅燒豆腐",
+          "name_english": "Braised Tofu & Vegetable",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ]
+        },
+        {
+          "id": "K45",
+          "name_chinese": "乾煸四季豆",
+          "name_english": "Stir-Fried String Bean with Minced Pork & spicy sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K46",
+          "name_chinese": "欖菜肉鬆四季豆",
+          "name_english": "Stir-Fried String Bean with Minced Pork",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ]
+        },
+        {
+          "id": "K47",
+          "name_chinese": "XO醬鹹魚仔炒四季豆",
+          "name_english": "Stir-Fried String Bean with Salted Fish and XO Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.99
+            }
+          ]
+        },
+        {
+          "id": "K48",
+          "name_chinese": "生炒牛柳絲腸粉",
+          "name_english": "Fried Rice Noodle Roll with Diced Beef Tenderloin",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ]
+        },
+        {
+          "id": "K49",
+          "name_chinese": "手撕雞",
+          "name_english": "Hand Shredded Chicken",
+          "pricing": [
+            {
+              "size": "Half",
+              "temp": "default",
+              "price": 18.75
+            },
+            {
+              "size": "Whole",
+              "temp": "default",
+              "price": 38.75
+            }
+          ]
+        },
+        {
+          "id": "K50",
+          "name_chinese": "香辣手撕雞",
+          "name_english": "Shredded Chicken with Spicy",
+          "pricing": [
+            {
+              "size": "Half",
+              "temp": "default",
+              "price": 16.99
+            },
+            {
+              "size": "Whole",
+              "temp": "default",
+              "price": 34.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "K51",
+          "name_chinese": "脆皮本地雞",
+          "name_english": "Crispy Chicken",
+          "pricing": [
+            {
+              "size": "Half",
+              "temp": "default",
+              "price": 16.99
+            },
+            {
+              "size": "Whole",
+              "temp": "default",
+              "price": 34.99
+            }
+          ]
+        },
+        {
+          "id": "K52",
+          "name_chinese": "魚湯杞子浸貴妃雞",
+          "name_english": "Poached Chicken in Fish Soup with Gojiberry",
+          "pricing": [
+            {
+              "size": "Half",
+              "temp": "default",
+              "price": 17.99
+            },
+            {
+              "size": "Whole",
+              "temp": "default",
+              "price": 36.99
+            }
+          ]
+        },
+        {
+          "id": "K53",
+          "name_chinese": "炸子雞",
+          "name_english": "Crispy Fried Chicken",
+          "pricing": [
+            {
+              "size": "Half",
+              "temp": "default",
+              "price": 17.99
+            },
+            {
+              "size": "Whole",
+              "temp": "default",
+              "price": 36.99
+            }
+          ]
+        },
+        {
+          "id": "K54",
+          "name_chinese": "鎮江小排骨",
+          "name_english": "House Special Chop Suey",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.50
+            }
+          ]
+        },
+        {
+          "id": "K55",
+          "name_chinese": "XO醬帶子蘆筍鮮魷魚仔",
+          "name_english": "Stir Fried Whole Baby & Leek Flowers with XO Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.25
+            }
+          ]
+        },
+        {
+          "id": "K56",
+          "name_chinese": "蝦子扒芥菜",
+          "name_english": "Braised Mustard Green",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.50
+            }
+          ]
+        },
+        {
+          "id": "K57",
+          "name_chinese": "蒜茸炒雜菜/芥蘭/白菜苗",
+          "name_english": "Stir Fried Mixed Vegetable/ Chinese Broccoli/ Baby Pak Choi with Garlic Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Vegetable",
+              "choices": [
+                "Mixed Vegetable",
+                "Chinese Broccoli",
+                "Baby Pak Choi"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K58",
+          "name_chinese": "菜脯煎蛋",
+          "name_english": "Preserved Vegetable Omelette",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "K59",
+          "name_chinese": "水煮牛肉",
+          "name_english": "Boiled Beef in Chili Broth",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "K60",
+          "name_chinese": "香脆蜜糖雞翼",
+          "name_english": "Deep Fried Chicken Wing with Honey Garlic Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.99
+            }
+          ]
+        },
+        {
+          "id": "K61",
+          "name_chinese": "椒鹽雞扒",
+          "name_english": "Spicy & Pepper Salt Chicken Chop",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "K62",
+          "name_chinese": "咕嚕肉",
+          "name_english": "Fried Pork Chop & Onion with Sweet & Sour Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ]
+        },
+        {
+          "id": "K63",
+          "name_chinese": "千島豬扒",
+          "name_english": "Fried Pork Chop with Thousand Island Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "K64",
+          "name_chinese": "椒鹽鮮魷",
+          "name_english": "Spicy & Pepper Salt Squid",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.50
+            }
+          ]
+        },
+        {
+          "id": "K65",
+          "name_chinese": "椒鹽豆腐",
+          "name_english": "Spicy & Pepper Salt Tofu",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 11.99
+            }
+          ]
+        },
+        {
+          "id": "K66",
+          "name_chinese": "味噌青/咕嚕肉",
+          "name_english": "Sweet & Sour Chicken or Pork",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Pork"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K67",
+          "name_chinese": "滑蛋炒蝦仁",
+          "name_english": "Stir Fried Shrimp with Scramble Egg",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ]
+        },
+        {
+          "id": "K68",
+          "name_chinese": "蕃茄炒蛋牛/雞柳",
+          "name_english": "Stir Fried Beef or Chicken with Scramble Egg",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K69",
+          "name_chinese": "京都豬扒",
+          "name_english": "Dried Fried Pork Chop",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 12.99
+            }
+          ]
+        },
+        {
+          "id": "K70",
+          "name_chinese": "XO醬炒腸粉",
+          "name_english": "Fried Rice Noodle Roll with XO Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 12.50
+            }
+          ]
+        },
+        {
+          "id": "K71",
+          "name_chinese": "韭黃蝦春卷",
+          "name_english": "Chives and Shrimp Spring Roll",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 12.25
+            }
+          ]
+        },
+        {
+          "id": "K72",
+          "name_chinese": "炸雲吞",
+          "name_english": "Fried Wonton (8 roll)",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 6.75
+            }
+          ]
+        },
+        {
+          "id": "K73",
+          "name_chinese": "炸兩/牛脷酥",
+          "name_english": "Chinese Oil Dough Fritter/Sweet Cruller",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 3.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose an item",
+              "choices": [
+                "Chinese Oil Dough Fritter",
+                "Sweet Cruller"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K74",
+          "name_chinese": "炸雞翼",
+          "name_english": "Deep Fried Chicken Wings(6 pcs)",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 12.50
+            }
+          ]
+        },
+        {
+          "id": "K75",
+          "name_chinese": "啫啫雞煲",
+          "name_english": "Chicken with mixed Mushroom",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K76",
+          "name_chinese": "蜜椒牛柳粒",
+          "name_english": "Diced Beef with Honey Pepper Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 28.99
+            }
+          ]
+        },
+        {
+          "id": "K77",
+          "name_chinese": "沙爹金菇牛肉粉絲煲",
+          "name_english": "Satay Beef & Enoki in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K78",
+          "name_chinese": "中式牛柳粒",
+          "name_english": "Stir Fried Beef Tenderloin in Chinese Styles",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K79",
+          "name_chinese": "豉椒炒大腸",
+          "name_english": "Stir Fried Pig Intestine with Black Bean Sauce and Pickled Vegetable",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "K80",
+          "name_chinese": "魚湯浸菜",
+          "name_english": "Vegetable in Fish Soup",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 10.99
+            }
+          ]
+        },
+        {
+          "id": "K81",
+          "name_chinese": "洋蔥豬扒",
+          "name_english": "Fried Pork Chop with Onion Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "小炒類",
+      "category_name_english": "STIR FRY DISHES",
+      "items": [
+        {
+          "id": "K1",
+          "name_chinese": "避風塘龍蝦",
+          "name_english": "Stir Fried Lobster with Hong Kong Style",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 45.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K2",
+          "name_chinese": "薑蔥炒龍蝦",
+          "name_english": "Stir Fried Lobster with Ginger & Green Onion",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 42.99
+            }
+          ]
+        },
+        {
+          "id": "K3",
+          "name_chinese": "美極炒龍蝦",
+          "name_english": "Stir Fried Lobster with Maggi Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 43.99
+            }
+          ]
+        },
+        {
+          "id": "K4",
+          "name_chinese": "馬拉盞生蠔",
+          "name_english": "Stir-fried Oyster with BelaChan Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 28.99
+            }
+          ]
+        },
+        {
+          "id": "K5",
+          "name_chinese": "薑蔥生蠔",
+          "name_english": "Stir-fried Oyster with Ginger & Green Onion in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 28.99
+            }
+          ]
+        },
+        {
+          "id": "K6",
+          "name_chinese": "潮州煎蠔餅",
+          "name_english": "Oyster Omelette",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.50
+            }
+          ]
+        },
+        {
+          "id": "K7",
+          "name_chinese": "海鮮炒芥蘭",
+          "name_english": "Stir Fried Seafood with Chinese Broccoli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K8",
+          "name_chinese": "班片炒芥蘭",
+          "name_english": "Stir Fried Garoupa Fish with Chinese Broccoli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K9",
+          "name_chinese": "帶子青扒豆苗",
+          "name_english": "Stir Fried Snow Pea Leaves with King Mushroom",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.75
+            }
+          ]
+        },
+        {
+          "id": "K10",
+          "name_chinese": "魚湯杞子豆苗",
+          "name_english": "Snow Pea leaves in Fish Soup with Gojiberry",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "K11",
+          "name_chinese": "蒜蓉炒豆苗",
+          "name_english": "Stir Fried Snow Pea Leaves with Garlic",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.25
+            }
+          ]
+        },
+        {
+          "id": "K12",
+          "name_chinese": "上湯蒜子豆苗",
+          "name_english": "Snow Pea Leaves in Soup with Garlic",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.25
+            }
+          ]
+        },
+        {
+          "id": "K13",
+          "name_chinese": "蜜椒牛柳粒",
+          "name_english": "Diced Beef Tenderloin with Honey Pepper Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K14",
+          "name_chinese": "醬爆老虎蝦",
+          "name_english": "Fried Tiger Shrimp & Chicken with Maggi",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "K15",
+          "name_chinese": "四川炒老虎蝦",
+          "name_english": "Szechuan Style Tiger Shrimp",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "K16",
+          "name_chinese": "五柳/椒鹽/粟米班片",
+          "name_english": "Sweet & Sour/Spicy & Salt/Sweet Corn sauce Garoupa Fillet",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Sauce",
+              "choices": [
+                "Sweet & Sour",
+                "Spicy & Salt",
+                "Sweet Corn sauce"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "K17",
+          "name_chinese": "豆腐斑腩煲",
+          "name_english": "Garoupa & Tofu in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.50
+            }
+          ]
+        },
+        {
+          "id": "K18",
+          "name_chinese": "涼瓜斑腩煲",
+          "name_english": "Garoupa & Bitter Melon in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.50
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "炒粉麵類",
+      "category_name_english": "FRIED NOODLE",
+      "items": [
+        {
+          "id": "E1",
+          "name_chinese": "薑蔥龍蝦伊麵",
+          "name_english": "Lobster with Ginger & Green Onion E-Fu Noodle",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 44.99
+            }
+          ]
+        },
+        {
+          "id": "E2",
+          "name_chinese": "避風塘炒麵",
+          "name_english": "Vermicelli Hong Kong Style with Mixed Pork, Shrimp, Squid",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "E3",
+          "name_chinese": "廣東炒麵",
+          "name_english": "Cantonese Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ]
+        },
+        {
+          "id": "E4",
+          "name_chinese": "干炒海鮮烏冬",
+          "name_english": "Seafood & Mixed Vegetable Fried Udon with Vermicelli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ]
+        },
+        {
+          "id": "E5",
+          "name_chinese": "海鮮炒麵",
+          "name_english": "Seafood Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ]
+        },
+        {
+          "id": "E6",
+          "name_chinese": "乾炒海鮮鴛鴦冬",
+          "name_english": "Seafood Dry Fried Udon Noodle",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ]
+        },
+        {
+          "id": "E7",
+          "name_chinese": "XO醬乾炒牛河",
+          "name_english": "Dry Fried Noodle with Sliced Beef & XO Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ]
+        },
+        {
+          "id": "E8",
+          "name_chinese": "雪菜火鴨絲炆米",
+          "name_english": "Shredded Duck & Preserved Vegetable with Vermicelli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.75
+            }
+          ]
+        },
+        {
+          "id": "E9",
+          "name_chinese": "蟹肉炆伊麵",
+          "name_english": "Braised E-Fu Noodles with Crab Meat",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.50
+            }
+          ]
+        },
+        {
+          "id": "E10",
+          "name_chinese": "菜遠肉絲炆米",
+          "name_english": "Shredded Pork & Preserved Cabbage Stewed Vermicelli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.50
+            }
+          ]
+        },
+        {
+          "id": "E11",
+          "name_chinese": "乾燒牛伊麵",
+          "name_english": "Braised E-Fu Deep Noodles with Beef and Soya Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.50
+            }
+          ]
+        },
+        {
+          "id": "E12",
+          "name_chinese": "乾燒伊麵",
+          "name_english": "Braised E-Fu Noodles with Soya Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ]
+        },
+        {
+          "id": "E13",
+          "name_chinese": "沙嗲牛/雞炒河粉",
+          "name_english": "Fried Rice Noodles with Chicken or Beef & Satay Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "E14",
+          "name_chinese": "星洲炒米",
+          "name_english": "Fried Rice Noodles with Chicken or Beef, Shrimp with Curry Sauce Style",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.25
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "E15",
+          "name_chinese": "三絲炒麵",
+          "name_english": "Mixed Shredded Meat Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ]
+        },
+        {
+          "id": "E16",
+          "name_chinese": "時菜牛/雞炒麵",
+          "name_english": "Chicken or Beef & Vegetable Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "E17",
+          "name_chinese": "肉絲炒麵",
+          "name_english": "Shredded Pork Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ]
+        },
+        {
+          "id": "E18",
+          "name_chinese": "豉油王炒麵",
+          "name_english": "Soya Sauce Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.25
+            }
+          ]
+        },
+        {
+          "id": "E19",
+          "name_chinese": "豉椒牛河/雞河",
+          "name_english": "Fried Rice Noodles with Chicken or Beef with Black Bean Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "E20",
+          "name_chinese": "羅漢齋炒麵",
+          "name_english": "Fried Rice Noodles with Mixed Vegetable",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ]
+        },
+        {
+          "id": "E21",
+          "name_chinese": "滑蛋牛/雞河",
+          "name_english": "Fried Rice Noodles with Chicken or Beef with Scrambled Egg Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "E22",
+          "name_chinese": "蝦仁炒蛋麵",
+          "name_english": "Fried Rice Noodles with Shrimp & Scrambled Egg",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ]
+        },
+        {
+          "id": "E23",
+          "name_chinese": "滑蛋蝦仁河",
+          "name_english": "Fried Rice Noodles with shrimp and Scrambled Egg Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.75
+            }
+          ]
+        },
+        {
+          "id": "E24",
+          "name_chinese": "干燒蝦球伊麵",
+          "name_english": "Fried Shrimp Noodles with Shrimp & Preserved Vegetable",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ]
+        },
+        {
+          "id": "E25",
+          "name_chinese": "廈門炒米",
+          "name_english": "Fried Rice Vermicelli with Shrimp & Pork in Sweet & Sour Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ]
+        },
+        {
+          "id": "E26",
+          "name_chinese": "貴刁(濕/乾)",
+          "name_english": "Fried Vermicelli with Shrimp & Pork Malaysian Style",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a style",
+              "choices": [
+                "Wet",
+                "Dry"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "E27",
+          "name_chinese": "家鄉炒米",
+          "name_english": "Fried Rice Vermicelli with Shrimp & Pork Home Style",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ]
+        },
+        {
+          "id": "E28",
+          "name_chinese": "魚湯浸貴刁",
+          "name_english": "Kway Teow in Fish Soup",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ]
+        },
+        {
+          "id": "E29",
+          "name_chinese": "豉油王炒麵",
+          "name_english": "Soya Sauce Chow Mein",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ]
+        },
+        {
+          "id": "E30",
+          "name_chinese": "泰式炒河粉",
+          "name_english": "Pad Tai with Shrimp & Chicken",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.25
+            }
+          ]
+        },
+        {
+          "id": "E31",
+          "name_chinese": "鹹魚雞粒炒河粉",
+          "name_english": "Salted Fish & Chicken Fried Rice Noodle",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.99
+            }
+          ]
+        },
+        {
+          "id": "E32",
+          "name_chinese": "魚香茄子炆伊麵",
+          "name_english": "Braised Eggplant with Minced Pork & Salted Fish in Spicy Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "category_note": {
+        "chinese": "所有炒粉麵類下午五點前堂食均奉送飲品一杯",
+        "english": "All fried noodle dishes ordered before 5 PM for dine-in come with a free drink."
+      }
+    },
+    {
+      "category_name_chinese": "飯類",
+      "category_name_english": "RICE",
+      "items": [
+        {
+          "id": "H1",
+          "name_chinese": "皇太子鰻魚炒飯",
+          "name_english": "Eel Fried Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.75
+            }
+          ]
+        },
+        {
+          "id": "H2",
+          "name_chinese": "瑤柱蛋白炒飯",
+          "name_english": "Dried Scallop & Egg White Fried Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.75
+            }
+          ]
+        },
+        {
+          "id": "H3",
+          "name_chinese": "欖菜肉鬆四季豆炒飯",
+          "name_english": "Stir Fried String Bean with Olive Vegetables and Pork",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.25
+            }
+          ]
+        },
+        {
+          "id": "H4",
+          "name_chinese": "臘味炒飯",
+          "name_english": "Fried Rice with Sausage, Shrimp, Pork Rind & Preserved Cabbage",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ]
+        },
+        {
+          "id": "H5",
+          "name_chinese": "福建炒飯",
+          "name_english": "Fukien Fried Rice with Seafood & Chicken",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ]
+        },
+        {
+          "id": "H6",
+          "name_chinese": "菠蘿海鮮炒飯",
+          "name_english": "Seafood Fried Rice with Pineapple",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ]
+        },
+        {
+          "id": "H7",
+          "name_chinese": "蒜香海皇炒飯",
+          "name_english": "Seafood Fried Rice with Garlic",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ]
+        },
+        {
+          "id": "H8",
+          "name_chinese": "太極鴛鴦炒飯",
+          "name_english": "Yin Yang Fried Rice with Cream & Tomato Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.25
+            }
+          ]
+        },
+        {
+          "id": "H9",
+          "name_chinese": "鹹魚雞粒炒飯",
+          "name_english": "Chicken Fried Rice with Salted Fish",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.25
+            }
+          ]
+        },
+        {
+          "id": "H10",
+          "name_chinese": "蝦仁炒飯",
+          "name_english": "Shrimp Fried Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.75
+            }
+          ]
+        },
+        {
+          "id": "H11",
+          "name_chinese": "滑蛋蝦仁飯",
+          "name_english": "Shrimp with Scrambled Egg Sauce on Steamed Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 14.50
+            }
+          ]
+        },
+        {
+          "id": "H12",
+          "name_chinese": "滑蛋牛肉/雞肉/肉片飯",
+          "name_english": "Beef/Chicken/Pork with Scrambled Egg Sauce on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 14.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken",
+                "Pork"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H13",
+          "name_chinese": "揚州炒飯",
+          "name_english": "Young Chow Fried Rice with Shrimp",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ]
+        },
+        {
+          "id": "H14",
+          "name_chinese": "生炒雞絲/牛肉飯",
+          "name_english": "Chicken or Beef Fried Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 14.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H15",
+          "name_chinese": "咖喱雞/牛飯",
+          "name_english": "Curry Chicken or Beef on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "H16",
+          "name_chinese": "咖喱牛腩飯",
+          "name_english": "Curry Beef Brisket on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 17.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "H17",
+          "name_chinese": "咖喱海鮮飯",
+          "name_english": "Curry Seafood on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "H18",
+          "name_chinese": "左宗雞飯",
+          "name_english": "General Tso's Chicken on Steamed Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 14.25
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "H19",
+          "name_chinese": "咕嚕雞肉/咕嚕肉飯",
+          "name_english": "Sweet & Sour Pork or Chicken on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 14.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Pork"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H20",
+          "name_chinese": "涼瓜牛肉/雞肉/肉片飯",
+          "name_english": "Beef/Pork/or Chicken with Bitter Melon on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Pork",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H21",
+          "name_chinese": "羅漢齋飯",
+          "name_english": "Mixed Vegetable on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ]
+        },
+        {
+          "id": "H22",
+          "name_chinese": "麻婆豆腐飯",
+          "name_english": "Spicy Sauce with Tofu & Minced Pork on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "H23",
+          "name_chinese": "辣子雞/牛飯",
+          "name_english": "Spicy Chicken or beef on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 14.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "H24",
+          "name_chinese": "沙嗲牛肉/雞肉/肉片飯",
+          "name_english": "Beef or Chicken or Pork with Satay on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken",
+                "Pork"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "H25",
+          "name_chinese": "豉椒牛肉/雞肉/肉片飯",
+          "name_english": "Beef or Chicken or Pork with Black Bean Sauce on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken",
+                "Pork"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H26",
+          "name_chinese": "鮮茄牛肉/雞肉/肉片飯",
+          "name_english": "Beef or Chicken or Pork with Tomato on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken",
+                "Pork"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H27",
+          "name_chinese": "窩蛋免治牛肉飯",
+          "name_english": "Minced Beef with Raw Egg on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ]
+        },
+        {
+          "id": "H28",
+          "name_chinese": "時菜牛腩/牛筋飯",
+          "name_english": "Beef Brisket/Tendon on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 15.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose one",
+              "choices": [
+                "Beef Brisket",
+                "Tendon"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H29",
+          "name_chinese": "生炒糯米飯",
+          "name_english": "Stir Fried Sticky Rice with Preserved Meat",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 16.75
+            }
+          ]
+        },
+        {
+          "id": "H30",
+          "name_chinese": "白飯",
+          "name_english": "Steamed Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 3.25
+            }
+          ]
+        },
+        {
+          "id": "H31",
+          "name_chinese": "椒鹽豬扒飯",
+          "name_english": "Spicy & Salt Pork Chop on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.99
+            }
+          ]
+        },
+        {
+          "id": "H32",
+          "name_chinese": "洋蔥豬扒飯",
+          "name_english": "Stir Fried Pork Chop with Onion Sauce on Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.99
+            }
+          ]
+        },
+        {
+          "id": "H33",
+          "name_chinese": "馬拉盞雞絲/牛松炒飯",
+          "name_english": "Beef/Chicken Fried Rice with Belacan Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H34",
+          "name_chinese": "粟米肉粒/雞粒飯",
+          "name_english": "Minced Pork/Chicken on Rice with Sweet Corn",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Minced Pork",
+                "Chicken"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "H35",
+          "name_chinese": "魚香茄子飯",
+          "name_english": "Fried Eggplant with Minced Pork & Salted Fish in Spicy Sauce On Rice",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 13.50
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "category_note": {
+        "chinese": "所有飯類下午五點前堂食均奉送飲品一杯 (白飯除外)",
+        "english": "All rice dishes ordered before 5 PM for dine-in come with a free drink (except steamed rice)."
+      }
+    },
+    {
+      "category_name_chinese": "粥類",
+      "category_name_english": "CONGEE",
+      "items": [
+        {
+          "id": "B1",
+          "name_chinese": "生滾龍蝦粥",
+          "name_english": "Lobster Super Bowl Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 19.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 40.25
+            }
+          ]
+        },
+        {
+          "id": "B2",
+          "name_chinese": "海鮮大粥",
+          "name_english": "Seafood Super Bowl Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 10.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        },
+        {
+          "id": "B3",
+          "name_chinese": "雞鴨絲粥",
+          "name_english": "Chicken & Duck Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 10.50
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        },
+        {
+          "id": "B4",
+          "name_chinese": "帶子蝦球粥",
+          "name_english": "Scallop & Tiger Shrimp Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 12.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.75
+            }
+          ]
+        },
+        {
+          "id": "B5",
+          "name_chinese": "三文魚粥",
+          "name_english": "Salmon Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 10.75
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "B6",
+          "name_chinese": "生滾蝦球粥",
+          "name_english": "Tiger Shrimp Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        },
+        {
+          "id": "B7",
+          "name_chinese": "香茜魚片粥",
+          "name_english": "Sliced Fish Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 17.75
+            }
+          ]
+        },
+        {
+          "id": "B8",
+          "name_chinese": "魚片牛肉粥",
+          "name_english": "Sliced Fish & Beef Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 18.25
+            }
+          ]
+        },
+        {
+          "id": "B9",
+          "name_chinese": "魚片豬潤粥",
+          "name_english": "Sliced Fish & Pork Liver Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 18.25
+            }
+          ]
+        },
+        {
+          "id": "B10",
+          "name_chinese": "皮蛋瘦肉粥",
+          "name_english": "Preserved Egg & Pork Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 17.25
+            }
+          ]
+        },
+        {
+          "id": "B11",
+          "name_chinese": "生滾滑牛粥",
+          "name_english": "Sliced Beef Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 17.25
+            }
+          ]
+        },
+        {
+          "id": "B12",
+          "name_chinese": "免治牛肉粥",
+          "name_english": "Minced Beef Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 17.25
+            }
+          ]
+        },
+        {
+          "id": "B13",
+          "name_chinese": "榨菜牛松粥",
+          "name_english": "Minced Beef with Preserved Mustard Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 17.25
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "B14",
+          "name_chinese": "雞茸粟米粥",
+          "name_english": "Minced Chicken & Corn Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.00
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 16.50
+            }
+          ]
+        },
+        {
+          "id": "B15",
+          "name_chinese": "豆腐粟米粥",
+          "name_english": "Tofu & Corn Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.00
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 16.50
+            }
+          ]
+        },
+        {
+          "id": "B16",
+          "name_chinese": "三姑豆腐粥",
+          "name_english": "Mixed Mushroom & Tofu Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 9.00
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 16.50
+            }
+          ]
+        },
+        {
+          "id": "B17",
+          "name_chinese": "瑤柱白粥",
+          "name_english": "Plain Congee",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 5.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 9.00
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "湯類",
+      "category_name_english": "SOUP",
+      "items": [
+        {
+          "id": "D1",
+          "name_chinese": "蟹肉魚肚羹",
+          "name_english": "Crab Meat & Fish Maw Thick Soup",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 12.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 22.99
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "name_chinese": "酸辣湯",
+          "name_english": "Hot and Sour Soup with Shrimp And Pork",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 21.25
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "D3",
+          "name_chinese": "雞茸粟米羹",
+          "name_english": "Minced Chicken & Corn Thick Soup",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 12.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 22.75
+            }
+          ]
+        },
+        {
+          "id": "D4",
+          "name_chinese": "海皇豆腐羹",
+          "name_english": "Seafood & Tofu Thick Soup",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 21.25
+            }
+          ]
+        },
+        {
+          "id": "D5",
+          "name_chinese": "西湖牛肉羹",
+          "name_english": "Minced Beef with Egg White Thick Soup",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 21.25
+            }
+          ]
+        },
+        {
+          "id": "D6",
+          "name_chinese": "雞茸蘑菇羹",
+          "name_english": "Minced Chicken & Mushroom Thick Soup",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        },
+        {
+          "id": "D7",
+          "name_chinese": "豆腐粟米羹",
+          "name_english": "Tofu & Corn Thick Soup",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        },
+        {
+          "id": "D8",
+          "name_chinese": "蘑菇蛋花湯",
+          "name_english": "Egg Drop Thick Soup with Mushroom",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_name_chinese": "湯粉麵類",
+      "category_name_english": "SOUP NOODLE",
+      "items": [
+        {
+          "id": "C1",
+          "name_chinese": "雪菜火鴨絲",
+          "name_english": "Shredded Duck & Preserved Cabbage",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 12.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 21.25
+            }
+          ]
+        },
+        {
+          "id": "C2",
+          "name_chinese": "雪菜肉絲",
+          "name_english": "Shredded Pork & Preserved Cabbage",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        },
+        {
+          "id": "C3",
+          "name_chinese": "沙嗲牛/雞",
+          "name_english": "Chicken or Beef & Satay Sauce",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 12.25
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 21.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "C4",
+          "name_chinese": "時菜牛/雞",
+          "name_english": "Chicken or Beef with Vegetable",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "C5",
+          "name_chinese": "牛筋腩",
+          "name_english": "Beef Tendon & Brisket",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 12.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 22.75
+            }
+          ]
+        },
+        {
+          "id": "C6",
+          "name_chinese": "香炸豬扒",
+          "name_english": "Deep Fried Pork Chop",
+          "pricing": [
+            {
+              "size": "S",
+              "temp": "default",
+              "price": 11.99
+            },
+            {
+              "size": "L",
+              "temp": "default",
+              "price": 20.25
+            }
+          ]
+        }
+      ],
+      "category_options": [
+        {
+          "title": "Choose a Noodle",
+          "choices": [
+            "Rice Noodles",
+            "Vermicelli",
+            "Egg Noodles",
+            "Udon (+$1.00)",
+            "Instant Noodle (+$1.00)"
+          ]
+        }
+      ]
+    }
+  ]
+}
