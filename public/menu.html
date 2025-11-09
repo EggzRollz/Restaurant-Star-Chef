@@ -86,11 +86,20 @@
       <div class="modal-content">
         <div class="scroll-area">
           <button id="close-modal" class="closeModalBttn">X</button>
+          <img id ="modal-image" class="modal-image">
           <h2 id="customize-title" class="itemName"></h2>
           <h3 id="default-price" class="defaultPrice"></h3>
     
           <!-- This container will be cleared and refilled with size/temp options -->
           <div id="customOptions" class="custom-options"></div>
+          <div class="option-group">
+            <h4>Special Instructions</h4>
+            <textarea 
+              id="order-notes" 
+              class="order-notes-textarea" 
+              placeholder="e.g., extra spicy, no onions, allergy note..."
+            ></textarea>
+          </div>
         </div>
         <!-- Move these OUTSIDE customOptions so they don't get deleted -->
         <div class="quantity-controls">

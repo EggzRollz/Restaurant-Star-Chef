@@ -84,11 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
       menuInventory = querySnapshot.docs.map(doc => {
         const data = doc.data();
         
+        
         // --- Data Validation and Transformation (Important!) ---
         // This prevents errors if a document has missing fields.
         return {
           id: doc.id,
           name: data.name_english || "Unnamed Item",
+          image: data.image,
           price: data.pricing?.[0]?.price || 0.00, // Safely access nested price
           tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
           options: data.options || [],
@@ -195,15 +197,19 @@ function createMenuItemElement(item) {
     const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
 
     
+
     
     // --- The rest of your function continues as normal ---
     const itemPriceDiv = document.createElement('div');
     itemPriceDiv.classList.add("item-price");
-    itemPriceDiv.textContent = `$${item.price.toFixed(2)}`;
+    itemPriceDiv.textContent = `$${item.pricing[0].price.toFixed(2)}`;
 
-    const itemImg = document.createElement('div');
+    const itemImg = document.createElement('img');
     itemImg.classList.add("item-img");
-    itemImg.textContent = "Temporary Image";
+    if (item.image) {
+        itemImg.src = 'graphics/' + item.image;
+        itemImg.alt = item.name;
+    }
 
 
     
@@ -360,86 +366,121 @@ function renderAllItemsByCategory() {
     }
   });
 }
-  
-  // --- Modal and Cart Logic ---
-  // (Your existing modal and cart logic can go here)
-  // I have included the fixed version from the previous step.
 
-  function openCustomizeModal(item) {
-    console.log("Opening modal for item:", item);
-    currentItem = item;
-    currentPrice = item.price; 
-    amount = 1; 
-    updateQuantityDisplay();
+function openCustomizeModal(item) {
+  console.log("Opening modal for item:", item);
+  currentItem = item;
+  // currentPrice will be set by the radio buttons, so we don't need to set a default here.
+  amount = 1;
+  updateQuantityDisplay();
+
+  // --- GET HTML ELEMENTS ---
+  const title = document.getElementById('customize-title');
+  const optionsContainer = document.getElementById('customOptions');
+  const defaultPrice = document.getElementById('default-price');
+  const modalImage = document.getElementById('modal-image'); // Get the existing <img> element from HTML
+  const orderNotesTextarea = document.getElementById('order-notes');
+
+  // --- RESET AND POPULATE MODAL ---
+  title.textContent = item.name;
+  optionsContainer.innerHTML = ''; // Clear old options
+  defaultPrice.textContent = ''; // Clear the old default price, as sizes will show prices
+
+  if (orderNotesTextarea) {
+      orderNotesTextarea.value = '';
+  }
+
+  // --- HANDLE THE IMAGE --- (The corrected part)
+  if (item.image) {
+    modalImage.src = 'graphics/' + item.image; // Set the src of the HTML element
+    modalImage.alt = item.name; // Set the alt text for accessibility
+    modalImage.style.display = 'block'; // Make sure it's visible if it was hidden
+  } else {
+    modalImage.style.display = 'none'; // Hide the image element if there's no image
+  }
+
+  // --- HANDLE PRICING (SIZES) ---
+  if (item.pricing.length === 1) {
+    // If there's only one price, display it and set it
+    defaultPrice.textContent = "$ " + item.pricing[0].price.toFixed(2);
+    currentPrice = item.pricing[0].price;
+  } else if (item.pricing && item.pricing.length > 0) {
+    const pricingGroup = document.createElement('div');
+    pricingGroup.className = 'option-group';
     
-    const title = document.getElementById('customize-title');
-    const optionsContainer = document.getElementById('customOptions');
-    const defaultPrice = document.getElementById('default-price');
+    const pricingTitle = document.createElement('h4');
+    // We assume the title is 'Temperature' for this structure, 
+    // but you could make this more dynamic if needed.
+    pricingTitle.textContent = 'Temperature'; 
+    pricingGroup.appendChild(pricingTitle);
 
-    defaultPrice.textContent = ("$ " + item.price.toFixed(2));
-    title.textContent = item.name;
-    optionsContainer.innerHTML = '';
-    
-    if (item.pricing.length === 1) {
-      currentPrice = item.pricing[0].price;
-    }
-    else if (item.pricing && item.pricing.length > 0) {
-      const pricingGroup = document.createElement('div');
-      pricingGroup.className = 'option-group';
-      const pricingTitle = document.createElement('h4');
-      pricingTitle.textContent = "Size";
-      pricingGroup.appendChild(pricingTitle);
+    // This will hold the price of the first option as the default
+    let isFirstOption = true; 
 
-      item.pricing.forEach((p, index) => {
+    item.pricing.forEach(priceOption => {
         const label = document.createElement('label');
         const radio = document.createElement('input');
         radio.type = 'radio';
-        radio.name = 'priceOption';
-        radio.value = p.size; // store the size name
+        radio.name = 'Temperature'; // Group them together
+        
+        // THIS IS THE KEY FIX: Use the 'temp' from your data as the value
+        radio.value = priceOption.temp; 
+        
+        // Store the price in a data attribute for easy access
+        radio.dataset.price = priceOption.price;
 
-        if (index === 0) {
-          radio.checked = true;
-          currentPrice = p.price; // price is a number
+        // Check the first option by default
+        if (isFirstOption) {
+            radio.checked = true;
+            currentPrice = priceOption.price; // Set the initial price
+            isFirstOption = false;
         }
 
-        radio.addEventListener('change', () => {
-          currentPrice = p.price; // update the price when selected
-          updateCartButtonPrice();
-        });
-
         label.appendChild(radio);
-        label.append(` ${p.size} - $${p.price.toFixed(2)}`);
+        // Display the temp and price to the user
+        label.append(` ${priceOption.temp} ($${priceOption.price.toFixed(2)})`); 
         pricingGroup.appendChild(label);
-      });
+    });
 
-      optionsContainer.appendChild(pricingGroup);
-    }
-    
-    if (item.options && item.options.length > 0) {
-      item.options.forEach(opt => {
-        const optionGroup = document.createElement('div');
-        optionGroup.className = 'option-group';
-        const optionTitle = document.createElement('h4');
-        optionTitle.textContent = opt.title;
-        optionGroup.appendChild(optionTitle);
-        opt.choices.forEach((choice, index) => {
-          const label = document.createElement('label');
-          const radio = document.createElement('input');
-          radio.type = 'radio';
-          radio.name = opt.title;
-          radio.value = choice;
-          if (index === 0) radio.checked = true;
-          label.appendChild(radio);
-          label.append(` ${choice}`);
-          optionGroup.appendChild(label);
-        });
-        optionsContainer.appendChild(optionGroup);
+    // Add an event listener to update the price when the user changes temperature
+    pricingGroup.addEventListener('change', (event) => {
+        if (event.target.type === 'radio' && event.target.checked) {
+            // Get the price from the selected option's data attribute
+            currentPrice = parseFloat(event.target.dataset.price);
+            updateCartButtonPrice(); // Update the price on the button
+        }
+    });
+
+    optionsContainer.appendChild(pricingGroup);
+}
+
+
+  // --- HANDLE OTHER OPTIONS ---
+  if (item.options && item.options.length > 0) {
+    item.options.forEach(opt => {
+      const optionGroup = document.createElement('div');
+      optionGroup.className = 'option-group';
+      const optionTitle = document.createElement('h4');
+      optionTitle.textContent = opt.title;
+      optionGroup.appendChild(optionTitle);
+      opt.choices.forEach((choice, index) => {
+        const label = document.createElement('label');
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = opt.title;
+        radio.value = choice;
+        if (index === 0) radio.checked = true;
+        label.appendChild(radio);
+        label.append(` ${choice}`);
+        optionGroup.appendChild(label);
       });
-    }
-    
-    updateCartButtonPrice();
-    customizeModal.classList.remove('hidden');
+      optionsContainer.appendChild(optionGroup);
+    });
   }
+
+  updateCartButtonPrice(); // Update button with initial price
+  customizeModal.classList.remove('hidden');
+}
 
   function updateCartButtonPrice() {
     if(submitBttn) submitBttn.textContent = `ADD TO CART - $${(currentPrice * amount).toFixed(2)}`;
@@ -460,9 +501,7 @@ function renderAllItemsByCategory() {
   if(submitBttn) submitBttn.addEventListener("click", () => {
     if (amount > 0 && currentItem) {  
       const customizations = {};
-      // Find all the option groups within the modal
       const optionGroups = document.querySelectorAll('#customOptions .option-group');
-
       optionGroups.forEach(group => {
         // Find the title (h4) of the group
         const groupTitle = group.querySelector('h4').textContent;
@@ -475,6 +514,10 @@ function renderAllItemsByCategory() {
         }
       });
       
+      const orderNotes = document.getElementById('order-notes').value.trim();
+      if (orderNotes) {
+        customizations['Special Instructions'] = orderNotes;
+      }
       console.log("User's full customization choices:", customizations);
       cart.addItem(currentItem.name, currentItem.id, currentPrice, amount, customizations);
       console.log(`${amount} of ${currentItem.name} added to cart.`);

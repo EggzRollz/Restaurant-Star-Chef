@@ -56,7 +56,7 @@
     },
     {
       "category_name_chinese": "飲品類",
-      "category_name_english": "DRINKS",
+      "category_name_english": "BEVERAGES",
       "items": [
         {
           "id": "R1",
@@ -407,58 +407,247 @@
       ]
     },
     {
-      "category_name_chinese": "啤酒類",
-      "category_name_english": "BEER",
+      "category_name_chinese": "小炒類",
+      "category_name_english": "STIR FRY",
       "items": [
         {
-          "id": "G1",
-          "name_chinese": "進口啤酒",
-          "name_english": "Imported Beer (Tsingtao/Heineken)",
+          "id": "K1",
+          "name_chinese": "避風塘龍蝦",
+          "name_english": "Stir Fried Lobster with Hong Kong Style",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
-              "price": 6.75
+              "price": 45.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "id": "K2",
+          "name_chinese": "薑蔥炒龍蝦",
+          "name_english": "Stir Fried Lobster with Ginger & Green Onion",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 42.99
+            }
+          ]
+        },
+        {
+          "id": "K3",
+          "name_chinese": "美極炒龍蝦",
+          "name_english": "Stir Fried Lobster with Maggi Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 43.99
+            }
+          ]
+        },
+        {
+          "id": "K4",
+          "name_chinese": "馬拉盞生蠔",
+          "name_english": "Stir-fried Oyster with BelaChan Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 28.99
+            }
+          ]
+        },
+        {
+          "id": "K5",
+          "name_chinese": "薑蔥生蠔",
+          "name_english": "Stir-fried Oyster with Ginger & Green Onion in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 28.99
+            }
+          ]
+        },
+        {
+          "id": "K6",
+          "name_chinese": "潮州煎蠔餅",
+          "name_english": "Oyster Omelette",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.50
+            }
+          ]
+        },
+        {
+          "id": "K7",
+          "name_chinese": "海鮮炒芥蘭",
+          "name_english": "Stir Fried Seafood with Chinese Broccoli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K8",
+          "name_chinese": "班片炒芥蘭",
+          "name_english": "Stir Fried Garoupa Fish with Chinese Broccoli",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K9",
+          "name_chinese": "帶子青扒豆苗",
+          "name_english": "Stir Fried Snow Pea Leaves with King Mushroom",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.75
+            }
+          ]
+        },
+        {
+          "id": "K10",
+          "name_chinese": "魚湯杞子豆苗",
+          "name_english": "Snow Pea leaves in Fish Soup with Gojiberry",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "K11",
+          "name_chinese": "蒜蓉炒豆苗",
+          "name_english": "Stir Fried Snow Pea Leaves with Garlic",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 18.25
+            }
+          ]
+        },
+        {
+          "id": "K12",
+          "name_chinese": "上湯蒜子豆苗",
+          "name_english": "Snow Pea Leaves in Soup with Garlic",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.25
+            }
+          ]
+        },
+        {
+          "id": "K13",
+          "name_chinese": "蜜椒牛柳粒",
+          "name_english": "Diced Beef Tenderloin with Honey Pepper Sauce",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 22.50
+            }
+          ]
+        },
+        {
+          "id": "K14",
+          "name_chinese": "醬爆老虎蝦",
+          "name_english": "Fried Tiger Shrimp & Chicken with Maggi",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ]
+        },
+        {
+          "id": "K15",
+          "name_chinese": "四川炒老虎蝦",
+          "name_english": "Szechuan Style Tiger Shrimp",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy",
+              "level": 2
+            }
+          ]
+        },
+        {
+          "id": "K16",
+          "name_chinese": "五柳/椒鹽/粟米班片",
+          "name_english": "Sweet & Sour/Spicy & Salt/Sweet Corn sauce Garoupa Fillet",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.99
             }
           ],
           "options": [
             {
-              "title": "Choose a beer",
+              "title": "Choose a Sauce",
               "choices": [
-                "Tsingtao",
-                "Heineken"
+                "Sweet & Sour",
+                "Spicy & Salt",
+                "Sweet Corn sauce"
               ]
             }
           ]
         },
         {
-          "id": "G2",
-          "name_chinese": "本地啤酒",
-          "name_english": "Local Beer (Coors Lite/Molson Canadian/Budweiser)",
+          "id": "K17",
+          "name_chinese": "豆腐斑腩煲",
+          "name_english": "Garoupa & Tofu in Hot Pot",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
-              "price": 5.75
-            }
-          ],
-          "options": [
-            {
-              "title": "Choose a beer",
-              "choices": [
-                "Coors Lite",
-                "Molson Canadian",
-                "Budweiser"
-              ]
+              "price": 19.50
             }
           ]
-        }
-      ]
-    },
-    {
-      "category_name_chinese": "主菜",
-      "category_name_english": "Main Course",
-      "items": [
+        },
+        {
+          "id": "K18",
+          "name_chinese": "涼瓜斑腩煲",
+          "name_english": "Garoupa & Bitter Melon in Hot Pot",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 19.50
+            }
+          ]
+        },
         {
           "id": "K19",
           "name_chinese": "豬手(南乳/五香/麻辣/酸甜)/豉汁/椒鹽",
@@ -979,6 +1168,7 @@
           "id": "K49",
           "name_chinese": "手撕雞",
           "name_english": "Hand Shredded Chicken",
+          "image": "K49.jpg",
           "pricing": [
             {
               "size": "Half",
@@ -1454,250 +1644,6 @@
               "size": "default",
               "temp": "default",
               "price": 15.99
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "category_name_chinese": "小炒類",
-      "category_name_english": "STIR FRY DISHES",
-      "items": [
-        {
-          "id": "K1",
-          "name_chinese": "避風塘龍蝦",
-          "name_english": "Stir Fried Lobster with Hong Kong Style",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 45.99
-            }
-          ],
-          "tags": [
-            {
-              "type": "spicy",
-              "level": 1
-            }
-          ]
-        },
-        {
-          "id": "K2",
-          "name_chinese": "薑蔥炒龍蝦",
-          "name_english": "Stir Fried Lobster with Ginger & Green Onion",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 42.99
-            }
-          ]
-        },
-        {
-          "id": "K3",
-          "name_chinese": "美極炒龍蝦",
-          "name_english": "Stir Fried Lobster with Maggi Sauce",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 43.99
-            }
-          ]
-        },
-        {
-          "id": "K4",
-          "name_chinese": "馬拉盞生蠔",
-          "name_english": "Stir-fried Oyster with BelaChan Sauce",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 28.99
-            }
-          ]
-        },
-        {
-          "id": "K5",
-          "name_chinese": "薑蔥生蠔",
-          "name_english": "Stir-fried Oyster with Ginger & Green Onion in Hot Pot",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 28.99
-            }
-          ]
-        },
-        {
-          "id": "K6",
-          "name_chinese": "潮州煎蠔餅",
-          "name_english": "Oyster Omelette",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.50
-            }
-          ]
-        },
-        {
-          "id": "K7",
-          "name_chinese": "海鮮炒芥蘭",
-          "name_english": "Stir Fried Seafood with Chinese Broccoli",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 22.50
-            }
-          ]
-        },
-        {
-          "id": "K8",
-          "name_chinese": "班片炒芥蘭",
-          "name_english": "Stir Fried Garoupa Fish with Chinese Broccoli",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 22.50
-            }
-          ]
-        },
-        {
-          "id": "K9",
-          "name_chinese": "帶子青扒豆苗",
-          "name_english": "Stir Fried Snow Pea Leaves with King Mushroom",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.75
-            }
-          ]
-        },
-        {
-          "id": "K10",
-          "name_chinese": "魚湯杞子豆苗",
-          "name_english": "Snow Pea leaves in Fish Soup with Gojiberry",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.99
-            }
-          ]
-        },
-        {
-          "id": "K11",
-          "name_chinese": "蒜蓉炒豆苗",
-          "name_english": "Stir Fried Snow Pea Leaves with Garlic",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 18.25
-            }
-          ]
-        },
-        {
-          "id": "K12",
-          "name_chinese": "上湯蒜子豆苗",
-          "name_english": "Snow Pea Leaves in Soup with Garlic",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.25
-            }
-          ]
-        },
-        {
-          "id": "K13",
-          "name_chinese": "蜜椒牛柳粒",
-          "name_english": "Diced Beef Tenderloin with Honey Pepper Sauce",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 22.50
-            }
-          ]
-        },
-        {
-          "id": "K14",
-          "name_chinese": "醬爆老虎蝦",
-          "name_english": "Fried Tiger Shrimp & Chicken with Maggi",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.99
-            }
-          ]
-        },
-        {
-          "id": "K15",
-          "name_chinese": "四川炒老虎蝦",
-          "name_english": "Szechuan Style Tiger Shrimp",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.99
-            }
-          ],
-          "tags": [
-            {
-              "type": "spicy",
-              "level": 2
-            }
-          ]
-        },
-        {
-          "id": "K16",
-          "name_chinese": "五柳/椒鹽/粟米班片",
-          "name_english": "Sweet & Sour/Spicy & Salt/Sweet Corn sauce Garoupa Fillet",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.99
-            }
-          ],
-          "options": [
-            {
-              "title": "Choose a Sauce",
-              "choices": [
-                "Sweet & Sour",
-                "Spicy & Salt",
-                "Sweet Corn sauce"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "K17",
-          "name_chinese": "豆腐斑腩煲",
-          "name_english": "Garoupa & Tofu in Hot Pot",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.50
-            }
-          ]
-        },
-        {
-          "id": "K18",
-          "name_chinese": "涼瓜斑腩煲",
-          "name_english": "Garoupa & Bitter Melon in Hot Pot",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 19.50
             }
           ]
         }

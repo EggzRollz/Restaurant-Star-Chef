@@ -36,7 +36,6 @@ if (placeOrderBttn) {
             baseId: item.id.split('_')[0], 
             quantity: item.quantity,
             customizations: item.customizations
-            
         }));
         if (cartPayload.length === 0) {
             alert("Your cart is empty. Please add items before placing an order.");

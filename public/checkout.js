@@ -55,6 +55,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         savedCart.forEach((item, index) => {
+            console.log("Data for cart item being rendered:", item.customizations);
+            let customizationText = '';
+            if (item.customizations) { // Make sure customizations exist
+                if (item.customizations.temp && item.customizations.temp !== 'default') {
+                    customizationText = item.customizations.temp;
+                } else if (item.customizations.size && item.customizations.size !== 'default') {
+                    customizationText = item.customizations.size;
+                }
+            }
+
+            // 2. Create the HTML for the customization line only if there's text to show.
+            const customizationHTML = customizationText 
+                ? `<div class="cart-item-customization">${customizationText}</div>` 
+                : '';
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('cart-item');
             itemDiv.innerHTML = `

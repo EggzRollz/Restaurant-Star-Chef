@@ -418,6 +418,89 @@ body {
     max-width: 600px;
     line-height: 1.6;
 }
+.site-footer {
+  background-color: #000000; /* A modern dark blue-gray */
+  color: #ecf0f1; /* A soft white */
+  padding: 40px 20px;
+  font-family: "Asap Condensed", sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+  gap: 30px; 
+  max-width: 1200px;
+  margin: 0 auto; 
+  padding-bottom: 30px;
+  border-bottom: 1px solid #202325; /* Subtle separator line */
+  
+}
+
+/* Individual column styling */
+.footer-column {
+  flex: 1; /* Allows columns to grow and shrink as needed */
+  min-width: 200px; /* Prevents columns from getting too narrow */
+  
+}
+
+.footer-column h5 {
+  color: #ffffff;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.footer-column p,
+.footer-column address,
+.footer-column .footer-nav {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #bdc3c7; /* A slightly dimmer white for content */
+}
+
+/* Styling for links */
+.footer-column a {
+  color: #bdc3c7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block; /* Helps with spacing */
+  margin-bottom: 5px;
+}
+
+.footer-column a:hover {
+  color: #3498db; /* A bright blue for hover effect */
+  text-decoration: underline;
+}
+
+/* Bottom copyright bar */
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+/* --- Responsive Design for Mobile --- */
+@media (max-width: 480px) {
+  .footer-container {
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center; /* Center-align the columns */
+    text-align: center;
+  }
+  
+  .footer-column {
+    min-width: 100%; /* Each column takes full width */
+    margin-bottom: 20px;
+  }
+}
+
+.footer-location{
+  width:100%;
+  height:auto;
+}
+
 .reservation {
     display: flex;
     flex-direction: column;
@@ -452,6 +535,7 @@ body {
     width: 200px;
     text-align: center;
 }
+
 
 .reservation-button:hover {
   background-color: #A2956B;
@@ -808,7 +892,16 @@ hr.divider {
   color: #A2956B;
 }
 
-
+.item-img {
+  
+  flex: 1; 
+  height: 100%;  
+  object-fit: cover; 
+  object-position: center; 
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  overflow: hidden; 
+}
 
 .modal {
   position: fixed;
@@ -825,14 +918,34 @@ hr.divider {
 }
 
 
-.closeModalBttn{
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 1.5rem;
-}
+.closeModalBttn {
+  
+  position: absolute;  
+  top: 10px;            
+  left: 15px;          
+  z-index: 10;          
 
+ 
+  background: rgba(0, 0, 0, 0.5); 
+  color: white;                   /* White 'X' */
+  border: none;
+  border-radius: 50%;             
+  cursor: pointer;
+  
+  /* --- Sizing and Centering the 'X' --- */
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 32px; /* Vertically centers the text */
+  text-align: center; /* Horizontally centers the text */
+  padding: 0;
+
+  /* --- Smooth Hover Effect --- */
+  transition: background-color 0.2s ease-in-out;
+}
 .modal-content {
+  position:relative;
   background: white;
   border-radius: 8px;
   max-height: 80vh;
@@ -841,8 +954,16 @@ hr.divider {
   flex-direction: column;  /* stack scroll-area + bottom bar */
   max-width: 50%;     /* never goes beyond this on desktop */
   min-width: 50%;
+  overflow: hidden; 
 }
-
+.modal-image {
+  width: calc(100% + 4rem); 
+  height: 350px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  margin: -2rem -2rem 1.5rem -2rem; /* Top | L/R | Bottom | L/R */
+}
 @media (max-width: 480px){
   .modal-content {
   background: white;
@@ -853,9 +974,33 @@ hr.divider {
   flex-direction: column;  /* stack scroll-area + bottom bar */
   max-width: 80%;     /* never goes beyond this on desktop */
   min-width: 80%;
+  }
+  .modal-image {
+  width: calc(100% + 4rem); 
+  height: 250px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  margin: -2rem -2rem 1.5rem -2rem; /* Top | L/R | Bottom | L/R */
+  }
 }
+.order-notes-textarea {
+  width: 100%;
+  min-height: 80px; /* Give it a decent starting height */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit; /* Use the same font as the rest of the site */
+  font-size: 1rem;
+  resize: vertical; 
+  box-sizing: border-box; 
 }
 
+/* Add a nice focus effect for better user experience */
+.order-notes-textarea:focus {
+  outline: none;
+  border-color: #A2956B; /* Use one of your brand colors */
+  box-shadow: 0 0 0 2px rgba(162, 149, 107, 0.3); /* A subtle glow */
+}
 
 
 .modal:not(.hidden) {
@@ -865,7 +1010,9 @@ hr.divider {
 
 .scroll-area {
   overflow-y: auto;        /* scrollable content */
-  padding: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   flex: 1;                 /* takes remaining space above bottom bar */
 }
 
@@ -873,12 +1020,9 @@ hr.divider {
   color:rgb(0, 0, 0)
 }
 .defaultPrice{
-  padding-bottom: 14px;
   display: flex;
   color:black;
   border-bottom: 2px solid #A2956B;
-  
-
 }
 .hidden {
   display: none;
@@ -886,7 +1030,6 @@ hr.divider {
 
 .submitBttn{
   display:flex;
-
   list-style : none;
   border: 2px solid #ffffff;
   background-color: #c8b883;
@@ -969,11 +1112,9 @@ hr.divider {
 }
 
 
-
 .custom-options {
   flex: 1;                       /* takes up remaining space */
-  overflow-y: auto;
-  padding-bottom: 80px;          /* ensures content doesn’t hide behind bottom bar */
+  overflow-y: auto;        /* ensures content doesn’t hide behind bottom bar */
 }
 
 /* Hide the default radio button */
@@ -1036,11 +1177,6 @@ hr.divider {
 }
 
 
-
-/* Option group container */
-.option-group {
-  margin: 20px 0;
-}
 
 .option-group h4 {
   margin-bottom: 12px;
