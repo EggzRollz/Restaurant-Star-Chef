@@ -2,7 +2,7 @@ console.log("The script is running!");
 
 const gallery = document.querySelector('.gallery');
 const images = document.querySelectorAll('.gallery img');
-const texts = document.querySelectorAll('.minor-splash-text');
+const animatedTexts = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .about-us-text');
 const navLinks = document.querySelector('.nav-links');
 const menuToggle = document.querySelector('.menu-toggle');
 const overlay = document.querySelector('.overlay');
@@ -37,46 +37,32 @@ function isInView(el) {
   return inView;
 }
 
-
-function revealImages() {
+function revealElementsOnScroll() {
+  
+  // Animate images
   images.forEach((img, index) => {
-    if (isInView(img)) {
-      if (!img.classList.contains('visible')) {
-        setTimeout(() => {
-          img.classList.add('visible');
-        }, index * 300);
-      }
-    } else {
-      
-      img.classList.remove('visible');
+    // Only animate if it's in view AND hasn't been animated yet
+    if (isInView(img) && !img.classList.contains('visible')) {
+      setTimeout(() => {
+        img.classList.add('visible');
+      }, index * 200); // Shorter delay for images is often smoother
+    }
+  });
+
+  // Animate all texts
+  animatedTexts.forEach((el, index) => {
+    if (isInView(el) && !el.classList.contains('visible')) {
+      // Use a small, staggered delay
+      setTimeout(() => {
+        el.classList.add('visible');
+      }, index * 150);
     }
   });
 }
 
-function revealText() {
-  texts.forEach((el, index) => {
-    if (isInView(el)) {
-      if (!el.classList.contains('visible')) {
-        
-        setTimeout(() => {
-          el.classList.add('visible');
-        }, index * 300);
-      }
-    } else {
-      el.classList.remove('visible');
-    }
-  });
-}
-
-window.addEventListener('load', () => {
-  revealImages();
-  revealText();
-});
-
-window.addEventListener('scroll', () => {
-  revealImages();
-  revealText();
-});
+// Run the function on load and on scroll
+window.addEventListener('load', revealElementsOnScroll);
+window.addEventListener('scroll', revealElementsOnScroll);
 document.addEventListener('DOMContentLoaded', () => {
 
   const mainHeader = document.querySelector('.main-header');

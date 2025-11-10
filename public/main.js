@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return {
           id: doc.id,
           name: data.name_english || "Unnamed Item",
+          name_chinese: data.name_chinese || "Unnamed Item",
           image: data.image,
           price: data.pricing?.[0]?.price || 0.00, // Safely access nested price
           tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
@@ -193,6 +194,11 @@ function createMenuItemElement(item) {
     const itemNameDiv = document.createElement('div');
     itemNameDiv.classList.add("item-name");
     itemNameDiv.textContent = `${item.name}`;
+
+    const itemChineseNameDiv = document.createElement('div');
+    itemChineseNameDiv.classList.add("item-name");
+    itemChineseNameDiv.textContent = `${item.name_chinese}`;
+
  
     const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
 
@@ -216,6 +222,7 @@ function createMenuItemElement(item) {
     
     // IMPORTANT: We now add the name and price divs to itemInfo
     itemInfo.appendChild(itemNameDiv);
+    itemInfo.appendChild(itemChineseNameDiv);
     itemInfo.appendChild(itemPriceDiv);
     for (const modifierKey in MODIFIERS) {
         if (lowerCaseTags.includes(modifierKey)) {
@@ -276,6 +283,8 @@ function renderSingleCategory(categoryName) {
       header.textContent = categoryName; 
       header.classList.add('menu-group-title');
       
+      
+
       // 4. Create the list of items
       const list = document.createElement('ul');
       list.classList.add('item-list-grid');

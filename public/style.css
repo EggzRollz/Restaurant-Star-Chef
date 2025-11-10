@@ -270,6 +270,40 @@ body {
 }
 
 
+.splash-text,
+.minor-splash-text, 
+.opening-hours-text, 
+.about-us-text {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.splash-text {
+    transform: translate(-50%, -50%) translateY(20px);
+}
+
+.minor-splash-text, 
+.opening-hours-text, 
+.about-us-text {
+    transform: translateY(20px);
+}
+
+/*
+  STEP 2: Define the FINAL (visible) state.
+  When the .visible class is added by JavaScript, the elements
+  will transition to being fully opaque and in their original position.
+*/
+.splash-text.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* This is the key fix! */
+}
+
+/* When .visible is added, all other text moves to its final position. */
+.minor-splash-text.visible, 
+.opening-hours-text.visible, 
+.about-us-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 
 .awards{
@@ -399,6 +433,86 @@ body {
   .minor-splash-img {
     order: 2; /* Image comes second */
   }
+}
+
+.awards-plaque {
+    min-width:40%;
+    padding: 40px 50px;
+    text-align: center;
+}
+
+/* --- Plaque Title --- */
+.plaque-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 35px 0;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+/* A simple, classic underline for the title */
+.plaque-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 1px;
+    background-color: rgba(201, 163, 59, 0.6); /* Solid, muted gold line */
+}
+
+/* List of awards */
+.awards-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Individual award item */
+.award-item {
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* A subtle separator */
+}
+
+/* Remove the border from the very last item */
+.award-item:last-child {
+    border-bottom: none;
+    padding-bottom: 10px; /* Adjust padding for the last item */
+}
+.award-item:first-child {
+    padding-top: 10px;
+}
+
+/* --- Star Rating: Classic and Clean --- */
+.star-rating {
+    font-size: 2rem;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+    color: #C9A33B; /* A richer, slightly desaturated gold color */
+}
+
+/* The empty star should be a faint outline */
+.star-rating .far.fa-star {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* The source of the rating */
+.rating-source {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #d1d1d1;
+    margin: 0;
+}
+
+/* Clarification text */
+.rating-clarification {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #888;
+    margin: 5px 0 0 0;
 }
 .info{
     display: flex;
@@ -1773,6 +1887,7 @@ p {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  z-index: 100;
 }
 
 .opening-hours-text.visible {
