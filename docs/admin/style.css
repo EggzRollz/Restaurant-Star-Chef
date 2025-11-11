@@ -138,3 +138,32 @@ h1 {
     border-bottom: none; /* Remove the border, as the container now handles it */
     padding-bottom: 0;
 }
+
+.totals-container {
+    margin-top: 15px; /* Space above the totals */
+    padding-top: 10px; /* Space below the dividing line */
+    border-top: 1px dashed #ccc; /* A line to separate items from totals */
+}
+
+/* Style for each line (Subtotal, HST, Total) */
+.total-line {
+    display: flex; /* This is the key for alignment */
+    justify-content: space-between; /* Pushes the label and value to opposite ends */
+    margin: 5px 0; /* Vertical spacing between lines */
+    font-size: 0.95em;
+    color: #333;
+}
+
+/* Make the final total line stand out */
+.total-line.total {
+    font-size: 1.1em; /* Larger font size */
+    margin-top: 10px; /* More space above the final total */
+    padding-top: 5px;
+    border-top: 1px solid #ddd;
+    color: #000;
+}
+
+/* The strong tags inside the final total line are already bold, this is optional */
+.total-line.total strong {
+    font-weight: 600; /* A bit bolder */
+}

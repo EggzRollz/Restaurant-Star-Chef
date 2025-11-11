@@ -53,10 +53,8 @@ export class Cart {
 
 
   cartLength(){
-    let count = 0;
-    for(let i = 0; i < this.shoppingCart.length; i++){
-      count = count + this.shoppingCart[i].quantity;
-    }
+    const count = this.shoppingCart.reduce((total, item) => total + item.quantity, 0);
+
     return count;
   }
 

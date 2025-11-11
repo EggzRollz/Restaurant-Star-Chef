@@ -14,7 +14,7 @@
 />
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
   </head>
@@ -39,8 +39,7 @@
       </nav>
     </header>
 
-    <div class="splash-image">
-      <img src="graphics/restaurant.webp" alt="blackgound" />
+    <div class="splash-image splash-index">
       <div class="splash-text">
         <h1>Star Chef</h1>
         <p class="subtitle">Chinese Restaurant</p>
@@ -49,6 +48,7 @@
         <li><a href="menu.html">MENU</a></li>
       </ul>
     </div>
+        
 
     <main>
       <div class="awards">
@@ -58,57 +58,73 @@
           dishes, local favorites, interesting dishes.
         </p>
       </div>
+      <div class="gallery-wrapper">
+      <button id="prev-btn" class="gallery-nav-btn" aria-label="Previous image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
       <div class="gallery">
       <img src="graphics/tofu.jpg" alt="dish1" loading="lazy" />
       <img src="graphics/restaurant4.jpg" alt="dish2" loading="lazy" />
       <img src="graphics/chowmein.jpg" alt="dish3" loading="lazy" />
-</div>
-<div class="minor-splash-container">
+      
+    </div>
+    <button id="next-btn" class="gallery-nav-btn" aria-label="Next image">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</button>
+  </div>
+    <div class="minor-splash-container">
     
     <div class="minor-splash-item">
-        <div class="minor-splash-img">
-            <img src="graphics/noodles.jpg" alt="dish4" loading="lazy"/>
-        </div>
-        <div class="awards-plaque">
-        <h2 class="plaque-title">Reviews</h2>
+    <div class="minor-splash-img">
+        <img src="graphics/noodles.jpg" alt="dish4" loading="lazy"/>
+    </div>
+    <div class="awards-plaque">
+        <h2 class="plaque-title">REVIEWS</h2>
         
         <ul class="awards-list">
             <li class="award-item">
                 <div class="star-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
+                    <!-- 4 full stars, 1 empty star -->
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star_border</span>
                 </div>
                 <p class="rating-source">Google & Yelp</p>
             </li>
             
             <li class="award-item">
                 <div class="star-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-stroke"></i>
+                    <!-- 4 full stars, 1 half star -->
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star_half</span>
                 </div>
                 <p class="rating-source">Uber Eats</p>
             </li>
 
             <li class="award-item">
                 <div class="star-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-stroke"></i>
+                    <!-- 4 full stars, 1 half star -->
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="material-symbols-outlined">star_half</span>
                 </div>
                 <p class="rating-source">SkipTheDishes</p>
                 <p class="rating-clarification">(9.3 / 10 Rating)</p>
             </li>
         </ul>
     </div>
-
+</div>
     </div>
 
     <div class="minor-splash-item reverse">

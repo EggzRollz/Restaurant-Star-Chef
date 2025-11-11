@@ -21,7 +21,6 @@ const firebaseConfig = {
   appId: "1:924721320321:web:41644950fe66ee58eed880",
   measurementId: "G-BKD21L9889"
 };
-export {firebaseConfig};
 
 // --- Initialize Firebase and Firestore ---
 let db; // Declare db here in the global scope
@@ -34,7 +33,12 @@ try {
   const container = document.getElementById('menu-items-container');
   if(container) container.innerHTML = "<h1>Error: Could not connect to the menu database.</h1>";
 }
-export { db };
+export { db, firebaseConfig };
+
+export function updateCartQuantityDisplay(cart) {
+    const cartQuantityDisplay = document.getElementById('cartQuantityDisplay');
+    if(cartQuantityDisplay) cartQuantityDisplay.textContent = cart.cartLength(); 
+  }
 
 // --- Main Application Logic ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -56,12 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let menuInventory = [];
   const savedCartStr = localStorage.getItem('cart');
     
-    
+  // Checking if a cart already exists
   if (savedCartStr) {
       const savedCartItems = JSON.parse(savedCartStr);
       cart.loadFromStorage(savedCartItems);
   }
-  updateCartQuantityDisplay(); 
+  updateCartQuantityDisplay(cart); 
 
   if(modalContent) modalContent.addEventListener('click', (e) => e.stopPropagation());
 
@@ -104,9 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (menuInventory.length > 0) {
         setupCategoryButtons();
         handleCategoryClick('All');
-      } else {
-        menuContainer.innerHTML = "<h2>Menu is currently empty.</h2>";
-      }
+      } 
     } catch (error) {
       console.error("Error fetching menu data from Firestore:", error);
       menuContainer.innerHTML = "<h1>Error loading menu. Please try again later.</h1>";
@@ -319,14 +321,12 @@ function renderAllItemsByCategory() {
   // This is our desired display order and the source for our titles.
   const categoryOrder = [
     "Popular", 
-    "Specials", 
-    "StirFry",
+    "Sides", 
+    "Stir Fry",
     "Fried Noodle",
     "Rice", 
     "Soup / Noodles",
     "Congee", 
-    "Sides", 
-    "Desserts", 
     "Beverages"
   ];
 
@@ -348,7 +348,7 @@ function renderAllItemsByCategory() {
           item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
       );
     }
-
+    console.log(`Category: "${displayCategory}" | Found ${filteredItems.length} items.`);
     // --- Rendering Logic ---
     // If we found any items for this category, create the title and the list.
     if (filteredItems.length > 0) {
@@ -379,90 +379,102 @@ function renderAllItemsByCategory() {
 function openCustomizeModal(item) {
   console.log("Opening modal for item:", item);
   currentItem = item;
-  // currentPrice will be set by the radio buttons, so we don't need to set a default here.
+  // currentPrice will be set by the radio buttons
   amount = 1;
   updateQuantityDisplay();
 
   // --- GET HTML ELEMENTS ---
   const title = document.getElementById('customize-title');
+  const chineseTitle = document.getElementById('customize-chinese-title');
   const optionsContainer = document.getElementById('customOptions');
   const defaultPrice = document.getElementById('default-price');
-  const modalImage = document.getElementById('modal-image'); // Get the existing <img> element from HTML
+  const modalImage = document.getElementById('modal-image');
   const orderNotesTextarea = document.getElementById('order-notes');
 
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
+  chineseTitle.textContent = item.name_chinese;
   optionsContainer.innerHTML = ''; // Clear old options
-  defaultPrice.textContent = ''; // Clear the old default price, as sizes will show prices
+  defaultPrice.textContent = ''; // Clear the old default price
 
   if (orderNotesTextarea) {
       orderNotesTextarea.value = '';
   }
 
-  // --- HANDLE THE IMAGE --- (The corrected part)
+  // --- HANDLE THE IMAGE ---
   if (item.image) {
-    modalImage.src = 'graphics/' + item.image; // Set the src of the HTML element
-    modalImage.alt = item.name; // Set the alt text for accessibility
-    modalImage.style.display = 'block'; // Make sure it's visible if it was hidden
+    modalImage.src = 'graphics/' + item.image;
+    modalImage.alt = item.name;
+    modalImage.style.display = 'block';
   } else {
-    modalImage.style.display = 'none'; // Hide the image element if there's no image
+    modalImage.style.display = 'none';
   }
 
-  // --- HANDLE PRICING (SIZES) ---
+  // --- HANDLE PRICING (SIZES / TEMPERATURES) ---
   if (item.pricing.length === 1) {
     // If there's only one price, display it and set it
     defaultPrice.textContent = "$ " + item.pricing[0].price.toFixed(2);
     currentPrice = item.pricing[0].price;
+
   } else if (item.pricing && item.pricing.length > 0) {
     const pricingGroup = document.createElement('div');
     pricingGroup.className = 'option-group';
     
+    // --- FIX: Determine the type of option (Size or Temperature) ---
+    let optionTypeKey = 'temp'; // Default to 'temp'
+    let optionGroupTitle = 'Temperature'; // Default title
+
+    // Check the first pricing option to see if it's based on size
+    if (item.pricing[0].size && item.pricing[0].size !== 'default') {
+        optionTypeKey = 'size';
+        optionGroupTitle = 'Size';
+    }
+    // --- END FIX ---
+
     const pricingTitle = document.createElement('h4');
-    // We assume the title is 'Temperature' for this structure, 
-    // but you could make this more dynamic if needed.
-    pricingTitle.textContent = 'Temperature'; 
+    // FIX: Use the dynamic title we just determined
+    pricingTitle.textContent = optionGroupTitle;
     pricingGroup.appendChild(pricingTitle);
 
-    // This will hold the price of the first option as the default
     let isFirstOption = true; 
 
     item.pricing.forEach(priceOption => {
         const label = document.createElement('label');
         const radio = document.createElement('input');
         radio.type = 'radio';
-        radio.name = 'Temperature'; // Group them together
+        // FIX: Use the dynamic group title for the name
+        radio.name = optionGroupTitle;
         
-        // THIS IS THE KEY FIX: Use the 'temp' from your data as the value
-        radio.value = priceOption.temp; 
+        // FIX: Use the dynamic key ('size' or 'temp') to get the value
+        // This is the most important change. `priceOption[optionTypeKey]` will
+        // evaluate to `priceOption['size']` or `priceOption['temp']`.
+        radio.value = priceOption[optionTypeKey]; 
         
-        // Store the price in a data attribute for easy access
         radio.dataset.price = priceOption.price;
 
-        // Check the first option by default
         if (isFirstOption) {
             radio.checked = true;
-            currentPrice = priceOption.price; // Set the initial price
+            currentPrice = priceOption.price;
             isFirstOption = false;
         }
 
         label.appendChild(radio);
-        // Display the temp and price to the user
-        label.append(` ${priceOption.temp} ($${priceOption.price.toFixed(2)})`); 
+        // FIX: Display the correct option value (size or temp) to the user
+        label.append(` ${priceOption[optionTypeKey]} ($${priceOption.price.toFixed(2)})`); 
         pricingGroup.appendChild(label);
     });
 
-    // Add an event listener to update the price when the user changes temperature
     pricingGroup.addEventListener('change', (event) => {
         if (event.target.type === 'radio' && event.target.checked) {
-            // Get the price from the selected option's data attribute
             currentPrice = parseFloat(event.target.dataset.price);
-            updateCartButtonPrice(); // Update the price on the button
+            updateCartButtonPrice(); 
         }
     });
 
     optionsContainer.appendChild(pricingGroup);
-}
+  }
 
+  
 
   // --- HANDLE OTHER OPTIONS ---
   if (item.options && item.options.length > 0) {
@@ -532,11 +544,13 @@ function openCustomizeModal(item) {
       console.log(`${amount} of ${currentItem.name} added to cart.`);
       localStorage.setItem('cart', JSON.stringify(cart.getItems()));
       
-      updateCartQuantityDisplay()
+      updateCartQuantityDisplay(cart)
     }
     closeCustomizeModal();
 
 });
+
+
   if (cartButton) {
     cartButton.addEventListener('click', () => {
       window.location.href = 'checkout.html'; // Change to your cart page filename
@@ -551,10 +565,6 @@ function openCustomizeModal(item) {
     if(quantityDisplay) quantityDisplay.textContent = amount; 
   }
 
-  function updateCartQuantityDisplay() {
-    const cartQuantityDisplay = document.getElementById('cartQuantityDisplay');
-    if(cartQuantityDisplay) cartQuantityDisplay.textContent = cart.cartLength(); 
-  }
 
   document.getElementById('close-modal')?.addEventListener('click', closeCustomizeModal);
   if(customizeModal) customizeModal.addEventListener('click', (e) => {

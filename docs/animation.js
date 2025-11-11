@@ -38,31 +38,94 @@ function isInView(el) {
 }
 
 function revealElementsOnScroll() {
-  
-  // Animate images
-  images.forEach((img, index) => {
-    // Only animate if it's in view AND hasn't been animated yet
-    if (isInView(img) && !img.classList.contains('visible')) {
-      setTimeout(() => {
+  if (gallery) {
+    gallery.querySelectorAll('img').forEach((img) => {
+      if (isInView(img) && !img.classList.contains('visible')) {
         img.classList.add('visible');
-      }, index * 200); // Shorter delay for images is often smoother
-    }
-  });
-
-  // Animate all texts
+      }
+    });
+  }
   animatedTexts.forEach((el, index) => {
     if (isInView(el) && !el.classList.contains('visible')) {
-      // Use a small, staggered delay
-      setTimeout(() => {
-        el.classList.add('visible');
-      }, index * 150);
+      setTimeout(() => { el.classList.add('visible'); }, index * 150);
+    }
+  });
+}
+function setupMobileGalleryLoop() {
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  
+  // Only run this entire logic on mobile
+  if (!gallery || !isMobile) return;
+
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  if (!prevBtn || !nextBtn) return;
+
+  // --- 1. CLONE IMAGES FOR THE LOOP ---
+  const originalItems = Array.from(gallery.children);
+  if (originalItems.length === 0) return;
+  
+  originalItems.forEach(item => {
+    const clone = item.cloneNode(true);
+    clone.classList.remove('visible');
+    gallery.appendChild(clone);
+  });
+  
+  let loopPoint = 0;
+
+  // --- 2. THE LOOPING LOGIC ---
+  const handleLoop = () => {
+    if (loopPoint === 0) return; // Don't run if width isn't calculated yet
+    
+    // If scrolled past the original set, jump back silently
+    if (gallery.scrollLeft >= loopPoint) {
+      gallery.style.scrollBehavior = 'auto'; // Make the jump instant
+      gallery.scrollLeft -= loopPoint;
+      gallery.style.scrollBehavior = 'smooth'; // Restore smooth scrolling
+    }
+    // If scrolled before the original set, jump forward silently
+    else if (gallery.scrollLeft <= 0) {
+      gallery.style.scrollBehavior = 'auto';
+      gallery.scrollLeft += loopPoint;
+      gallery.style.scrollBehavior = 'smooth';
+    }
+  };
+
+  // Wait for images to load to get correct widths
+  window.addEventListener('load', () => {
+    // Calculate the exact width of the original set of images
+    const gap = parseInt(window.getComputedStyle(gallery).gap) || 30;
+    originalItems.forEach(item => {
+      loopPoint += item.offsetWidth + gap;
+    });
+
+    // --- 3. BUTTON CLICK EVENTS ---
+    nextBtn.addEventListener('click', () => {
+      // Scroll by the width of one image
+      const scrollAmount = originalItems[0].offsetWidth + gap;
+      gallery.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      const scrollAmount = originalItems[0].offsetWidth + gap;
+      gallery.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    // Use a timeout on the scroll event to check for loop condition *after* scroll finishes
+    if ('onscrollend' in window) {
+      gallery.addEventListener('scrollend', handleLoop);
+    } else {
+      let scrollTimer;
+      gallery.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(handleLoop, 300); // Increased timeout
+      });
     }
   });
 }
 
 // Run the function on load and on scroll
-window.addEventListener('load', revealElementsOnScroll);
-window.addEventListener('scroll', revealElementsOnScroll);
+
 document.addEventListener('DOMContentLoaded', () => {
 
   const mainHeader = document.querySelector('.main-header');
@@ -70,6 +133,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuNavWrapper = document.querySelector('.menu-nav-wrapper');
   const menuNavLinks = document.querySelectorAll('.menu-nav a');
   
+  if (mainHeader) {
+    const scrollThreshold = 600; // Pixels to scroll before the header changes
+
+    function handleHeaderScroll() {
+      if (window.scrollY > scrollThreshold) {
+        mainHeader.classList.add('scrolled');
+      } else {
+        mainHeader.classList.remove('scrolled');
+      }
+    }
+    
+    window.addEventListener('scroll', handleHeaderScroll);
+    handleHeaderScroll(); 
+  }
+  setupMobileGalleryLoop();
   if (menuNavLinks.length > 0) {
     menuNavLinks.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -123,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let menuNavHeight = 0;
     let originalWrapperTop = 0;
     let isSticky = false;
+    
 
     function setupStickyNav() {
       // Remove fixed class to get accurate measurements
@@ -162,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (scrollPosition >= triggerPoint) {
         if (!isSticky) {
-          // Before adding fixed class, ensure wrapper has exact height set
           menuNavWrapper.style.height = `${menuNavHeight}px`;
           menuNav.classList.add('fixed');
           isSticky = true;
@@ -210,10 +288,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (scrollIndicator) { 
       window.addEventListener('scroll', () => {
           if (window.scrollY > 50) { 
-              scrollIndicator.classList.add('hidden');
+              scrollIndicator.classList.add('fade-out');
           } else {
-              scrollIndicator.classList.remove('hidden');
+              scrollIndicator.classList.remove('fade-out');
           }
       });
   }
+  revealElementsOnScroll(); 
+  window.addEventListener('scroll', revealElementsOnScroll)
 });
+

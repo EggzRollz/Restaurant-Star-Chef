@@ -73,20 +73,28 @@ body {
     }
 }
 .main-header {
-
     top :  0;
     left : 0;
     width : 100%;
-    height : 60px;
-    background-color: black;
-    backdrop-filter: blur(20px);
-    color:black;
+    height : 60px; 
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+    backdrop-filter: blur(2px);
     position: fixed;
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     z-index: 100;
 }
-
+.main-header a {
+  color: white; 
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); 
+}
+.main-header.scrolled {
+    background-color: #000000; /* Change background to black */
+}
+.solid-header-page .main-header {
+  background-color: #000000; /* Use the same color as your .scrolled state */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Also add the shadow if you want it */
+}
 @media (max-width: 480px) {
     .main-header {
         position: fixed;  
@@ -104,60 +112,61 @@ body {
 }
 
 
+
 .main-nav {
-    
-    position: relative;
-    display : flex;
-    align-items: center;
-    justify-content: flex-start;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
-.nav-links a i {
-  color: white;
-  margin-right: 6px;
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: space-around;
+  gap: 50px; /* e.g. 20px minimum gap */
+  margin-left: 7%;
+  margin-right: auto;
+  flex-grow: 1; 
+  max-width: 800px; /* Adjust this value as needed */
+  flex-direction: row;
+  font-weight: 400;
+  font-style: normal;
 }
-.nav-links a:hover i {
+
+
+
+
+
+.nav-links a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-family: 'Asap Condensed', sans-serif;
+  font-weight: 400;
+  fill: white;
+}
+
+.nav-links a:hover {
   color: #A2956B;
   transition: color 0.3s;
-}
-
-
-
-.nav-links{
-    display : flex;
-    list-style : none;
-    padding : 0;
-    gap: 200px;
-    flex-direction: row;
-    margin: 0px;
-    font-weight: 400;
-    font-style: normal;
-}
-.nav-links a{
-    color: rgb(255, 255, 255);
-    text-decoration: none;
-    font-family: 'Asap Condensed', sans-serif;
-    font-weight: 400;
-    fill: white;
-}
-.nav-links a:hover {
-    color: #A2956B;
-    transition: color 0.3s;
 }
 
 
 @media (max-width: 480px) {
   .nav-links {
     position: fixed;       
-    top: 40px;
+    top: 30px;
     right: 0;
     height: calc(100vh - 40px);         
     width: 250px;          
     background-color: #000;
-    padding: 20px 0;
+    padding: 50px 0;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10%px;
     transform: translateX(100%);  
+    justify-content: flex-start; 
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
     z-index: 1000;         
@@ -168,6 +177,7 @@ body {
     opacity: 1;
   }
 
+  
   .nav-links li {
     color: #A2956B;
     margin: 10px 0;
@@ -198,7 +208,7 @@ body {
     height: 50px; 
     width: auto;  
     margin-left: 50px;
-    margin-right: 100px;
+
     z-index: 1000;
 }
 @media (max-width: 480px) {
@@ -212,14 +222,41 @@ body {
 
 
 .splash-image {
-  position: relative; /* Needed for positioning text inside */
-  width: 100%;        /* Make the container exactly the width of the page */
-  height: 90vh;       /* Set a specific height (e.g., 90% of viewport height). Adjust as you like. */
-  overflow: hidden;   /* This is good, it will crop the image inside */
+  position: relative; 
+  width: 100%;
+  height: 110vh;
+  overflow: hidden;
   z-index: 1;
- 
+
+  /* Universal background settings */
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+  /* Default desktop focal point */
+  background-position: center 40%; 
+  
+  /* 
+    NOTICE: The specific 'background-image' url is GONE from here.
+  */
 }
 
+/* === PAGE-SPECIFIC IMAGES === */
+/* Add one of these for each page that needs a splash image */
+
+.splash-index {
+  background-image: url('graphics/restaurantSplashGIMP.jpg');
+}
+
+.splash-menu {
+  background-image: url('graphics/menuSplash.jpg'); /* Example for menu page */
+}
+
+.splash-about {
+  background-image: url('graphics/outsideRestaurant.png'); /* Example for about page */
+}
+
+
+/* === GRADIENT OVERLAY (Stays the same) === */
 .splash-image::after {
   content: '';
   position: absolute;
@@ -230,22 +267,25 @@ body {
   background: linear-gradient(to top, black, transparent);
   pointer-events: none;
   z-index: 8;
+}
+
+@media (max-width: 480px) {
   
+  .splash-menu {
+    background-position: 50% 25%; 
+  }
+
+  .splash-index {
+    background-position: 40% 25%;
+  }
+
+  .splash-about {
+    background-position: 72% 25%;
+  }
 }
-
-.splash-image img {
-  width: 100%;         /* Make the image fill its container horizontally */
-  height: 100%;        /* Make the image fill its container vertically */
-  object-fit: cover;   /* This is the magic! It scales the image to cover the
-                           area without stretching or distorting it. */
-  display: block;
-  padding-bottom: 80px
-}
-
-
 .splash-text {
     position: absolute;
-    top: 50%;
+    top: 46%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
@@ -332,7 +372,87 @@ body {
     color: white;
     font-size: 20px;
 }
+.gallery-wrapper {
+  position: relative; /* Needed to position the buttons */
+  width: 100%;
+}
 
+.gallery-nav-btn {
+  /* Positioning and size */
+  display: none !important; 
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 50px;  /* Slightly larger touch area */
+  height: 50px;
+
+  /* Make the button itself invisible */
+  background: transparent;
+  border: none;
+  
+  /* Center the SVG inside */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+}
+
+/* Specific positioning for each button */
+#prev-btn {
+  left: 8px; /* A little closer to the edge */
+}
+
+#next-btn {
+  right: 8px;
+}
+
+/* --- Style the SVG icon for a premium look --- */
+.gallery-nav-btn svg {
+  width: 28px;  /* Make the icon a bit larger */
+  height: 28px;
+  color: white;
+  
+  /* 
+    THE KEY FOR VISIBILITY: A drop-shadow makes the icon stand out 
+    on any background (light or dark). It traces the shape of the icon itself.
+  */
+  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.6));
+  
+  /* A hint of opacity makes it feel lighter */
+  opacity: 0.8;
+
+  /* Smooth transitions for all effects */
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              opacity 0.2s ease,
+              filter 0.2s ease;
+}
+
+/* --- INTERACTION STATES --- */
+
+/* Subtle feedback on hover (for desktop) or focus (for accessibility) */
+.gallery-nav-btn:hover svg,
+.gallery-nav-btn:focus-visible svg {
+  opacity: 1;
+  transform: scale(1.15); /* Enlarge icon on hover */
+  filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.8)); /* Stronger shadow */
+}
+
+/* Quick press-down effect */
+.gallery-nav-btn:active svg {
+  transform: scale(1.0); /* Slightly smaller than hover for a 'press' feel */
+  transition-duration: 0.1s; /* Make the press feel faster */
+}
+
+/* --- Media Query to SHOW buttons on mobile --- */
+@media (max-width: 768px) {
+  .gallery-nav-btn {
+    /* Now we turn them ON */
+    display: flex !important; 
+  }
+}
 .gallery {
     display:flex;
     gap:30px;
@@ -355,6 +475,31 @@ body {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+@media (max-width: 768px) { /* A slightly larger breakpoint is often better for this */
+
+    .gallery {
+        overflow-x: auto;
+        overflow-y: hidden;
+        justify-content: flex-start; 
+        padding: 0 20px; 
+        box-sizing: border-box; 
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        scroll-snap-type: x mandatory;
+    }
+    .gallery::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    .gallery img {
+        height: 50vh; 
+        width: auto;
+        flex-shrink: 0;
+        scroll-snap-align: center;
+    }
 }
 .minor-splash-container {
   display: flex;
@@ -443,13 +588,11 @@ body {
 
 /* --- Plaque Title --- */
 .plaque-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.1rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0 0 35px 0;
-    position: relative;
-    padding-bottom: 20px;
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    color: white;
+    font-size: 3rem;
 }
 
 /* A simple, classic underline for the title */
@@ -462,6 +605,13 @@ body {
     width: 70px;
     height: 1px;
     background-color: rgba(201, 163, 59, 0.6); /* Solid, muted gold line */
+}
+.rating-source{
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: white;
+    font-size: 20px;
 }
 
 /* List of awards */
@@ -486,25 +636,33 @@ body {
     padding-top: 10px;
 }
 
-/* --- Star Rating: Classic and Clean --- */
-.star-rating {
-    font-size: 2rem;
-    letter-spacing: 4px;
-    margin-bottom: 12px;
-    color: #C9A33B; /* A richer, slightly desaturated gold color */
+/* --- Style for the new Material Symbols stars --- */
+
+.star-rating .material-symbols-outlined {
+    font-size: 2rem; /* Or whatever size you prefer */
+    color: #a2956b;     /* A nice modern gold/yellow */
+    
+    /* This is a helpful property to ensure icons align perfectly with text */
+    vertical-align: middle; 
 }
 
-/* The empty star should be a faint outline */
-.star-rating .far.fa-star {
-    color: rgba(255, 255, 255, 0.25);
+/* 
+  A small trick: The "filled" style in Material Symbols is controlled by a font setting.
+  This makes the star icon solid.
+*/
+.star-rating .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
 }
 
-/* The source of the rating */
-.rating-source {
-    font-size: 1rem;
-    font-weight: 400;
-    color: #d1d1d1;
-    margin: 0;
+
+.star-rating .material-symbols-outlined:is([innerHTML="star_border"]) {
+  font-variation-settings: 'FILL' 0;
+  color: #d1d5db; /* Give the empty star a more muted color */
+}
+
+/* The half star already looks great, but you could target it if needed */
+.star-rating .material-symbols-outlined:is([innerHTML="star_half"]) {
+  /* No special styles needed unless you want a different color */
 }
 
 /* Clarification text */
@@ -671,7 +829,7 @@ p{
 
 .scroll-down-indicator {
     position: absolute;
-    bottom: 2%;
+    bottom: 10%;
     left: 50%;
     transform: translateX(-50%); /* Only centering is needed now */
     z-index: 15;
@@ -681,16 +839,28 @@ p{
 
     /* Remove link underline */
     text-decoration: none; 
+    opacity: 1;
+    visibility: visible;
 
     /* Add the animation */
+    transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
     animation: bounce-svg 2s infinite;
 }
+
+.scroll-down-indicator.fade-out {
+    /* Fade it out */
+    opacity: 0;
+    /* Hide it from view and from screen readers */
+    visibility: hidden;
+}
+
 
 /* Style the SVG itself */
 .scroll-down-indicator svg {
     /* Control the size here */
     width: 2.5rem;
     height: 2.5rem;
+    
 }
 
 /* A simpler animation for the new SVG setup */
@@ -968,17 +1138,13 @@ hr.divider {
   width:60%;
   border-right: 1px solid #434343;
   padding: 6px;
-  
-}
-.item-info:hover{
-  display:flex;
-  flex-direction:column;
-  width:60%;
-  border-right: 1px solid #434343;
-  padding: 6px;
-  transition: color 0.3s ease;
 }
 
+.modal-content h2,
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 5px; /* Adjust this value for the spacing you want */
+}
 .icon-indicator{
   display: flex;
   align-content: start;
@@ -989,7 +1155,6 @@ hr.divider {
   font-weight: bold;
   display: flex;
   align-items: center;
-  justify-content: space-between; 
   transition: color 0.3s ease;
 }
 
@@ -1066,8 +1231,8 @@ hr.divider {
   min-height: 80vh;      
   display: flex;
   flex-direction: column;  /* stack scroll-area + bottom bar */
-  max-width: 50%;     /* never goes beyond this on desktop */
-  min-width: 50%;
+  max-width: 35%;     /* never goes beyond this on desktop */
+  min-width: 35%;
   overflow: hidden; 
 }
 .modal-image {
@@ -1305,9 +1470,9 @@ hr.divider {
 }
 
 .cart-button {
-  position: fixed;
+  position: relative;
   top: 30%;
-  right: 5rem !important;
+  right: 10%;
   background: transparent;
   color: rgb(255, 255, 255);
   border: none;

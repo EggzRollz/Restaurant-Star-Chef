@@ -10,6 +10,7 @@ const firestore = getFirestore(app);
 
 let menuItemsMap = {};
 
+
 /**
  * Fetches all menu items from Firestore and stores them in the menuItemsMap.
  */
@@ -70,16 +71,84 @@ const renderCustomizationsFromObject = (item) => {
     return customizationContainer;
 };
 
+const CUSTOMIZATION_TO_DB_KEY_MAP = {
+  Size: 'size',
+  Temperature: 'temp'
+};
+
+function findPriceForOrderItem(menuItem, orderItem) {
+    // --- Diagnostic Logging ---
+    console.group(`[Pricing Check] for Item ID: ${orderItem.itemId}`);
+    console.log("Order Item Data:", orderItem);
+    console.log("Database Menu Item Data:", menuItem);
+
+    if (!menuItem.pricing || menuItem.pricing.length === 0) {
+        console.warn("Decision: No pricing array found. Returning null.");
+        console.groupEnd();
+        return null;
+    }
+
+    if (menuItem.pricing.length === 1) {
+        console.log("Decision: Simple item with one price. Returning default.");
+        console.groupEnd();
+        return menuItem.pricing[0].price;
+    }
+
+    const allCustomerChoices = orderItem.customizations || {};
+    console.log("All Customer Choices:", allCustomerChoices);
+
+    // --- KEY CHANGE: Filter for ONLY price-affecting choices ---
+    const priceAffectingChoices = {};
+    for (const key in allCustomerChoices) {
+        if (CUSTOMIZATION_TO_DB_KEY_MAP.hasOwnProperty(key)) {
+            priceAffectingChoices[key] = allCustomerChoices[key];
+        }
+    }
+    console.log("Filtered Price-Affecting Choices:", priceAffectingChoices);
+    // --- END OF KEY CHANGE ---
+    
+    // If there are no price-affecting choices, we can just take the default price.
+    if (Object.keys(priceAffectingChoices).length === 0) {
+        console.log("Decision: No price-affecting customizations found. Returning default price.");
+        console.groupEnd();
+        return menuItem.pricing[0].price;
+    }
+
+    const priceInfo = menuItem.pricing.find(priceOption => {
+        // Now, we only need to match against the filtered choices.
+        return Object.keys(priceAffectingChoices).every(customizationKey => {
+            const dbKey = CUSTOMIZATION_TO_DB_KEY_MAP[customizationKey];
+            return priceOption[dbKey] === priceAffectingChoices[customizationKey];
+        });
+    });
+
+    if (priceInfo) {
+        console.log("SUCCESS: Found a perfect match in pricing array:", priceInfo);
+        console.log(`Decision: Using matched price: ${priceInfo.price}`);
+        console.groupEnd();
+        return priceInfo.price;
+    } else {
+        console.warn("FAILURE: Could not find a price option that matched the price-affecting choices.");
+        console.log("Decision: Using fallback price:", menuItem.pricing[0].price);
+        console.groupEnd();
+        return menuItem.pricing[0].price;
+    }
+}
 // --- UPDATED createOrderCard FUNCTION with robust checks ---
 // ... (imports and helper functions remain the same) ...
 
 function createOrderCard(order) {
     const orderCard = document.createElement('div');
     orderCard.className = 'order-card';
-    // Add data attribute for easier styling/targeting if needed
-    orderCard.setAttribute('data-status', order.status.toLowerCase()); 
+    orderCard.setAttribute('data-status', order.status.toLowerCase());
 
-    // --- 1. Order Header Container (holds H2 and the button) ---
+    // --- CONFIGURATION ---
+    const HST_RATE = 0.13; // 13% HST. Change this value if your tax rate is different.
+
+    // --- INITIALIZE TOTALS ---
+    let subtotal = 0;
+
+    // --- 1. Order Header Container ---
     const headerContainer = document.createElement('div');
     headerContainer.className = 'order-header-container';
 
@@ -96,15 +165,10 @@ function createOrderCard(order) {
     deleteButton.textContent = '✖'; 
     deleteButton.className = 'delete-order-btn';
     deleteButton.title = `Mark Order #${order.orderNumber} as complete and remove.`;
-    
-    deleteButton.addEventListener('click', () => {
-        deleteOrder(order.orderNumber);
-    });
+    deleteButton.addEventListener('click', () => deleteOrder(order.orderNumber));
 
-    // Structure the header: H2 and Button together
     headerContainer.appendChild(h2);
     headerContainer.appendChild(deleteButton);
-
 
     // --- 3. Details (Customer, Phone, Time) ---
     const customerP = document.createElement('p');
@@ -113,11 +177,10 @@ function createOrderCard(order) {
     phoneP.innerHTML = `<strong>Phone:</strong> ${order.phoneNumber}`;
     const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true }; 
     const formattedTime = new Date(order.orderDate).toLocaleTimeString(undefined, timeOptions);
-    
     const timeP = document.createElement('p');
     timeP.innerHTML = `<strong>Time:</strong> ${formattedTime}`;
 
-    // --- 4. Items List Header ---
+    // --- 4. Items List ---
     const itemsH3 = document.createElement('h3');
     itemsH3.textContent = 'Items:';
     const itemsUl = document.createElement('ul');
@@ -132,14 +195,27 @@ function createOrderCard(order) {
         const li = document.createElement('li');
         
         if (!menuItem || !menuItem.name_english) { 
-            li.textContent = `Error: Item ID "${baseId}" not found in menu data or is missing its name.`;
+            li.textContent = `Error: Item ID "${baseId}" not found.`;
             itemsFragment.appendChild(li);
             return; 
         }
 
         const itemDetailsDiv = document.createElement('div');
         itemDetailsDiv.className = 'item-details';
-        itemDetailsDiv.textContent = `${item.quantity} x ${menuItem.name_english}`; 
+        itemDetailsDiv.textContent = `${item.quantity} x ${menuItem.name_english}`;
+        
+        const itemPriceDiv = document.createElement('div');
+        itemPriceDiv.className = 'item-price'; 
+        
+        const singleItemPrice = findPriceForOrderItem(menuItem, item);
+
+        if (singleItemPrice !== null) {
+            const lineItemTotal = item.quantity * singleItemPrice;
+            subtotal += lineItemTotal; // <-- KEY CHANGE: Add to running subtotal
+            itemPriceDiv.textContent = `$${lineItemTotal.toFixed(2)}`;
+        } else {
+            itemPriceDiv.textContent = 'Price N/A';
+        }
 
         const itemCodeP = document.createElement('p');
         itemCodeP.className = 'item-id-code';
@@ -148,6 +224,7 @@ function createOrderCard(order) {
         const customizationsDiv = renderCustomizationsFromObject(item); 
 
         li.appendChild(itemDetailsDiv);
+        li.appendChild(itemPriceDiv);
         li.appendChild(itemCodeP);
         li.appendChild(customizationsDiv); 
 
@@ -156,13 +233,38 @@ function createOrderCard(order) {
 
     itemsUl.appendChild(itemsFragment); 
 
-    // --- 5. Assemble the Card (The Fix is here!) ---
-    orderCard.appendChild(headerContainer); // Append the complete header
+    // --- 5. NEW: Create Totals Section ---
+    const hst = subtotal * HST_RATE;
+    const total = subtotal + hst;
+
+    const totalsContainer = document.createElement('div');
+    totalsContainer.className = 'totals-container';
+
+    const subtotalP = document.createElement('p');
+    subtotalP.className = 'total-line subtotal';
+    // Using spans for easy flexbox alignment
+    subtotalP.innerHTML = `<span>Subtotal:</span> <span>$${subtotal.toFixed(2)}</span>`;
+
+    const hstP = document.createElement('p');
+    hstP.className = 'total-line hst';
+    hstP.innerHTML = `<span>HST (${(HST_RATE * 100).toFixed(0)}%):</span> <span>$${hst.toFixed(2)}</span>`;
+
+    const totalP = document.createElement('p');
+    totalP.className = 'total-line total';
+    totalP.innerHTML = `<strong>Total:</strong> <strong>$${total.toFixed(2)}</strong>`;
+    
+    totalsContainer.appendChild(subtotalP);
+    totalsContainer.appendChild(hstP);
+    totalsContainer.appendChild(totalP);
+
+    // --- 6. Assemble the Card ---
+    orderCard.appendChild(headerContainer);
     orderCard.appendChild(customerP);
     orderCard.appendChild(phoneP);
     orderCard.appendChild(timeP);
     orderCard.appendChild(itemsH3);
     orderCard.appendChild(itemsUl);
+    orderCard.appendChild(totalsContainer); // <-- Add the new totals section
 
     return orderCard;
 }

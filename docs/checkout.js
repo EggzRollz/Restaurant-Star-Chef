@@ -1,4 +1,5 @@
-// Replace your entire checkout.js file with this.
+import {updateCartQuantityDisplay} from './main.js'
+import { Cart } from './cart.js'
 
 document.addEventListener("DOMContentLoaded", () => {
     // Select elements
@@ -12,10 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const firstName = document.getElementById("firstName")
     const lastName = document.getElementById("lastName")
     const phone = document.getElementById("phone")
-    let savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = new Cart();
+    const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
 
-
-
+    cart.loadFromStorage(savedItems);
 
     function updateButtonState() {
         // Trim the values to ensure fields with only spaces are considered empty
@@ -23,8 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isLastNameEmpty = lastName.value.trim() === '';
         const isPhoneEmpty = phone.value.trim() === '';
         const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
-        const isCartEmpty = savedCart.length === 0;
-
+        const isCartEmpty = savedItems.length === 0;
         placeOrderBttn.disabled = areAnyFieldsEmpty || isCartEmpty;
     }
 
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function updateTotals() {
-        const subtotal = savedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const subtotal = savedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const hstAmount = subtotal * 0.13;
         const finalTotal = subtotal + hstAmount;
 
@@ -49,12 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderCartItems() {
         if (!cartContainer) return;
         cartContainer.innerHTML = '';
-        if (savedCart.length === 0) {
+        const itemsToRender = cart.getItems();
+        if (itemsToRender.length === 0) {
             cartContainer.innerHTML = '<p>Your cart is empty.</p>';
             updateTotals();
             return;
         }
-        savedCart.forEach((item, index) => {
+        
+        itemsToRender.forEach((item, index) => {
             console.log("Data for cart item being rendered:", item.customizations);
             let customizationText = '';
             if (item.customizations) { // Make sure customizations exist
@@ -90,7 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     function saveCartAndRender() {
-        localStorage.setItem('cart', JSON.stringify(savedCart));
+    const itemsArray = cart.getItems();
+    const jsonStringToSave = JSON.stringify(itemsArray);
+
+    // THIS IS THE MOST IMPORTANT DEBUGGING STEP
+    console.log("CORRECTLY SAVING to cart:", jsonStringToSave); 
+        localStorage.setItem('cart', JSON.stringify(cart.getItems()));
         renderCartItems();
     }
 
@@ -147,14 +154,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const index = target.dataset.index;
             if (index === undefined) return;
             if (target.matches('.increase-buttn')) {
-                savedCart[index].quantity++;
+                savedItems[index].quantity++;
             } else if (target.matches('.decrease-buttn')) {
-                savedCart[index].quantity--;
-                if (savedCart[index].quantity <= 0) {
-                    savedCart.splice(index, 1);
+                savedItems[index].quantity--;
+                if (savedItems[index].quantity <= 0) {
+                    savedItems.splice(index, 1);
                 }
             }
+            
             saveCartAndRender();
+            updateCartQuantityDisplay(cart);
+            console.log(savedItems[index].quantity)
         });
     }
 
@@ -165,3 +175,5 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCartItems();
     handleStickySummary();
 });
+
+
