@@ -8,6 +8,7 @@
           "id": "SD1",
           "name_chinese": "蜜汁煎餐肉",
           "name_english": "Pan Fried Sausage with Honey Glaze",
+          "image": "SD1.jpg",
           "pricing": [
             {
               "size": "default",
@@ -20,6 +21,7 @@
           "id": "SD2",
           "name_chinese": "炸豬扒",
           "name_english": "Fried Pork Chop",
+          "image": "SD2.jpg",
           "pricing": [
             {
               "size": "default",
@@ -32,6 +34,7 @@
           "id": "SD3",
           "name_chinese": "炸雞翼",
           "name_english": "Deep Fried Chicken Wing",
+          "image": "SD3.jpg",
           "pricing": [
             {
               "size": "default",
@@ -44,6 +47,7 @@
           "id": "SD4",
           "name_chinese": "炸魚柳",
           "name_english": "Deep Fried Fish Fillet",
+          "image": "SD4.jpg",
           "pricing": [
             {
               "size": "default",
@@ -62,6 +66,7 @@
           "id": "R1",
           "name_chinese": "港式奶茶",
           "name_english": "HK style Milk Tea",
+          "image": "R1.jpg",
           "pricing": [
             {
               "size": "default",
@@ -79,6 +84,7 @@
           "id": "R2",
           "name_chinese": "咖啡",
           "name_english": "Coffee",
+          "image": "R2.jpg",
           "pricing": [
             {
               "size": "default",
@@ -96,6 +102,7 @@
           "id": "R3",
           "name_chinese": "鴛鴦",
           "name_english": "Yin & Coffee",
+          "image": "R3.jpg",
           "pricing": [
             {
               "size": "default",
@@ -131,6 +138,7 @@
           "id": "R5",
           "name_chinese": "檸檬水",
           "name_english": "Lemon Water",
+          "image": "R5.jpg",
           "pricing": [
             {
               "size": "default",
@@ -148,6 +156,7 @@
           "id": "R6",
           "name_chinese": "檸檬蜜糖",
           "name_english": "Lemon with Honey",
+          "image": "R4.jpg",
           "pricing": [
             {
               "size": "default",
@@ -182,6 +191,7 @@
           "id": "R8",
           "name_chinese": "檸檬可樂/雪碧",
           "name_english": "Lemon Coke/Sprite",
+          "image": "R8.jpg",
           "pricing": [
             {
               "size": "default",
@@ -208,6 +218,7 @@
           "id": "R9",
           "name_chinese": "豆漿",
           "name_english": "Soya Milk",
+          "image": "R9.jpg",
           "pricing": [
             {
               "size": "default",
@@ -225,6 +236,7 @@
           "id": "R10",
           "name_chinese": "鮮奶",
           "name_english": "Milk",
+          "image": "R10.jpg",
           "pricing": [
             {
               "size": "default",
@@ -242,6 +254,7 @@
           "id": "R11",
           "name_chinese": "紅豆冰",
           "name_english": "Red Bean Freeze",
+          "image": "R11.jpg",
           "pricing": [
             {
               "size": "default",
@@ -267,6 +280,7 @@
           "id": "R13",
           "name_chinese": "涼粉冰",
           "name_english": "Grass Jelly Freeze",
+          "image": "R13.jpg",
           "pricing": [
             {
               "size": "default",
@@ -279,6 +293,7 @@
           "id": "R14",
           "name_chinese": "雪糕涼粉冰",
           "name_english": "Grass Jelly Freeze with ice-cream",
+          "image": "R13.jpg",
           "pricing": [
             {
               "size": "default",
@@ -291,6 +306,7 @@
           "id": "R15",
           "name_chinese": "涼粉/紅豆冰",
           "name_english": "Grass Jelly/Red Jelly Freeze",
+          "image": "R15.jpg",
           "pricing": [
             {
               "size": "default",
@@ -312,6 +328,7 @@
           "id": "R16",
           "name_chinese": "雪糕涼粉/紅豆冰",
           "name_english": "Grass Jelly/Red Jelly Freeze with Ice-cream",
+          "image": "R16.jpg",
           "pricing": [
             {
               "size": "default",
@@ -333,6 +350,7 @@
           "id": "R17",
           "name_chinese": "奶昔(芒果/士多啤梨)",
           "name_english": "Milkshake (Mango/Strawberry)",
+          "image": "R17.jpg",
           "pricing": [
             {
               "size": "default",
@@ -354,6 +372,7 @@
           "id": "R18",
           "name_chinese": "冰沙(芒果/士多啤梨)",
           "name_english": "Slush (Mango/Strawberry)",
+          "image": "R18.jpg",
           "pricing": [
             {
               "size": "default",
@@ -375,6 +394,7 @@
           "id": "R19",
           "name_chinese": "汽水",
           "name_english": "Soft Drink",
+          "image": "R19.jpg",
           "pricing": [
             {
               "size": "default",
@@ -398,6 +418,7 @@
           "id": "R20",
           "name_chinese": "香港檸檬茶",
           "name_english": "Iced tea",
+          "image": "R20.jpg",
           "pricing": [
             {
               "size": "default",

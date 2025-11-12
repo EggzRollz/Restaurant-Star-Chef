@@ -227,12 +227,9 @@ body {
   height: 110vh;
   overflow: hidden;
   z-index: 1;
-
   /* Universal background settings */
   background-size: cover;
   background-repeat: no-repeat;
-  
-  /* Default desktop focal point */
   background-position: center 40%; 
   
   /* 
@@ -244,7 +241,7 @@ body {
 /* Add one of these for each page that needs a splash image */
 
 .splash-index {
-  background-image: url('graphics/restaurantSplashGIMP.jpg');
+  background-image: url('graphics/test.jpg');
 }
 
 .splash-menu {
