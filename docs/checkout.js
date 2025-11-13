@@ -74,56 +74,70 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
     }
 
-    function renderCartItems() {
-        if (!cartContainer) return;
-        cartContainer.innerHTML = '';
-        const itemsToRender = cart.getItems();
-        if (itemsToRender.length === 0) {
-            cartContainer.innerHTML = '<p>Your cart is empty.</p>';
-            // Make the button disabled only if the cart is empty
-            if(placeOrderBttn) placeOrderBttn.disabled = true; 
-            updateTotals();
-            return;
-        } else {
-            // Re-enable the button if items are added
-            if(placeOrderBttn) placeOrderBttn.disabled = false;
-        }
-        
-        itemsToRender.forEach((item, index) => {
-            console.log("Data for cart item being rendered:", item.customizations);
-            let customizationText = '';
-            if (item.customizations) { // Make sure customizations exist
-                if (item.customizations.temp && item.customizations.temp !== 'default') {
-                    customizationText = item.customizations.temp;
-                } else if (item.customizations.size && item.customizations.size !== 'default') {
-                    customizationText = item.customizations.size;
-                }
-            }
-
-            // 2. Create the HTML for the customization line only if there's text to show.
-            const customizationHTML = customizationText 
-                ? `<div class="cart-item-customization">${customizationText}</div>` 
-                : '';
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('cart-item');
-            itemDiv.innerHTML = `
-                <div class="cart-item-subinfo">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-defaultPrice">$${item.price.toFixed(2)}</div>
-                    <div class="quantity-mod-container">
-                        <button class="decrease-buttn" data-index="${index}">-</button>
-                        <span class="quantity-value">${item.quantity}</span>
-                        <button class="increase-buttn" data-index="${index}">+</button>
-                    </div>
-                </div>
-                <div class="cart-item-customization">${Object.values(item.customizations).join(', ')}</div>
-                <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
-            `;
-            cartContainer.appendChild(itemDiv);
-        });
-        updateTotals();
-    }
+   function renderCartItems() {
+    // Get references to the template and the container
+    const template = document.getElementById('cart-item-template');
+    const cartContainer = document.getElementById('checkoutItemContainer');
     
+    if (!cartContainer || !template) {
+        console.error("Cart container or template not found!");
+        return;
+    }
+
+    cartContainer.innerHTML = ''; // Clear previous items
+    const itemsToRender = cart.getItems();
+
+    // Handle empty cart
+    if (itemsToRender.length === 0) {
+        cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+        if (placeOrderBttn) placeOrderBttn.disabled = true;
+        updateTotals();
+        return;
+    } else {
+        if (placeOrderBttn) placeOrderBttn.disabled = false;
+    }
+
+    // Loop through each item and render it using the template
+    itemsToRender.forEach((item, index) => {
+        // 1. Clone the template's content
+        const clone = template.content.cloneNode(true);
+
+        // 2. Find the placeholder elements within the cloned node
+        const nameEl = clone.querySelector('.cart-item-name');
+        const defaultPriceEl = clone.querySelector('.cart-item-defaultPrice');
+        const quantityEl = clone.querySelector('.quantity-value');
+        const totalPriceEl = clone.querySelector('.cart-item-total-price');
+        const customizationEl = clone.querySelector('.cart-item-customization');
+        const decreaseBtn = clone.querySelector('.decrease-buttn');
+        const increaseBtn = clone.querySelector('.increase-buttn');
+
+        // 3. Fill the placeholders with the item's data
+        nameEl.textContent = item.name;
+        defaultPriceEl.textContent = `$${item.price.toFixed(2)}`;
+        quantityEl.textContent = item.quantity;
+        totalPriceEl.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
+
+        // Set the data-index for the buttons so they know which item to modify
+        decreaseBtn.dataset.index = index;
+        increaseBtn.dataset.index = index;
+
+        // 4. Handle customizations (only show the div if customizations exist)
+        let customizationText = Object.values(item.customizations)
+            .filter(value => value && value !== 'default')
+            .join(', ');
+
+        if (customizationText) {
+            customizationEl.textContent = customizationText;
+        } else {
+            customizationEl.remove(); // If no customizations, remove the element entirely
+        }
+
+        // 5. Append the finished clone to the cart container in the DOM
+        cartContainer.appendChild(clone);
+    });
+
+    updateTotals();
+}
     function saveCartAndRender() {
     const itemsArray = cart.getItems();
     const jsonStringToSave = JSON.stringify(itemsArray);
