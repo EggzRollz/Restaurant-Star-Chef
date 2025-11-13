@@ -32,16 +32,30 @@ function writeOrderData(orderDetails) {
 if (placeOrderBttn) {
     placeOrderBttn.addEventListener("click", async (event) => {
         event.preventDefault(); 
-        const isFormValid = validateCheckoutForm();
-        if (!isFormValid) {
-            return; // Stop the function execution if validation fails
+        
+        // --- MODIFIED: Capture the result object from the validation function ---
+        const validationResult = validateCheckoutForm();
+
+        // --- MODIFIED: Check the 'isValid' property and scroll if invalid ---
+        if (!validationResult.isValid) {
+            // Use the returned element to scroll it into view
+            if (validationResult.firstInvalidField) {
+                validationResult.firstInvalidField.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center' // This centers the field in the viewport
+                });
+            }
+            return; // Stop the function execution
         }
+
+        // --- The rest of your code remains the same ---
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
             itemId: item.id, 
             baseId: item.id.split('_')[0], 
             quantity: item.quantity,
             customizations: item.customizations
         }));
+
         if (cartPayload.length === 0) {
             alert("Your cart is empty. Please add items before placing an order.");
             return; 
@@ -61,21 +75,13 @@ if (placeOrderBttn) {
                 items: cartPayload
             };
 
-
-            // Write the complete order object to Firebase
             await writeOrderData(orderDetails);
-
-            // --- Post-Submission Success ---
-            console.log("Order submitted successfully!", orderDetails);
             
-            // Clear the cart from storage so it's empty for the next visit
+            console.log("Order submitted successfully!", orderDetails);
             localStorage.removeItem('cart');
-
-            // Redirect to a confirmation page
             window.location.href = `thank-you.html?order=${newOrderNumber}`;
 
         } catch (error) {
-            // --- Handle Errors ---
             console.error("Error placing order: ", error);
             alert("There was an error placing your order. Please try again.");
             
@@ -84,5 +90,3 @@ if (placeOrderBttn) {
         }
     });
 }
-
-

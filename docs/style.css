@@ -164,7 +164,7 @@ body {
     padding: 50px 0;
     display: flex;
     flex-direction: column;
-    gap: 10%px;
+    gap: 10%;
     transform: translateX(100%);  
     justify-content: flex-start; 
     opacity: 0;
@@ -211,8 +211,8 @@ body {
 /* The red circular badge */
 .cart-quantity-display {
   position: absolute;
-  top: -5px;    /* adjust for your icon size */
-  right: -8px;
+  top: -8px;    /* adjust for your icon size */
+  right: -11px;
   background-color: red;
   color: white;
   font-size: 0.65rem;
@@ -826,6 +826,8 @@ body {
   font-size: 14px;
   line-height: 1.8;
   color: #bdc3c7; /* A slightly dimmer white for content */
+  text-decoration: none;
+  list-style-type: none 
 }
 
 /* Styling for links */
@@ -1247,8 +1249,8 @@ hr.divider {
 }
 
 .item-name {
-  color: white;
-  font-weight: bold;
+  color: #a5a5a5;
+
   display: flex;
   align-items: center;
   transition: color 0.3s ease;
@@ -1896,6 +1898,146 @@ input.input-error::placeholder {
   opacity: 0.7;
 }
 
+/* Main container for the order details section */
+.order-details-box {
+    margin-top: 2.5rem; /* Adds space below the "YOUR INFORMATION" form */
+    margin-bottom: 2rem;
+}
+
+/* The "ORDER DETAILS" heading */
+.order-details-title {
+    position: relative;
+    margin-top: 0;
+    color: black;
+    border-bottom: 2px solid lightgrey;
+    font-family: "Noto Sans Display", sans-serif;
+    font-size: 1.5em;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 10px;
+    font-weight: 400;
+}
+
+/* Container for all the detail rows (Pickup, Address, Time) */
+.order-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Creates consistent spacing between each detail item */
+    padding: 0 20px;
+}
+
+/* A single detail row (icon + text) */
+.order-detail-item {
+    display: flex;
+    align-items: flex-start; /* Aligns icon to the top of the text block */
+    gap: 0.8rem; /* Space between the icon and the text */
+}
+
+/* Styling for the SVG icons */
+.order-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+    stroke: #333;
+    /* The `stroke-width` is set in the SVG, but you could override it here if needed */
+}
+
+/* The text block next to the icon */
+.detail-text {
+    line-height: 1.4;
+}
+
+/* The label for each detail, e.g., "Store Address" */
+.detail-title {
+    font-size: 0.9rem;
+    color: #555; /* A slightly lighter gray for the label */
+}
+
+/* The actual information, e.g., the address or time */
+.detail-info {
+    font-size: 1rem;
+    color: #1c1c1c;
+}
+
+/* Specific styling for the address link to match the image */
+.detail-info-link {
+    font-size: 1rem;
+    color: black;
+    text-decoration: none;
+}
+
+.detail-info-link:hover {
+    text-decoration: none; /* A common UX touch for links */
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- STYLES FOR THE EMPTY CART MESSAGE --- */
+.hidden {
+    display: none !important;
+}
+
+#time-box.store-closed {
+    background-color: #f8d7da; /* Light red/pink highlight */
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* This styles the text message inside the box when it's closed */
+#time-box.store-closed .detail-info {
+    color: #721c24; /* Darker red for good contrast */
+    font-weight: bold;
+}
+
+/* The main container - now a "card" */
+.cart-empty-message {
+    text-align: center;
+    padding: 48px 24px; /* Use multiples of 8 for spacing */
+    margin-top: 24px;
+    background-color: #f8f9fa; /* A very light, clean gray */
+    border: 1px solid #e9ecef; /* A subtle border */
+    border-radius: 8px; /* Soft rounded corners */
+    
+    /* A gentle animation for when it appears */
+    animation: fadeIn 0.5s ease-out; 
+}
+
+/* The SVG icon - now a design element */
+
+/* The main heading */
+.cart-empty-message h2 {
+    margin: 0 0 8px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1.75em; /* Slightly larger for more impact */
+    font-weight: 600;
+    color: #212529; /* A strong, near-black for high contrast */
+    letter-spacing: -0.5px; /* A pro typography trick */
+}
+
+/* The descriptive paragraph */
+.cart-empty-message p {
+    margin: 0 auto 32px auto;
+    max-width: 350px; /* Constrains line length for readability */
+    color: #6c757d; /* A secondary text color */
+    font-size: 1.1em;
+    line-height: 1.6; /* Improves readability */
+}
+
+
+
+/* The animation keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* MOBILE STYLES - EVERYTHING BELOW 768px */
 @media (max-width: 768px) {
     .checkout-bar-container {
@@ -1918,11 +2060,33 @@ input.input-error::placeholder {
     }
 
     .cart-item {
+        display: flex; /* Ensure it's a flex container */
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
     }
+    .cart-item-details {
+        display: contents;
+    }
 
+   .cart-item-name,
+    .cart-item-name_chinese,
+    .cart-item-defaultPrice,
+    .cart-item-customization { 
+        order: 1; 
+    }
+
+    /* Group 2: Interactive controls and final price. */
+    .quantity-mod-container {
+        order: 2;
+        /* Optional: Add a little space to separate from the info block */
+        margin-top: 8px; 
+    }
+
+    .cart-item-total-price {
+        order: 3; 
+        font-weight: 600;
+    }
     .cart-item-price {
         font-weight: 600;
         margin-top: 8px;

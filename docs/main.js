@@ -325,11 +325,11 @@ function renderAllItemsByCategory() {
   const categoryOrder = [
     "Popular", 
     "Sides", 
-    "Stir Fry",
+    "Congee",
     "Fried Noodle",
     "Rice", 
-    "Soup / Noodles",
-    "Congee", 
+    "Soup / Noodles", 
+    "Stir Fry",
     "Beverages"
   ];
 
@@ -520,20 +520,22 @@ function openCustomizeModal(item) {
     updateCartButtonPrice();
     updateQuantityDisplay();
   });
-  
   if (submitBttn) {
   submitBttn.addEventListener("click", () => {
     if (amount <= 0 || !currentItem) {
       return; 
     }
 
-    // --- NEW: First, remove any old error messages from the previous attempt ---
+    // --- First, remove any old error messages from the previous attempt ---
     const oldErrors = document.querySelectorAll('#customOptions .validation-error');
     oldErrors.forEach(error => error.remove());
 
     const customizations = {};
     const optionGroups = document.querySelectorAll('#customOptions .option-group');
     let isFormValid = true; 
+    
+    // --- NEW: Variable to store a reference to the first error element ---
+    let firstErrorElement = null;
 
     // --- VALIDATION AND DATA GATHERING LOOP ---
     optionGroups.forEach(group => {
@@ -548,18 +550,30 @@ function openCustomizeModal(item) {
         // NO selection was made, the form is invalid.
         isFormValid = false; 
         
-        // --- NEW: Create and insert the error message div ---
+        // --- Create and insert the error message div ---
         const errorDiv = document.createElement('div');
         errorDiv.className = 'validation-error'; // Apply our CSS style
         errorDiv.textContent = 'You must select an option.';
         
-        // Insert the new error message right after the h4 title
         titleElement.insertAdjacentElement('afterend', errorDiv);
+        
+        // --- NEW: If this is the first error we've found, save it for scrolling ---
+        if (!firstErrorElement) {
+          firstErrorElement = errorDiv;
+        }
       }
     });
 
-    // --- STOP IF VALIDATION FAILED ---
+    // --- MODIFIED: STOP AND SCROLL IF VALIDATION FAILED ---
     if (!isFormValid) {
+      // Check if we have an element to scroll to
+      if (firstErrorElement) {
+        // Scroll that first error into the user's view
+        firstErrorElement.scrollIntoView({
+          behavior: 'smooth', // Use a smooth animation
+          block: 'center'     // Try to center the error vertically
+        });
+      }
       return; // Stop the function here.
     }
 
@@ -569,7 +583,7 @@ function openCustomizeModal(item) {
       customizations['Special Instructions'] = orderNotes;
     }
 
-    cart.addItem(currentItem.name, currentItem.id, currentPrice, amount, customizations);
+    cart.addItem(currentItem.name, currentItem.name_chinese, currentItem.id, currentPrice, amount, customizations);
     localStorage.setItem('cart', JSON.stringify(cart.getItems()));
     
     updateCartQuantityDisplay(cart);

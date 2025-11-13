@@ -33,7 +33,7 @@ export class Cart {
 }
 
   
-  addItem(item, id, finalPrice, quantity, customizations = {}) {
+  addItem(item, name_chinese, id, finalPrice, quantity, customizations = {}) {
     const cartId = this._generateItemId(id, customizations);
     const existingItem = this.shoppingCart.find(cartItem => cartItem.id === cartId);
     if (existingItem) {
@@ -42,6 +42,7 @@ export class Cart {
       const newItem = {
         id: cartId,          
         name: item,
+        name_chinese: name_chinese, 
         price: finalPrice,
         quantity: quantity,
         customizations: customizations 

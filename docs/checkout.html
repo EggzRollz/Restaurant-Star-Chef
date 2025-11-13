@@ -51,7 +51,7 @@
             <div class="checkout-details">
               <div id="clientInfoTitle" class="checkout-title">YOUR INFORMATION</div>
                 <div class="clientInfoContainer" id="client-info-container">
-                    
+              
                     <div class="form-group" >
                         <div class="input-group">
                             <input type="text" id="firstName" name="firstName" placeholder="First Name" required>                          
@@ -60,14 +60,58 @@
                         <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
                     </div>
                 </div>
+                 <div class="order-details-box">
+            <div class="order-details-header">
+                <h3 class="order-details-title">ORDER DETAILS</h3>
+            </div>
+            <div class="order-details-content">
+                <div class="order-detail-item">
+                    <div class="order-icon-wrapper">
+                        <!-- Shopping Bag Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    </div>
+                    <div class="detail-text">
+                        <div class="detail-title">Pickup</div>
+                        <div class="detail-info">Order for Pickup</div>
+                    </div>
+                </div>
+                <div class="order-detail-item">
+                    <div class="order-icon-wrapper">
+                        <!-- Map Pin Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </div>
+                    <div class="detail-text">
+                        <div class="detail-title">Store Address</div>
+                        <a href="#" class="detail-info-link">9750 Markham Rd, Markham, ON L6E 0H7</a>
+                    </div>
+                </div>
+                <div class="order-detail-item"id="time-box">
+                    <div class="order-icon-wrapper">
+                        <!-- Clock Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <div class="detail-text">
+                        <div class="detail-title">Estimated Time for Pickup</div>
+                        <div class="detail-info" id="pickup-time">Calculating...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
                 <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
+                <div id="cartEmptyMessage" class="cart-empty-message hidden">
+                    <h2>Your Cart is Empty</h2>
+                    <p>Looks like you haven't added anything yet.</p>
+                    <!-- Change href="/index.html" to your main shop page -->
+                </div>
                 <div class="checkout-item-list">
+                  
                   
                   <template id="cart-item-template">
                       <div class="cart-item">
                           <!-- Wrapper for Name, Price, and Quantity -->
                           <div class="cart-item-details">
                               <div class="cart-item-name"></div> <!-- Placeholder for name -->
+                              <div class="cart-item-name-chinese"></div>
                               <div class="cart-item-defaultPrice"></div> <!-- Placeholder for price -->
                               <div class="quantity-mod-container">
                                   <button class="decrease-buttn" data-index="">-</button>
@@ -90,6 +134,7 @@
 
             <!-- Column 2: The summary box that will be sticky -->
                   <div class="summary-column">
+                  
               <!-- The original summary box now lives inside the placeholder -->
               <div class="cart-total-summary">
                   <div class="summary-row">
@@ -106,7 +151,7 @@
                     <span id="cart-total" class="summary-price">$0.00</span>
                   </div>
                   <div class="button-container"></div>
-                  <button class="placeOrderButton" id="place-order-button">Place Order</button>
+                  <button class="placeOrderButton" id="place-order-button">Place Order For Pickup</button>
                   </div>
               </div>
           </div>

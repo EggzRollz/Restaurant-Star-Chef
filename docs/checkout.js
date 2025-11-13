@@ -10,35 +10,59 @@ const clientInfoContainer = document.getElementById('client-info-container');
 const formFields = [firstName, lastName, phone];
 
 // MOVED & CHANGED: This is now an exported function for validation
+// MODIFIED to highlight ALL errors but still track the FIRST for scrolling
 export function validateCheckoutForm() {
     
+    let firstInvalidField = null; // This will store the first error field we find
+
     // Clear previous errors before re-validating
     formFields.forEach(field => field.classList.remove('input-error'));
 
+    // Check each field individually
     const isFirstNameEmpty = firstName.value.trim() === '';
+    if (isFirstNameEmpty) {
+        firstName.classList.add('input-error');
+        // If this is the first error we've found, save this element
+        if (!firstInvalidField) {
+            firstInvalidField = firstName;
+        }
+    }
+
     const isLastNameEmpty = lastName.value.trim() === '';
+    if (isLastNameEmpty) {
+        lastName.classList.add('input-error');
+        // If this is the first error we've found, save this element
+        if (!firstInvalidField) {
+            firstInvalidField = lastName;
+        }
+    }
+
     const isPhoneEmpty = phone.value.trim() === '';
+    if (isPhoneEmpty) {
+        phone.classList.add('input-error');
+        // If this is the first error we've found, save this element
+        if (!firstInvalidField) {
+            firstInvalidField = phone;
+        }
+    }
+
     const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
 
     if (areAnyFieldsEmpty) {
-      
-        if (isFirstNameEmpty) firstName.classList.add('input-error');
-        if (isLastNameEmpty) lastName.classList.add('input-error');
-        if (isPhoneEmpty) phone.classList.add('input-error');
-        
+        // This part still runs if any field failed
         if (clientInfoContainer) {
             clientInfoContainer.classList.add('highlight-error');
             setTimeout(() => {
                 clientInfoContainer.classList.remove('highlight-error');
             }, 2500);
         }
-        return false; // Validation FAILED
+        // Return failure status and the first invalid field we found
+        return { isValid: false, firstInvalidField: firstInvalidField };
     }
 
-    return true; // Validation SUCCEEDED
+    // If we get here, no fields were empty
+    return { isValid: true, firstInvalidField: null };
 }
-
-
 document.addEventListener("DOMContentLoaded", () => {
     // Select elements
     const cartContainer = document.getElementById('checkoutItemContainer');
@@ -48,21 +72,100 @@ document.addEventListener("DOMContentLoaded", () => {
     const placeOrderBttn = document.getElementById("place-order-button");
     const summaryBox = document.querySelector('.cart-total-summary');
     const wrapper = document.querySelector('.checkout-content-wrapper');
+    const emptyMessageEl = document.getElementById('cartEmptyMessage');
+    const pickupTimeElement = document.getElementById('pickup-time');
+    const timeBoxElement = document.getElementById('time-box');
     const cart = new Cart();
+    const now = new Date();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     cart.loadFromStorage(savedItems);
-
    
-
-    const formFields = [firstName, lastName, phone];
     formFields.forEach(field => {
-        if (field) {
-            field.addEventListener('input', () => {
-                field.classList.remove('input-error');
+    if (field) {
+        // This listener handles real-time input cleanup and length limiting
+        field.addEventListener('input', (e) => {
+            field.classList.remove('input-error');
+
+            if (field === phone) {
+                // --- THIS IS THE MODIFIED LINE ---
+                // 1. Remove non-numbers, then 2. limit the result to 10 characters.
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').substring(0, 10);
+                
+            } else if (field === firstName || field === lastName) {
+                e.target.value = e.target.value.replace(/[^a-zA-Z\s'-]/g, '');
+            }
+        });
+
+        // This listener still prevents invalid keystrokes
+        field.addEventListener('keydown', (event) => {
+            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            const isShortcut = (event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase());
+
+            if (allowedKeys.includes(event.key) || isShortcut) {
+                return;
+            }
+
+            let isKeyAllowed = false;
+            if (field === phone) {
+                isKeyAllowed = event.key >= '0' && event.key <= '9';
+            } else if (field === firstName || field === lastName) {
+                const isLetter = /^[a-zA-Z]$/.test(event.key);
+                const isAllowedChar = [' ', '-', '\''].includes(event.key);
+                isKeyAllowed = isLetter || isAllowedChar;
+            }
+
+            if (!isKeyAllowed) {
+                event.preventDefault();
+            }
+        });
+
+        // This 'blur' listener still formats the number when the user leaves the field
+        if (field === phone) {
+            field.addEventListener('blur', (e) => {
+                const digits = e.target.value;
+
+                if (digits.length === 10) {
+                    const formatted = digits.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
+                    e.target.value = formatted;
+                }
             });
         }
-    });
+    }
+});
+
+        function updatePickupTime() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            const isBeforeOpening = currentHour < 11;
+            const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+
+            if (isBeforeOpening || isAfterClosing) {
+                // If store is closed, the button is ALWAYS disabled.
+                pickupTimeElement.textContent = ("No more orders are being processed tonight. Please try again tomorrow.");
+                timeBoxElement.classList.add('store-closed');
+                placeOrderBttn.disabled = true;
+
+            } else {
+                // If store is open, the button is disabled ONLY if the cart is empty.
+                timeBoxElement.classList.remove('store-closed');
+                const isCartEmpty = cart.getItems().length === 0;
+                placeOrderBttn.disabled = isCartEmpty;
+                
+                const pickupTime = new Date(); 
+                pickupTime.setMinutes(pickupTime.getMinutes() + 30);
+                const minutes = pickupTime.getMinutes();
+                let hours24 = pickupTime.getHours();
+                const ampm = hours24 >= 12 ? 'PM' : 'AM';
+                let hours12 = hours24 % 12;
+                if (hours12 === 0) { hours12 = 12; }
+                const paddedMinutes = String(minutes).padStart(2, '0');
+                const displayTime = `Estimated pickup time ${hours12}:${paddedMinutes} ${ampm}`;
+                pickupTimeElement.textContent = displayTime;
+            }
+        }
 
     function updateTotals() {
         const subtotal = savedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -74,11 +177,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
     }
 
+
+
    function renderCartItems() {
     // Get references to the template and the container
     const template = document.getElementById('cart-item-template');
     const cartContainer = document.getElementById('checkoutItemContainer');
-    
+
     if (!cartContainer || !template) {
         console.error("Cart container or template not found!");
         return;
@@ -89,12 +194,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle empty cart
     if (itemsToRender.length === 0) {
-        cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+        cartContainer.innerHTML = '';
+        emptyMessageEl.classList.remove('hidden');
         if (placeOrderBttn) placeOrderBttn.disabled = true;
         updateTotals();
         return;
     } else {
-        if (placeOrderBttn) placeOrderBttn.disabled = false;
+        emptyMessageEl.classList.add('hidden'); // Hide the empty message
+        cartContainer.innerHTML = '';
     }
 
     // Loop through each item and render it using the template
@@ -104,6 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 2. Find the placeholder elements within the cloned node
         const nameEl = clone.querySelector('.cart-item-name');
+        const nameChineseEl = clone.querySelector('.cart-item-name-chinese');
         const defaultPriceEl = clone.querySelector('.cart-item-defaultPrice');
         const quantityEl = clone.querySelector('.quantity-value');
         const totalPriceEl = clone.querySelector('.cart-item-total-price');
@@ -113,6 +221,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 3. Fill the placeholders with the item's data
         nameEl.textContent = item.name;
+        nameChineseEl.textContent = item.name_chinese;
+        console.log(item.name_chinese)
         defaultPriceEl.textContent = `$${item.price.toFixed(2)}`;
         quantityEl.textContent = item.quantity;
         totalPriceEl.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
@@ -139,11 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTotals();
 }
     function saveCartAndRender() {
-    const itemsArray = cart.getItems();
-    const jsonStringToSave = JSON.stringify(itemsArray);
-
-    // THIS IS THE MOST IMPORTANT DEBUGGING STEP
-    console.log("CORRECTLY SAVING to cart:", jsonStringToSave); 
         localStorage.setItem('cart', JSON.stringify(cart.getItems()));
         renderCartItems();
     }
@@ -221,6 +326,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize Page
     renderCartItems();
     handleStickySummary();
+    updatePickupTime();
+    setInterval(updatePickupTime, 1000);
 });
 
 
