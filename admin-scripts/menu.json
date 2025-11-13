@@ -2,13 +2,12 @@
   "menu": [
     {
       "category_name_chinese": "配菜",
-      "category_name_english": "Sides",
+      "category_name_english": "SIDES",
       "items": [
         {
           "id": "SD1",
           "name_chinese": "蜜汁煎餐肉",
           "name_english": "Pan Fried Sausage with Honey Glaze",
-          "image": "SD1.jpg",
           "pricing": [
             {
               "size": "default",
@@ -21,7 +20,6 @@
           "id": "SD2",
           "name_chinese": "炸豬扒",
           "name_english": "Fried Pork Chop",
-          "image": "SD2.jpg",
           "pricing": [
             {
               "size": "default",
@@ -34,7 +32,6 @@
           "id": "SD3",
           "name_chinese": "炸雞翼",
           "name_english": "Deep Fried Chicken Wing",
-          "image": "SD3.jpg",
           "pricing": [
             {
               "size": "default",
@@ -47,7 +44,6 @@
           "id": "SD4",
           "name_chinese": "炸魚柳",
           "name_english": "Deep Fried Fish Fillet",
-          "image": "SD4.jpg",
           "pricing": [
             {
               "size": "default",
@@ -218,7 +214,7 @@
           "id": "R9",
           "name_chinese": "豆漿",
           "name_english": "Soya Milk",
-          "image": "R9.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -254,7 +250,6 @@
           "id": "R11",
           "name_chinese": "紅豆冰",
           "name_english": "Red Bean Freeze",
-          "image": "R11.jpg",
           "pricing": [
             {
               "size": "default",
@@ -280,7 +275,7 @@
           "id": "R13",
           "name_chinese": "涼粉冰",
           "name_english": "Grass Jelly Freeze",
-          "image": "R13.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -293,7 +288,7 @@
           "id": "R14",
           "name_chinese": "雪糕涼粉冰",
           "name_english": "Grass Jelly Freeze with ice-cream",
-          "image": "R13.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -306,7 +301,7 @@
           "id": "R15",
           "name_chinese": "涼粉/紅豆冰",
           "name_english": "Grass Jelly/Red Jelly Freeze",
-          "image": "R15.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -328,7 +323,7 @@
           "id": "R16",
           "name_chinese": "雪糕涼粉/紅豆冰",
           "name_english": "Grass Jelly/Red Jelly Freeze with Ice-cream",
-          "image": "R16.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -350,7 +345,7 @@
           "id": "R17",
           "name_chinese": "奶昔(芒果/士多啤梨)",
           "name_english": "Milkshake (Mango/Strawberry)",
-          "image": "R17.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -372,7 +367,7 @@
           "id": "R18",
           "name_chinese": "冰沙(芒果/士多啤梨)",
           "name_english": "Slush (Mango/Strawberry)",
-          "image": "R18.jpg",
+          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -611,7 +606,6 @@
           "id": "K15",
           "name_chinese": "四川炒老虎蝦",
           "name_english": "Szechuan Style Tiger Shrimp",
-          "image": "K15.jpg",
           "pricing": [
             {
               "size": "default",
@@ -1898,6 +1892,7 @@
           "id": "E16",
           "name_chinese": "時菜牛/雞炒麵",
           "name_english": "Chicken or Beef & Vegetable Chow Mein",
+          "image": "E16.jpg",
           "pricing": [
             {
               "size": "default",

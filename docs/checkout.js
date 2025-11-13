@@ -1,6 +1,44 @@
 import {updateCartQuantityDisplay} from './main.js'
 import { Cart } from './cart.js'
 
+
+
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const phone = document.getElementById("phone");
+const clientInfoContainer = document.getElementById('client-info-container');
+const formFields = [firstName, lastName, phone];
+
+// MOVED & CHANGED: This is now an exported function for validation
+export function validateCheckoutForm() {
+    
+    // Clear previous errors before re-validating
+    formFields.forEach(field => field.classList.remove('input-error'));
+
+    const isFirstNameEmpty = firstName.value.trim() === '';
+    const isLastNameEmpty = lastName.value.trim() === '';
+    const isPhoneEmpty = phone.value.trim() === '';
+    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
+
+    if (areAnyFieldsEmpty) {
+      
+        if (isFirstNameEmpty) firstName.classList.add('input-error');
+        if (isLastNameEmpty) lastName.classList.add('input-error');
+        if (isPhoneEmpty) phone.classList.add('input-error');
+        
+        if (clientInfoContainer) {
+            clientInfoContainer.classList.add('highlight-error');
+            setTimeout(() => {
+                clientInfoContainer.classList.remove('highlight-error');
+            }, 2500);
+        }
+        return false; // Validation FAILED
+    }
+
+    return true; // Validation SUCCEEDED
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // Select elements
     const cartContainer = document.getElementById('checkoutItemContainer');
@@ -10,28 +48,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const placeOrderBttn = document.getElementById("place-order-button");
     const summaryBox = document.querySelector('.cart-total-summary');
     const wrapper = document.querySelector('.checkout-content-wrapper');
-    const firstName = document.getElementById("firstName")
-    const lastName = document.getElementById("lastName")
-    const phone = document.getElementById("phone")
     const cart = new Cart();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     cart.loadFromStorage(savedItems);
 
-    function updateButtonState() {
-        // Trim the values to ensure fields with only spaces are considered empty
-        const isFirstNameEmpty = firstName.value.trim() === '';
-        const isLastNameEmpty = lastName.value.trim() === '';
-        const isPhoneEmpty = phone.value.trim() === '';
-        const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
-        const isCartEmpty = savedItems.length === 0;
-        placeOrderBttn.disabled = areAnyFieldsEmpty || isCartEmpty;
-    }
+   
 
     const formFields = [firstName, lastName, phone];
     formFields.forEach(field => {
-        if (field) { 
-            field.addEventListener('input', updateButtonState);
+        if (field) {
+            field.addEventListener('input', () => {
+                field.classList.remove('input-error');
+            });
         }
     });
 
@@ -43,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cartSubTotalElement) cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
         if (cartHST) cartHST.textContent = `$${hstAmount.toFixed(2)}`;
         if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
-        updateButtonState();
     }
 
     function renderCartItems() {
@@ -52,8 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const itemsToRender = cart.getItems();
         if (itemsToRender.length === 0) {
             cartContainer.innerHTML = '<p>Your cart is empty.</p>';
+            // Make the button disabled only if the cart is empty
+            if(placeOrderBttn) placeOrderBttn.disabled = true; 
             updateTotals();
             return;
+        } else {
+            // Re-enable the button if items are added
+            if(placeOrderBttn) placeOrderBttn.disabled = false;
         }
         
         itemsToRender.forEach((item, index) => {
@@ -146,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-
+  
     // Event Listeners
     if (cartContainer) {
         cartContainer.addEventListener('click', (event) => {

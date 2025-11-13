@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
           name_chinese: data.name_chinese || "Unnamed Item",
           image: data.image,
           price: data.pricing?.[0]?.price || 0.00, // Safely access nested price
+          category: data.category_english || "Misc",
           tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
           options: data.options || [],
           pricing: data.pricing || [],
@@ -169,9 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- In main.js ---
 
 function createMenuItemElement(item) {
-    // 1. DEFINE ALL POSSIBLE MODIFIERS HERE
-    // This is our "dictionary". Key is the tag to look for (lowercase).
-    // Value is an object with the emoji and the hover-text.
+
     const MODIFIERS = {
         spicy: { emoji: '🌶️', title: 'Spicy' },
         cold: { emoji: '❄️', title: 'Cold/Iced' },
@@ -214,9 +213,15 @@ function createMenuItemElement(item) {
 
     const itemImg = document.createElement('img');
     itemImg.classList.add("item-img");
+    itemImg.loading = 'lazy'; 
     if (item.image) {
         itemImg.src = 'graphics/' + item.image;
         itemImg.alt = item.name;
+    } else {
+      const categoryFileName = item.category.replace(/ \/ /g, '-');
+      console.log(`Fallback for category: "[${item.category}]"`); 
+      itemImg.src = `graphics/category_fallback/${categoryFileName}.png`; 
+      itemImg.alt = `A placeholder image for the ${item.category} category`
     }
 
 
@@ -299,8 +304,6 @@ function renderSingleCategory(categoryName) {
       // 5. NEW: Append the t itle AND list to the new section wrapper
       section.appendChild(header);
       section.appendChild(list);
-
-      // 6. NEW: Finally, append the entire completed section to the main container
       menuContainer.appendChild(section);
 
   } else {
@@ -390,6 +393,7 @@ function openCustomizeModal(item) {
   const defaultPrice = document.getElementById('default-price');
   const modalImage = document.getElementById('modal-image');
   const orderNotesTextarea = document.getElementById('order-notes');
+  const scrollArea = document.getElementById('modal-scroll-area');
 
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
@@ -405,11 +409,12 @@ function openCustomizeModal(item) {
   if (item.image) {
     modalImage.src = 'graphics/' + item.image;
     modalImage.alt = item.name;
-    modalImage.style.display = 'block';
   } else {
-    modalImage.style.display = 'none';
+    const categoryFileName = item.category.replace(/ \/ /g, '-');
+    modalImage.src = `graphics/category_fallback/${categoryFileName}.png`; 
+    modalImage.alt = `A placeholder image for the ${item.category} category`
   }
-
+  modalImage.style.display = 'block';
   // --- HANDLE PRICING (SIZES / TEMPERATURES) ---
   if (item.pricing.length === 1) {
     // If there's only one price, display it and set it
@@ -444,19 +449,10 @@ function openCustomizeModal(item) {
         radio.type = 'radio';
         // FIX: Use the dynamic group title for the name
         radio.name = optionGroupTitle;
-        
-        // FIX: Use the dynamic key ('size' or 'temp') to get the value
-        // This is the most important change. `priceOption[optionTypeKey]` will
-        // evaluate to `priceOption['size']` or `priceOption['temp']`.
         radio.value = priceOption[optionTypeKey]; 
-        
         radio.dataset.price = priceOption.price;
 
-        if (isFirstOption) {
-            radio.checked = true;
-            currentPrice = priceOption.price;
-            isFirstOption = false;
-        }
+        
 
         label.appendChild(radio);
         // FIX: Display the correct option value (size or temp) to the user
@@ -490,17 +486,23 @@ function openCustomizeModal(item) {
         radio.type = 'radio';
         radio.name = opt.title;
         radio.value = choice;
-        if (index === 0) radio.checked = true;
         label.appendChild(radio);
         label.append(` ${choice}`);
         optionGroup.appendChild(label);
       });
       optionsContainer.appendChild(optionGroup);
     });
-  }
+    
+}
+
 
   updateCartButtonPrice(); // Update button with initial price
   customizeModal.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    if (scrollArea) {
+      scrollArea.scrollTop = 0;
+    }
+  });
 }
 
   function updateCartButtonPrice() {
@@ -519,36 +521,61 @@ function openCustomizeModal(item) {
     updateQuantityDisplay();
   });
   
-  if(submitBttn) submitBttn.addEventListener("click", () => {
-    if (amount > 0 && currentItem) {  
-      const customizations = {};
-      const optionGroups = document.querySelectorAll('#customOptions .option-group');
-      optionGroups.forEach(group => {
-        // Find the title (h4) of the group
-        const groupTitle = group.querySelector('h4').textContent;
-        // Find the checked radio button WITHIN that group
-        const selectedOption = group.querySelector('input[type="radio"]:checked');
-        
-        if (selectedOption) {
-            // Store the selected value using the group title as the key
-            customizations[groupTitle] = selectedOption.value;
-        }
-      });
-      
-      const orderNotes = document.getElementById('order-notes').value.trim();
-      if (orderNotes) {
-        customizations['Special Instructions'] = orderNotes;
-      }
-      console.log("User's full customization choices:", customizations);
-      cart.addItem(currentItem.name, currentItem.id, currentPrice, amount, customizations);
-      console.log(`${amount} of ${currentItem.name} added to cart.`);
-      localStorage.setItem('cart', JSON.stringify(cart.getItems()));
-      
-      updateCartQuantityDisplay(cart)
+  if (submitBttn) {
+  submitBttn.addEventListener("click", () => {
+    if (amount <= 0 || !currentItem) {
+      return; 
     }
-    closeCustomizeModal();
 
-});
+    // --- NEW: First, remove any old error messages from the previous attempt ---
+    const oldErrors = document.querySelectorAll('#customOptions .validation-error');
+    oldErrors.forEach(error => error.remove());
+
+    const customizations = {};
+    const optionGroups = document.querySelectorAll('#customOptions .option-group');
+    let isFormValid = true; 
+
+    // --- VALIDATION AND DATA GATHERING LOOP ---
+    optionGroups.forEach(group => {
+      const titleElement = group.querySelector('h4');
+      const groupTitle = titleElement.textContent;
+      const selectedOption = group.querySelector('input[type="radio"]:checked');
+      
+      if (selectedOption) {
+        // A selection was made for this group.
+        customizations[groupTitle] = selectedOption.value;
+      } else {
+        // NO selection was made, the form is invalid.
+        isFormValid = false; 
+        
+        // --- NEW: Create and insert the error message div ---
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'validation-error'; // Apply our CSS style
+        errorDiv.textContent = 'You must select an option.';
+        
+        // Insert the new error message right after the h4 title
+        titleElement.insertAdjacentElement('afterend', errorDiv);
+      }
+    });
+
+    // --- STOP IF VALIDATION FAILED ---
+    if (!isFormValid) {
+      return; // Stop the function here.
+    }
+
+    // --- If we get here, the form was valid. Proceed as normal. ---
+    const orderNotes = document.getElementById('order-notes').value.trim();
+    if (orderNotes) {
+      customizations['Special Instructions'] = orderNotes;
+    }
+
+    cart.addItem(currentItem.name, currentItem.id, currentPrice, amount, customizations);
+    localStorage.setItem('cart', JSON.stringify(cart.getItems()));
+    
+    updateCartQuantityDisplay(cart);
+    closeCustomizeModal();
+  });
+}
 
 
   if (cartButton) {

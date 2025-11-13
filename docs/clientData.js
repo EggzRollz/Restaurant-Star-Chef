@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { firebaseConfig } from "./main.js";
+import { validateCheckoutForm } from './checkout.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -31,6 +32,10 @@ function writeOrderData(orderDetails) {
 if (placeOrderBttn) {
     placeOrderBttn.addEventListener("click", async (event) => {
         event.preventDefault(); 
+        const isFormValid = validateCheckoutForm();
+        if (!isFormValid) {
+            return; // Stop the function execution if validation fails
+        }
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
             itemId: item.id, 
             baseId: item.id.split('_')[0], 

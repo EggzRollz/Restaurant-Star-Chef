@@ -52,9 +52,9 @@ function revealElementsOnScroll() {
   });
 }
 function setupMobileGalleryLoop() {
+  const gallery = document.querySelector('.gallery'); // Assuming gallery is defined here
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   
-  // Only run this entire logic on mobile
   if (!gallery || !isMobile) return;
 
   const prevBtn = document.getElementById('prev-btn');
@@ -65,43 +65,41 @@ function setupMobileGalleryLoop() {
   const originalItems = Array.from(gallery.children);
   if (originalItems.length === 0) return;
   
+  // Clone images for the infinite effect
   originalItems.forEach(item => {
     const clone = item.cloneNode(true);
-    clone.classList.remove('visible');
+    // Ensure cloned items don't have the 'visible' class if you are using it
+    clone.classList.remove('visible'); 
     gallery.appendChild(clone);
   });
-  
-  let loopPoint = 0;
 
-  // --- 2. THE LOOPING LOGIC ---
-  const handleLoop = () => {
-    if (loopPoint === 0) return; // Don't run if width isn't calculated yet
-    
-    // If scrolled past the original set, jump back silently
-    if (gallery.scrollLeft >= loopPoint) {
-      gallery.style.scrollBehavior = 'auto'; // Make the jump instant
-      gallery.scrollLeft -= loopPoint;
-      gallery.style.scrollBehavior = 'smooth'; // Restore smooth scrolling
-    }
-    // If scrolled before the original set, jump forward silently
-    else if (gallery.scrollLeft <= 0) {
-      gallery.style.scrollBehavior = 'auto';
-      gallery.scrollLeft += loopPoint;
-      gallery.style.scrollBehavior = 'smooth';
-    }
-  };
-
-  // Wait for images to load to get correct widths
-  window.addEventListener('load', () => {
-    // Calculate the exact width of the original set of images
+  // This function will contain the logic that depends on element dimensions
+  function initializeGalleryLogic() {
+    let loopPoint = 0;
     const gap = parseInt(window.getComputedStyle(gallery).gap) || 30;
+
+    // Calculate the exact width of the original set of images
     originalItems.forEach(item => {
       loopPoint += item.offsetWidth + gap;
     });
 
+    // --- 2. THE LOOPING LOGIC ---
+    const handleLoop = () => {
+      if (loopPoint === 0) return; // Guard clause
+      
+      // If scrolled past the end of the original set, jump back silently
+      if (gallery.scrollLeft >= loopPoint) {
+        gallery.style.scrollBehavior = 'auto';
+        gallery.scrollLeft -= loopPoint;
+        gallery.style.scrollBehavior = 'smooth';
+      }
+      // Note: A backward loop is more complex and often not needed with this setup.
+      // The user can just scroll back normally.
+    };
+
     // --- 3. BUTTON CLICK EVENTS ---
     nextBtn.addEventListener('click', () => {
-      // Scroll by the width of one image
+      // It's safer to calculate scrollAmount here in case of resize
       const scrollAmount = originalItems[0].offsetWidth + gap;
       gallery.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     });
@@ -111,18 +109,25 @@ function setupMobileGalleryLoop() {
       gallery.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     });
 
-    // Use a timeout on the scroll event to check for loop condition *after* scroll finishes
-    if ('onscrollend' in window) {
-      gallery.addEventListener('scrollend', handleLoop);
-    } else {
-      let scrollTimer;
-      gallery.addEventListener('scroll', () => {
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(handleLoop, 300); // Increased timeout
-      });
-    }
-  });
+    // --- 4. SCROLL EVENT LISTENER ---
+    // Use a timeout to check for the loop condition after the scroll has finished
+    let scrollTimer;
+    gallery.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(handleLoop, 150); // A shorter timeout is fine
+    });
+  }
+
+  // --- ROBUST INITIALIZATION ---
+  // Check if the document is already loaded. If so, run the logic immediately.
+  // Otherwise, wait for it to load.
+  if (document.readyState === 'complete') {
+    initializeGalleryLogic();
+  } else {
+    window.addEventListener('load', initializeGalleryLogic);
+  }
 }
+
 
 // Run the function on load and on scroll
 

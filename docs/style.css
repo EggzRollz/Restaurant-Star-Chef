@@ -260,7 +260,7 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 50%;
+  height: 70%;
   background: linear-gradient(to top, black, transparent);
   pointer-events: none;
   z-index: 8;
@@ -369,6 +369,20 @@ body {
     color: white;
     font-size: 20px;
 }
+
+@media (max-width: 480px){
+  .awards{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    margin-top:80px;
+    margin-bottom:15px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 .gallery-wrapper {
   position: relative; /* Needed to position the buttons */
   width: 100%;
@@ -376,7 +390,6 @@ body {
 
 .gallery-nav-btn {
   /* Positioning and size */
-  display: none !important; 
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -389,7 +402,7 @@ body {
   border: none;
   
   /* Center the SVG inside */
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
 
@@ -443,40 +456,52 @@ body {
   transition-duration: 0.1s; /* Make the press feel faster */
 }
 
-/* --- Media Query to SHOW buttons on mobile --- */
-@media (max-width: 768px) {
-  .gallery-nav-btn {
-    /* Now we turn them ON */
-    display: flex !important; 
-  }
-}
+
+
 .gallery {
-    display:flex;
-    gap:30px;
+
+    display: flex;
+    gap: 30px;
     flex-direction: row;
-    justify-content: center;
     overflow: hidden;
     position: relative;
-    z-index: 1;
-    object-fit: cover;
+    padding-left: 10%;
+    padding-right: 10%;
+    min-height: 80vh;
+    align-items: center; /* Vertically centers the images in the container */
 }
-.gallery img.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+
 .gallery img {
-    max-height: 100vh;
-    width:auto;
+    flex: 1; 
+    /* A necessary fix to prevent flex items from overflowing */
+    min-width: 0; 
+    
+    /* Set a specific height to make them tall */
+    height: 100vh; 
+    /* The image will fill the width of its flex container */
+    width: 100%; 
+    
+    /* This is the key: it makes the image fill the box without stretching. */
+    /* It will crop the image (horizontally in this case) to fit the tall shape. */
+    object-fit: cover; 
+
+    /* --- Your Animation Properties (unchanged) --- */
     display: block;
-    position:relative;
+    position: relative;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
+.gallery img.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) { /* A slightly larger breakpoint is often better for this */
 
     .gallery {
+        width: 100%;
         overflow-x: auto;
         overflow-y: hidden;
         justify-content: flex-start; 
@@ -492,16 +517,22 @@ body {
 
 
     .gallery img {
-        height: 50vh; 
-        width: auto;
+        height: 80vh; 
+        width: 60vw; 
+        flex: none; /* THIS IS THE KEY FIX - prevent flex from shrinking */
         flex-shrink: 0;
+        object-fit: cover; 
         scroll-snap-align: center;
     }
+    .gallery-nav-btn {
+    /* Now we turn them ON */
+    display: flex; 
+  }
 }
 .minor-splash-container {
   display: flex;
   flex-direction: column;
-  margin-top: 200px;
+  margin-top: 100px;
   gap: 60px;
 }
 
@@ -552,7 +583,7 @@ body {
 /* Mobile layout */
 @media (max-width: 480px) {
   .minor-splash-container {
-    margin-top: 100px;
+    margin-top: 15px;
     gap: 40px;
   }
   
@@ -1234,7 +1265,7 @@ hr.divider {
 }
 .modal-image {
   width: calc(100% + 4rem); 
-  height: 350px;
+  height: 400px;
   display: block;
   object-fit: cover;
   object-position: center;
@@ -1387,7 +1418,17 @@ hr.divider {
   color: #a2956b;
 }
 
-
+.validation-error {
+    background-color: #ffebe6; /* A light red background */
+    color: #c00;             /* A dark red text color */
+    border: 1px solid #c00;   /* A dark red border */
+    border-radius: 4px;       /* Slightly rounded corners */
+    padding: 8px 12px;        /* Some space inside the box */
+    margin-top: 5px;          /* A little space below the title */
+    margin-bottom: 10px;      /* A little space above the options */
+    font-size: 0.9em;         /* Slightly smaller font */
+    font-weight: bold;
+}
 .custom-options {
   flex: 1;                       /* takes up remaining space */
   overflow-y: auto;        /* ensures content doesn’t hide behind bottom bar */
@@ -1518,7 +1559,8 @@ hr.divider {
   }
 }
 .checkout-background {
-    background-image: url('graphics/restaurant3.jpg');
+    background-image: url('graphics/checkout.jpg');
+    background-color: black;
     background-size: cover;
     background-attachment: fixed;
     background-position: center 60%;
@@ -1558,9 +1600,9 @@ hr.divider {
     background-repeat: no-repeat;
     background-position: center;
     width: 150px;
-    height: 250px;
+    height: 160px;
     
-    margin-top: 5px;
+    margin-top: 30px;
 
 }
 
@@ -1639,6 +1681,15 @@ hr.divider {
     
 }
 
+input.input-error {
+  border-color: #e74c3c !important; /* Make the border red */
+  background-color: #fff2f2; /* A very light pink background */
+}
+
+/* Style for the placeholder text in an invalid field */
+input.input-error::placeholder {
+    color: #c0392b; /* A darker red for placeholder text */
+}
 .cart-item {
     display: flex;
     justify-content: space-between;
@@ -1868,6 +1919,12 @@ hr.divider {
         left: auto !important;
         top: auto !important;
     }
+    .checkout-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+}
 }
 
 /* Import luxury fonts */
@@ -2020,38 +2077,99 @@ p {
 /* ===== OPENING HOURS SECTION ===== */
 .opening-hours-section {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 30px;
+  /* We add 'align-items: stretch' to make sure both columns are the same height */
+  align-items: stretch; 
   width: 100%;
-  padding: 40px 0;
   margin-top: 200px;
+  /* You can add a gap here if you want space between them */
+  /* gap: 30px; */ 
 }
 
+/* --- The Image Column (First 50%) --- */
 .opening-hours-img {
+  /* This is the key: 'flex: 1' tells it to take up 1 equal share of space. */
   flex: 1;
-  width: 50%;
+  /* We REMOVE the 'width: 50%' because flexbox is handling it now. */
 }
 
 .opening-hours-img img {
   width: 100%;
-  height: auto;
+  height: 100%; /* Make the image fill the entire container height */
   display: block;
-  object-fit: cover;
+  object-fit: cover; /* This is great, it prevents the image from being distorted */
 }
 
+/* --- The Text Column (Second 50%) --- */
 .opening-hours-text {
+  /* This is the other key: 'flex: 1' tells it to take up the OTHER equal share. */
   flex: 1;
-  width: 50%;
-  text-align: center;
-  color: #A2956B;
-  padding: 20px;
+  /* We REMOVE the 'width: 10%' which was causing the problem. */
+
+  /* We now use flexbox AGAIN to center the text perfectly inside this column */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers vertically */
+  align-items: center;     /* Centers horizontally */
+  
+  padding: 40px; /* Add some padding so text isn't stuck to the edges */
+  
+  /* Your animation styles are perfect and stay the same */
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  z-index: 100;
+  z-index: 10;
 }
 
+/* Your original h2/sub styles for font can go here */
+.opening-hours-text h2 {
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 200; /* This should now work correctly */
+    font-style: normal;
+    color: white;
+    font-size: 40px;
+    margin-bottom: 40px;
+
+}
+
+/* This is the container for the list, controlling its overall width */
+.hours-list {
+  width: 100%;
+  max-width: 450px; /* Prevents the list from becoming too wide on large screens */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* This is where the magic happens: we turn the list into a grid */
+.hours-list dl {
+  display: grid;
+  grid-template-columns: auto 1fr; /* Two columns: first is sized to its content, second takes the rest */
+  row-gap: 15px; /* The vertical space between each day. SPACING IS KEY to a classy look. */
+}
+
+/* Styling for the day of the week (e.g., "Monday") */
+.hours-list dt {
+  grid-column: 1; /* Puts this in the first column */
+  font-family: "Asap Condensed", sans-serif;
+  font-weight: 400; /* Regular weight to stand out slightly */
+  color: rgba(255, 255, 255, 0.9); /* A slightly softer white */
+  font-size: 18px;
+  text-transform: uppercase; /* Makes it look clean and uniform */
+  letter-spacing: 1.5px; /* Adds an airy, elegant feel */
+  text-align: left; /* Aligns the day to the left */
+}
+
+/* Styling for the time (e.g., "11:00 AM — 10:00 PM") */
+.hours-list dd {
+  grid-column: 2; /* Puts this in the second column */
+  margin: 0; /* Important: Resets browser default margin */
+  font-family: "Asap Condensed", sans-serif;
+  font-weight: 300; /* A lighter weight for a subtle hierarchy */
+  color: rgba(255, 255, 255, 0.7); /* More subtle color to recede slightly */
+  font-size: 18px;
+  text-align: right; /* Aligns the time to the right, creating the clean columns */
+}
+
+/* Don't forget your .visible class for the animation */
 .opening-hours-text.visible {
   opacity: 1;
   transform: translateY(0);
