@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
-
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 /* Style BOTH html and body scrollbars */
 ::-webkit-scrollbar {
     width: 6px;
@@ -2637,5 +2641,11 @@ p {
     margin-top: 10vh;
     margin-bottom: 10vh;
   }
+  .opening-hours-text.visible{
+    padding-bottom: 30px;
+  }
 }
 
+*{
+    border: 1px solid red !important;
+}
