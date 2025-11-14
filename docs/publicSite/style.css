@@ -1191,6 +1191,8 @@ hr.divider {
 }
 
 .menu-item {
+  flex-basis: calc(33.3333% - 16.67px);
+
 }
 
 
@@ -1243,6 +1245,7 @@ hr.divider {
   border: 1px solid #434343;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
   transition: all 0.3s ease;
+  margin-right: auto;
 }
 
 
