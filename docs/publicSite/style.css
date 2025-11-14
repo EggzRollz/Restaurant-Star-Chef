@@ -43,33 +43,69 @@ body {
     scrollbar-width: thin; 
     scrollbar-color: #666 transparent;
 }
+/* --- Option 3: The Double Line Reveal --- */
 .our-menu {
-  padding: 0.4em 1em;
-  list-style : none;
-  border: 2px solid #ffffff;
-  cursor: pointer;
-  font-size: 1.2em;
+  /* --- Positioning & Structure --- */
   position: absolute; 
-  border-radius: 1000px;
   top: 65%; 
   left: 50%; 
   transform: translateX(-50%);
   z-index: 100;
+  
+  /* --- Visuals --- */
+  background: transparent;
+  border: none;
+  padding: 1em;
+  cursor: pointer;
 }
-.our-menu a{
-    background-color: transparent;
-    color: #ffffff;
-    text-decoration: none;
-    display: inline-block; 
-    font-family: "Birthstone", cursive;
-    font-weight: 400;
-    font-size: 1.2em;
-    font-style: normal;
+
+.our-menu a {
+  /* --- Typography --- */
+  color: #FFFFFF;
+  text-decoration: none;
+  font-family: "Birthstone", cursive;
+  font-size: 1.8em;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 8px;
+  transition: color 0.3s ease 0.1s; /* Slight delay on the text color change */
 }
-.our-menu:hover {
-  background-color: #A2956B;
-  color: #ffffff;
-  transition: background-color 0.3s, color 0.3s;
+
+/* --- The "Something Extra": Two lines stacked on top of each other --- */
+/* The gold line underneath (always there) */
+.our-menu a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #A2956B; 
+  /* It doesn't animate, it just waits to be revealed */
+}
+
+/* The white line on top (this one animates) */
+.our-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #FFFFFF; /* The visible default line */
+  transform: scaleX(1);
+  transform-origin: right; /* It will shrink towards the right */
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* --- The HOVER State --- */
+.our-menu:hover a {
+  color: #A2956B; /* Text changes to gold */
+}
+
+.our-menu:hover a::after {
+  /* The top white line scales to 0, revealing the gold one underneath */
+  transform: scaleX(0); 
 }
 
 .menu-toggle {
@@ -1171,8 +1207,8 @@ hr.divider {
 }
 
 .menu-grid {
-  padding-right: 20px; /* Keeps some space around the whole menu */
-  padding-left: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 /* 2. Style each category section */
@@ -1197,20 +1233,14 @@ hr.divider {
 
 
 .item-list-grid {
-  display: flex;
-  flex-wrap: wrap;
-
-  /* CHANGE this to 'center'. This will center the group of items on the page.
-     As the screen gets wider, the space on the left and right of the group will grow,
-     but the items and the gap between them will stay consistent. */
-  justify-content: center; 
-  
-  gap: 25px; /* The space between your item boxes */
-  
-  /* Reset default list styling */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  max-width: 1400px; /* Limit how wide items can stretch */
+  margin: 0 auto;
+  justify-content: center;
+  gap: 25px;
   list-style-type: none;
   padding: 0;
-  margin: 0;
 }
 @media (max-width:768px){
   .menu-group {
@@ -1238,7 +1268,8 @@ hr.divider {
   /* --- KEY CHANGES --- */
   width: 100%;           /* Still fill the available space... */
   max-width: 355px;      /* ...but NEVER get wider than 255px. */
-  min-width: 350px;
+  min-width: 200px;
+  flex-shrink: 1;
   height: 150px; /* The height belongs on the element with the background/border */
   background-color: rgb(20, 20, 20);
   border-radius: 20px;
