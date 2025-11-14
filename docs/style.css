@@ -199,7 +199,7 @@ body {
     gap: 60px;          /* Now you can use gap to create controlled, small spacing */
     /* Layout for items inside the menu */
     display: flex;
-    flex-direction: column;
+    flex-direction: column !important;
     align-items: center; /* Center links horizontally */
     padding-top: 80px;  /* Give space at the top for a close button or branding */
 
