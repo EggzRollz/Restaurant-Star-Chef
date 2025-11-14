@@ -1207,8 +1207,10 @@ hr.divider {
 }
 
 .menu-grid {
-  padding-left: 30px;
-  padding-right: 30px;
+  max-width: 1090px; /* Exactly fits 4 items: (255px × 4) + (25px × 3 gaps) + 40px padding */
+  margin: 0 auto; /* Centers the menu */
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 /* 2. Style each category section */
@@ -1268,7 +1270,7 @@ hr.divider {
   /* --- KEY CHANGES --- */
   width: 100%;           /* Still fill the available space... */
   max-width: 355px;      /* ...but NEVER get wider than 255px. */
-  min-width: 255px;
+  min-width: 200px;
   flex-shrink: 1;
   height: 150px; /* The height belongs on the element with the background/border */
   background-color: rgb(20, 20, 20);
