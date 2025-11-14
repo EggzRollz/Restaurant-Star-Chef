@@ -1191,7 +1191,6 @@ hr.divider {
 }
 
 .menu-item {
-
 }
 
 
@@ -1237,7 +1236,7 @@ hr.divider {
   /* --- KEY CHANGES --- */
   width: 100%;           /* Still fill the available space... */
   max-width: 255px;      /* ...but NEVER get wider than 255px. */
-  
+  min-width: 250px;
   height: 150px; /* The height belongs on the element with the background/border */
   background-color: rgb(20, 20, 20);
   border-radius: 20px;
