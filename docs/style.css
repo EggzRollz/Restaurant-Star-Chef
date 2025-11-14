@@ -1131,7 +1131,7 @@ hr.divider {
     right: 0;
     background-color: #000000;
     z-index: 20;
-    
+    padding-top:18px;
     padding-bottom: 20px; 
     border-bottom: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
