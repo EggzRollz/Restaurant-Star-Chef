@@ -2,7 +2,7 @@ console.log("The script is running!");
 
 const gallery = document.querySelector('.gallery');
 const images = document.querySelectorAll('.gallery img');
-const animatedTexts = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .about-us-text');
+const animatedTexts = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .location-text');
 const navLinks = document.querySelector('.nav-links');
 const menuToggle = document.querySelector('.menu-toggle');
 const overlay = document.querySelector('.overlay');

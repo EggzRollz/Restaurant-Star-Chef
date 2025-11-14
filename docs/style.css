@@ -1,23 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
+/* Style BOTH html and body scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px; 
+}
 
+::-webkit-scrollbar-track {
+    background: none;
+    /* or try: background: rgba(0, 0, 0, 0); */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 3px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
 html {
-  scrollbar-gutter: stable;
-  scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+    scrollbar-width: thin; 
+    scrollbar-color: #666 transparent;
 }
 
 body {
-  /* This tells the body to be exactly as tall as its parent (the html element). */
-  /* This is the key change that prevents the body from creating its own scrollbar. */
-  min-height: 100%; 
-  
-  /* The rest of your body styles are fine. */
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden; 
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #000000;
+    min-height: 100%; 
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; 
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #000000;
+    
+    /* Add Firefox support for body too */
+    scrollbar-width: thin; 
+    scrollbar-color: #666 transparent;
 }
 .our-menu {
   padding: 0.4em 1em;
@@ -104,7 +124,8 @@ body {
         height: 10vh;
         background-color: #000000;
         color: #A2956B;
-        padding: 10px 20px;
+        padding-left: 20px;
+        padding-right: 20px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         z-index: 100;
         box-sizing: border-box;
@@ -121,6 +142,7 @@ body {
 }
 
 .nav-links {
+  
   display: flex;
   list-style: none;
   padding: 0;
@@ -155,35 +177,45 @@ body {
 
 @media (max-width: 768px) {
   .nav-links {
-    position: fixed;       
-    top: 50%;
-    right: 0;
-    height: calc(100vh - 40px);         
-    width: 250px;          
+    position: fixed; 
+    
+    /* === THE FIX === */
+    top: 0;    /* 1. Anchor it to the top of the screen */
+    right: 0;  /* Keep it on the right side */
+    height: 100vh; /* 2. Make it 100% of the viewport height */
+    
+    width: 200px; /* A little wider can feel better on mobile */
     background-color: #000;
-    padding: 50px 0;
+    z-index: 1000;
+    justify-content: flex-start; 
+
+     /* Increase padding for better spacing from the top */
+    gap: 60px;          /* Now you can use gap to create controlled, small spacing */
+    /* Layout for items inside the menu */
     display: flex;
     flex-direction: column;
-    gap: 10%;
-    transform: translateX(100%);  
-    justify-content: flex-start; 
+    align-items: center; /* Center links horizontally */
+    padding-top: 80px;  /* Give space at the top for a close button or branding */
+
+    /* Animation properties */
     opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    z-index: 1000;         
+    /* 3. The transform now ONLY handles the horizontal slide */
+    transform: translateX(100%); 
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
   }
 
+  /* --- The Mobile Menu Container (Visible State) --- */
   .nav-links.active {
-    transform: translateX(0);  
     opacity: 1;
+    /* 4. We bring it back to its original spot on the screen */
+    transform: translateX(0);
   }
 
-  
   .nav-links li {
     color: #A2956B;
-    margin: 10px 0;
     text-align: center;
+    width: 100%; /* Ensure the link's clickable area is full-width */
   }
-  
 }
 
 
@@ -378,7 +410,7 @@ body {
 .splash-text,
 .minor-splash-text, 
 .opening-hours-text, 
-.about-us-text {
+.location-text {
     opacity: 0;
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
@@ -388,7 +420,7 @@ body {
 
 .minor-splash-text, 
 .opening-hours-text, 
-.about-us-text {
+.location-text {
     transform: translateY(20px);
 }
 
@@ -405,39 +437,63 @@ body {
 /* When .visible is added, all other text moves to its final position. */
 .minor-splash-text.visible, 
 .opening-hours-text.visible, 
-.about-us-text.visible {
+.location-text.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
 
-.awards{
+/* --- Base Container & Text Grouping (.awards) --- */
+.awards {
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
-    margin-top:120px;
-    margin-bottom:100px;
-    max-width: 400px;
+    margin-top: 120px;
+    margin-bottom: 100px;
+    max-width: 400px; 
     margin-left: auto;
     margin-right: auto;
+    padding: 20px; 
 }
-.awards h2{
+
+/* --- Heading Styling (.awards h2) - KEPT Asap Condensed */
+.awards h2 {
     font-family: "Asap Condensed", sans-serif;
     font-weight: 200;
     font-style: normal;
-    color: white;
+    color: white; 
     font-size: 40px;
+    line-height: 1.5; 
+    margin-bottom: 15px; 
 }
 
-.awards p{
+/* --- Paragraph Styling (.awards p.popular) - SWITCHED TO LORA */
+.awards p.popular { 
+    /* CHANGED FONT: Using Lora */
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  color: white;
+    /* Lora looks good slightly smaller */
+  padding: 0 10px; 
+  margin-bottom: 15px; 
+  /* Still keeps the line breaks nicely spaced */
+  white-space: pre-line;
+  
+}
+
+/* --- Signature Styling - KEPT Asap Condensed */
+.signature {
     font-family: "Asap Condensed", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    color: white;
-    font-size: 20px;
+    font-size: 18px; 
+    font-weight: 300; 
+    font-style: italic; 
+    color: rgba(255, 255, 255, 0.7); 
+    margin-top: 5px; 
+    display: block; 
 }
-
 @media (max-width: 768px){
   .awards{
     display: flex;
@@ -749,7 +805,10 @@ body {
 .star-rating .material-symbols-outlined {
   font-variation-settings: 'FILL' 1;
 }
-
+.star-rating .empty-star { 
+    font-variation-settings: 'FILL' 0 !important; /* Override: Make it outlined */
+    color: #a2956b !important; /* Give the empty star a more muted color */
+}
 
 .star-rating .material-symbols-outlined:is([innerHTML="star_border"]) {
   font-variation-settings: 'FILL' 0;
@@ -789,7 +848,11 @@ body {
 .site-footer {
   background-color: #000000; /* A modern dark blue-gray */
   color: #ecf0f1; /* A soft white */
-  padding: 40px 20px;
+  padding-top:200px;
+  padding-bottom:40px;
+  padding-left:20px;
+  padding-right:20px;
+
   font-family: "Asap Condensed", sans-serif;
 }
 
@@ -811,6 +874,7 @@ body {
   min-width: 200px; /* Prevents columns from getting too narrow */
   
 }
+
 
 .footer-column h5 {
   color: #ffffff;
@@ -864,53 +928,14 @@ body {
     min-width: 100%; /* Each column takes full width */
     margin-bottom: 20px;
   }
+  .footer-column img{
+    max-width: 40%;
+}
 }
 
 .footer-location{
   width:100%;
   height:auto;
-}
-
-.reservation {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    margin-top:120px;
-    margin-bottom:100px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-.reservation h2{
-    font-family: "Asap Condensed", sans-serif;
-    font-weight: 200;
-    font-style: normal;
-    color: white;
-    font-size: 40px;
-   
-}
-.reservation-button {
-    text-decoration: none;
-    appearance: none;
-    outline: none;
-    display: block; 
-    padding: 0.4em 1em;
-    border: 2px solid #ffffff;
-    cursor: pointer;
-    font-size: 1.2em;
-    border-radius: 1000px;
-    margin: 20px auto; 
-    color: #ffffff;
-    width: 200px;
-    text-align: center;
-}
-
-
-.reservation-button:hover {
-  background-color: #A2956B;
-  color: #ffffff;
-  transition: background-color 0.3s, color 0.3s;
 }
 
 
@@ -1405,29 +1430,39 @@ hr.divider {
   display: none;
 }
 
-.submitBttn{
-  display:flex;
-  list-style : none;
-  border: 2px solid #ffffff;
-  background-color: #c8b883;
-  cursor: pointer;
-  border-radius: 1000px;
-  z-index: 100;
-  min-width: 200px;
-  font-size: 13px !important;
-  height: 48px; /* or whatever height you want */
-  min-height: 48px; /* ensures it doesn't shrink */
-  padding: 12px 24px; /* adjust padding to keep button looking proportional */
+.submitBttn {
+  display: inline-flex; /* More flexible than flex for a single button */
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: white;
+  
+  background-color: #A2956B; /* Start with the richer gold */
+  color: #ffffff;
+  
+  border: none; /* Remove the white border for a cleaner look */
+  border-radius: 4px; /* A subtle, sophisticated curve */
+  cursor: pointer;
+
+  padding: 12px 30px; /* Generous padding for a premium feel */
+  min-width: 200px;
+  height: 48px;
+
+  /* Refined Typography */
+  font-family: sans-serif; /* Use your site's main font */
+  font-size: 15px; /* Slightly larger and no !important */
+  font-weight: 400; /* Normal weight is often more elegant than bold */
+  letter-spacing: 0.5px; /* Adds breathing room to the text */
+  text-transform: uppercase; /* An elegant touch for short text */
+
+  /* Smooth transition and subtle shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.submitBttn:hover{
-  background-color: #A2956B;
-  color: #272727;
-  transition: background-color 0.3s, color 0.3s;
+.submitBttn:hover {
+  background-color: #c8b883; /* Lightens on hover */
+  color: #ffffff;
+  transform: translateY(-2px); /* Lifts the button slightly */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Enhances the lift effect */
 }
 .quantity-display {
   font-size: 1.2rem;
@@ -2296,7 +2331,7 @@ p {
 .opening-hours-img {
   /* This is the key: 'flex: 1' tells it to take up 1 equal share of space. */
   flex: 1;
-  /* We REMOVE the 'width: 50%' because flexbox is handling it now. */
+ 
 }
 
 .opening-hours-img img {
@@ -2337,7 +2372,6 @@ p {
     margin-bottom: 40px;
 
 }
-
 /* This is the container for the list, controlling its overall width */
 .hours-list {
   width: 100%;
@@ -2353,12 +2387,13 @@ p {
   row-gap: 15px; /* The vertical space between each day. SPACING IS KEY to a classy look. */
 }
 
-/* Styling for the day of the week (e.g., "Monday") */
+/* --- THIS IS THE MISSING PIECE, NOW RESTORED --- */
+/* Styling for the day/title (e.g., "Monday") */
 .hours-list dt {
   grid-column: 1; /* Puts this in the first column */
   font-family: "Asap Condensed", sans-serif;
   font-weight: 400; /* Regular weight to stand out slightly */
-  color: rgba(255, 255, 255, 0.9); /* A slightly softer white */
+  color: rgba(255, 255, 255, 0.9); /* A slightly softer white BY DEFAULT */
   font-size: 18px;
   text-transform: uppercase; /* Makes it look clean and uniform */
   letter-spacing: 1.5px; /* Adds an airy, elegant feel */
@@ -2371,10 +2406,66 @@ p {
   margin: 0; /* Important: Resets browser default margin */
   font-family: "Asap Condensed", sans-serif;
   font-weight: 300; /* A lighter weight for a subtle hierarchy */
-  color: rgba(255, 255, 255, 0.7); /* More subtle color to recede slightly */
+  color: rgba(255, 255, 255, 0.7); /* More subtle white BY DEFAULT */
   font-size: 18px;
   text-align: right; /* Aligns the time to the right, creating the clean columns */
 }
+
+/* --- STYLES FOR THE SPECIALS DESCRIPTION --- */
+.hours-list .item-description {
+  grid-column: 1 / 3; /* Makes this DD span BOTH columns */
+  text-align: left;     /* Overrides the default right-align for DDs */
+  font-size: 16px;      /* Slightly smaller for hierarchy */
+  font-weight: 300;     /* Matches the light weight of the times */
+  margin-top: 5px;      /* Adds a little space below the time */
+  padding-left: 2px;    /* Aligns it nicely with the DT above */
+}
+
+.hours-list .upgrades-list {
+  list-style-type: none; /* Removes the default bullet points */
+  padding-left: 0;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.hours-list .upgrades-list li {
+    margin-bottom: 4px; /* A little space between list items */
+}
+
+/* --- MODIFIER FOR USE ON A LIGHT BACKGROUND --- */
+/* This overrides the default white text color ONLY when .dark-text is used */
+.hours-list.dark-text dt {
+  color: rgba(255, 255, 255, 0.85); /* A strong, but not pure black for the day */
+}
+
+.hours-list.dark-text dd {
+  color: rgba(254, 254, 254, 0.65); /* A slightly softer black for the time */
+}
+
+.deal {
+        margin-bottom: 2rem; /* Adds space between the two deals */
+    }
+    .deal-time {
+        font-weight: bold;
+        color: #555;
+    }
+    .deal-upgrades-title {
+        margin-bottom: 0.5rem;
+    }
+
+.upgrades-list li {
+  display: flex;                  /* This is the magic! Activates flexbox. */
+  justify-content: space-between; /* Pushes the name and price to opposite ends. */
+  align-items: center;            /* Keeps them aligned vertically. */
+  margin-bottom: 6px;             /* Adds a little space between each upgrade line. */
+}
+
+/* Style for the price to make it stand out */
+.upgrades-list .upgrade-price {
+  font-weight: 600; /* Bolder font for the price */
+  color: #EAEAEA;  /* A slightly brighter white */
+}
+
 
 /* Don't forget your .visible class for the animation */
 .opening-hours-text.visible {
@@ -2391,6 +2482,9 @@ p {
   background-image: url('graphics/longSpread.png');
   background-size: cover;
   background-position: center;
+  display: flex;
+  justify-content: center; /* Horizontally centers the content */
+  align-items: center;     /* Vertically centers the content */
 }
 
 .about-spread img {
@@ -2398,70 +2492,150 @@ p {
   height: 100%;   
   object-fit: cover; 
 }
+.reservation {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+.reservation h2{
+    font-family: "Asap Condensed", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    color: white;
+    font-size: 40px;
+   
+}
+.reservation-button {
+    text-decoration: none;
+    display: block; 
+    padding: 0.6em 1.5em;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    font-size: 1.2em;
+    border-radius: 0; /* Sharp, clean corners */
+    margin: 20px auto; 
+    color: #ffffff;
+    width: 220px; /* A bit wider for presence */
+    text-align: center;
+    background-color: transparent; /* Explicitly transparent */
+
+    /* Transition for the color and border change */
+    transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.reservation-button:hover {
+  border-color: #A2956B; /* Border turns to gold */
+  color: #A2956B;       /* Text turns to gold */
+  background-color: transparent; /* Stays transparent */
+}
 
 /* ===== ABOUT US SECTION ===== */
-.about-us-section {
+.location-section {
   display: flex;
-  flex-direction: row-reverse; /* Image on right, text on left */
-  align-items: center;
-  gap: 30px;
+  align-items: stretch; 
   width: 100%;
-  padding: 40px 0;
+  margin-top: 50px;
+  /* A dark background makes the text pop */
+  color: white; /* Set a default text color for the section */
 }
 
-.about-us-img {
+.location-text {
   flex: 1;
-  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 40px; /* More vertical padding gives it room to breathe */
+  
+  /* Use 'gap' for consistent spacing between elements. It's cleaner than margin! */
+  gap: 25px; 
 }
 
-.about-us-img img {
+.location-img {
+  flex: 1;
+}
+
+.location-img img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
-  z-index: 1 !important;
 }
 
-.about-us-text {
-  flex: 1;
-  width: 60%;
+/* --- Typography Hierarchy --- */
+
+.location-text h2 {
+  font-family: "Asap Condensed", sans-serif;
+  font-weight: 200; /* A bit thicker for a heading */
+  font-size: 2.5rem; /* 40px is good, rem is more flexible */
+  color: #EAEAEA;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0; /* Remove margin as 'gap' now handles spacing */
+}
+
+/* Style for the "MARKHAM | ONTARIO" subheading */
+.location-text .location-subheading {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #a2956b; /* An accent color to make it stand out */
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Style for the main description paragraph */
+.location-text .location-description {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300; /* Lighter weight for body text is easier to read */
+  font-size: 1.1rem;
+  line-height: 1.7; /* Increased line-height is crucial for readability */
   text-align: center;
-  color: #A2956B;
-  padding: 20px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  color: #cccccc; /* Slightly softer than pure white */
+  max-width: 500px; /* Keeps lines from getting too long */
+  margin: 0;
 }
-
-.about-us-text.visible {
+.location-text .location-exact{
+   font-family: "Asap Condensed", sans-serif;
+    font-size: 18px; 
+    font-weight: 300; 
+    font-style: italic; 
+    color: rgba(255, 255, 255, 0.7); 
+    margin-top: 5px; 
+    display: block; 
+}
+/* Optional: Keep your animation class */
+.location-text.visible {
   opacity: 1;
   transform: translateY(0);
 }
-
 /* ===== MOBILE LAYOUT ===== */
 @media (max-width: 768px) {
   .opening-hours-section,
-  .about-us-section {
+  .location-section {
     flex-direction: column;
     margin-top: 60px;
   }
   
   .opening-hours-img,
-  .about-us-img {
+  .location-img {
     width: 100%;
     order: 2; /* Image comes second */
   }
   
   .opening-hours-text,
-  .about-us-text {
+  .location-text {
     width: 100%;
     padding: 10px;
     order: 1; /* Text comes first */
   }
   
-  .about-spread {
+  .location-spread {
     height: 50vh;
     margin-top: 10vh;
     margin-bottom: 10vh;
   }
 }
+
