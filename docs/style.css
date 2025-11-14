@@ -125,7 +125,7 @@ body {
         top: 0;
         left: 0;
         width: 100%;
-        height: 10.1vh; /* Set an explicit height */
+        height: 10vh; /* Set an explicit height */
         background-color: #000000;
         padding: 0 20px; /* Use shorthand padding */
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -1124,17 +1124,17 @@ hr.divider {
 
 
 @media (max-width: 768px) {
-    .menu-nav.fixed {
-  position: fixed;
+  .menu-nav.fixed {
+    position: fixed;
 
-  left: 0;
-  right: 0;
-  background-color: #000000;
-  z-index: 20;
-  padding-top:20px;
-  padding-bottom: 20px; 
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    left: 0;
+    right: 0;
+    background-color: #000000;
+    z-index: 20;
+    padding-top:19px;
+    padding-bottom: 20px; 
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 }
 .menu-placeholder {
