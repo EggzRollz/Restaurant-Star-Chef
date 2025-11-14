@@ -24,17 +24,10 @@
     background: #444;
 }
 html {
-    
     scroll-behavior: smooth;
     scrollbar-width: thin; 
     scrollbar-color: #666 transparent;
  
-}
-
-@media (min-width: 769px) {
-    html {
-        scrollbar-gutter: stable;
-    }
 }
 
 body {
