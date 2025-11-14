@@ -6,8 +6,8 @@
       "items": [
         {
           "id": "SD1",
-          "name_chinese": "蜜汁煎餐肉",
-          "name_english": "Pan Fried Sausage with Honey Glaze",
+          "name_chinese": "蜜汁煎餐肉*****",
+          "name_english": "Luncheon",
           "pricing": [
             {
               "size": "default",
@@ -18,6 +18,18 @@
         },
         {
           "id": "SD2",
+          "name_chinese": "蜜汁煎餐肉******",
+          "name_english": "Pan Fried Sausage with Honey Glaze",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 4.00
+            }
+          ]
+        },
+        {
+          "id": "SD3",
           "name_chinese": "炸豬扒",
           "name_english": "Fried Pork Chop",
           "pricing": [
@@ -29,7 +41,7 @@
           ]
         },
         {
-          "id": "SD3",
+          "id": "SD4",
           "name_chinese": "炸雞翼",
           "name_english": "Deep Fried Chicken Wing",
           "pricing": [
@@ -41,9 +53,21 @@
           ]
         },
         {
-          "id": "SD4",
-          "name_chinese": "炸魚柳",
+          "id": "SD5",
+          "name_chinese": "炸魚柳********",
           "name_english": "Deep Fried Fish Fillet",
+          "pricing": [
+            {
+              "size": "default",
+              "temp": "default",
+              "price": 4.00
+            }
+          ]
+        },
+        {
+          "id": "SD6",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Pan Fried Boneless Chicken",
           "pricing": [
             {
               "size": "default",
@@ -97,7 +121,7 @@
         {
           "id": "R3",
           "name_chinese": "鴛鴦",
-          "name_english": "Yin & Coffee",
+          "name_english": "Milk tea & Coffee",
           "image": "R3.jpg",
           "pricing": [
             {
@@ -214,7 +238,6 @@
           "id": "R9",
           "name_chinese": "豆漿",
           "name_english": "Soya Milk",
-          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -261,7 +284,7 @@
         {
           "id": "R12",
           "name_chinese": "雪糕紅豆冰",
-          "name_english": "Red Bean Freeze with ice-cream",
+          "name_english": "Red Bean Freeze with Ice-cream",
           "image": "R12.jpg",
           "pricing": [
             {
@@ -275,7 +298,6 @@
           "id": "R13",
           "name_chinese": "涼粉冰",
           "name_english": "Grass Jelly Freeze",
-          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -287,8 +309,7 @@
         {
           "id": "R14",
           "name_chinese": "雪糕涼粉冰",
-          "name_english": "Grass Jelly Freeze with ice-cream",
-          "image": "temporaryDrink.jpg",
+          "name_english": "Grass Jelly Freeze with Ice-cream",
           "pricing": [
             {
               "size": "default",
@@ -300,22 +321,12 @@
         {
           "id": "R15",
           "name_chinese": "涼粉/紅豆冰",
-          "name_english": "Grass Jelly/Red Jelly Freeze",
-          "image": "temporaryDrink.jpg",
+          "name_english": "Red Bean and Grass Jelly Freeze",
           "pricing": [
             {
               "size": "default",
               "temp": "Cold",
               "price": 5.99
-            }
-          ],
-          "options": [
-            {
-              "title": "Choose a type",
-              "choices": [
-                "Grass Jelly",
-                "Red Jelly"
-              ]
             }
           ]
         },
@@ -323,7 +334,6 @@
           "id": "R16",
           "name_chinese": "雪糕涼粉/紅豆冰",
           "name_english": "Grass Jelly/Red Jelly Freeze with Ice-cream",
-          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -345,7 +355,6 @@
           "id": "R17",
           "name_chinese": "奶昔(芒果/士多啤梨)",
           "name_english": "Milkshake (Mango/Strawberry)",
-          "image": "temporaryDrink.jpg",
           "pricing": [
             {
               "size": "default",
@@ -412,7 +421,7 @@
         {
           "id": "R20",
           "name_chinese": "香港檸檬茶",
-          "name_english": "Iced tea",
+          "name_english": "Nestea",
           "image": "R20.jpg",
           "pricing": [
             {
@@ -431,7 +440,7 @@
         {
           "id": "K1",
           "name_chinese": "避風塘龍蝦",
-          "name_english": "Stir Fried Lobster with Hong Kong Style",
+          "name_english": "Hong Kong Style Stir Fried Lobster",
           "pricing": [
             {
               "size": "default",
@@ -485,7 +494,7 @@
         {
           "id": "K5",
           "name_chinese": "薑蔥生蠔",
-          "name_english": "Stir-fried Oyster with Ginger & Green Onion in Hot Pot",
+          "name_english": "Fried Oyster with Ginger & Green Onion in Hot Pot",
           "pricing": [
             {
               "size": "default",
@@ -593,7 +602,7 @@
         {
           "id": "K14",
           "name_chinese": "醬爆老虎蝦",
-          "name_english": "Fried Tiger Shrimp & Chicken with Maggi",
+          "name_english": "Fried Tiger Shrimp & Chicken with Mango",
           "pricing": [
             {
               "size": "default",
@@ -622,7 +631,7 @@
         },
         {
           "id": "K16",
-          "name_chinese": "五柳/椒鹽/粟米班片",
+          "name_chinese": "五柳/椒鹽/粟米班片******",
           "name_english": "Sweet & Sour/Spicy & Salt/Sweet Corn sauce Garoupa Fillet",
           "pricing": [
             {
@@ -683,7 +692,7 @@
         {
           "id": "K20",
           "name_chinese": "蒜香牛仔骨",
-          "name_english": "Garlic Short Ribs",
+          "name_english": "Pan Fried Prawn (Kung Pao/Tomato Sauce/Spicy & Pepper Salt/Maggi Sauce)",
           "image": "K20.jpg",
           "pricing": [
             {
@@ -715,21 +724,12 @@
         {
           "id": "K21",
           "name_chinese": "豉椒雞/牛",
-          "name_english": "Chicken or Beef with Black Sauce on Sizzling Hot Plate",
+          "name_english": "Chicken with Black Sauce on Sizzling Hot Plate",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
               "price": 18.50
-            }
-          ],
-          "options": [
-            {
-              "title": "Choose a Protein",
-              "choices": [
-                "Chicken",
-                "Beef"
-              ]
             }
           ]
         },
@@ -767,19 +767,28 @@
         {
           "id": "K23",
           "name_chinese": "鐵板金菇牛柳",
-          "name_english": "Beef Tenderloin with Enoki Mushroom on Sizzling Hot Plate",
+          "name_english": "Chicken or Beef with Enoki Mushroom on Sizzling Hot Plate",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
               "price": 19.99
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
           ]
         },
         {
           "id": "K24",
           "name_chinese": "鐵板中式牛扒",
-          "name_english": "Chinese Style Steak with Hot Plate",
+          "name_english": "Stir Fried Beef With Tung Choi",
           "pricing": [
             {
               "size": "default",
@@ -813,7 +822,7 @@
         {
           "id": "K26",
           "name_chinese": "潮式芥蘭炒牛肉/雞柳",
-          "name_english": "Stir Fried Beef/Chicken with Chinese Broccoli Chiuchow Style",
+          "name_english": "Stir Fried Beef/Chicken with Chinese Broccoli Chaozhou Style",
           "pricing": [
             {
               "size": "default",
@@ -852,7 +861,7 @@
         {
           "id": "K28",
           "name_chinese": "避風塘炒蜆",
-          "name_english": "Stir Fried Clams Typhoon Style with Minced Pork",
+          "name_english": "Stir Fried Clams in HK Style with Minced Pork and Dry Fish",
           "pricing": [
             {
               "size": "default",
@@ -870,7 +879,7 @@
         {
           "id": "K29",
           "name_chinese": "四川辣雞片/牛肉",
-          "name_english": "Szechuan Style Sliced Chicken/Beef",
+          "name_english": "Szechuan Style Chicken/Beef",
           "pricing": [
             {
               "size": "default",
@@ -915,7 +924,7 @@
         {
           "id": "K31",
           "name_chinese": "福建扒豆腐",
-          "name_english": "Braised Sliced Pork with Fukien Style",
+          "name_english": "Fukien Style Steamed Bean Curd",
           "pricing": [
             {
               "size": "default",
@@ -994,7 +1003,7 @@
         {
           "id": "K36",
           "name_chinese": "粟米斑塊",
-          "name_english": "Fish Fillet with Corn",
+          "name_english": "Stir Fried Vegetable with Mixed Mushroom",
           "image": "K36.jpg",
           "pricing": [
             {
@@ -1007,7 +1016,7 @@
         {
           "id": "K37",
           "name_chinese": "欖菜肉鬆/蝦醬/XO醬/蒜茸/馬拉盞 通菜",
-          "name_english": "Stir Fried Tung Choy with a choice of sauce",
+          "name_english": "Stir Fried Tung Choy with a Choice of Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1031,7 +1040,7 @@
         {
           "id": "K38",
           "name_chinese": "椒絲腐乳 /蝦醬/蒜蓉/馬拉盞 西生菜",
-          "name_english": "Stir Fried Lettuce with a choice of sauce",
+          "name_english": "Stir-Fried Lettuce with a Choice of Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1065,20 +1074,20 @@
         },
         {
           "id": "K40",
-          "name_chinese": "魚香茄子",
-          "name_english": "Eggplant with Minced Pork in Garlic Sauce",
+          "name_chinese": "鹹魚肉鬆茄子煲",
+          "name_english": "Beef with Ginger & Green Onion",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
-              "price": 16.75
+              "price": 16.50
             }
           ]
         },
         {
           "id": "K41",
-          "name_chinese": "鹹魚雞粒豆腐煲",
-          "name_english": "Diced Chicken with Minced Pork & Salted Fish in Hot Pot",
+          "name_chinese": "魚香茄子",
+          "name_english": "Stir-Fried Eggplant with Minced Pork & Salted Fish in Spicy Sauce",
           "image": "K41.jpg",
           "pricing": [
             {
@@ -1090,21 +1099,22 @@
         },
         {
           "id": "K42",
-          "name_chinese": "鹹魚肉鬆茄子煲",
-          "name_english": "Eggplant with Diced Pork & Salted Fish in Hot Pot",
+          "name_chinese": "鹹魚雞粒豆腐煲",
+          "name_english": "Chicken & Tofu with Salted Fish in Hot Pot",
           "image": "K42.jpg",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
-              "price": 16.50
+              "price": 16.75
             }
           ]
         },
+        
         {
           "id": "K43",
           "name_chinese": "麻婆豆腐",
-          "name_english": "Minced Pork in Spicy Sauce",
+          "name_english": "Braised Tofu & Minced Pork in Spicy Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1122,7 +1132,7 @@
         {
           "id": "K44",
           "name_chinese": "紅燒豆腐",
-          "name_english": "Braised Tofu & Vegetable",
+          "name_english": "Stir-Fried Tofu & Vegetable",
           "pricing": [
             {
               "size": "default",
@@ -1134,7 +1144,7 @@
         {
           "id": "K45",
           "name_chinese": "乾煸四季豆",
-          "name_english": "Stir-Fried String Bean with Minced Pork & spicy sauce",
+          "name_english": "Stir-Fried Green Bean with Minced Pork & spicy sauce",
           "pricing": [
             {
               "size": "default",
@@ -1152,7 +1162,7 @@
         {
           "id": "K46",
           "name_chinese": "欖菜肉鬆四季豆",
-          "name_english": "Stir-Fried String Bean with Minced Pork",
+          "name_english": "Stir-Fried Olive Green Bean with Minced Pork",
           "pricing": [
             {
               "size": "default",
@@ -1176,7 +1186,7 @@
         {
           "id": "K48",
           "name_chinese": "生炒牛柳絲腸粉",
-          "name_english": "Fried Rice Noodle Roll with Diced Beef Tenderloin",
+          "name_english": "Stir-Fried Rice Noodle Roll with Diced Beef Tenderloin & Satay Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1206,7 +1216,7 @@
         {
           "id": "K50",
           "name_chinese": "香辣手撕雞",
-          "name_english": "Shredded Chicken with Spicy",
+          "name_english": "Shredded Chicken with Spicy Sauce",
           "pricing": [
             {
               "size": "Half",
@@ -1247,7 +1257,7 @@
         {
           "id": "K52",
           "name_chinese": "魚湯杞子浸貴妃雞",
-          "name_english": "Poached Chicken in Fish Soup with Gojiberry",
+          "name_english": "Steamed Concubine Chicken in Fish Soup",
           "pricing": [
             {
               "size": "Half",
@@ -1293,7 +1303,7 @@
         {
           "id": "K55",
           "name_chinese": "XO醬帶子蘆筍鮮魷魚仔",
-          "name_english": "Stir Fried Whole Baby & Leek Flowers with XO Sauce",
+          "name_english": "Stir Fried Scallops & Leek with XO Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1305,19 +1315,28 @@
         {
           "id": "K56",
           "name_chinese": "蝦子扒芥菜",
-          "name_english": "Braised Mustard Green",
+          "name_english": "Spicy Chicken or Beef",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
               "price": 17.50
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Beef",
+                "Chicken"
+              ]
+            }
           ]
         },
         {
           "id": "K57",
           "name_chinese": "蒜茸炒雜菜/芥蘭/白菜苗",
-          "name_english": "Stir Fried Mixed Vegetable/ Chinese Broccoli/ Baby Pak Choi with Garlic Sauce",
+          "name_english": "Stir Fried Mixed Vegetable/ Chinese Broccoli/ Baby Bok Choi with Garlic Sauce",
           "image":"K57.jpg",
           "pricing": [
             {
@@ -1352,7 +1371,7 @@
         {
           "id": "K59",
           "name_chinese": "水煮牛肉",
-          "name_english": "Boiled Beef in Chili Broth",
+          "name_english": "Bitter Melon Beef Omelette",
           "pricing": [
             {
               "size": "default",
@@ -1419,7 +1438,7 @@
         {
           "id": "K64",
           "name_chinese": "椒鹽鮮魷",
-          "name_english": "Spicy & Pepper Salt Squid",
+          "name_english": "Spicy Pepper Salt Squid",
           "pricing": [
             {
               "size": "default",
@@ -1431,7 +1450,7 @@
         {
           "id": "K65",
           "name_chinese": "椒鹽豆腐",
-          "name_english": "Spicy & Pepper Salt Tofu",
+          "name_english": "Spicy Pepper Salt Tofu",
           "image": "K65.jpg",
           "pricing": [
             {
@@ -1466,7 +1485,7 @@
         {
           "id": "K67",
           "name_chinese": "滑蛋炒蝦仁",
-          "name_english": "Stir Fried Shrimp with Scramble Egg",
+          "name_english": "Stir Fried Shrimp with Scrambled Eggs",
           "image": "K67.jpg",
           "pricing": [
             {
@@ -1479,7 +1498,7 @@
         {
           "id": "K68",
           "name_chinese": "蕃茄炒蛋牛/雞柳",
-          "name_english": "Stir Fried Beef or Chicken with Scramble Egg",
+          "name_english": "Stir Fried Beef or Chicken with Scrambled Eggs",
           "pricing": [
             {
               "size": "default",
@@ -1537,7 +1556,7 @@
         {
           "id": "K72",
           "name_chinese": "炸雲吞",
-          "name_english": "Vegetable Spring Roll (3 rolls)",
+          "name_english": "Vegetable Spring Rolls (3 rolls)",
           "pricing": [
             {
               "size": "default",
@@ -1549,7 +1568,7 @@
         {
           "id": "K73",
           "name_chinese": "炸兩/牛脷酥",
-          "name_english": "Chinese Oil Dough Fritter/Sweet Cruller",
+          "name_english": "Deep Fried Dough Fritter/Sweet Cruller",
           "pricing": [
             {
               "size": "default",
@@ -1570,7 +1589,7 @@
         {
           "id": "K74",
           "name_chinese": "炸雞翼",
-          "name_english": "Deep Fried Chicken Wings(6 pcs)",
+          "name_english": "Deep Fried Chicken Wings(8 pcs)",
           "pricing": [
             {
               "size": "default",
@@ -1582,7 +1601,7 @@
         {
           "id": "K75",
           "name_chinese": "啫啫雞煲",
-          "name_english": "Chicken with mixed Mushroom",
+          "name_english": "Fried Tofu with mixed Mushroom",
           "pricing": [
             {
               "size": "default",
@@ -1600,7 +1619,7 @@
         {
           "id": "K76",
           "name_chinese": "蜜椒牛柳粒",
-          "name_english": "Diced Beef with Honey Pepper Sauce",
+          "name_english": "Oyster with Honey Pepper Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1612,7 +1631,7 @@
         {
           "id": "K77",
           "name_chinese": "沙爹金菇牛肉粉絲煲",
-          "name_english": "Satay Beef & Enoki in Hot Pot",
+          "name_english": "Satay Mushroom & Beef Vermicelli Casserole",
           "pricing": [
             {
               "size": "default",
@@ -1630,7 +1649,7 @@
         {
           "id": "K78",
           "name_chinese": "中式牛柳粒",
-          "name_english": "Stir Fried Beef Tenderloin in Chinese Styles",
+          "name_english": "Chinese Style Stir-Fried Beef Tenderloin",
           "pricing": [
             {
               "size": "default",
@@ -1642,7 +1661,7 @@
         {
           "id": "K79",
           "name_chinese": "豉椒炒大腸",
-          "name_english": "Stir Fried Pig Intestine with Black Bean Sauce and Pickled Vegetable",
+          "name_english": "Stir-Fried Pig Intestine with Black Bean Sauce and Pickled Vegetable",
           "pricing": [
             {
               "size": "default",
@@ -1696,7 +1715,7 @@
         {
           "id": "E2",
           "name_chinese": "避風塘炒麵",
-          "name_english": "Vermicelli Hong Kong Style with Mixed Pork, Shrimp, Squid",
+          "name_english": "HK Style Fried Noodle with Mixed Pork, Shrimp, Squid",
           "pricing": [
             {
               "size": "default",
@@ -1726,7 +1745,7 @@
         {
           "id": "E4",
           "name_chinese": "干炒海鮮烏冬",
-          "name_english": "Seafood & Mixed Vegetable Fried Udon with Vermicelli",
+          "name_english": "Taiwanese Vermicelli & Fried Seafood with Mixed Vegetable",
           "pricing": [
             {
               "size": "default",
@@ -1750,7 +1769,7 @@
         {
           "id": "E6",
           "name_chinese": "乾炒海鮮鴛鴦冬",
-          "name_english": "Seafood Dry Fried Udon Noodle",
+          "name_english": "Seafood Fried Udon Noodle",
           "pricing": [
             {
               "size": "default",
@@ -1762,7 +1781,7 @@
         {
           "id": "E7",
           "name_chinese": "XO醬乾炒牛河",
-          "name_english": "Dry Fried Noodle with Sliced Beef & XO Sauce",
+          "name_english": "Fried Rice Noodle with Sliced Beef & XO Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1774,7 +1793,7 @@
         {
           "id": "E8",
           "name_chinese": "雪菜火鴨絲炆米",
-          "name_english": "Shredded Duck & Preserved Vegetable with Vermicelli",
+          "name_english": "Braised Shredded Duck & Preserved Cabbage with Vermicelli",
           "pricing": [
             {
               "size": "default",
@@ -1798,7 +1817,7 @@
         {
           "id": "E10",
           "name_chinese": "菜遠肉絲炆米",
-          "name_english": "Shredded Pork & Preserved Cabbage Stewed Vermicelli",
+          "name_english": "Braised Shredded Pork & Preserved Cabbage with Vermicelli",
           "pricing": [
             {
               "size": "default",

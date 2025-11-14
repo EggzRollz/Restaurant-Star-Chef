@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Asap+Condensed:wght@400&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
 *,
 *::before,
 *::after {
@@ -100,7 +100,7 @@ body {
     top :  0;
     left : 0;
     width : 100%;
-    height : 60px; 
+    min-height : 60px; 
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
     backdrop-filter: blur(2px);
     position: fixed;
@@ -139,30 +139,27 @@ body {
 }
 
 
-
 .main-nav {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    /* This is the key property! */
+    justify-content: space-between; 
+    align-items: center; /* Vertically aligns logo, links, and cart */
+    width: 100%;
+    height: 100%;
+    padding: 0 40px; /* Adds space on the sides so logo/cart aren't on the edge */
+    box-sizing: border-box; /* Ensures padding is included in the width */
 }
 
 .nav-links {
-  
-  display: flex;
-  list-style: none;
-  padding: 0;
-  justify-content: space-around;
-  gap: 50px; /* e.g. 20px minimum gap */
-  margin-left: 7%;
-  margin-right: auto;
-  flex-grow: 1; 
-  max-width: 800px; /* Adjust this value as needed */
-  flex-direction: row;
-  font-weight: 400;
-  font-style: normal;
-}
+    display: flex; /* This still needs to be flex to arrange the <li> items */
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Remove default margin from the <ul> */
+    gap: 13vw; /* This controls the spacing BETWEEN the links */
 
+    /* REMOVE ALL of the old positioning rules */
+    /* max-width, margin-left, margin-right, flex-grow are no longer needed */
+}
 
 
 
@@ -236,7 +233,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0; /* Removes default button spacing */
-  margin-right: 10vw; /* Adds some space from the edge of the screen */
+  margin-right: 5vw; /* Adds some space from the edge of the screen */
 }
 .cart-button i {
   position: relative;
@@ -1115,6 +1112,7 @@ hr.divider {
   right: 0;
   background-color: #000000;
   z-index: 10000;
+  padding-top:20px;
   padding-bottom: 20px; 
   border-bottom: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -1131,7 +1129,7 @@ hr.divider {
     right: 0;
     background-color: #000000;
     z-index: 20;
-    padding-top:18px;
+    padding-top:15px;
     padding-bottom: 20px; 
     border-bottom: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
