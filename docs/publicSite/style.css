@@ -1191,22 +1191,20 @@ hr.divider {
 }
 
 .menu-item {
-  /* This part is still correct for creating the three-column grid */
-  flex-basis: calc(33.3333% - 16.67px);
-  display: flex;
-  justify-content: center;
-  
-  
+
 }
 
 
-/* 4. MOVE the flexbox rules to the list INSIDE each category */
 .item-list-grid {
   display: flex;
   flex-wrap: wrap;
-  /* 'flex-start' is usually better than 'center' when inside a full-width section */
-  justify-content: flex-start; 
-  gap:25px;  /*he space between your item boxes */
+
+  /* CHANGE this to 'center'. This will center the group of items on the page.
+     As the screen gets wider, the space on the left and right of the group will grow,
+     but the items and the gap between them will stay consistent. */
+  justify-content: center; 
+  
+  gap: 25px; /* The space between your item boxes */
   
   /* Reset default list styling */
   list-style-type: none;
