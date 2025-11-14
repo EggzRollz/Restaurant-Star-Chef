@@ -191,22 +191,29 @@ body {
 @media (max-width: 768px) {
   .nav-links {
     position: fixed; 
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 200px;
+    
+    /* === THE FIX === */
+    top: 0;    /* 1. Anchor it to the top of the screen */
+    right: 0;  /* Keep it on the right side */
+    height: 100vh; /* 2. Make it 100% of the viewport height */
+    
+    width: 200px; /* A little wider can feel better on mobile */
     background-color: #000;
     z-index: 1000;
-    
-    /* Layout for vertical centering */
+    justify-content: flex-start; 
+
+     /* Increase padding for better spacing from the top */
+    gap: 60px;          /* Now you can use gap to create controlled, small spacing */
+    /* Layout for items inside the menu */
     display: flex;
-    
-    gap: 60px;
-    padding: 20px; /* Uniform padding instead of padding-top */
+    flex-direction: column;
+    align-items: center; /* Center links horizontally */
+    padding-top: 80px;  /* Give space at the top for a close button or branding */
 
     /* Animation properties */
     opacity: 0;
-    transform: translateX(100%);
+    /* 3. The transform now ONLY handles the horizontal slide */
+    transform: translateX(100%); 
     transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
   }
 
