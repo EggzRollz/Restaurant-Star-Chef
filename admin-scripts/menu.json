@@ -1829,7 +1829,7 @@
         {
           "id": "E11",
           "name_chinese": "乾燒牛伊麵",
-          "name_english": "Braised E-Fu Deep Noodles with Beef and Soya Sauce",
+          "name_english": "Fried U-Don Noodles with Beef and Soya Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1880,7 +1880,7 @@
         {
           "id": "E14",
           "name_chinese": "星洲炒米",
-          "name_english": "Fried Rice Noodles with Chicken or Beef, Shrimp with Curry Sauce Style",
+          "name_english": "Chao Zhou Style Fried Rice Noodles with Chicken or Beef & Stay Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1944,7 +1944,7 @@
         {
           "id": "E18",
           "name_chinese": "豉油王炒麵",
-          "name_english": "Soya Sauce Chow Mein",
+          "name_english": "Mixed Vegetable Chow Mein",
           "pricing": [
             {
               "size": "default",
@@ -1977,7 +1977,7 @@
         {
           "id": "E20",
           "name_chinese": "羅漢齋炒麵",
-          "name_english": "Fried Rice Noodles with Mixed Vegetable",
+          "name_english": "Fried Rice Noodles with Chiecken or Beef with Vegetables",
           "pricing": [
             {
               "size": "default",
@@ -2010,7 +2010,7 @@
         {
           "id": "E22",
           "name_chinese": "蝦仁炒蛋麵",
-          "name_english": "Fried Rice Noodles with Shrimp & Scrambled Egg",
+          "name_english": "Fried Rice Noodles with Chicken or Beef with Soy Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2034,7 +2034,7 @@
         {
           "id": "E24",
           "name_chinese": "干燒蝦球伊麵",
-          "name_english": "Fried Shrimp Noodles with Shrimp & Preserved Vegetable",
+          "name_english": "Shanghai Style Fried Thick Noodles with Shrimp & Pork",
           "pricing": [
             {
               "size": "default",
@@ -2046,7 +2046,7 @@
         {
           "id": "E25",
           "name_chinese": "廈門炒米",
-          "name_english": "Fried Rice Vermicelli with Shrimp & Pork in Sweet & Sour Sauce",
+          "name_english": "Fried Vermicelli with Shrimp & Pork in Sweet & Sour Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2058,7 +2058,7 @@
         {
           "id": "E26",
           "name_chinese": "貴刁(濕/乾)",
-          "name_english": "Fried Vermicelli with Shrimp & Pork Malaysian Style",
+          "name_english": "Singapore Style Fried Vermicelli with Shrimp & Pork",
           "pricing": [
             {
               "size": "default",
@@ -2079,7 +2079,7 @@
         {
           "id": "E27",
           "name_chinese": "家鄉炒米",
-          "name_english": "Fried Rice Vermicelli with Shrimp & Pork Home Style",
+          "name_english": "Home Style Fried Vermicelli with Shrimp & Pork",
           "pricing": [
             {
               "size": "default",
@@ -2091,7 +2091,7 @@
         {
           "id": "E28",
           "name_chinese": "魚湯浸貴刁",
-          "name_english": "Kway Teow in Fish Soup",
+          "name_english": "Singapore Style Fried Rice Noodles with Shrimp & Pork",
           "pricing": [
             {
               "size": "default",
@@ -2127,7 +2127,7 @@
         {
           "id": "E31",
           "name_chinese": "鹹魚雞粒炒河粉",
-          "name_english": "Salted Fish & Chicken Fried Rice Noodle",
+          "name_english": "Pad Tai with Vegetable & Tofu",
           "pricing": [
             {
               "size": "default",
@@ -2139,7 +2139,7 @@
         {
           "id": "E32",
           "name_chinese": "魚香茄子炆伊麵",
-          "name_english": "Braised Eggplant with Minced Pork & Salted Fish in Spicy Sauce",
+          "name_english": "Braised E-Fu with Fried Eggplant, Minced Pork & Salted Fish in Spicy Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2191,7 +2191,7 @@
         {
           "id": "H3",
           "name_chinese": "欖菜肉鬆四季豆炒飯",
-          "name_english": "Stir Fried String Bean with Olive Vegetables and Pork",
+          "name_english": "Green Bean Fried Rice with Olive Vegetables and Pork",
           "pricing": [
             {
               "size": "default",
@@ -2203,7 +2203,7 @@
         {
           "id": "H4",
           "name_chinese": "臘味炒飯",
-          "name_english": "Fried Rice with Sausage, Shrimp, Pork Rind & Preserved Cabbage",
+          "name_english": "Fried Rice with Scallop, Shrimp, Pork Rind & Preserved Cabbage",
           "pricing": [
             {
               "size": "default",
@@ -2251,7 +2251,7 @@
         {
           "id": "H8",
           "name_chinese": "太極鴛鴦炒飯",
-          "name_english": "Yin Yang Fried Rice with Cream & Tomato Sauce",
+          "name_english": "Shrimp & Chicken Fried Rice with Cream & Tomato Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2288,7 +2288,7 @@
         {
           "id": "H11",
           "name_chinese": "滑蛋蝦仁飯",
-          "name_english": "Shrimp with Scrambled Egg Sauce on Steamed Rice",
+          "name_english": "Shrimp with Scrambled Egg Sauce on Rice",
           "pricing": [
             {
               "size": "default",
@@ -2322,7 +2322,7 @@
         {
           "id": "H13",
           "name_chinese": "揚州炒飯",
-          "name_english": "Young Chow Fried Rice with Shrimp",
+          "name_english": "Yeung Chow Fried Rice with Shrimp & Pork",
           "pricing": [
             {
               "size": "default",
@@ -2479,7 +2479,7 @@
         {
           "id": "H21",
           "name_chinese": "羅漢齋飯",
-          "name_english": "Mixed Vegetable on Rice",
+          "name_english": "Mixed Vegetables Fried Rice",
           "pricing": [
             {
               "size": "default",
@@ -2509,7 +2509,7 @@
         {
           "id": "H23",
           "name_chinese": "辣子雞/牛飯",
-          "name_english": "Spicy Chicken or beef on Rice",
+          "name_english": "Spicy Chicken or Beef on Rice",
           "pricing": [
             {
               "size": "default",
@@ -2536,7 +2536,7 @@
         {
           "id": "H24",
           "name_chinese": "沙嗲牛肉/雞肉/肉片飯",
-          "name_english": "Beef or Chicken or Pork with Satay on Rice",
+          "name_english": "Beef or Chicken or Pork with Satay",
           "pricing": [
             {
               "size": "default",
@@ -2690,7 +2690,7 @@
         {
           "id": "H33",
           "name_chinese": "馬拉盞雞絲/牛松炒飯",
-          "name_english": "Beef/Chicken Fried Rice with Belacan Sauce",
+          "name_english": "Beef/Chicken Fried Rice with Be-laChan Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2763,12 +2763,12 @@
           "name_english": "Lobster Super Bowl Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 19.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 40.25
             }
@@ -2780,12 +2780,12 @@
           "name_english": "Seafood Super Bowl Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 10.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -2797,12 +2797,12 @@
           "name_english": "Chicken & Duck Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 10.50
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -2814,12 +2814,12 @@
           "name_english": "Scallop & Tiger Shrimp Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 12.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.75
             }
@@ -2831,12 +2831,12 @@
           "name_english": "Salmon Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 10.75
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 19.99
             }
@@ -2848,12 +2848,12 @@
           "name_english": "Tiger Shrimp Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -2865,12 +2865,12 @@
           "name_english": "Sliced Fish Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 17.75
             }
@@ -2882,12 +2882,12 @@
           "name_english": "Sliced Fish & Beef Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 18.25
             }
@@ -2899,12 +2899,12 @@
           "name_english": "Sliced Fish & Pork Liver Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 18.25
             }
@@ -2916,12 +2916,12 @@
           "name_english": "Preserved Egg & Pork Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 17.25
             }
@@ -2933,12 +2933,12 @@
           "name_english": "Sliced Beef Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 17.25
             }
@@ -2950,12 +2950,12 @@
           "name_english": "Minced Beef Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 17.25
             }
@@ -2967,12 +2967,12 @@
           "name_english": "Minced Beef with Preserved Mustard Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 17.25
             }
@@ -2987,15 +2987,15 @@
         {
           "id": "B14",
           "name_chinese": "雞茸粟米粥",
-          "name_english": "Minced Chicken & Corn Congee",
+          "name_english": "Mixed Vegetables & Corn Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.00
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 16.50
             }
@@ -3007,12 +3007,12 @@
           "name_english": "Tofu & Corn Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.00
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 16.50
             }
@@ -3024,12 +3024,12 @@
           "name_english": "Mixed Mushroom & Tofu Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 9.00
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 16.50
             }
@@ -3041,12 +3041,12 @@
           "name_english": "Plain Congee",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 5.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 9.00
             }
@@ -3064,12 +3064,12 @@
           "name_english": "Crab Meat & Fish Maw Thick Soup",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 12.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 22.99
             }
@@ -3081,12 +3081,12 @@
           "name_english": "Hot and Sour Soup with Shrimp And Pork",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 21.25
             }
@@ -3101,16 +3101,16 @@
         {
           "id": "D3",
           "name_chinese": "雞茸粟米羹",
-          "name_english": "Minced Chicken & Corn Thick Soup",
+          "name_english": "Crab & Corn Thick Soup",
           "image": "D3.jpg",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 12.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 22.75
             }
@@ -3122,12 +3122,12 @@
           "name_english": "Seafood & Tofu Thick Soup",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 21.25
             }
@@ -3139,12 +3139,12 @@
           "name_english": "Minced Beef with Egg White Thick Soup",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 21.25
             }
@@ -3153,15 +3153,15 @@
         {
           "id": "D6",
           "name_chinese": "雞茸蘑菇羹",
-          "name_english": "Minced Chicken & Mushroom Thick Soup",
+          "name_english": "Minced Chicken & Corn Thick Soup",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -3173,12 +3173,12 @@
           "name_english": "Tofu & Corn Thick Soup",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -3190,12 +3190,12 @@
           "name_english": "Egg Drop Thick Soup with Mushroom",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -3213,12 +3213,12 @@
           "name_english": "Shredded Duck & Preserved Cabbage",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 12.25
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 21.25
             }
@@ -3227,15 +3227,15 @@
         {
           "id": "C2",
           "name_chinese": "雪菜肉絲",
-          "name_english": "Shredded Pork & Preserved Cabbage",
+          "name_english": "Shredded Pork & Preserved Cabbage Soup",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
@@ -3244,16 +3244,14 @@
         {
           "id": "C3",
           "name_chinese": "沙嗲牛/雞",
-          "name_english": "Chicken or Beef & Satay Sauce",
+          "name_english": "Chicken or Beef & Satay Sauce Soup",
           "pricing": [
             {
-              "size": "S",
-              "temp": "default",
+              "size": "Small",
               "price": 12.25
             },
             {
-              "size": "L",
-              "temp": "default",
+              "size": "Large",
               "price": 21.25
             }
           ],
@@ -3279,16 +3277,29 @@
           "name_english": "Chicken or Beef with Vegetable",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
           ],
+          "addOns":[
+            {
+              "title": "Choose a Noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon", "price": 1.00 },
+                { "addOnName": "Instant Noodles", "price": 1.00 }
+              ]
+            }
+          ], 
           "options": [
             {
               "title": "Choose a Protein",
@@ -3305,12 +3316,12 @@
           "name_english": "Beef Tendon & Brisket",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 12.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 22.75
             }
@@ -3322,27 +3333,15 @@
           "name_english": "Deep Fried Pork Chop",
           "pricing": [
             {
-              "size": "S",
+              "size": "Small",
               "temp": "default",
               "price": 11.99
             },
             {
-              "size": "L",
+              "size": "Large",
               "temp": "default",
               "price": 20.25
             }
-          ]
-        }
-      ],
-      "category_options": [
-        {
-          "title": "Choose a Noodle",
-          "choices": [
-            "Rice Noodles",
-            "Vermicelli",
-            "Egg Noodles",
-            "Udon (+$1.00)",
-            "Instant Noodle (+$1.00)"
           ]
         }
       ]

@@ -218,28 +218,39 @@ document.addEventListener("DOMContentLoaded", () => {
         const customizationEl = clone.querySelector('.cart-item-customization');
         const decreaseBtn = clone.querySelector('.decrease-buttn');
         const increaseBtn = clone.querySelector('.increase-buttn');
+        const customizations = item.customizations || {};
+        const customizationValues = Object.values(customizations);
 
         // 3. Fill the placeholders with the item's data
         nameEl.textContent = item.name;
         nameChineseEl.textContent = item.name_chinese;
-        console.log(item.name_chinese)
         defaultPriceEl.textContent = `$${item.price.toFixed(2)}`;
         quantityEl.textContent = item.quantity;
         totalPriceEl.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
-
+        
         // Set the data-index for the buttons so they know which item to modify
         decreaseBtn.dataset.index = index;
         increaseBtn.dataset.index = index;
 
         // 4. Handle customizations (only show the div if customizations exist)
-        let customizationText = Object.values(item.customizations)
-            .filter(value => value && value !== 'default')
-            .join(', ');
 
-        if (customizationText) {
-            customizationEl.textContent = customizationText;
+
+        // Filter out any default or empty values
+        const validValues = customizationValues.filter(value => value && value !== 'default');
+
+        if (validValues.length > 0) {
+            // If there are valid customizations, loop through the values
+            validValues.forEach(value => {
+                // Create a new span element for this single value
+                const customSpan = document.createElement('span');
+                customSpan.textContent = value; // e.g., "Small"
+                
+                // Append this new span to the main customization container
+                customizationEl.appendChild(customSpan);
+            });
         } else {
-            customizationEl.remove(); // If no customizations, remove the element entirely
+            // If there are no customizations, remove the container entirely
+            customizationEl.remove();
         }
 
         // 5. Append the finished clone to the cart container in the DOM

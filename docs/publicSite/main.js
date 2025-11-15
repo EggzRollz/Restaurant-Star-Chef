@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
           category: data.category_english || "Misc",
           tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
           options: data.options || [],
+          addOns: data.addOns || [],
           pricing: data.pricing || [],
         };
       });
@@ -385,7 +386,8 @@ function openCustomizeModal(item) {
   // currentPrice will be set by the radio buttons
   amount = 1;
   updateQuantityDisplay();
-
+  let basePrice = 0;
+  let addOnPrice = 0;
   // --- GET HTML ELEMENTS ---
   const title = document.getElementById('customize-title');
   const chineseTitle = document.getElementById('customize-chinese-title');
@@ -415,11 +417,16 @@ function openCustomizeModal(item) {
     modalImage.alt = `A placeholder image for the ${item.category} category`
   }
   modalImage.style.display = 'block';
+  const updateTotalPrice = () => {
+    currentPrice = basePrice + addOnPrice;
+    // This function should update the 'Add to Cart' button's price display
+    updateCartButtonPrice(); 
+  };
   // --- HANDLE PRICING (SIZES / TEMPERATURES) ---
   if (item.pricing.length === 1) {
     // If there's only one price, display it and set it
     defaultPrice.textContent = "$ " + item.pricing[0].price.toFixed(2);
-    currentPrice = item.pricing[0].price;
+    basePrice = item.pricing[0].price;
 
   } else if (item.pricing && item.pricing.length > 0) {
     const pricingGroup = document.createElement('div');
@@ -434,14 +441,14 @@ function openCustomizeModal(item) {
         optionTypeKey = 'size';
         optionGroupTitle = 'Size';
     }
+
+    
     // --- END FIX ---
 
     const pricingTitle = document.createElement('h4');
     // FIX: Use the dynamic title we just determined
     pricingTitle.textContent = optionGroupTitle;
     pricingGroup.appendChild(pricingTitle);
-
-    let isFirstOption = true; 
 
     item.pricing.forEach(priceOption => {
         const label = document.createElement('label');
@@ -456,22 +463,72 @@ function openCustomizeModal(item) {
 
         label.appendChild(radio);
         // FIX: Display the correct option value (size or temp) to the user
-        label.append(` ${priceOption[optionTypeKey]} ($${priceOption.price.toFixed(2)})`); 
-        pricingGroup.appendChild(label);
-    });
+        label.append(` ${priceOption[optionTypeKey]}`);
+
+          // 2. Then, create and add the styled price span.
+          const priceSpan = document.createElement('span');
+          priceSpan.className = 'price-modifier'; // Use the same CSS class
+          priceSpan.textContent = `($${priceOption.price.toFixed(2)})`;
+          label.appendChild(priceSpan); 
+                  pricingGroup.appendChild(label);
+        });
 
     pricingGroup.addEventListener('change', (event) => {
         if (event.target.type === 'radio' && event.target.checked) {
-            currentPrice = parseFloat(event.target.dataset.price);
-            updateCartButtonPrice(); 
+            basePrice = parseFloat(event.target.dataset.price);
+            updateTotalPrice();
         }
     });
 
     optionsContainer.appendChild(pricingGroup);
   }
 
-  
+  if (item.addOns && item.addOns.length > 0) {
+    item.addOns.forEach(addOnGroupData => {
+        const addOnGroup = document.createElement('div');
+        addOnGroup.className = 'option-group';
 
+        const addOnTitle = document.createElement('h4');
+        addOnTitle.textContent = addOnGroupData.title;
+        addOnGroup.appendChild(addOnTitle);
+
+        addOnGroupData.choices.forEach(choice => {
+            const label = document.createElement('label');
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = addOnGroupData.title; // Group add-ons
+            radio.value = choice.addOnName;
+            // Use 0 if price is not specified (free add-on)
+            radio.dataset.price = choice.price || 0; 
+
+            label.appendChild(radio);
+
+            label.append(` ${choice.addOnName}`);
+
+            // 2. If there's a price, create a separate span for it.
+            if (choice.price && choice.price > 0) {
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'price-modifier'; // Apply our new CSS class
+                priceSpan.textContent = `(+$${choice.price.toFixed(2)})`;
+                label.appendChild(priceSpan); // Add the styled span to the label
+            }
+            addOnGroup.appendChild(label);
+        });
+
+        // Add an event listener to this specific group
+        addOnGroup.addEventListener('change', (event) => {
+            if (event.target.type === 'radio' && event.target.checked) {
+                // When an add-on is selected, update the addOnPrice and recalculate total
+                // This assumes only one add-on group for now, but can be expanded
+                addOnPrice = parseFloat(event.target.dataset.price);
+                updateTotalPrice();
+            }
+        });
+
+        optionsContainer.appendChild(addOnGroup);
+    });
+  }
+  updateTotalPrice();
   // --- HANDLE OTHER OPTIONS ---
   if (item.options && item.options.length > 0) {
     item.options.forEach(opt => {

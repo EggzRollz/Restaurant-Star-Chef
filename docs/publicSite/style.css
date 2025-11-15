@@ -302,9 +302,9 @@ body {
 @media (max-width:768px) {
   .cart-button {
     position: absolute; /* Position it relative to the nav bar */
-    top: 60%; /* Center it vertically */
+    top: 50%; /* Center it vertically */
     transform: translateY(-50%); /* This is a trick for perfect vertical centering */
-    right: 75px; /* Position it to the LEFT of the hamburger menu. Adjust as needed. */
+    right: 28%; /* Position it to the LEFT of the hamburger menu. Adjust as needed. */
     z-index: 1100; /* Ensure it's on top */
     margin-right: 0; /* We don't need margin when using absolute positioning */
   }
@@ -313,9 +313,9 @@ body {
   .menu-toggle {
     display: block; /* Make sure it's visible */
     position: absolute;
-    top: 50%;
+    top: 47%;
     transform: translateY(-50%);
-    right: 8px; /* Position on the far right */
+    right: 10%; /* Position on the far right */
     z-index: 1100;
     background: none;
     border: none;
@@ -346,8 +346,6 @@ body {
 .logo-link img {
     height: 50px; 
     width: auto;  
-    margin-left: 50px;
-
     z-index: 1000;
 }
 @media (max-width: 768px) {
@@ -899,7 +897,7 @@ body {
   display: flex;
   flex-wrap: wrap; 
   justify-content: space-between; 
-  gap: 30px; 
+  gap: 10%; 
   max-width: 1200px;
   margin: 0 auto; 
   padding-bottom: 30px;
@@ -1090,7 +1088,7 @@ hr.divider {
 }
 .menu-nav ul {
   display: flex;
-  gap: 50px; 
+  gap: 4.5%; 
   margin: 0;
   list-style: none;
   white-space: nowrap; 
@@ -1143,7 +1141,7 @@ hr.divider {
 
 .menu-nav.fixed {
   position: fixed;
-  top: 80px;
+  top: 20px;
   left: 0;
   right: 0;
   background-color: #000000;
@@ -1160,13 +1158,13 @@ hr.divider {
 @media (max-width: 768px) {
   .menu-nav.fixed {
     position: fixed;
-
+    top: 10%;
     left: 0;
     right: 0;
     background-color: #000000;
     z-index: 20;
     padding-top:15px;
-    padding-bottom: 20px; 
+    padding-bottom: 15px; 
     border-bottom: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
@@ -1236,29 +1234,30 @@ hr.divider {
 
 .item-list-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
-  max-width: 1400px; /* Limit how wide items can stretch */
-  margin: 0 auto;
-  justify-content: center;
+  /* KEY CHANGE 1: Define explicit columns. 
+     This creates a 3-column layout on large screens. 
+     '1fr' means each column takes up an equal fraction of the available space. 
+     This forces the items to grow and fill the container, solving the "condensed" look. */
+  grid-template-columns: repeat(3, 1fr); 
+  
   gap: 25px;
   list-style-type: none;
   padding: 0;
+
+  /* The .menu-grid parent already centers and adds padding, 
+     so these can be removed to avoid conflicts. */
+  /* max-width: 1400px; */ 
+  /* margin: 0 auto; */
 }
+
 @media (max-width:768px){
   .menu-group {
     margin-bottom: 0px; /* Was 60px, which is too much for mobile */
   }
   .item-list-grid {
-    display: flex;
-    flex-direction: column;
-    /* 'flex-start' is usually better than 'center' when inside a full-width section */
-    justify-content: flex-start; 
-    gap: 0px; /* The space between your item boxes */
-    
-    /* Reset default list styling */
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+
+    grid-template-columns: repeat(2, 1fr);
+
   }
 
 }
@@ -1269,16 +1268,13 @@ hr.divider {
   
   /* --- KEY CHANGES --- */
   width: 100%;           /* Still fill the available space... */
-  max-width: 355px;      /* ...but NEVER get wider than 255px. */
-  min-width: 200px;
-  flex-shrink: 1;
   height: 150px; /* The height belongs on the element with the background/border */
   background-color: rgb(20, 20, 20);
   border-radius: 20px;
   border: 1px solid #434343;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
   transition: all 0.3s ease;
-  margin-right: auto;
+  overflow: hidden;
 }
 
 
@@ -1294,13 +1290,16 @@ hr.divider {
 
 
 
-.item-info{
-  display:flex;
-  flex-direction:column;
-  width:60%;
+.item-info {
+  display: flex;
+  flex-direction: column;
   border-right: 1px solid #434343;
   padding: 6px;
+  /* KEY CHANGE: Use flex to fill available space */
+  flex: 1; /* This makes it grow to fill remaining space */
+  min-width: 0; /* Prevents flex item from overflowing */
 }
+
 
 .modal-content h2,
 .modal-content h3 {
@@ -1335,12 +1334,10 @@ hr.divider {
 
 .item-img {
   
-  flex: 1; 
+  flex: 0 0 130px;
   height: 100%;  
   object-fit: cover; 
   object-position: center; 
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
   overflow: hidden; 
 }
 
@@ -1357,7 +1354,10 @@ hr.divider {
   display: flex;
   flex-direction: row;
 }
-
+.price-modifier {
+  color: #888; /* A nice light grey */
+  margin-left: 4px; /* Optional: Adds a little space */
+}
 
 .closeModalBttn {
   
@@ -1819,6 +1819,19 @@ input.input-error::placeholder {
     flex: 1;
     text-align: center;
     color: #838383;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    word-break: break-word;  /* Break long words */
+    overflow-wrap: break-word;  /* Ensure wrapping */
+    max-width: 100%;  /* Prevent overflow */
+}
+.cart-item-customization span:not(:last-child)::after {
+    content: ', ';
+    }
+.cart-item-customization span {
+    word-break: break-word;  /* Also apply to individual spans */
+    overflow-wrap: break-word;
 }
 
 .cart-item-price {
@@ -2149,6 +2162,13 @@ input.input-error::placeholder {
     .cart-item-customization { 
         order: 1; 
     }
+    .cart-item-customization {
+        display: flex;
+        flex-direction: row !important;  /* Added !important to override base style */
+        gap: 5px;  /* Remove gap since we're using commas */
+        flex-wrap: wrap;  /* Allow wrapping if needed */
+    }
+    
 
     /* Group 2: Interactive controls and final price. */
     .quantity-mod-container {
@@ -2600,6 +2620,17 @@ p {
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+.location-img iframe {
+    /* Standard CSS filter for most modern browsers */
+    filter: grayscale(100%) invert(100%);
+    
+    /* Vendor-specific prefixes for compatibility */
+    -webkit-filter: grayscale(100%) invert(100%);
+    -moz-filter: grayscale(100%) invert(100%);
+    -ms-filter: grayscale(100%) invert(100%);
+    -o-filter: grayscale(100%) invert(100%);
 }
 
 /* --- Typography Hierarchy --- */
