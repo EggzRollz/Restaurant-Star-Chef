@@ -151,37 +151,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleCategoryClick(tag) {
-    console.log(`Category clicked: ${tag}`);
-    const activeLink = document.querySelector('.menu-nav a.active');
-    if (activeLink) activeLink.classList.remove('active');
-    const newActiveLink = document.querySelector(`[data-category="${tag}"]`);
-    if (newActiveLink) newActiveLink.classList.add('active');
-    
-    if (tag === 'All') {
-    // This function already creates all the titles, so it's perfect.
+  console.log(`Category clicked: ${tag}`);
+  const activeLink = document.querySelector('.menu-nav a.active');
+  if (activeLink) activeLink.classList.remove('active');
+  const newActiveLink = document.querySelector(`[data-category="${tag}"]`);
+  if (newActiveLink) newActiveLink.classList.add('active');
+  
+  if (tag === 'All') {
     renderAllItemsByCategory();
-
   } else {
-    // For any other category, call our new function that creates a single title.
     renderSingleCategory(tag);
-
   }
-  }
+}
 
 // --- In main.js ---
 
 function createMenuItemElement(item) {
-
+  console.log(item); 
     const MODIFIERS = {
-        spicy: { emoji: '🌶️', title: 'Spicy' },
-        cold: { emoji: '❄️', title: 'Cold/Iced' },
-        popular: { emoji: '⭐', title: 'Popular' }
+        spicy: { iconFile: '/docs/publicSite/svg/pepper.svg', title: 'Spicy' },
+        cold: { iconFile: '/docs/publicSite/svg/snowflake.svg', title: 'Cold/Iced' },
+        nuts: { iconFile: '/docs/publicSite/svg/peanut.svg', title: 'Peanuts' }
         // Add more here easily! e.g., gluten-free: { emoji: '🚫🌾', title: 'Gluten-Free'}
     };
 
-    // --- The rest of your function structure ---
-    const itemEl = document.createElement('li');
-    itemEl.classList.add('menu-item');
 
     const link = document.createElement('a');
     link.href = '#';
@@ -204,7 +197,7 @@ function createMenuItemElement(item) {
  
     const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
 
-    
+ 
 
     
     // --- The rest of your function continues as normal ---
@@ -225,154 +218,118 @@ function createMenuItemElement(item) {
       itemImg.alt = `A placeholder image for the ${item.category} category`
     }
 
-
-    
-    
-    // IMPORTANT: We now add the name and price divs to itemInfo
-    itemInfo.appendChild(itemNameDiv);
+       itemInfo.appendChild(itemNameDiv);
     itemInfo.appendChild(itemChineseNameDiv);
     itemInfo.appendChild(itemPriceDiv);
+    const modifierContainer = document.createElement('div');
+    modifierContainer.classList.add('modifier-container');
+
     for (const modifierKey in MODIFIERS) {
         if (lowerCaseTags.includes(modifierKey)) {
-            // If it's a match, create the icon!
-            const icon = document.createElement('span');
-            icon.classList.add('icon-indicator'); // Use a generic class for all icons
-            
-            // Get the emoji and title from our dictionary
-            icon.textContent = MODIFIERS[modifierKey].emoji;
+            const icon = document.createElement('img');
+            icon.classList.add('modifier-icon');
+            icon.src = `${MODIFIERS[modifierKey].iconFile}`;
+            icon.alt = MODIFIERS[modifierKey].title;
             icon.title = MODIFIERS[modifierKey].title;
             
-            // Add the icon to the name div
-            itemInfo.appendChild(icon);
+            // 2. Add the icon to our new container, NOT to itemInfo
+            modifierContainer.appendChild(icon);
         }
     }
-    itemContainer.appendChild(itemInfo);
+    if (modifierContainer.hasChildNodes()) {
+        itemInfo.appendChild(modifierContainer);
+    }
+
+   itemContainer.appendChild(itemInfo);
     itemContainer.appendChild(itemImg);
     link.appendChild(itemContainer);
-    itemEl.appendChild(link);
+    
+    // --- RETURN THE LINK DIRECTLY, NOT THE <li> ---
+    // itemEl.appendChild(link);
+    // return itemEl;
 
     link.addEventListener('click', e => {
         e.preventDefault();
         openCustomizeModal(item);
     });
 
-    return itemEl;
+    return link; // Return the link directly as the grid item
 }
 function renderSingleCategory(categoryName) {
-  // 1. Get and clear the main container
   if (!menuContainer) return;
   menuContainer.innerHTML = '';
 
-  // --- Filtering Logic (This part is already perfect and doesn't need to change) ---
-  let filteredItems;
   const lowerCaseCategory = categoryName.toLowerCase();
+  
+  // Simple, unified filtering: just check if the tag exists
+  const filteredItems = menuInventory.filter(item => 
+    item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
+  );
 
-  if (lowerCaseCategory === 'soup / noodles') {
-    filteredItems = menuInventory.filter(item => {
-        const primaryTag = (item.tags[0] || '').toLowerCase();
-        return primaryTag === 'soup' || primaryTag === 'soup noodle';
-    });
-  } else {
-    filteredItems = menuInventory.filter(item => 
-        item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
-    );
-  }
-
-  // --- Rendering Logic (This is where we make the change) ---
-  // Only proceed to render if we actually found items for this category
   if (filteredItems.length > 0) {
-      
-      // 2. NEW: Create the section wrapper, just like in the 'All Items' function
-      const section = document.createElement('section');
-      section.classList.add('menu-group');
+    const section = document.createElement('section');
+    section.classList.add('menu-group');
 
-      // 3. Create the title element
-      const header = document.createElement('h2');
-      header.textContent = categoryName; 
-      header.classList.add('menu-group-title');
-      
-      
+    const header = document.createElement('h2');
+    header.textContent = categoryName; 
+    header.classList.add('menu-group-title');
 
-      // 4. Create the list of items
-      const list = document.createElement('ul');
-      list.classList.add('item-list-grid');
-      
-      // Sort items for consistency (optional but good practice)
-      filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+    const list = document.createElement('ul');
+    list.classList.add('item-list-grid');
+    
+    filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+    filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
 
-      filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
-
-      // 5. NEW: Append the t itle AND list to the new section wrapper
-      section.appendChild(header);
-      section.appendChild(list);
-      menuContainer.appendChild(section);
-
+    section.appendChild(header);
+    section.appendChild(list);
+    menuContainer.appendChild(section);
   } else {
-      // If no items were found, display a message directly in the container
-      menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
+    menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
   }
 }
-
-
 
   
 // In main.js
 
 function renderAllItemsByCategory() {
   if (!menuContainer) return;
-  menuContainer.innerHTML = ''; // Clear the container first
+  menuContainer.innerHTML = '';
 
-  // This is our desired display order and the source for our titles.
+  // Display order - these should match your tag names
   const categoryOrder = [
-    "Popular", 
-    "Sides", 
-    "Congee",
-    "Fried Noodle",
-    "Rice", 
-    "Soup / Noodles", 
-    "Stir Fry",
-    "Beverages"
+    "Popular",      // Tag: popular
+    "Sides",        // Tag: sides
+    "Congee",       // Tag: congee
+    "Fried Noodle", // Tag: fried noodle
+    "Rice",         // Tag: rice
+    "Soup",         // Tag: soup (simplified from "Soup / Noodles")
+    "Soup Noodle",  // Tag: soup noodle
+    "Stir Fry",     // Tag: stir fry
+    "Beverages"     // Tag: beverages
   ];
 
-  // Loop through each category we want to display.
   categoryOrder.forEach(displayCategory => {
     const lowerCaseCategory = displayCategory.toLowerCase();
-    let filteredItems;
-
-    // --- Filtering Logic (similar to renderSingleCategory) ---
-    // Handle our special combined category first.
-    if (lowerCaseCategory === 'soup / noodles') {
-      filteredItems = menuInventory.filter(item => {
-          const primaryTag = (item.tags[0] || '').toLowerCase();
-          return primaryTag === 'soup' || primaryTag === 'soup noodle';
-      });
-    } else {
-      // For all other categories, check if the tag exists anywhere in the item's tags array.
-      filteredItems = menuInventory.filter(item => 
-          item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
-      );
-    }
-    console.log(`Category: "${displayCategory}" | Found ${filteredItems.length} items.`);
-    // --- Rendering Logic ---
-    // If we found any items for this category, create the title and the list.
+    
+    // Same simple filtering for everything
+    const filteredItems = menuInventory.filter(item => 
+      item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
+    );
+    
     if (filteredItems.length > 0) {
       const section = document.createElement('section');
       section.classList.add('menu-group');
       
       const header = document.createElement('h2');
-      header.textContent = displayCategory; // Use the nicely formatted name
+      header.textContent = displayCategory;
       header.classList.add('menu-group-title');
       section.appendChild(header);
       
       const list = document.createElement('ul');
       list.classList.add('item-list-grid');
       
-      // Sort items alphabetically within their category for consistency
       filteredItems.sort((a, b) => a.name.localeCompare(b.name));
-
-      filteredItems.forEach(item => {
-        list.appendChild(createMenuItemElement(item));
-      });
+      filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
       
       section.appendChild(list);
       menuContainer.appendChild(section);

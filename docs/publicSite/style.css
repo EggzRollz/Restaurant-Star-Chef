@@ -771,7 +771,7 @@ body {
 
 .awards-plaque {
     min-width:40%;
-    padding: 40px 50px;
+    padding: 20px 50px;
     text-align: center;
 }
 
@@ -1078,58 +1078,54 @@ hr.divider {
 }
 
 
+
 .menu-nav {
   width: 100%;
   overflow-x: auto;
-  background:transparent; 
-  padding-left: 10px;
-  padding-right: 10px;
+  background: transparent; 
   transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
 }
+
 .menu-nav ul {
   display: flex;
-  gap: 4.5%; 
+  justify-content: space-between; /* This spreads items across available space */
+  width: 100%; /* Takes full width */
+  max-width: 1800px; /* Prevents it from getting too wide - adjust as needed */
   margin: 0;
+  padding: 0 40px; /* Side padding */
   list-style: none;
   white-space: nowrap; 
   padding-bottom: 20px;
 }
-@media (max-width: 768px){
-  .menu-nav ul {
-  display: flex;
-  gap: 20px; 
-  padding: 0 20px;
-  margin: 0;
-  list-style: none;
-  white-space: nowrap; 
-  padding-bottom: 20px;
-  }
-}
+
+
 .menu-nav li {
   flex: 0 0 auto;
 }
+
+.menu-nav a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-family: "Noto Sans Display", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: thin 100;
+  font-variation-settings: "wdth" 100;
+  /* Remove margin-right since gap handles spacing now */
+}
+
 .menu-nav a:hover,
-
-
 .menu-nav a:focus {
   color: #A2956B; 
   outline: none;
-}
-.menu-nav a{
-    color: rgb(255, 255, 255);
-    margin-right:20px;
-    text-decoration: none;
-    font-family: "Noto Sans Display", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    font-style: thin 100;
-    font-variation-settings:
-    "wdth" 100;
 }
 
 .menu-nav a.active {
   color: #A2956B; 
 }
+
 .menu-nav::-webkit-scrollbar {
   height: 6px;
 }
@@ -1138,7 +1134,17 @@ hr.divider {
   background-color: #A2956B;
   border-radius: 20px;
 }
-
+@media (max-width: 768px){
+  .menu-nav ul {
+  display: flex;
+  gap: 30px; 
+  padding: 0 20px;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap; 
+  padding-bottom: 20px;
+  }
+}
 .menu-nav.fixed {
   position: fixed;
   top: 20px;
@@ -1205,7 +1211,7 @@ hr.divider {
 }
 
 .menu-grid {
-  max-width: 1090px; /* Exactly fits 4 items: (255px × 4) + (25px × 3 gaps) + 40px padding */
+  max-width: 1600px; /* Exactly fits 4 items: (255px × 4) + (25px × 3 gaps) + 40px padding */
   margin: 0 auto; /* Centers the menu */
   padding-right: 20px;
   padding-left: 20px;
@@ -1226,9 +1232,10 @@ hr.divider {
   margin-bottom: 30px;
 }
 
-.menu-item {
-  flex-basis: calc(33.3333% - 16.67px);
-
+@media (min-width: 769px) {
+  .menu-item {
+    flex-basis: calc(33.3333% - 16.67px);
+  }
 }
 
 
@@ -1250,16 +1257,39 @@ hr.divider {
   /* margin: 0 auto; */
 }
 
-@media (max-width:768px){
-  .menu-group {
-    margin-bottom: 0px; /* Was 60px, which is too much for mobile */
-  }
+@media (max-width: 768px) {
   .item-list-grid {
-
-    grid-template-columns: repeat(2, 1fr);
-
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+  }
+  
+  .menu-grid {
+    padding-right: 15px;
+    padding-left: 15px;
   }
 
+  .menu-group h2 {
+    font-size: 1rem;
+  }
+  
+
+  .item-container {
+    width: 100%;
+    min-width: 100%;
+  }
+  .item-name {
+    font-size: 0.9rem; /* Reduces font size from the default (likely 1rem or 16px) */
+    line-height: 1.3;  /* Improves readability for wrapped text */
+  }
+
+  /* Target the item price */
+  .item-price {
+    font-size: 0.85rem; /* Make the price slightly smaller than the name */
+  }
+  .modifier-icon {
+    width: 1rem;   /* Make icons a little smaller to match the new text size */
+    height: 1rem;
+  }
 }
 
 .item-container {
@@ -1288,18 +1318,35 @@ hr.divider {
   transform: translateY(-8px); 
 }
 
-
+.item-container-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
 
 .item-info {
   display: flex;
   flex-direction: column;
   border-right: 1px solid #434343;
-  padding: 6px;
+  padding: 12px;
   /* KEY CHANGE: Use flex to fill available space */
   flex: 1; /* This makes it grow to fill remaining space */
   min-width: 0; /* Prevents flex item from overflowing */
 }
+.modifier-container {
+  display: flex;
+  flex-direction: row; /* This is the default, but good to be explicit */
+  align-items: center; /* Vertically aligns icons if they have different heights */
+  gap: 6px;            /* Creates space between each icon */
+  margin-top: auto;    /* Pushes the icon row to the bottom of the card */
+  padding-top: 5px;    /* Adds a little space above the icons */
+}
+.modifier-icon {
+    width: 1.2em;      /* Makes the icon size relative to the text size */
+    height: 1.2em;     /* Keeps it square */
 
+    vertical-align: middle; /* Aligns the icon nicely with the line of text */
+}
 
 .modal-content h2,
 .modal-content h3 {
@@ -2535,6 +2582,7 @@ p {
 /* ===== ABOUT SPREAD (Background Image Section) ===== */
 .about-spread {
   height: 80vh;
+  max-height: 600px;
   width: 100%;
   margin-top: 25vh;
   margin-bottom: 25vh;
@@ -2550,6 +2598,23 @@ p {
   width: 100%;    
   height: 100%;   
   object-fit: cover; 
+}
+
+
+@media (max-width: 786px){
+  .about-spread {
+  height: 60vh;
+  max-height: 600px;
+  width: 100%;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  background-image: url('graphics/longSpread.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center; /* Horizontally centers the content */
+  align-items: center;     /* Vertically centers the content */
+}
 }
 .reservation {
     display: flex;
@@ -2575,7 +2640,7 @@ p {
     border-radius: 0; /* Sharp, clean corners */
     margin: 20px auto; 
     color: #ffffff;
-    width: 220px; /* A bit wider for presence */
+    width: 240px; /* A bit wider for presence */
     text-align: center;
     background-color: transparent; /* Explicitly transparent */
 
@@ -2620,9 +2685,15 @@ p {
   height: 100%;
   display: block;
   object-fit: cover;
+  padding-bottom: 175px;
 }
 
 .location-img iframe {
+    width: 100%;
+    height: 100%;
+    display: block; /* Good practice to remove potential bottom spacing */
+    border: 0;      /* Remove the default border */
+
     /* Standard CSS filter for most modern browsers */
     filter: grayscale(100%) invert(100%);
     
@@ -2686,7 +2757,7 @@ p {
   .opening-hours-section,
   .location-section {
     flex-direction: column;
-    margin-top: 60px;
+    margin-top: 3vh;
   }
   
   .opening-hours-img,
@@ -2709,6 +2780,18 @@ p {
   }
   .opening-hours-text.visible{
     padding-bottom: 30px;
+  }
+   .location-img iframe {
+    width: 100%; /* Make the iframe fill the container's width */
+    height: 400px; /* Give it a reasonable height for mobile */
+    border: 0;   /* Good practice to put this in CSS */
+  }
+  .location-img img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  padding-bottom: 100px;
   }
 }
 

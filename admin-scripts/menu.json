@@ -279,7 +279,10 @@
               "temp": "Cold",
               "price": 5.99
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R12",
@@ -292,7 +295,10 @@
               "temp": "Cold",
               "price": 7.25
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R13",
@@ -304,7 +310,10 @@
               "temp": "Cold",
               "price": 5.99
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R14",
@@ -333,7 +342,7 @@
         {
           "id": "R16",
           "name_chinese": "雪糕涼粉/紅豆冰",
-          "name_english": "Grass Jelly/Red Jelly Freeze with Ice-cream",
+          "name_english": "Grass Jelly and Red Jelly Freeze with Ice-cream",
           "pricing": [
             {
               "size": "default",
@@ -341,15 +350,9 @@
               "price": 7.25
             }
           ],
-          "options": [
-            {
-              "title": "Choose a type",
-              "choices": [
-                "Grass Jelly",
-                "Red Jelly"
-              ]
-            }
-          ]
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R17",
@@ -370,7 +373,10 @@
                 "Strawberry"
               ]
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R18",
@@ -392,7 +398,10 @@
                 "Strawberry"
               ]
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R19",
@@ -416,7 +425,10 @@
                 "Ginger Ale"
               ]
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         },
         {
           "id": "R20",
@@ -429,7 +441,10 @@
               "temp": "Cold",
               "price": 3.99
             }
-          ]
+          ],
+          "tags": [    
+              {"type": "cold"}     
+            ]
         }
       ]
     },
@@ -448,10 +463,18 @@
               "price": 45.99
             }
           ],
+         "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -477,6 +500,9 @@
               "temp": "default",
               "price": 43.99
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -489,6 +515,19 @@
               "temp": "default",
               "price": 28.99
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [     
+              {"type": "popular"},
+              {"type": "spicy"}
           ]
         },
         {
@@ -554,13 +593,16 @@
         {
           "id": "K10",
           "name_chinese": "魚湯杞子豆苗",
-          "name_english": "Snow Pea leaves in Fish Soup with Gojiberry",
+          "name_english": "Snow Pea leaves in Fish Soup with Wolfberry",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
               "price": 19.99
             }
+          ],
+          "tags": [
+              {"type": "popular"}     
           ]
         },
         {
@@ -597,6 +639,19 @@
               "temp": "default",
               "price": 22.50
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+            "tags": [
+            {"type": "popular"},
+            {"type": "spicy"}
           ]
         },
         {
@@ -608,6 +663,15 @@
               "size": "default",
               "temp": "default",
               "price": 19.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ]
         },
@@ -622,10 +686,18 @@
               "price": 19.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 2
+              "type": "spicy"
             }
           ]
         },
@@ -648,6 +720,18 @@
                 "Spicy & Salt",
                 "Sweet Corn sauce"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -672,7 +756,7 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 19.50
+              "price": 19.75
             }
           ]
         },
@@ -703,22 +787,17 @@
           ],
           "options": [
             {
-              "title": "Choose a style",
+              "title": "Choose a Sauce",
               "choices": [
-                "Fermented Tofu",
-                "Five Spice",
-                "Szechuan Spicy",
-                "Sweet & Sour",
-                "Black Bean Sauce",
-                "Spicy & Pepper Salt"
+                "Kung Pao",
+                "Tomato Sauce",
+                "Spicy & Pepper Salt",
+                "Maggi Sauce"
               ]
             }
           ],
           "tags": [
-            {
-              "type": "spicy",
-              "level": 2
-            }
+            {"type": "spicy"}
           ]
         },
         {
@@ -736,7 +815,7 @@
         {
           "id": "K22",
           "name_chinese": "雞/牛柳/豬扒(黑椒/蒜茸/中式/洋蔥)",
-          "name_english": "Beef or Chicken & Mushroom on Sizzling Hot Plate",
+          "name_english": "Chicken or Beef & Mushroom on Sizzling Hot Plate",
           "pricing": [
             {
               "size": "default",
@@ -749,17 +828,7 @@
               "title": "Choose a Protein",
               "choices": [
                 "Chicken",
-                "Beef Tenderloin",
-                "Pork Chop"
-              ]
-            },
-            {
-              "title": "Choose a Sauce",
-              "choices": [
-                "Black Pepper",
-                "Garlic",
-                "Chinese Style",
-                "Onion"
+                "Beef"
               ]
             }
           ]
@@ -772,7 +841,7 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 19.99
+              "price": 19.25
             }
           ],
           "options": [
@@ -837,13 +906,24 @@
                 "Beef",
                 "Chicken"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
+          ],
+          "tags": [
+            {"type": "nuts"},
+            {"type": "spicy"}
           ]
         },
         {
           "id": "K27",
           "name_chinese": "豉椒炒蜆",
-          "name_english": "Stir Fried Clams with Chili Black Bean Sauce",
+          "name_english": "Stir Fried Clam with Chili Black Bean Sauce",
           "pricing": [
             {
               "size": "default",
@@ -851,10 +931,18 @@
               "price": 19.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -869,10 +957,18 @@
               "price": 21.50
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -894,12 +990,18 @@
                 "Chicken",
                 "Beef"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 2
+              "type": "spicy"
             }
           ]
         },
@@ -914,10 +1016,18 @@
               "price": 16.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -1016,7 +1126,7 @@
         {
           "id": "K37",
           "name_chinese": "欖菜肉鬆/蝦醬/XO醬/蒜茸/馬拉盞 通菜",
-          "name_english": "Stir Fried Tung Choy with a Choice of Sauce",
+          "name_english": "Stir Fried Tung Choi with a Choice of Sauce",
           "pricing": [
             {
               "size": "default",
@@ -1028,12 +1138,23 @@
             {
               "title": "Choose a Sauce",
               "choices": [
-                "Minced Pork with Preserved Olive",
-                "Shrimp Paste",
-                "XO Sauce",
-                "Garlic",
-                "Belacan"
+                "Spicy Preserved Bean Curd Sauce",
+                "Dried Shrimp Paste",
+                "Garlic Sauce",
+                "Belachan Sauce"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1053,10 +1174,22 @@
               "title": "Choose a Sauce",
               "choices": [
                 "Fermented Bean Curd Sauce",
-                "Shrimp Paste",
-                "Garlic",
-                "Belacan"
+                "Dried Shrimp Paste",
+                "Garlic Sauce",
+                "Belachan Sauce"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1080,7 +1213,7 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 16.50
+              "price": 16.75
             }
           ]
         },
@@ -1095,6 +1228,20 @@
               "temp": "default",
               "price": 16.75
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
+            }
           ]
         },
         {
@@ -1106,7 +1253,7 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 16.75
+              "price": 16.99
             }
           ]
         },
@@ -1119,13 +1266,21 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 16.99
+              "price": 16.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -1152,10 +1307,18 @@
               "price": 15.75
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -1181,6 +1344,20 @@
               "temp": "default",
               "price": 17.99
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
+            }
           ]
         },
         {
@@ -1193,6 +1370,19 @@
               "temp": "default",
               "price": 15.50
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            { "type": "spicy"},
+            { "type": "nuts"}
           ]
         },
         {
@@ -1209,7 +1399,7 @@
             {
               "size": "Whole",
               "temp": "default",
-              "price": 38.75
+              "price": 34.75
             }
           ]
         },
@@ -1221,7 +1411,7 @@
             {
               "size": "Half",
               "temp": "default",
-              "price": 16.99
+              "price": 18.99
             },
             {
               "size": "Whole",
@@ -1229,10 +1419,18 @@
               "price": 34.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 2
+              "type": "spicy"
             }
           ]
         },
@@ -1250,7 +1448,7 @@
             {
               "size": "Whole",
               "temp": "default",
-              "price": 34.99
+              "price": 30.75
             }
           ]
         },
@@ -1262,12 +1460,12 @@
             {
               "size": "Half",
               "temp": "default",
-              "price": 17.99
+              "price": 18.50
             },
             {
               "size": "Whole",
               "temp": "default",
-              "price": 36.99
+              "price": 32.99
             }
           ]
         },
@@ -1284,7 +1482,7 @@
             {
               "size": "Whole",
               "temp": "default",
-              "price": 36.99
+              "price": 31.99
             }
           ]
         },
@@ -1298,6 +1496,19 @@
               "temp": "default",
               "price": 17.50
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {"type": "spicy"},   
+            {"type": "nuts"}
           ]
         },
         {
@@ -1309,6 +1520,20 @@
               "size": "default",
               "temp": "default",
               "price": 19.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1330,6 +1555,18 @@
                 "Beef",
                 "Chicken"
               ]
+            },         
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1376,13 +1613,7 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 19.99
-            }
-          ],
-          "tags": [
-            {
-              "type": "spicy",
-              "level": 2
+              "price": 16.99
             }
           ]
         },
@@ -1407,7 +1638,21 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 16.99
+              "price": 15.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1445,6 +1690,20 @@
               "temp": "default",
               "price": 17.50
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
+            }
           ]
         },
         {
@@ -1457,6 +1716,20 @@
               "size": "default",
               "temp": "default",
               "price": 11.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1519,7 +1792,7 @@
         {
           "id": "K69",
           "name_chinese": "京都豬扒",
-          "name_english": "Dried Fried Pork Chop",
+          "name_english": "Deep Fried Pork Chop",
           "pricing": [
             {
               "size": "default",
@@ -1537,6 +1810,20 @@
               "size": "default",
               "temp": "default",
               "price": 12.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1580,7 +1867,7 @@
             {
               "title": "Choose an item",
               "choices": [
-                "Chinese Oil Dough Fritter",
+                "Deep Fried Dough Fritter",
                 "Sweet Cruller"
               ]
             }
@@ -1608,12 +1895,6 @@
               "temp": "default",
               "price": 17.99
             }
-          ],
-          "tags": [
-            {
-              "type": "spicy",
-              "level": 1
-            }
           ]
         },
         {
@@ -1625,6 +1906,20 @@
               "size": "default",
               "temp": "default",
               "price": 28.99
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1639,10 +1934,18 @@
               "price": 18.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -1655,6 +1958,20 @@
               "size": "default",
               "temp": "default",
               "price": 22.50
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1723,10 +2040,18 @@
               "price": 18.75
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -1787,6 +2112,20 @@
               "size": "default",
               "temp": "default",
               "price": 18.75
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -1868,12 +2207,18 @@
                 "Beef",
                 "Chicken"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -1888,11 +2233,18 @@
               "price": 16.25
             }
           ],
-          "tags": [
+          "options": [
             {
-              "type": "spicy",
-              "level": 1
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
+          ],
+          "tags": [
+            {"type": "spicy"},
+            {"type": "nuts"}      
           ]
         },
         {
@@ -2017,6 +2369,15 @@
               "temp": "default",
               "price": 15.75
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                "Chicken",
+                "Beef"
+              ]
+            }
           ]
         },
         {
@@ -2068,11 +2429,16 @@
           ],
           "options": [
             {
-              "title": "Choose a style",
+              "title": "Choose a Spice",
               "choices": [
-                "Wet",
-                "Dry"
+                "Spicy",
+                "Mild"          
               ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
             }
           ]
         },
@@ -2098,6 +2464,20 @@
               "temp": "default",
               "price": 15.75
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {
+              "type": "spicy"
+            }
           ]
         },
         {
@@ -2122,6 +2502,19 @@
               "temp": "default",
               "price": 18.25
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {"type": "spicy"},
+            {"type": "tags"}
           ]
         },
         {
@@ -2134,6 +2527,19 @@
               "temp": "default",
               "price": 16.99
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+            {"type": "spicy"},
+            {"type": "tags"}
           ]
         },
         {
@@ -2147,10 +2553,18 @@
               "price": 15.75
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         }
@@ -2293,7 +2707,7 @@
             {
               "size": "default",
               "temp": "default",
-              "price": 14.50
+              "price": 15.25
             }
           ]
         },
@@ -2370,13 +2784,18 @@
                 "Chicken",
                 "Beef"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
-            }
+              "type": "spicy" }
           ]
         },
         {
@@ -2390,10 +2809,18 @@
               "price": 17.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -2408,10 +2835,18 @@
               "price": 18.99
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -2424,6 +2859,15 @@
               "size": "default",
               "temp": "default",
               "price": 14.25
+            }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
@@ -2499,10 +2943,18 @@
               "price": 13.50
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -2524,19 +2976,25 @@
                 "Chicken",
                 "Beef"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 2
+              "type": "spicy"
             }
           ]
         },
         {
           "id": "H24",
           "name_chinese": "沙嗲牛肉/雞肉/肉片飯",
-          "name_english": "Beef or Chicken or Pork with Satay",
+          "name_english": "Beef/Chicken/Pork with Satay",
           "pricing": [
             {
               "size": "default",
@@ -2552,19 +3010,25 @@
                 "Chicken",
                 "Pork"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
         {
           "id": "H25",
           "name_chinese": "豉椒牛肉/雞肉/肉片飯",
-          "name_english": "Beef or Chicken or Pork with Black Bean Sauce on Rice",
+          "name_english": "Beef/Chicken/Pork with Black Bean Sauce on Rice",
           "pricing": [
             {
               "size": "default",
@@ -2586,7 +3050,7 @@
         {
           "id": "H26",
           "name_chinese": "鮮茄牛肉/雞肉/肉片飯",
-          "name_english": "Beef or Chicken or Pork with Tomato on Rice",
+          "name_english": "Beef/Chicken/Pork with Tomato on Rice",
           "pricing": [
             {
               "size": "default",
@@ -2649,6 +3113,9 @@
               "temp": "default",
               "price": 16.75
             }
+          ],
+          "tags": [  
+              {"type": "nuts"} 
           ]
         },
         {
@@ -2673,6 +3140,19 @@
               "temp": "default",
               "price": 13.99
             }
+          ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
+          "tags": [
+              {"type": "popular"},   
+              {"type": "spicy"} 
           ]
         },
         {
@@ -2723,7 +3203,7 @@
             {
               "title": "Choose a Protein",
               "choices": [
-                "Minced Pork",
+                "Pork",
                 "Chicken"
               ]
             }
@@ -2740,10 +3220,18 @@
               "price": 13.50
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         }
@@ -2763,12 +3251,7 @@
           "name_english": "Lobster Super Bowl Congee",
           "pricing": [
             {
-              "size": "Small",
-              "temp": "default",
-              "price": 19.99
-            },
-            {
-              "size": "Large",
+              "size": "default",
               "temp": "default",
               "price": 40.25
             }
@@ -2780,14 +3263,9 @@
           "name_english": "Seafood Super Bowl Congee",
           "pricing": [
             {
-              "size": "Small",
+              "size": "default",
               "temp": "default",
-              "price": 10.25
-            },
-            {
-              "size": "Large",
-              "temp": "default",
-              "price": 20.25
+              "price": 19.99
             }
           ]
         },
@@ -2804,7 +3282,7 @@
             {
               "size": "Large",
               "temp": "default",
-              "price": 20.25
+              "price": 18.50
             }
           ]
         },
@@ -2838,7 +3316,7 @@
             {
               "size": "Large",
               "temp": "default",
-              "price": 19.99
+              "price": 18.99
             }
           ]
         },
@@ -2872,7 +3350,7 @@
             {
               "size": "Large",
               "temp": "default",
-              "price": 17.75
+              "price": 18.25
             }
           ]
         },
@@ -2935,7 +3413,7 @@
             {
               "size": "Small",
               "temp": "default",
-              "price": 9.99
+              "price": 9.25
             },
             {
               "size": "Large",
@@ -2977,10 +3455,18 @@
               "price": 17.25
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -3091,10 +3577,18 @@
               "price": 21.25
             }
           ],
+          "options": [
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
+            }
+          ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -3158,7 +3652,7 @@
             {
               "size": "Small",
               "temp": "default",
-              "price": 11.25
+              "price": 11.99
             },
             {
               "size": "Large",
@@ -3222,6 +3716,19 @@
               "temp": "default",
               "price": 21.25
             }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a Noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon", "price": 1.00 },
+                { "addOnName": "Instant Noodles", "price": 1.00 }
+              ]
+            }
           ]
         },
         {
@@ -3239,6 +3746,19 @@
               "temp": "default",
               "price": 20.25
             }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a Noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon", "price": 1.00 },
+                { "addOnName": "Instant Noodles", "price": 1.00 }
+              ]
+            }
           ]
         },
         {
@@ -3255,6 +3775,19 @@
               "price": 21.25
             }
           ],
+          "addOns":[
+            {
+              "title": "Choose a Noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon", "price": 1.00 },
+                { "addOnName": "Instant Noodles", "price": 1.00 }
+              ]
+            }
+          ], 
           "options": [
             {
               "title": "Choose a Protein",
@@ -3262,12 +3795,18 @@
                 "Chicken",
                 "Beef"
               ]
+            },
+            {
+              "title": "Choose a Spice",
+              "choices": [
+                "Spicy",
+                "Mild"          
+              ]
             }
           ],
           "tags": [
             {
-              "type": "spicy",
-              "level": 1
+              "type": "spicy"
             }
           ]
         },
@@ -3323,7 +3862,20 @@
             {
               "size": "Large",
               "temp": "default",
-              "price": 22.75
+              "price": 22.99
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a Noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon", "price": 1.00 },
+                { "addOnName": "Instant Noodles", "price": 1.00 }
+              ]
             }
           ]
         },
@@ -3341,6 +3893,19 @@
               "size": "Large",
               "temp": "default",
               "price": 20.25
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a Noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon", "price": 1.00 },
+                { "addOnName": "Instant Noodles", "price": 1.00 }
+              ]
             }
           ]
         }
