@@ -539,12 +539,7 @@ const limit = addOnGroupData.limit;
                         header.insertAdjacentElement('afterend', errorElement);
                     }
                 }
-                if (limit !== undefined) {
-                  const extraCostDisplay = document.createElement('div');
-                  extraCostDisplay.className = 'extra-cost-display';
-                  extraCostDisplay.textContent = `Maximum choice of ${limit} side dishes`;
-                  titleGroup.appendChild(extraCostDisplay);
-                }
+                
                 if (checkedCount > limit) {
                     // Prevent the action by un-checking the box
                     input.checked = false; 
