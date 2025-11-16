@@ -1,16 +1,11 @@
-// main.js
 
-// --- Import functions from your existing files ---
 import { Cart } from './cart.js';  
 import { mergeSort, filterBy } from './algorithms.js';
 
-// --- Import the V9 Firebase modules ---
-// We will import directly from the Firebase CDN for simplicity
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
-// --- STEP 1: ADD YOUR FIREBASE CONFIGURATION HERE ---
-// Replace with your actual config object from the Firebase console
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAd-LuABfQtKfugGXYY20_S1uwwyNV6ZVw",
@@ -24,6 +19,7 @@ const firebaseConfig = {
 
 // --- Initialize Firebase and Firestore ---
 let db; // Declare db here in the global scope
+
 try {
   const app = initializeApp(firebaseConfig);
   db = getFirestore(app); // Assign the database connection to the global db variable
@@ -96,10 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
           name: data.name_english || "Unnamed Item",
           name_chinese: data.name_chinese || "Unnamed Item",
           image: data.image,
-          price: data.pricing?.[0]?.price || 0.00, // Safely access nested price
+          price: data.pricing?.[0]?.price || 0.00, 
           category: data.category_english || "Misc",
           tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
-          options: data.options || [],
           addOns: data.addOns || [],
           pricing: data.pricing || [],
         };
@@ -120,20 +115,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Start fetching the data ---
   fetchMenuData();
   
-  // --- Rendering Logic (largely the same as before) ---
+  // --- Rendering Logic ---
   
   function setupCategoryButtons() {
     document.querySelectorAll('[data-category]').forEach(link => {
       link.addEventListener("click", event => {
         event.preventDefault(); 
         
-        // --- NEW: Add the centering logic here ---
+       
         if (menuNavSlider) {
             const sliderWidth = menuNavSlider.offsetWidth;
-            // The link is inside an <li>, which is what we need to measure.
             const linkListItem = link.parentElement;
-            
-            // Calculate the target scroll position to center the clicked list item.
             const targetScrollLeft = linkListItem.offsetLeft + (linkListItem.offsetWidth / 2) - (sliderWidth / 2);
     
             // Animate the scroll
@@ -142,9 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
               behavior: 'smooth'
             });
         }
-        // --- END of new logic ---
 
-        // The original logic continues as before
         handleCategoryClick(link.dataset.category);
       });
     });
@@ -169,10 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function createMenuItemElement(item) {
   console.log(item); 
     const MODIFIERS = {
-        spicy: { iconFile: '/docs/publicSite/svg/pepper.svg', title: 'Spicy' },
-        cold: { iconFile: '/docs/publicSite/svg/snowflake.svg', title: 'Cold/Iced' },
-        nuts: { iconFile: '/docs/publicSite/svg/peanut.svg', title: 'Peanuts' }
-        // Add more here easily! e.g., gluten-free: { emoji: '🚫🌾', title: 'Gluten-Free'}
+        spicy: { iconFile: 'svg/pepper.svg', title: 'Spicy' },
+        cold: { iconFile: 'svg/snowflake.svg', title: 'Cold/Iced' },
+        nuts: { iconFile: 'svg/peanut.svg', title: 'Peanuts' }
     };
 
 
@@ -255,6 +244,8 @@ function createMenuItemElement(item) {
 
     return link; // Return the link directly as the grid item
 }
+
+
 function renderSingleCategory(categoryName) {
   if (!menuContainer) return;
   menuContainer.innerHTML = '';
@@ -353,7 +344,7 @@ function openCustomizeModal(item) {
   const modalImage = document.getElementById('modal-image');
   const orderNotesTextarea = document.getElementById('order-notes');
   const scrollArea = document.getElementById('modal-scroll-area');
-
+  let selectedAddOnPrices = {};
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
   chineseTitle.textContent = item.name_chinese;
@@ -363,7 +354,7 @@ function openCustomizeModal(item) {
   if (orderNotesTextarea) {
       orderNotesTextarea.value = '';
   }
-
+  
   // --- HANDLE THE IMAGE ---
   if (item.image) {
     modalImage.src = 'graphics/' + item.image;
@@ -399,11 +390,9 @@ function openCustomizeModal(item) {
         optionGroupTitle = 'Size';
     }
 
-    
-    // --- END FIX ---
+
 
     const pricingTitle = document.createElement('h4');
-    // FIX: Use the dynamic title we just determined
     pricingTitle.textContent = optionGroupTitle;
     pricingGroup.appendChild(pricingTitle);
 
@@ -411,7 +400,7 @@ function openCustomizeModal(item) {
         const label = document.createElement('label');
         const radio = document.createElement('input');
         radio.type = 'radio';
-        // FIX: Use the dynamic group title for the name
+
         radio.name = optionGroupTitle;
         radio.value = priceOption[optionTypeKey]; 
         radio.dataset.price = priceOption.price;
@@ -440,76 +429,97 @@ function openCustomizeModal(item) {
     optionsContainer.appendChild(pricingGroup);
   }
 
-  if (item.addOns && item.addOns.length > 0) {
+if (item.addOns && item.addOns.length > 0) {
     item.addOns.forEach(addOnGroupData => {
+        // --- 1. SETUP THE GROUP CONTAINER ---
         const addOnGroup = document.createElement('div');
         addOnGroup.className = 'option-group';
 
+        // --- THE FIX IS HERE ---
+        // Read from 'freeToppingLimit' but still write to 'data-free-limit'
+        // This makes the HTML attribute consistent for the validation code to read.
+        if (addOnGroupData.freeToppingLimit) {
+            addOnGroup.dataset.freeLimit = addOnGroupData.freeToppingLimit;
+        }
+        
         const addOnTitle = document.createElement('h4');
         addOnTitle.textContent = addOnGroupData.title;
         addOnGroup.appendChild(addOnTitle);
 
+        // --- Use the correct variable name from your JSON ---
+        const freeLimit = addOnGroupData.freeToppingLimit; // Corrected to match your data
+        const postLimitPrice = addOnGroupData.postLimitPrice;
+        
+        // This static text logic is now correct based on your request
+        if (freeLimit !== undefined) {
+          const extraCostDisplay = document.createElement('div');
+          extraCostDisplay.className = 'extra-cost-display';
+          // Using a more informative static text
+          extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
+          addOnGroup.appendChild(extraCostDisplay);
+        }
+
+        // --- 2. CREATE AND ADD ALL THE INPUT OPTIONS ---
+        const inputType = addOnGroupData.multiSelect ? 'checkbox' : 'radio';
         addOnGroupData.choices.forEach(choice => {
+            const choiceName = (typeof choice === 'object') ? choice.addOnName : choice;
+            const choicePrice = (freeLimit !== undefined) ? 0 : ((typeof choice === 'object' && choice.price) ? choice.price : 0);
+            
             const label = document.createElement('label');
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = addOnGroupData.title; // Group add-ons
-            radio.value = choice.addOnName;
-            // Use 0 if price is not specified (free add-on)
-            radio.dataset.price = choice.price || 0; 
+            const input = document.createElement('input');
+            
+            input.type = inputType; 
+            input.name = addOnGroupData.title;
+            input.value = choiceName;
+            input.dataset.price = choicePrice;
 
-            label.appendChild(radio);
+            label.appendChild(input);
+            label.append(` ${choiceName}`);
 
-            label.append(` ${choice.addOnName}`);
-
-            // 2. If there's a price, create a separate span for it.
-            if (choice.price && choice.price > 0) {
+            if (choicePrice > 0) {
                 const priceSpan = document.createElement('span');
-                priceSpan.className = 'price-modifier'; // Apply our new CSS class
-                priceSpan.textContent = `(+$${choice.price.toFixed(2)})`;
-                label.appendChild(priceSpan); // Add the styled span to the label
+                priceSpan.className = 'price-modifier';
+                priceSpan.textContent = `(+$${choicePrice.toFixed(2)})`;
+                label.appendChild(priceSpan);
             }
             addOnGroup.appendChild(label);
         });
 
-        // Add an event listener to this specific group
+        // --- 3. ADD THE EVENT LISTENER TO THE COMPLETED GROUP ---
         addOnGroup.addEventListener('change', (event) => {
-            if (event.target.type === 'radio' && event.target.checked) {
-                // When an add-on is selected, update the addOnPrice and recalculate total
-                // This assumes only one add-on group for now, but can be expanded
-                addOnPrice = parseFloat(event.target.dataset.price);
-                updateTotalPrice();
+            const input = event.target;
+            const groupTitle = input.name;
+            const groupElement = input.closest('.option-group');
+
+            // This logic is correct because 'freeLimit' and 'postLimitPrice' are correctly defined above
+            if (freeLimit !== undefined && postLimitPrice !== undefined && groupElement) {
+                const checkedCount = groupElement.querySelectorAll('input[type="checkbox"]:checked').length;
+                const extraItems = Math.max(0, checkedCount - freeLimit);
+                const groupPrice = extraItems * postLimitPrice;
+                selectedAddOnPrices[groupTitle] = groupPrice;
+            } else {
+                const price = parseFloat(input.dataset.price);
+                if (input.type === 'checkbox') {
+                    selectedAddOnPrices[groupTitle] = selectedAddOnPrices[groupTitle] || 0;
+                    if (input.checked) {
+                        selectedAddOnPrices[groupTitle] += price;
+                    } else {
+                        selectedAddOnPrices[groupTitle] -= price;
+                    }
+                } else if (input.type === 'radio') {
+                    selectedAddOnPrices[groupTitle] = price;
+                }
             }
+
+            addOnPrice = Object.values(selectedAddOnPrices).reduce((sum, current) => sum + current, 0);
+            updateTotalPrice();
         });
 
+        // --- 4. ADD THE GROUP TO THE MAIN CONTAINER ---
         optionsContainer.appendChild(addOnGroup);
     });
-  }
-  updateTotalPrice();
-  // --- HANDLE OTHER OPTIONS ---
-  if (item.options && item.options.length > 0) {
-    item.options.forEach(opt => {
-      const optionGroup = document.createElement('div');
-      optionGroup.className = 'option-group';
-      const optionTitle = document.createElement('h4');
-      optionTitle.textContent = opt.title;
-      optionGroup.appendChild(optionTitle);
-      opt.choices.forEach((choice, index) => {
-        const label = document.createElement('label');
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = opt.title;
-        radio.value = choice;
-        label.appendChild(radio);
-        label.append(` ${choice}`);
-        optionGroup.appendChild(label);
-      });
-      optionsContainer.appendChild(optionGroup);
-    });
-    
 }
-
-
+  updateTotalPrice();
   updateCartButtonPrice(); // Update button with initial price
   customizeModal.classList.remove('hidden');
   requestAnimationFrame(() => {
@@ -530,7 +540,7 @@ function openCustomizeModal(item) {
   });
   
   if(decreaseBttn) decreaseBttn.addEventListener("click", () => {
-    if (amount > 1) amount--; // Don't let amount go below 1 in the modal
+    if (amount > 1) amount--; 
     updateCartButtonPrice();
     updateQuantityDisplay();
   });
@@ -540,7 +550,6 @@ function openCustomizeModal(item) {
       return; 
     }
 
-    // --- First, remove any old error messages from the previous attempt ---
     const oldErrors = document.querySelectorAll('#customOptions .validation-error');
     oldErrors.forEach(error => error.remove());
 
@@ -551,32 +560,54 @@ function openCustomizeModal(item) {
     // --- NEW: Variable to store a reference to the first error element ---
     let firstErrorElement = null;
 
-    // --- VALIDATION AND DATA GATHERING LOOP ---
     optionGroups.forEach(group => {
-      const titleElement = group.querySelector('h4');
-      const groupTitle = titleElement.textContent;
-      const selectedOption = group.querySelector('input[type="radio"]:checked');
-      
-      if (selectedOption) {
-        // A selection was made for this group.
-        customizations[groupTitle] = selectedOption.value;
-      } else {
-        // NO selection was made, the form is invalid.
-        isFormValid = false; 
-        
-        // --- Create and insert the error message div ---
+    const titleElement = group.querySelector('h4');
+    const groupTitle = titleElement.textContent;
+    let isValidForThisGroup = true;
+    let errorMessage = '';
+
+    // Check for a required minimum selection on checkbox groups
+    const requiredMinimum = parseInt(group.dataset.freeLimit, 10);
+    if (!isNaN(requiredMinimum) && requiredMinimum > 0) {
+        const checkedCount = group.querySelectorAll('input[type="checkbox"]:checked').length;
+        if (checkedCount < requiredMinimum) {
+            isValidForThisGroup = false;
+            errorMessage = `You must select at least ${requiredMinimum} options.`;
+        } else {
+            // It's valid, so gather the selected checkbox values
+            const selectedCheckboxes = group.querySelectorAll('input[type="checkbox"]:checked');
+            customizations[groupTitle] = Array.from(selectedCheckboxes).map(cb => cb.value);
+        }
+    } else {
+        // Check for a required selection on radio button groups
+        const radioInputs = group.querySelectorAll('input[type="radio"]');
+        if (radioInputs.length > 0) { // Only validate if it IS a radio group
+            const selectedRadio = group.querySelector('input[type="radio"]:checked');
+            if (selectedRadio) {
+                customizations[groupTitle] = selectedRadio.value;
+            } else {
+                isValidForThisGroup = false;
+                errorMessage = 'You must select an option.';
+            }
+        }
+    }
+
+    // If validation failed for this group, show the error message
+    if (!isValidForThisGroup) {
+        isFormValid = false; // Set the overall form validity to false
+
         const errorDiv = document.createElement('div');
-        errorDiv.className = 'validation-error'; // Apply our CSS style
-        errorDiv.textContent = 'You must select an option.';
+        errorDiv.className = 'validation-error';
+        errorDiv.textContent = errorMessage;
         
         titleElement.insertAdjacentElement('afterend', errorDiv);
         
-        // --- NEW: If this is the first error we've found, save it for scrolling ---
+        // Keep track of the first error to scroll to it later
         if (!firstErrorElement) {
-          firstErrorElement = errorDiv;
+            firstErrorElement = errorDiv;
         }
-      }
-    });
+    }
+});
 
     // --- MODIFIED: STOP AND SCROLL IF VALIDATION FAILED ---
     if (!isFormValid) {

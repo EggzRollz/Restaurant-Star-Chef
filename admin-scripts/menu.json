@@ -75,6 +75,46 @@
               "price": 4.00
             }
           ]
+        },
+        {
+          "id": "SD7",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose at least 2 toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -224,12 +264,12 @@
               "price": 5.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a drink",
               "choices": [
-                "Coke",
-                "Sprite"
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" }
               ]
             }
           ]
@@ -365,7 +405,7 @@
               "price": 7.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a flavor",
               "choices": [
@@ -390,7 +430,7 @@
               "price": 7.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a flavor",
               "choices": [
@@ -415,14 +455,14 @@
               "price": 3.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a soft drink",
               "choices": [
-                "Coke",
-                "Sprite",
-                "Delt Coke",
-                "Ginger Ale"
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" }
               ]
             }
           ],
@@ -463,12 +503,12 @@
               "price": 45.99
             }
           ],
-         "options": [
+         "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -516,12 +556,12 @@
               "price": 28.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -640,12 +680,12 @@
               "price": 22.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice level",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -665,12 +705,12 @@
               "price": 19.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ]
@@ -686,12 +726,12 @@
               "price": 19.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -712,7 +752,7 @@
               "price": 19.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Sauce",
               "choices": [
@@ -722,10 +762,10 @@
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -785,7 +825,7 @@
               "price": 19.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Sauce",
               "choices": [
@@ -823,12 +863,12 @@
               "price": 18.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -844,12 +884,12 @@
               "price": 19.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -878,12 +918,12 @@
               "price": 17.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -899,19 +939,19 @@
               "price": 18.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -931,12 +971,12 @@
               "price": 19.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -957,12 +997,12 @@
               "price": 21.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -983,19 +1023,19 @@
               "price": 17.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1016,12 +1056,12 @@
               "price": 16.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1079,12 +1119,12 @@
               "price": 16.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -1100,12 +1140,12 @@
               "price": 16.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -1134,7 +1174,7 @@
               "price": 18.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Sauce",
               "choices": [
@@ -1145,10 +1185,10 @@
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1169,7 +1209,7 @@
               "price": 15.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Sauce",
               "choices": [
@@ -1180,10 +1220,10 @@
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1229,12 +1269,12 @@
               "price": 16.75
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1269,12 +1309,12 @@
               "price": 16.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1307,12 +1347,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1345,12 +1385,12 @@
               "price": 17.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1371,12 +1411,12 @@
               "price": 15.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1419,12 +1459,12 @@
               "price": 34.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1497,12 +1537,12 @@
               "price": 17.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1522,12 +1562,12 @@
               "price": 19.25
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1548,19 +1588,19 @@
               "price": 17.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             },         
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1582,7 +1622,7 @@
               "price": 15.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Vegetable",
               "choices": [
@@ -1641,12 +1681,12 @@
               "price": 15.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1691,12 +1731,12 @@
               "price": 17.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1718,12 +1758,12 @@
               "price": 11.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1745,12 +1785,12 @@
               "price": 15.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Pork"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Pork" }
               ]
             }
           ]
@@ -1779,12 +1819,12 @@
               "price": 17.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -1812,12 +1852,12 @@
               "price": 12.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1863,7 +1903,7 @@
               "price": 3.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose an item",
               "choices": [
@@ -1908,12 +1948,12 @@
               "price": 28.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1934,12 +1974,12 @@
               "price": 18.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -1960,12 +2000,12 @@
               "price": 22.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2040,12 +2080,12 @@
               "price": 18.75
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2114,12 +2154,12 @@
               "price": 18.75
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2200,19 +2240,19 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2233,12 +2273,12 @@
               "price": 16.25
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2271,12 +2311,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -2316,12 +2356,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -2349,12 +2389,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -2370,12 +2410,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -2427,12 +2467,12 @@
               "price": 15.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2465,12 +2505,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2503,12 +2543,12 @@
               "price": 18.25
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2528,12 +2568,12 @@
               "price": 16.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2553,12 +2593,12 @@
               "price": 15.75
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2722,13 +2762,13 @@
               "price": 14.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken",
-                "Pork"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" },
+                { "addOnName": "Pork" }
               ]
             }
           ]
@@ -2756,12 +2796,12 @@
               "price": 14.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
@@ -2777,19 +2817,19 @@
               "price": 15.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2809,12 +2849,12 @@
               "price": 17.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2835,12 +2875,12 @@
               "price": 18.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2861,12 +2901,12 @@
               "price": 14.25
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2888,12 +2928,12 @@
               "price": 14.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Pork"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Pork" }
               ]
             }
           ]
@@ -2909,13 +2949,13 @@
               "price": 13.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Pork",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -2943,12 +2983,12 @@
               "price": 13.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -2969,19 +3009,19 @@
               "price": 14.25
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3002,20 +3042,20 @@
               "price": 13.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken",
-                "Pork"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" },
+                { "addOnName": "Pork" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3036,13 +3076,13 @@
               "price": 13.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken",
-                "Pork"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" },
+                { "addOnName": "Pork" }
               ]
             }
           ]
@@ -3058,13 +3098,13 @@
               "price": 13.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken",
-                "Pork"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" },
+                { "addOnName": "Pork" }
               ]
             }
           ]
@@ -3093,12 +3133,12 @@
               "price": 15.99
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose one",
               "choices": [
-                "Beef Brisket",
-                "Tendon"
+                { "addOnName": "Beef Brisket" },
+                { "addOnName": "Tendon" }
               ]
             }
           ]
@@ -3141,12 +3181,12 @@
               "price": 13.99
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3178,12 +3218,12 @@
               "price": 18.75
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Beef",
-                "Chicken"
+                { "addOnName": "Beef" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -3199,12 +3239,12 @@
               "price": 13.50
             }
           ],
-          "options": [
+          "addOns": [
             {
               "title": "Choose a Protein",
               "choices": [
-                "Pork",
-                "Chicken"
+                { "addOnName": "Pork" },
+                { "addOnName": "Chicken" }
               ]
             }
           ]
@@ -3220,12 +3260,12 @@
               "price": 13.50
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3455,12 +3495,12 @@
               "price": 17.25
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3577,12 +3617,12 @@
               "price": 21.25
             }
           ],
-          "options": [
+          "addOns": [
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3786,21 +3826,19 @@
                 { "addOnName": "Udon", "price": 1.00 },
                 { "addOnName": "Instant Noodles", "price": 1.00 }
               ]
-            }
-          ], 
-          "options": [
+            },
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             },
             {
-              "title": "Choose a Spice",
+              "title": "Choose a spice",
               "choices": [
-                "Spicy",
-                "Mild"          
+                { "addOnName": "Spicy" },
+                { "addOnName": "Mild" }          
               ]
             }
           ],
@@ -3837,14 +3875,12 @@
                 { "addOnName": "Udon", "price": 1.00 },
                 { "addOnName": "Instant Noodles", "price": 1.00 }
               ]
-            }
-          ], 
-          "options": [
+            },
             {
               "title": "Choose a Protein",
               "choices": [
-                "Chicken",
-                "Beef"
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
               ]
             }
           ]
