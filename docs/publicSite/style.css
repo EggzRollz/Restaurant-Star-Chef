@@ -1516,6 +1516,7 @@ hr.divider {
   margin-top: -5px;
   margin-bottom: 5px;
 }
+
 .defaultPrice{
   display: flex;
   color:black;
@@ -1629,6 +1630,18 @@ hr.divider {
     font-size: 0.9em;         /* Slightly smaller font */
     font-weight: bold;
 }
+.limit-error {
+  background-color: #ffebe6; /* A light red background */
+    color: #c00;             /* A dark red text color */
+    border: 1px solid #c00;   /* A dark red border */
+    border-radius: 4px;       /* Slightly rounded corners */
+    padding: 8px 12px;        /* Some space inside the box */
+    margin-top: 5px;          /* A little space below the title */
+    margin-bottom: 10px;      /* A little space above the options */
+    font-size: 0.9em;         /* Slightly smaller font */
+    font-weight: bold;
+}
+
 .custom-options {
   flex: 1;                       /* takes up remaining space */
   overflow-y: auto;        /* ensures content doesn’t hide behind bottom bar */
@@ -1705,9 +1718,78 @@ hr.divider {
   font-size: 16px;
   letter-spacing: 0.5px;
 }
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 4px; /* Optional: give it some spacing */
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  overflow-x: hidden; 
+}
 
+/* The content area that will be hidden/shown */
+.accordion-content {
+  max-height: 0; /* Start collapsed */
+  overflow: hidden;
+  transition: max-height 0.3s ease-out; /* Smooth transition */
+  padding-left: 10px; /* Indent content slightly */
+  
+}
+.accordion-title-group {
+  display: flex;
+  flex-direction: column; /* Stack the title and subtitle vertically */
+  gap: 10px;              /* A small space between the title and subtitle */
+}
+
+/* Adjust the h4 inside the new group to have no extra margin */
+.accordion-title-group h4 {
+  margin: 0;
+}
+.accordion-content label {
+  margin-top: -5px;
+ 
+}
+
+/* The "open" state for the accordion */
+.option-group.is-accordion.is-open .accordion-content {
+  max-height: 600px; /* A large enough value to show all content */
+  transition: max-height 0.4s ease-in;
+}
+
+/* The toggle icon (+) */
+.accordion-toggle-icon {
+  font-size: 1.5em;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+.accordion-toggle-icon::before {
+    content: '+';
+    display: inline-block;
+    color: #555;
+
+}
+
+/* Change the icon to (-) when open */
+.option-group.is-accordion.is-open .accordion-toggle-icon {
+    transform: rotate(45deg);
+}
+
+/* Remove default margin from the h4 inside the accordion header */
+.accordion-header h4 {
+    margin: 0;
+}
 .site-header {
   position: relative;
+}
+.is-accordion .accordion-header {
+  padding-bottom: 10px; /* Explicitly remove any bottom margin from the header */
+  padding-top: 10px;
+}
+
+.is-accordion .accordion-content {
+  margin-top: 0;    /* Explicitly remove any top margin from the content */
 }
 
 .checkout-background {

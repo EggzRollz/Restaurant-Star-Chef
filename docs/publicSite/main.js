@@ -289,7 +289,7 @@ function renderAllItemsByCategory() {
   // Display order - these should match your tag names
   const categoryOrder = [
     "Popular",      // Tag: popular
-    "Sides",        // Tag: sides
+    "Fish Soup Noodle",        // Tag: sides
     "Congee",       // Tag: congee
     "Fried Noodle", // Tag: fried noodle
     "Rice",         // Tag: rice
@@ -327,11 +327,9 @@ function renderAllItemsByCategory() {
     }
   });
 }
-
 function openCustomizeModal(item) {
   console.log("Opening modal for item:", item);
   currentItem = item;
-  // currentPrice will be set by the radio buttons
   amount = 1;
   updateQuantityDisplay();
   let basePrice = 0;
@@ -348,14 +346,14 @@ function openCustomizeModal(item) {
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
   chineseTitle.textContent = item.name_chinese;
-  optionsContainer.innerHTML = ''; // Clear old options
-  defaultPrice.textContent = ''; // Clear the old default price
+  optionsContainer.innerHTML = ''; 
+  defaultPrice.textContent = ''; 
 
   if (orderNotesTextarea) {
       orderNotesTextarea.value = '';
   }
   
-  // --- HANDLE THE IMAGE ---
+  // --- (Image and Pricing sections are unchanged) ---
   if (item.image) {
     modalImage.src = 'graphics/' + item.image;
     modalImage.alt = item.name;
@@ -365,104 +363,137 @@ function openCustomizeModal(item) {
     modalImage.alt = `A placeholder image for the ${item.category} category`
   }
   modalImage.style.display = 'block';
+
   const updateTotalPrice = () => {
     currentPrice = basePrice + addOnPrice;
-    // This function should update the 'Add to Cart' button's price display
     updateCartButtonPrice(); 
   };
-  // --- HANDLE PRICING (SIZES / TEMPERATURES) ---
+
   if (item.pricing.length === 1) {
-    // If there's only one price, display it and set it
     defaultPrice.textContent = "$ " + item.pricing[0].price.toFixed(2);
     basePrice = item.pricing[0].price;
-
   } else if (item.pricing && item.pricing.length > 0) {
     const pricingGroup = document.createElement('div');
     pricingGroup.className = 'option-group';
-    
-    // --- FIX: Determine the type of option (Size or Temperature) ---
-    let optionTypeKey = 'temp'; // Default to 'temp'
-    let optionGroupTitle = 'Temperature'; // Default title
-
-    // Check the first pricing option to see if it's based on size
+    let optionTypeKey = 'temp'; 
+    let optionGroupTitle = 'Temperature';
     if (item.pricing[0].size && item.pricing[0].size !== 'default') {
         optionTypeKey = 'size';
         optionGroupTitle = 'Size';
     }
-
-
-
     const pricingTitle = document.createElement('h4');
     pricingTitle.textContent = optionGroupTitle;
     pricingGroup.appendChild(pricingTitle);
-
     item.pricing.forEach(priceOption => {
         const label = document.createElement('label');
         const radio = document.createElement('input');
-        radio.type = 'radio';
-
-        radio.name = optionGroupTitle;
-        radio.value = priceOption[optionTypeKey]; 
-        radio.dataset.price = priceOption.price;
-
-        
-
+        radio.type = 'radio'; radio.name = optionGroupTitle;
+        radio.value = priceOption[optionTypeKey]; radio.dataset.price = priceOption.price;
         label.appendChild(radio);
-        // FIX: Display the correct option value (size or temp) to the user
         label.append(` ${priceOption[optionTypeKey]}`);
-
-          // 2. Then, create and add the styled price span.
-          const priceSpan = document.createElement('span');
-          priceSpan.className = 'price-modifier'; // Use the same CSS class
-          priceSpan.textContent = `($${priceOption.price.toFixed(2)})`;
-          label.appendChild(priceSpan); 
-                  pricingGroup.appendChild(label);
-        });
-
+        const priceSpan = document.createElement('span');
+        priceSpan.className = 'price-modifier'; priceSpan.textContent = `($${priceOption.price.toFixed(2)})`;
+        label.appendChild(priceSpan); 
+        pricingGroup.appendChild(label);
+    });
     pricingGroup.addEventListener('change', (event) => {
         if (event.target.type === 'radio' && event.target.checked) {
             basePrice = parseFloat(event.target.dataset.price);
             updateTotalPrice();
         }
     });
-
     optionsContainer.appendChild(pricingGroup);
   }
+  // --- HANDLE ADD-ONS ---
+  if (item.addOns && item.addOns.length > 0) {
+    const isComboItem = item.tags && item.tags.some(tag => tag.toLowerCase() === 'combo');
 
-if (item.addOns && item.addOns.length > 0) {
     item.addOns.forEach(addOnGroupData => {
-        // --- 1. SETUP THE GROUP CONTAINER ---
         const addOnGroup = document.createElement('div');
         addOnGroup.className = 'option-group';
 
-        // --- THE FIX IS HERE ---
-        // Read from 'freeToppingLimit' but still write to 'data-free-limit'
-        // This makes the HTML attribute consistent for the validation code to read.
+        let headerContainer;
+        let optionsListContainer;
+        let titleGroup;
+        const addOnTitle = document.createElement('h4');
+        addOnTitle.textContent = addOnGroupData.title;
+
+        if (isComboItem) {
+            addOnGroup.classList.add('is-accordion');
+            headerContainer = document.createElement('div');
+            headerContainer.className = 'accordion-header';
+            const toggleIcon = document.createElement('span');
+            toggleIcon.className = 'accordion-toggle-icon';
+            const titleGroup = document.createElement('div');
+            titleGroup.className = 'accordion-title-group';
+            titleGroup.appendChild(addOnTitle);
+
+            const freeLimit = addOnGroupData.freeToppingLimit;
+            const postLimitPrice = addOnGroupData.postLimitPrice;
+            if (freeLimit !== undefined) {
+                const extraCostDisplay = document.createElement('div');
+                extraCostDisplay.className = 'extra-cost-display';
+                extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
+                titleGroup.appendChild(extraCostDisplay);
+            }
+            
+
+const limit = addOnGroupData.limit;
+        if (limit !== undefined) {
+            const limitTextDisplay = document.createElement('div');
+            limitTextDisplay.className = 'extra-cost-display'; // Re-use existing style
+            limitTextDisplay.textContent = `Maximum choice of ${limit}.`;
+            titleGroup.appendChild(limitTextDisplay);
+        }
+        // *** MOVED AND CORRECTED SECTION END ***
+
+        headerContainer.appendChild(titleGroup);
+        headerContainer.appendChild(toggleIcon);
+        
+        optionsListContainer = document.createElement('div');
+        optionsListContainer.className = 'accordion-content';
+
+        headerContainer.addEventListener('click', () => {
+            addOnGroup.classList.toggle('is-open');
+        });
+        
+        addOnGroup.appendChild(headerContainer);
+        addOnGroup.appendChild(optionsListContainer); 
+
+    } else {
+        headerContainer = addOnGroup; 
+        optionsListContainer = addOnGroup; 
+        headerContainer.appendChild(addOnTitle);
+        
+        const freeLimit = addOnGroupData.freeToppingLimit;
+        const postLimitPrice = addOnGroupData.postLimitPrice;
+        if (freeLimit !== undefined) {
+            const extraCostDisplay = document.createElement('div');
+            extraCostDisplay.className = 'extra-cost-display';
+            extraCostDisplay.textContent = `Includes 2 free toppings, +$${postLimitPrice.toFixed(2)} for additional selections.`;
+            optionsListContainer.appendChild(extraCostDisplay);
+        }
+
+        // *** MOVED AND CORRECTED SECTION START (for Non-Combo Items) ***
+        const limit = addOnGroupData.limit;
+        if (limit !== undefined) {
+            const limitTextDisplay = document.createElement('div');
+            limitTextDisplay.className = 'extra-cost-display';
+            limitTextDisplay.textContent = `Maximum choice of ${limit}.`;
+            // Append it right after the title
+            optionsListContainer.appendChild(limitTextDisplay);
+        }
+        // *** MOVED AND CORRECTED SECTION END ***
+    }
         if (addOnGroupData.freeToppingLimit) {
             addOnGroup.dataset.freeLimit = addOnGroupData.freeToppingLimit;
         }
-        
-        const addOnTitle = document.createElement('h4');
-        addOnTitle.textContent = addOnGroupData.title;
-        addOnGroup.appendChild(addOnTitle);
 
-        // --- Use the correct variable name from your JSON ---
-        const freeLimit = addOnGroupData.freeToppingLimit; // Corrected to match your data
-        const postLimitPrice = addOnGroupData.postLimitPrice;
-        
-        // This static text logic is now correct based on your request
-        if (freeLimit !== undefined) {
-          const extraCostDisplay = document.createElement('div');
-          extraCostDisplay.className = 'extra-cost-display';
-          // Using a more informative static text
-          extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
-          addOnGroup.appendChild(extraCostDisplay);
-        }
-
-        // --- 2. CREATE AND ADD ALL THE INPUT OPTIONS ---
         const inputType = addOnGroupData.multiSelect ? 'checkbox' : 'radio';
         addOnGroupData.choices.forEach(choice => {
             const choiceName = (typeof choice === 'object') ? choice.addOnName : choice;
+            const freeLimit = addOnGroupData.freeToppingLimit;
+
             const choicePrice = (freeLimit !== undefined) ? 0 : ((typeof choice === 'object' && choice.price) ? choice.price : 0);
             
             const label = document.createElement('label');
@@ -482,16 +513,54 @@ if (item.addOns && item.addOns.length > 0) {
                 priceSpan.textContent = `(+$${choicePrice.toFixed(2)})`;
                 label.appendChild(priceSpan);
             }
-            addOnGroup.appendChild(label);
+            optionsListContainer.appendChild(label);
         });
 
-        // --- 3. ADD THE EVENT LISTENER TO THE COMPLETED GROUP ---
         addOnGroup.addEventListener('change', (event) => {
             const input = event.target;
             const groupTitle = input.name;
             const groupElement = input.closest('.option-group');
+            
+            // *** NEW VALIDATION SECTION START ***
+            const limit = addOnGroupData.limit;
+            
+            // This validation only applies to multi-select checkboxes with a defined limit.
+            if (input.type === 'checkbox' && limit !== undefined) {
+                const checkedCount = groupElement.querySelectorAll('input[type="checkbox"]:checked').length;
+                
+                // Find or create the error message element for this group
+                let errorElement = groupElement.querySelector('.limit-error');
+                if (!errorElement) {
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'limit-error';
+                    // Insert it right after the title/header for visibility
+                    const header = groupElement.querySelector('h4') || groupElement.querySelector('.accordion-header');
+                    if (header) {
+                        header.insertAdjacentElement('afterend', errorElement);
+                    }
+                }
+                if (limit !== undefined) {
+                  const extraCostDisplay = document.createElement('div');
+                  extraCostDisplay.className = 'extra-cost-display';
+                  extraCostDisplay.textContent = `Maximum choice of ${limit} side dishes`;
+                  titleGroup.appendChild(extraCostDisplay);
+                }
+                if (checkedCount > limit) {
+                    // Prevent the action by un-checking the box
+                    input.checked = false; 
+                    // Display the error
+                    errorElement.textContent = `You can only select up to ${limit} items.`;
+                    errorElement.style.display = 'block';
+                } else {
+                    // If the user is within the limit, hide the error message
+                    errorElement.style.display = 'none';
+                }
+            }
+            // *** NEW VALIDATION SECTION END ***
 
-            // This logic is correct because 'freeLimit' and 'postLimitPrice' are correctly defined above
+            const freeLimit = addOnGroupData.freeToppingLimit;
+            const postLimitPrice = addOnGroupData.postLimitPrice;
+
             if (freeLimit !== undefined && postLimitPrice !== undefined && groupElement) {
                 const checkedCount = groupElement.querySelectorAll('input[type="checkbox"]:checked').length;
                 const extraItems = Math.max(0, checkedCount - freeLimit);
@@ -514,13 +583,13 @@ if (item.addOns && item.addOns.length > 0) {
             addOnPrice = Object.values(selectedAddOnPrices).reduce((sum, current) => sum + current, 0);
             updateTotalPrice();
         });
-
-        // --- 4. ADD THE GROUP TO THE MAIN CONTAINER ---
+        
         optionsContainer.appendChild(addOnGroup);
     });
-}
+  }
+
   updateTotalPrice();
-  updateCartButtonPrice(); // Update button with initial price
+  updateCartButtonPrice(); 
   customizeModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     if (scrollArea) {

@@ -2,84 +2,12 @@
   "menu": [
     {
       "category_name_chinese": "配菜",
-      "category_name_english": "SIDES",
-      "items": [
+      "category_name_english": "FISH SOUP NOODLES",
+      "items": [     
         {
-          "id": "SD1",
-          "name_chinese": "蜜汁煎餐肉*****",
-          "name_english": "Luncheon",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 4.00
-            }
-          ]
-        },
-        {
-          "id": "SD2",
-          "name_chinese": "蜜汁煎餐肉******",
-          "name_english": "Pan Fried Sausage with Honey Glaze",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 4.00
-            }
-          ]
-        },
-        {
-          "id": "SD3",
-          "name_chinese": "炸豬扒",
-          "name_english": "Fried Pork Chop",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 4.00
-            }
-          ]
-        },
-        {
-          "id": "SD4",
-          "name_chinese": "炸雞翼",
-          "name_english": "Deep Fried Chicken Wing",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 4.00
-            }
-          ]
-        },
-        {
-          "id": "SD5",
-          "name_chinese": "炸魚柳********",
-          "name_english": "Deep Fried Fish Fillet",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 4.00
-            }
-          ]
-        },
-        {
-          "id": "SD6",
+          "id": "FSH1",
           "name_chinese": "炸魚柳*****",
-          "name_english": "Pan Fried Boneless Chicken",
-          "pricing": [
-            {
-              "size": "default",
-              "temp": "default",
-              "price": 4.00
-            }
-          ]
-        },
-        {
-          "id": "SD7",
-          "name_chinese": "炸魚柳*****",
-          "name_english": "Combo",
+          "name_english": "Original Fish Soup combo",
           "pricing": [
             {
               "size": "default",
@@ -100,10 +28,91 @@
               ]
             },
             {
-              "title": "Choose at least 2 toppings",
+              "title": "Choose toppings",
               "multiSelect": true, 
               "freeToppingLimit": 2,
               "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00},
+                { "addOnName": "Pan Fried Sausage with Honey Glaze","price": 4.00},
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"}    
+          ]
+        },
+        {
+          "id": "FSH2",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Tomato & Pumpkin Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
               "choices": [               
                 { "addOnName": "Thick Vermicelli" },
                 { "addOnName": "Rice Noodles" },
@@ -113,11 +122,758 @@
                 { "addOnName": "Instant Noodles" },
                 { "addOnName": "Rice" }
               ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
             }
+          ],
+          "tags":[
+            {"type": "combo"}    
+          ]
+        },{
+          "id": "FSH3",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Parsley & Preserved Egg Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"}    
+          ]
+        },
+        {
+          "id": "FSH4",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Ginko & Pepper Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"},
+            {"type": "spicy"}     
+          ]
+        },{
+          "id": "FSH5",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Chaozhou Style Dried Fish & Minced Pork Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"}    
+          ]
+        },
+        {
+          "id": "FSH6",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Malay Laksa Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"},    
+            {"type": "spicy"} 
+          ]
+        },{
+          "id": "FSH7",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Szezhuan Spicy Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"}, 
+            {"type": "spicy"}    
+          ]
+        },
+        {
+          "id": "FSH8",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Peanut Sauce & Chilli Fish SoupCombo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"},
+            {"type": "spicy"}, 
+            {"type": "nuts"}    
+          ]
+        },
+        {
+          "id": "FSH9",
+          "name_chinese": "炸魚柳*****",
+          "name_english": "Thai Tom Yum Goong Fish Soup Combo",
+          "pricing": [
+            {
+              "size": "default",
+              "price": 16.50
+            }
+          ],
+          "addOns":[
+            {
+              "title": "Choose a noodle", 
+              "choices": [               
+                { "addOnName": "Thick Vermicelli" },
+                { "addOnName": "Rice Noodles" },
+                { "addOnName": "Vermicelli"},
+                { "addOnName": "Egg Noodles" },
+                { "addOnName": "Udon"},
+                { "addOnName": "Instant Noodles" },
+                { "addOnName": "Rice" }
+              ]
+            },
+            {
+              "title": "Choose toppings",
+              "multiSelect": true, 
+              "freeToppingLimit": 2,
+              "postLimitPrice": 3.75,
+              "choices": [               
+                { "addOnName": "Pork Intestines" },
+                { "addOnName": "Pork Stomach" },
+                { "addOnName": "Beef Tendon Ball"},
+                { "addOnName": "Fish Ball" },
+                { "addOnName": "Enoki Mushroom"},
+                { "addOnName": "Choy Sum" },
+                { "addOnName": "Seaweed" },
+                { "addOnName": "King Mushroom" },
+                { "addOnName": "Seasoned Pork Mushroom Ball" },
+                { "addOnName": "Beef Stomach"},
+                { "addOnName": "Bamboo Stick" },
+                { "addOnName": "Beef Brisket"},
+                { "addOnName": "Sliced Fish" },
+                { "addOnName": "Preserved Egg" },
+                { "addOnName": "Beef Tendon" },
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork Liver" },
+                { "addOnName": "Fish Tofu"},
+                { "addOnName": "Pumpkin Stick" },
+                { "addOnName": "Sweet Corn"},
+                { "addOnName": "Pork Blood" },
+                { "addOnName": "Mushroom" },
+                { "addOnName": "Baby Pak Choy" }
+              ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                { "addOnName": "Coffee" },
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Red Bean Freeze"},
+                { "addOnName": "Red Bean Freeze & Ice Cream" },
+                { "addOnName": "Grass Jelly"},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Red Bean & Grass Jelly Freeze" },
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" },
+                { "addOnName": "Mango Milkshake" },
+                { "addOnName": "Strawberry Milkshake" }
+            ]
+            },
+            {
+              "title": "Choose side dishes",
+              "multiSelect": true, 
+              "limit": 2,
+              "choices": [               
+                { "addOnName": "Luncheon", "price": 4.00 },
+                { "addOnName": "Pan Fried Sausage with Honey Glaze", "price": 4.00 },
+                { "addOnName": "Fried Pork Chop", "price": 4.00},
+                { "addOnName": "Deep Fried Chicken Wing", "price": 4.00 },
+                { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
+                { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
+              ]
+            }
+          ],
+          "tags":[
+            {"type": "combo"},
+            {"type": "spicy"}     
           ]
         }
       ]
     },
+    
     {
       "category_name_chinese": "飲品類",
       "category_name_english": "BEVERAGES",
