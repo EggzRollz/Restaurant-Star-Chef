@@ -76,66 +76,104 @@ const CUSTOMIZATION_TO_DB_KEY_MAP = {
   Temperature: 'temp'
 };
 
-function findPriceForOrderItem(menuItem, orderItem) {
-    // --- Diagnostic Logging ---
-    console.group(`[Pricing Check] for Item ID: ${orderItem.itemId}`);
-    console.log("Order Item Data:", orderItem);
-    console.log("Database Menu Item Data:", menuItem);
+function calculateVerifiedItemPrice(menuItem, orderItem) {
+    console.group(`[Price Verification] for: ${menuItem.name_english}`);
+    console.log("Database Item:", menuItem);
+    console.log("Customer Order Item:", orderItem);
 
-    if (!menuItem.pricing || menuItem.pricing.length === 0) {
-        console.warn("Decision: No pricing array found. Returning null.");
+    if (!menuItem || !menuItem.pricing || menuItem.pricing.length === 0) {
+        console.error("Pricing error: Menu item has no pricing information in the database.");
         console.groupEnd();
         return null;
     }
 
+    // --- 1. DETERMINE THE BASE PRICE ---
+    // This section mirrors the client-side logic for setting the initial price
+    // based on whether the item has one price or multiple (e.g., by Size).
+    let basePrice = 0;
+    const customerChoices = orderItem.customizations || {};
+
     if (menuItem.pricing.length === 1) {
-        console.log("Decision: Simple item with one price. Returning default.");
-        console.groupEnd();
-        return menuItem.pricing[0].price;
-    }
+        // Simple item with only one default price.
+        basePrice = menuItem.pricing[0].price;
+        console.log(`Base Price (Simple): $${basePrice}`);
+    } else {
+        // Item with multiple pricing options (e.g., Size, Temperature).
+        // We find which option the customer selected.
+        const pricingKey = menuItem.pricing[0].size ? 'size' : 'temp'; // 'size' or 'temp'
+        const pricingTitle = menuItem.pricing[0].size ? 'Size' : 'Temperature'; // 'Size' or 'Temperature'
 
-    const allCustomerChoices = orderItem.customizations || {};
-    console.log("All Customer Choices:", allCustomerChoices);
+        const customerChoiceValue = customerChoices[pricingTitle]; // e.g., The customer chose "Small"
+        
+        // Find the matching price object in the database's pricing array.
+        const matchedPriceOption = menuItem.pricing.find(p => p[pricingKey] === customerChoiceValue);
 
-    // --- KEY CHANGE: Filter for ONLY price-affecting choices ---
-    const priceAffectingChoices = {};
-    for (const key in allCustomerChoices) {
-        if (CUSTOMIZATION_TO_DB_KEY_MAP.hasOwnProperty(key)) {
-            priceAffectingChoices[key] = allCustomerChoices[key];
+        if (matchedPriceOption) {
+            basePrice = matchedPriceOption.price;
+            console.log(`Base Price (Matched Choice '${customerChoiceValue}'): $${basePrice}`);
+        } else {
+            // Fallback if the customer's choice isn't found in the DB. This indicates a potential issue.
+            basePrice = menuItem.pricing[0].price;
+            console.warn(`Could not find a matching price option for choice '${customerChoiceValue}'. Defaulting to first price: $${basePrice}`);
         }
     }
-    console.log("Filtered Price-Affecting Choices:", priceAffectingChoices);
-    // --- END OF KEY CHANGE ---
-    
-    // If there are no price-affecting choices, we can just take the default price.
-    if (Object.keys(priceAffectingChoices).length === 0) {
-        console.log("Decision: No price-affecting customizations found. Returning default price.");
-        console.groupEnd();
-        return menuItem.pricing[0].price;
-    }
 
-    const priceInfo = menuItem.pricing.find(priceOption => {
-        // Now, we only need to match against the filtered choices.
-        return Object.keys(priceAffectingChoices).every(customizationKey => {
-            const dbKey = CUSTOMIZATION_TO_DB_KEY_MAP[customizationKey];
-            return priceOption[dbKey] === priceAffectingChoices[customizationKey];
+    // --- 2. CALCULATE ADD-ON PRICE ---
+    // This section mirrors the complex add-on calculation, including the two distinct models.
+    let addOnPrice = 0;
+    if (menuItem.addOns && menuItem.addOns.length > 0) {
+        console.log("Calculating Add-On prices...");
+        
+        menuItem.addOns.forEach(addOnGroup => {
+            const groupTitle = addOnGroup.title; // e.g., "Choose Your Toppings"
+            const customerSelectionsForGroup = customerChoices[groupTitle]; // e.g., ["Mushroom", "Pepperoni", "Onion"]
+
+            if (!customerSelectionsForGroup) {
+                return; // Customer made no selections in this group, so skip.
+            }
+
+            // --- MODEL A: "Free Limit" / Combo Logic ---
+            // This is triggered if the database group has 'freeToppingLimit' and 'postLimitPrice' defined.
+            if (addOnGroup.freeToppingLimit !== undefined && addOnGroup.postLimitPrice !== undefined) {
+                const selectionsCount = Array.isArray(customerSelectionsForGroup) ? customerSelectionsForGroup.length : 1;
+                const freeLimit = addOnGroup.freeToppingLimit;
+                const pricePerExtra = addOnGroup.postLimitPrice;
+
+                // This calculation is identical to the client-side code.
+                const extraItems = Math.max(0, selectionsCount - freeLimit);
+                const groupPrice = extraItems * pricePerExtra;
+                
+                console.log(` -> Group '${groupTitle}' (Combo Style): ${selectionsCount} items selected, ${freeLimit} are free. Extra cost for ${extraItems} items: $${groupPrice.toFixed(2)}`);
+                addOnPrice += groupPrice;
+
+            // --- MODEL B: "Standard" Add-On Logic ---
+            // This runs for all other add-on groups.
+            } else {
+                // Normalize to an array to handle both single (radio) and multiple (checkbox) selections easily.
+                const selectionsArray = Array.isArray(customerSelectionsForGroup) ? customerSelectionsForGroup : [customerSelectionsForGroup];
+                let groupPrice = 0;
+
+                selectionsArray.forEach(selectionName => {
+                    // Find the chosen add-on in the database to get its REAL price.
+                    const dbChoice = addOnGroup.choices.find(choice => (typeof choice === 'object' ? choice.addOnName : choice) === selectionName);
+                    
+                    // Only add a price if it's an object with a price > 0.
+                    if (dbChoice && typeof dbChoice === 'object' && dbChoice.price > 0) {
+                        groupPrice += dbChoice.price;
+                    }
+                });
+                 console.log(` -> Group '${groupTitle}' (Standard Style): Total price for selections is $${groupPrice.toFixed(2)}`);
+                 addOnPrice += groupPrice;
+            }
         });
-    });
-
-    if (priceInfo) {
-        console.log("SUCCESS: Found a perfect match in pricing array:", priceInfo);
-        console.log(`Decision: Using matched price: ${priceInfo.price}`);
-        console.groupEnd();
-        return priceInfo.price;
-    } else {
-        console.warn("FAILURE: Could not find a price option that matched the price-affecting choices.");
-        console.log("Decision: Using fallback price:", menuItem.pricing[0].price);
-        console.groupEnd();
-        return menuItem.pricing[0].price;
     }
+
+    const finalPrice = basePrice + addOnPrice;
+    console.log(`Final Verified Price: $${basePrice.toFixed(2)} (base) + $${addOnPrice.toFixed(2)} (add-ons) = $${finalPrice.toFixed(2)}`);
+    console.groupEnd();
+    
+    return finalPrice;
 }
-// --- UPDATED createOrderCard FUNCTION with robust checks ---
-// ... (imports and helper functions remain the same) ...
 
 function createOrderCard(order) {
     const orderCard = document.createElement('div');
@@ -205,17 +243,18 @@ function createOrderCard(order) {
         itemDetailsDiv.textContent = `${item.quantity} x ${menuItem.name_english}`;
         
         const itemPriceDiv = document.createElement('div');
-        itemPriceDiv.className = 'item-price'; 
-        
-        const singleItemPrice = findPriceForOrderItem(menuItem, item);
+    itemPriceDiv.className = 'item-price';
+    
+    // Use the new, secure price calculation function.
+    const singleItemPrice = calculateVerifiedItemPrice(menuItem, item);
 
-        if (singleItemPrice !== null) {
-            const lineItemTotal = item.quantity * singleItemPrice;
-            subtotal += lineItemTotal; // <-- KEY CHANGE: Add to running subtotal
-            itemPriceDiv.textContent = `$${lineItemTotal.toFixed(2)}`;
-        } else {
-            itemPriceDiv.textContent = 'Price N/A';
-        }
+    if (singleItemPrice !== null) {
+        const lineItemTotal = item.quantity * singleItemPrice;
+        subtotal += lineItemTotal; // Add to the running subtotal for the order
+        itemPriceDiv.textContent = `$${lineItemTotal.toFixed(2)}`;
+    } else {
+        itemPriceDiv.textContent = 'Price Error'; // Make it clear if calculation failed
+    }
 
         const itemCodeP = document.createElement('p');
         itemCodeP.className = 'item-id-code';

@@ -215,6 +215,16 @@ body {
 
 
 @media (max-width: 768px) {
+  .main-nav {
+    display: flex;
+    /* This is the key property! */
+    justify-content: space-between; 
+    align-items: center; /* Vertically aligns logo, links, and cart */
+    width: 100%;
+    height: 100%;
+    padding: 0 20px; /* Adds space on the sides so logo/cart aren't on the edge */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
   .nav-links {
     position: fixed; 
     
@@ -353,7 +363,7 @@ body {
     .logo-link img {
         margin: 0 auto;   
         display: flex;
-        height: 30px;
+        height: 45px;
         z-index: 100;
     }
 }
@@ -369,7 +379,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 40%; 
-  
   /* 
     NOTICE: The specific 'background-image' url is GONE from here.
   */
@@ -420,7 +429,7 @@ body {
 }
 .splash-text {
     position: absolute;
-    top: 46%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
@@ -1087,6 +1096,7 @@ hr.divider {
   transition: all 0.3s ease;
   display: flex;
   justify-content: center;
+  
 }
 
 .menu-nav ul {
@@ -1136,8 +1146,10 @@ hr.divider {
   border-radius: 20px;
 }
 @media (max-width: 768px){
+  
   .menu-nav ul {
   display: flex;
+  
   gap: 30px; 
   padding: 0 20px;
   margin: 0;
@@ -1270,7 +1282,7 @@ hr.divider {
   }
 
   .menu-group h2 {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
   
 
@@ -1281,6 +1293,7 @@ hr.divider {
   .item-name {
     font-size: 0.9rem; /* Reduces font size from the default (likely 1rem or 16px) */
     line-height: 1.3;  /* Improves readability for wrapped text */
+
   }
 
   /* Target the item price */
@@ -1361,7 +1374,6 @@ hr.divider {
 
 .item-name {
   color: #a5a5a5;
-
   display: flex;
   align-items: center;
   transition: color 0.3s ease;
@@ -1520,10 +1532,14 @@ hr.divider {
 .extra-cost-display {
   font-size: 0.9em;
   color: #a1a1a1; /* A reddish warning color */
-  font-weight: bold;
+  font-weight: medium;
   height: 1.2em; /* Prevents layout shift when text appears */
   margin-top: -5px;
   margin-bottom: 5px;
+  font-style: italic;
+}
+#extaCostHighlight{
+  color: #661414;
 }
 
 .defaultPrice{
@@ -2161,6 +2177,7 @@ input.input-error::placeholder {
     flex-direction: column;
     gap: 1rem; /* Creates consistent spacing between each detail item */
     padding: 0 20px;
+    margin-top: 3vh;
 }
 
 /* A single detail row (icon + text) */
@@ -2377,155 +2394,231 @@ input.input-error::placeholder {
     position: relative;
 }
 }
-
-/* Import luxury fonts */
-
-/* Custom CSS Variables for Luxury Restaurant */
+/* File: style.css */
+/* ========================================= 
+   1. Variables & Reset 
+========================================= */
 :root {
-    --color-primary-dark: #0f0f0f;
-    --color-accent-gold: #a2956b;
-    --color-accent-bronze: #8b6f47;
-    --color-cream: #f5f3ef;
+	--gold-primary: #d4af37;
+	--gold-light: #f3e5ab;
+	--gold-dark: #aa8c2c;
+	--bg-dark: #0b0c10;
+	--bg-card: #131418;
+	--text-main: #e0e0e0;
+	--text-muted: #888888;
+
+	--font-header: 'Cinzel', serif;
+	--font-body: 'Inter', sans-serif;
+	--font-chinese: 'Noto Serif SC', serif;
 }
 
-.thank-you-page {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1410 100%);
-    color: var(--color-cream);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    position: relative;
-    overflow: hidden;
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
-/* Subtle ambient glow effect */
-.thank-you-page::before{
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(201, 169, 97, 0.03) 0%, transparent 70%);
-    pointer-events: none;
-    animation: ambient-glow 20s ease-in-out infinite;
+/* ========================================= 
+   2. Background & Atmosphere 
+========================================= */
+body.thank-you-page-background {
+	min-height: 100vh; /* Use min-height to be more flexible */
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--bg-dark);
+	color: var(--text-main);
+	font-family: var(--font-body);
+	overflow-x: hidden; /* Prevent horizontal scroll */
+    padding: 1rem; /* Add some padding so the card doesn't touch the edges on mobile */
+
+	/* Cinematic Lighting & Subtle Lattice Pattern */
+	background-image:
+		/* Strong Vignette for focus */
+		radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, #000000 100%),
+		/* Subtle Cross-hatch/Lattice texture */
+		linear-gradient(45deg, rgba(20, 20, 20, 1) 25%, transparent 25%, transparent 75%, rgba(20, 20, 20, 1) 75%, rgba(20, 20, 20, 1)),
+		linear-gradient(45deg, rgba(20, 20, 20, 1) 25%, transparent 25%, transparent 75%, rgba(20, 20, 20, 1) 75%, rgba(20, 20, 20, 1));
+	background-size: 100% 100%,
+		30px 30px,
+		30px 30px;
+	background-position: 0 0,
+		0 0,
+		15px 15px;
 }
 
-@keyframes ambient-glow {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(5%, 5%) scale(1.05); }
-}
-
+/* ========================================= 
+   3. The Card (Main Container) 
+========================================= */
 .card {
-    background: linear-gradient(145deg, rgba(25, 20, 15, 0.95), rgba(15, 15, 15, 0.98));
-    backdrop-filter: blur(10px);
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.7),
-        0 0 1px rgba(201, 169, 97, 0.3),
-        inset 0 1px 0 rgba(201, 169, 97, 0.1);
-    border: 1px solid rgba(201, 169, 97, 0.15);
-    position: relative;
-    z-index: 1;
-    /* Add a subtle fade-in animation */
-    opacity: 0;
-    animation: cardFadeIn 1s 0.2s ease-out forwards;
+	background: rgba(19, 20, 24, 0.85); /* Semi-transparent dark */
+	backdrop-filter: blur(10px); /* Glassmorphism */
+	border: 1px solid rgba(212, 175, 55, 0.2); /* Faint gold border */
+	
+    /* DYNAMIC PADDING:
+       clamp(MIN, PREFERRED, MAX)
+       Vertical padding: min 2rem, max 3rem, scales with 4% of viewport width.
+       Horizontal padding: min 1.5rem, max 4rem, scales with 6% of viewport width. */
+	padding: clamp(2rem, 1rem + 4vw, 3rem) clamp(1.5rem, 1rem + 6vw, 4rem);
+
+	max-width: 500px;
+	width: 100%; /* Changed from 90% to 100% since body has padding now */
+	text-align: center;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+	position: relative;
+	animation: fadeUp 1.2s ease-out forwards;
 }
 
-@keyframes cardFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Elegant decorative corner accents */
+/* Top/Bottom Gold Accents on Card */
 .card::before,
 .card::after {
-    content: '';
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--color-accent-gold);
-    opacity: 0.4;
+	content: '';
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 60px;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
 }
 
 .card::before {
-    top: 16px;
-    left: 16px;
-    border-right: none;
-    border-bottom: none;
+	top: 0;
 }
 
 .card::after {
-    bottom: 16px;
-    right: 16px;
-    border-left: none;
-    border-top: none;
+	bottom: 0;
 }
 
-.accent-text {
-    color: var(--color-accent-gold);
-    text-shadow: 0 0 20px rgba(201, 169, 97, 0.2);
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+/* ========================================= 
+   4. Header & Branding 
+========================================= */
+.header {
+    /* DYNAMIC MARGIN: Reduces on small screens */
+	margin-bottom: clamp(1.5rem, 1rem + 2vw, 2.5rem);
 }
 
-.thank-you-page h1{
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+.restaurant-name {
+
+	letter-spacing: 4px;
+	color: rgb(173, 171, 171);
+	margin-bottom: 0.5rem;
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 4rem;
+
 }
 
-svg.accent-text {
-    filter: drop-shadow(0 0 8px rgba(201, 169, 97, 0.3));
-    animation: check-pulse 2s ease-in-out infinite;
+.chinese-chars {
+	font-family: "Yuji Mai", serif;
+  font-weight: 100;
+	/* DYNAMIC FONT-SIZE: Scales from 1.5rem up to 1.8rem */
+    font-size: clamp(1.5rem, 2rem + 1vw, 3rem);
+	color: rgb(142, 142, 142);
+	opacity: 0.8;
+  
 }
 
-@keyframes check-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.9; }
+/* ========================================= 
+   5. Icon Animation (Checkmark) 
+========================================= */
+.icon-container {
+	margin-bottom: 1.5rem;
+	display: flex;
+	justify-content: center;
 }
 
-/* Time display box enhancement - remove the Tailwind override */
-.bg-gray-800\/50 {
-    background: linear-gradient(135deg, rgba(201, 169, 97, 0.08), rgba(139, 111, 71, 0.05)) !important;
-    border-color: rgba(201, 169, 97, 0.2) !important; /* Targeting border-color directly */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+.checkmark {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	display: block;
+	stroke-width: 2;
+	stroke: var(--gold-primary);
+	stroke-miterlimit: 10;
+	box-shadow: inset 0px 0px 0px var(--gold-primary);
+	animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
 }
 
-/* Button enhancement - use a custom class instead of overriding Tailwind */
-a.bg-white {
-    background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-bronze)) !important;
-    color: #0f0f0f !important;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-size: 0.85rem;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.3);
-    transition: all 0.3s ease;
-    font-family: 'Montserrat', sans-serif;
+.checkmark-circle {
+	stroke-dasharray: 166;
+	stroke-dashoffset: 166;
+	stroke-width: 1;
+	stroke-miterlimit: 10;
+	stroke: var(--gold-primary);
+	fill: none;
+	animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
 
-a.bg-white:hover {
-    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.5);
-    transform: translateY(-2px);
+.checkmark-check {
+	transform-origin: 50% 50%;
+	stroke-dasharray: 48;
+	stroke-dashoffset: 48;
+	animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
 }
 
-p {
-    font-weight: 300;
-    line-height: 1.6;
+/* ========================================= 
+   6. Content Typography 
+========================================= */
+h1 {
+	font-family: var(--font-header);
+	color: var(--gold-light);
+    /* DYNAMIC FONT-SIZE: Scales from 1.6rem up to 1.8rem */
+	font-size: clamp(1.6rem, 1.4rem + 1vw, 1.8rem);
+	font-weight: 400;
+	margin-bottom: 1rem;
+	text-transform: capitalize;
+	/* Gold gradient text effect */
+	background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa8c2c);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	background-size: 200% auto;
+	animation: shine 3s linear infinite;
 }
 
-#ready-time {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
-    letter-spacing: 0.05em;
+.message {
+	font-family: var(--font-body);
+	color: var(--text-muted);
+	font-size: 0.95rem;
+	line-height: 1.6;
+	font-weight: 300;
+	margin-bottom: 2rem;
 }
 
-/* ===== OPENING HOURS SECTION ===== */
+.pickup-section {
+	/* DYNAMIC MARGIN: Reduces on small screens */
+    margin: clamp(1rem, 5rem + 1.5vw, 1.25rem) 0;
+	padding: 1.5rem;
+	border-radius: 6px; /* Softly rounded corners for a modern feel */
+	
+	/* The core of the new style */
+	background-color: rgba(0, 0, 0, 0.2); /* A darker, transparent base */
+	border: 1px solid rgba(224, 224, 224, 0.1); /* A very faint light border for definition */
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow for a recessed look */
+}
+
+.pickup-label {
+	font-family: var(--font-header);
+	font-size: 0.9rem;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--text-muted); /* Muted color to give prominence to the time */
+	margin-bottom: 0.5rem;
+	font-weight: 400;
+}
+
+.pickup-time {
+	font-family: var(--font-header);
+    /* DYNAMIC FONT-SIZE: This was the biggest issue. 
+       Now it scales smoothly from a minimum of 2.2rem up to a max of 2.8rem */
+	font-size: clamp(2.2rem, 1.5rem + 3.5vw, 2.8rem);
+	color: var(--text-main); /* Crisp, high-contrast off-white */
+	font-weight: 700;
+	letter-spacing: 1px;
+	text-shadow: none; /* Ensure there is no glow */
+}
 .opening-hours-section {
   display: flex;
   /* We add 'align-items: stretch' to make sure both columns are the same height */
@@ -2676,6 +2769,7 @@ p {
 }
 
 
+/* Keyframes animations are omitted for brevity, they don't need changes. */
 /* Don't forget your .visible class for the animation */
 .opening-hours-text.visible {
   opacity: 1;

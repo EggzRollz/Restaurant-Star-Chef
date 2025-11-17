@@ -1,19 +1,14 @@
 import {updateCartQuantityDisplay} from './main.js'
 import { Cart } from './cart.js'
 
-
-
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const phone = document.getElementById("phone");
 const clientInfoContainer = document.getElementById('client-info-container');
 const formFields = [firstName, lastName, phone];
 
-// MOVED & CHANGED: This is now an exported function for validation
-// MODIFIED to highlight ALL errors but still track the FIRST for scrolling
 export function validateCheckoutForm() {
-    
-    let firstInvalidField = null; // This will store the first error field we find
+    let firstInvalidField = null;
 
     // Clear previous errors before re-validating
     formFields.forEach(field => field.classList.remove('input-error'));
@@ -22,7 +17,6 @@ export function validateCheckoutForm() {
     const isFirstNameEmpty = firstName.value.trim() === '';
     if (isFirstNameEmpty) {
         firstName.classList.add('input-error');
-        // If this is the first error we've found, save this element
         if (!firstInvalidField) {
             firstInvalidField = firstName;
         }
@@ -31,7 +25,6 @@ export function validateCheckoutForm() {
     const isLastNameEmpty = lastName.value.trim() === '';
     if (isLastNameEmpty) {
         lastName.classList.add('input-error');
-        // If this is the first error we've found, save this element
         if (!firstInvalidField) {
             firstInvalidField = lastName;
         }
@@ -40,7 +33,6 @@ export function validateCheckoutForm() {
     const isPhoneEmpty = phone.value.trim() === '';
     if (isPhoneEmpty) {
         phone.classList.add('input-error');
-        // If this is the first error we've found, save this element
         if (!firstInvalidField) {
             firstInvalidField = phone;
         }
@@ -49,20 +41,18 @@ export function validateCheckoutForm() {
     const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
 
     if (areAnyFieldsEmpty) {
-        // This part still runs if any field failed
         if (clientInfoContainer) {
             clientInfoContainer.classList.add('highlight-error');
             setTimeout(() => {
                 clientInfoContainer.classList.remove('highlight-error');
             }, 2500);
         }
-        // Return failure status and the first invalid field we found
         return { isValid: false, firstInvalidField: firstInvalidField };
     }
 
-    // If we get here, no fields were empty
     return { isValid: true, firstInvalidField: null };
 }
+
 document.addEventListener("DOMContentLoaded", () => {
     // Select elements
     const cartContainer = document.getElementById('checkoutItemContainer');
@@ -76,189 +66,198 @@ document.addEventListener("DOMContentLoaded", () => {
     const pickupTimeElement = document.getElementById('pickup-time');
     const timeBoxElement = document.getElementById('time-box');
     const cart = new Cart();
-    const now = new Date();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     cart.loadFromStorage(savedItems);
    
     formFields.forEach(field => {
-    if (field) {
-        // This listener handles real-time input cleanup and length limiting
-        field.addEventListener('input', (e) => {
-            field.classList.remove('input-error');
+        if (field) {
+            // This listener handles real-time input cleanup and length limiting
+            field.addEventListener('input', (e) => {
+                field.classList.remove('input-error');
 
-            if (field === phone) {
-                // --- THIS IS THE MODIFIED LINE ---
-                // 1. Remove non-numbers, then 2. limit the result to 10 characters.
-                e.target.value = e.target.value.replace(/[^0-9]/g, '').substring(0, 10);
-                
-            } else if (field === firstName || field === lastName) {
-                e.target.value = e.target.value.replace(/[^a-zA-Z\s'-]/g, '');
-            }
-        });
-
-        // This listener still prevents invalid keystrokes
-        field.addEventListener('keydown', (event) => {
-            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
-            const isShortcut = (event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase());
-
-            if (allowedKeys.includes(event.key) || isShortcut) {
-                return;
-            }
-
-            let isKeyAllowed = false;
-            if (field === phone) {
-                isKeyAllowed = event.key >= '0' && event.key <= '9';
-            } else if (field === firstName || field === lastName) {
-                const isLetter = /^[a-zA-Z]$/.test(event.key);
-                const isAllowedChar = [' ', '-', '\''].includes(event.key);
-                isKeyAllowed = isLetter || isAllowedChar;
-            }
-
-            if (!isKeyAllowed) {
-                event.preventDefault();
-            }
-        });
-
-        // This 'blur' listener still formats the number when the user leaves the field
-        if (field === phone) {
-            field.addEventListener('blur', (e) => {
-                const digits = e.target.value;
-
-                if (digits.length === 10) {
-                    const formatted = digits.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
-                    e.target.value = formatted;
+                if (field === phone) {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').substring(0, 10);
+                } else if (field === firstName || field === lastName) {
+                    e.target.value = e.target.value.replace(/[^a-zA-Z\s'-]/g, '');
                 }
             });
-        }
-    }
-});
 
-        function updatePickupTime() {
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
+            // This listener prevents invalid keystrokes
+            field.addEventListener('keydown', (event) => {
+                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+                const isShortcut = (event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase());
 
-            const isBeforeOpening = currentHour < 11;
-            const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+                if (allowedKeys.includes(event.key) || isShortcut) {
+                    return;
+                }
 
-            if (isBeforeOpening || isAfterClosing) {
-                // If store is closed, the button is ALWAYS disabled.
-                pickupTimeElement.textContent = ("No more orders are being processed tonight. Please try again tomorrow.");
-                timeBoxElement.classList.add('store-closed');
-                placeOrderBttn.disabled = true;
+                let isKeyAllowed = false;
+                if (field === phone) {
+                    isKeyAllowed = event.key >= '0' && event.key <= '9';
+                } else if (field === firstName || field === lastName) {
+                    const isLetter = /^[a-zA-Z]$/.test(event.key);
+                    const isAllowedChar = [' ', '-', '\''].includes(event.key);
+                    isKeyAllowed = isLetter || isAllowedChar;
+                }
 
-            } else {
-                // If store is open, the button is disabled ONLY if the cart is empty.
-                timeBoxElement.classList.remove('store-closed');
-                const isCartEmpty = cart.getItems().length === 0;
-                placeOrderBttn.disabled = isCartEmpty;
-                
-                const pickupTime = new Date(); 
-                pickupTime.setMinutes(pickupTime.getMinutes() + 30);
-                const minutes = pickupTime.getMinutes();
-                let hours24 = pickupTime.getHours();
-                const ampm = hours24 >= 12 ? 'PM' : 'AM';
-                let hours12 = hours24 % 12;
-                if (hours12 === 0) { hours12 = 12; }
-                const paddedMinutes = String(minutes).padStart(2, '0');
-                const displayTime = `Estimated pickup time ${hours12}:${paddedMinutes} ${ampm}`;
-                pickupTimeElement.textContent = displayTime;
+                if (!isKeyAllowed) {
+                    event.preventDefault();
+                }
+            });
+
+            // This 'blur' listener formats the number when the user leaves the field
+            if (field === phone) {
+                field.addEventListener('blur', (e) => {
+                    const digits = e.target.value;
+
+                    if (digits.length === 10) {
+                        const formatted = digits.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
+                        e.target.value = formatted;
+                    }
+                });
             }
         }
-
-    function updateTotals() {
-        const subtotal = savedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const hstAmount = subtotal * 0.13;
-        const finalTotal = subtotal + hstAmount;
-
-        if (cartSubTotalElement) cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
-        if (cartHST) cartHST.textContent = `$${hstAmount.toFixed(2)}`;
-        if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
-    }
-
-
-
-   function renderCartItems() {
-    // Get references to the template and the container
-    const template = document.getElementById('cart-item-template');
-    const cartContainer = document.getElementById('checkoutItemContainer');
-
-    if (!cartContainer || !template) {
-        console.error("Cart container or template not found!");
-        return;
-    }
-
-    cartContainer.innerHTML = ''; // Clear previous items
-    const itemsToRender = cart.getItems();
-
-    // Handle empty cart
-    if (itemsToRender.length === 0) {
-        cartContainer.innerHTML = '';
-        emptyMessageEl.classList.remove('hidden');
-        if (placeOrderBttn) placeOrderBttn.disabled = true;
-        updateTotals();
-        return;
-    } else {
-        emptyMessageEl.classList.add('hidden'); // Hide the empty message
-        cartContainer.innerHTML = '';
-    }
-
-    // Loop through each item and render it using the template
-    itemsToRender.forEach((item, index) => {
-        // 1. Clone the template's content
-        const clone = template.content.cloneNode(true);
-
-        // 2. Find the placeholder elements within the cloned node
-        const nameEl = clone.querySelector('.cart-item-name');
-        const nameChineseEl = clone.querySelector('.cart-item-name-chinese');
-        const defaultPriceEl = clone.querySelector('.cart-item-defaultPrice');
-        const quantityEl = clone.querySelector('.quantity-value');
-        const totalPriceEl = clone.querySelector('.cart-item-total-price');
-        const customizationEl = clone.querySelector('.cart-item-customization');
-        const decreaseBtn = clone.querySelector('.decrease-buttn');
-        const increaseBtn = clone.querySelector('.increase-buttn');
-        const customizations = item.customizations || {};
-        const customizationValues = Object.values(customizations);
-
-        // 3. Fill the placeholders with the item's data
-        nameEl.textContent = item.name;
-        nameChineseEl.textContent = item.name_chinese;
-        defaultPriceEl.textContent = `$${item.price.toFixed(2)}`;
-        quantityEl.textContent = item.quantity;
-        totalPriceEl.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
-        
-        // Set the data-index for the buttons so they know which item to modify
-        decreaseBtn.dataset.index = index;
-        increaseBtn.dataset.index = index;
-
-        // 4. Handle customizations (only show the div if customizations exist)
-
-
-        // Filter out any default or empty values
-        const validValues = customizationValues.filter(value => value && value !== 'default');
-
-        if (validValues.length > 0) {
-            // If there are valid customizations, loop through the values
-            validValues.forEach(value => {
-                // Create a new span element for this single value
-                const customSpan = document.createElement('span');
-                customSpan.textContent = value; // e.g., "Small"
-                
-                // Append this new span to the main customization container
-                customizationEl.appendChild(customSpan);
-            });
-        } else {
-            // If there are no customizations, remove the container entirely
-            customizationEl.remove();
-        }
-
-        // 5. Append the finished clone to the cart container in the DOM
-        cartContainer.appendChild(clone);
     });
 
-    updateTotals();
+    // SINGLE SOURCE OF TRUTH for button state
+    function updateButtonState() {
+        const isCartEmpty = cart.getItems().length === 0;
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        const isStoreClosed = false;
+        //const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+
+        // The button should be disabled if the store is closed OR if the cart is empty
+        placeOrderBttn.disabled = isStoreClosed || isCartEmpty;
+    }
+    
+    function updatePickupTime() {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        const isBeforeOpening = currentHour < 11;
+        const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+
+        if (isBeforeOpening || isAfterClosing) {
+            // Store is closed - update UI
+            pickupTimeElement.textContent = "No more orders are being processed tonight. Please try again tomorrow.";
+            timeBoxElement.classList.add('store-closed');
+        } else {
+            // Store is open - show pickup time
+            timeBoxElement.classList.remove('store-closed');
+            
+            const pickupTime = new Date(); 
+            pickupTime.setMinutes(pickupTime.getMinutes() + 30);
+            const minutes = pickupTime.getMinutes();
+            let hours24 = pickupTime.getHours();
+            const ampm = hours24 >= 12 ? 'PM' : 'AM';
+            let hours12 = hours24 % 12;
+            if (hours12 === 0) { hours12 = 12; }
+            const paddedMinutes = String(minutes).padStart(2, '0');
+            const displayTime = `Estimated pickup time ${hours12}:${paddedMinutes} ${ampm}`;
+            pickupTimeElement.textContent = displayTime;
+        }
+        
+        // Always call updateButtonState to handle both store hours and cart status
+        updateButtonState(); 
+    }
+
+    function updateTotals() {
+    // THE FIX: Use cart.getItems() instead of the outdated savedItems array
+    const currentCartItems = cart.getItems();
+    const subtotal = currentCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // The rest of the function is the same and will now work correctly
+    const hstAmount = subtotal * 0.13;
+    const finalTotal = subtotal + hstAmount;
+
+    if (cartSubTotalElement) cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
+    if (cartHST) cartHST.textContent = `$${hstAmount.toFixed(2)}`;
+    if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
 }
+
+    function renderCartItems() {
+        // Get references to the template and the container
+        const template = document.getElementById('cart-item-template');
+        const cartContainer = document.getElementById('checkoutItemContainer');
+
+        if (!cartContainer || !template) {
+            console.error("Cart container or template not found!");
+            return;
+        }
+
+        cartContainer.innerHTML = ''; // Clear previous items
+        const itemsToRender = cart.getItems();
+
+        // Handle empty cart
+        if (itemsToRender.length === 0) {
+            emptyMessageEl.classList.remove('hidden');
+            updateTotals();
+            updateButtonState(); // Let updateButtonState handle the button
+            return;
+        } else {
+            emptyMessageEl.classList.add('hidden');
+        }
+
+        // Loop through each item and render it using the template
+        itemsToRender.forEach((item, index) => {
+            // 1. Clone the template's content
+            const clone = template.content.cloneNode(true);
+
+            // 2. Find the placeholder elements within the cloned node
+            const nameEl = clone.querySelector('.cart-item-name');
+            const nameChineseEl = clone.querySelector('.cart-item-name-chinese');
+            const defaultPriceEl = clone.querySelector('.cart-item-defaultPrice');
+            const quantityEl = clone.querySelector('.quantity-value');
+            const totalPriceEl = clone.querySelector('.cart-item-total-price');
+            const customizationEl = clone.querySelector('.cart-item-customization');
+            const decreaseBtn = clone.querySelector('.decrease-buttn');
+            const increaseBtn = clone.querySelector('.increase-buttn');
+            const customizations = item.customizations || {};
+            const customizationValues = Object.values(customizations);
+
+            // 3. Fill the placeholders with the item's data
+            nameEl.textContent = item.name;
+            nameChineseEl.textContent = item.name_chinese;
+            defaultPriceEl.textContent = `$${item.price.toFixed(2)}`;
+            quantityEl.textContent = item.quantity;
+            totalPriceEl.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
+            
+            // Set the data-index for the buttons so they know which item to modify
+            decreaseBtn.dataset.index = index;
+            increaseBtn.dataset.index = index;
+
+            // 4. Handle customizations (only show the div if customizations exist)
+            // Filter out any default or empty values
+            const validValues = customizationValues.filter(value => value && value !== 'default');
+
+            if (validValues.length > 0) {
+                // If there are valid customizations, loop through the values
+                validValues.forEach(value => {
+                    // Create a new span element for this single value
+                    const customSpan = document.createElement('span');
+                    customSpan.textContent = value;
+                    
+                    // Append this new span to the main customization container
+                    customizationEl.appendChild(customSpan);
+                });
+            } else {
+                // If there are no customizations, remove the container entirely
+                customizationEl.remove();
+            }
+
+            // 5. Append the finished clone to the cart container in the DOM
+            cartContainer.appendChild(clone);
+        });
+
+        updateTotals();
+        updateButtonState(); // Let updateButtonState handle the button
+    }
+
     function saveCartAndRender() {
         localStorage.setItem('cart', JSON.stringify(cart.getItems()));
         renderCartItems();
@@ -309,27 +308,42 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-  
     // Event Listeners
     if (cartContainer) {
-        cartContainer.addEventListener('click', (event) => {
-            const target = event.target;
-            const index = target.dataset.index;
-            if (index === undefined) return;
-            if (target.matches('.increase-buttn')) {
-                savedItems[index].quantity++;
-            } else if (target.matches('.decrease-buttn')) {
-                savedItems[index].quantity--;
-                if (savedItems[index].quantity <= 0) {
-                    savedItems.splice(index, 1);
-                }
-            }
+    cartContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        const index = target.dataset.index;
+
+        // Exit if the click wasn't on a button with an index
+        if (index === undefined) return;
+
+        // --- THE FIX: Get the items directly from the cart object ---
+        const currentCartItems = cart.getItems();
+        const itemToModify = currentCartItems[index];
+
+        // Safety check in case something goes wrong
+        if (!itemToModify) {
+            console.error(`Could not find item at index ${index} to modify.`);
+            return;
+        }
+
+        if (target.matches('.increase-buttn')) {
+            itemToModify.quantity++;
+        } else if (target.matches('.decrease-buttn')) {
+            itemToModify.quantity--;
             
-            saveCartAndRender();
-            updateCartQuantityDisplay(cart);
-            console.log(savedItems[index].quantity)
-        });
-    }
+            // If quantity is zero or less, remove the item from the array
+            if (itemToModify.quantity <= 0) {
+                currentCartItems.splice(index, 1);
+            }
+        }
+        
+        // The cart's internal array is now correctly updated.
+        // Now save the updated cart and re-render the UI.
+        saveCartAndRender();
+        updateCartQuantityDisplay(cart);
+    });
+}
 
     window.addEventListener('scroll', handleStickySummary);
     window.addEventListener('resize', handleStickySummary);
@@ -338,7 +352,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCartItems();
     handleStickySummary();
     updatePickupTime();
+    updateButtonState();
     setInterval(updatePickupTime, 1000);
 });
-
-

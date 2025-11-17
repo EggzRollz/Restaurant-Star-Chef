@@ -1,51 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    const timeElement = document.getElementById('ready-time');
-    const confElement = document.getElementById('conf-number');
-
-    // --- Part 2 is moved up because we need the order number first ---
-    let orderNumber = null; // Declare orderNumber here to use it in both parts
-    if (confElement) {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        orderNumber = urlParams.get('order'); // Assign the value
-
-        if (orderNumber) {
-            confElement.textContent = `#${orderNumber}`;
-        } else {
-            confElement.textContent = '#N/A';
-        }
-    }
-
-    // --- Part 1: Set the PERMANENT readiness time ---
-    if (timeElement && orderNumber) { // Only run this if we have a time element AND an order number
-        
-        // Create a unique key for this specific order's ready time
-        const storageKey = `readyTimeForOrder_${orderNumber}`;
-        
-        // 1. Check if a ready time is already stored for this order
-        let readyTime = sessionStorage.getItem(storageKey);
-
-        if (!readyTime) {
-            // 2a. If NO time is stored, this is the first visit.
-            // So, we calculate, format, and SAVE the time.
-            console.log("No saved time found for this order. Generating a new one.");
-            
-            const now = new Date();
-            now.setMinutes(now.getMinutes() + 30);
-            const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-            
-            readyTime = now.toLocaleTimeString('en-US', options); // Assign to our variable
-            
-            // Save this newly created time to sessionStorage
-            sessionStorage.setItem(storageKey, readyTime);
-
-        } else {
-            // 2b. If a time IS stored, we'll just use it.
-            console.log("Found a saved time in sessionStorage:", readyTime);
-        }
-
-        // 3. Display the time (either the one we just made or the one we found)
-        timeElement.textContent = readyTime;
-    }
+    // Both of these lines must be INSIDE this block.
+    
+    // 1. Get the order number from the URL and display it.
+    const orderNumber = displayOrderNumber();
+    
+    // 2. Use that number to calculate and display the pickup time.
+    displayPickupTime(orderNumber);
 });
+
+/**
+ * Reads the 'order' parameter from the URL and displays it in the '#conf-number' element.
+ * @returns {string|null} The order number found in the URL, or null if not found.
+ */
+function displayOrderNumber() {
+    const confElement = document.getElementById('conf-number');
+    if (!confElement) {
+        console.error("HTML element with ID 'conf-number' was not found.");
+        return null;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderNumber = urlParams.get('order');
+
+    if (orderNumber) {
+        confElement.textContent = `#${orderNumber}`;
+    } else {
+        console.error("Order number not found in URL parameters. (URL should be like '...?order=1234')");
+        confElement.textContent = '#N/A';
+    }
+
+    return orderNumber;
+}
+
+/**
+ * Calculates, stores, and displays the pickup time in the '#ready-time' element.
+ * It uses the order number to create a unique key for sessionStorage.
+ * @param {string|null} orderNumber - The order number to associate with the pickup time.
+ */
+function displayPickupTime(orderNumber) {
+    const timeElement = document.getElementById('ready-time');
+    if (!timeElement) {
+        console.error("HTML element with ID 'ready-time' was not found.");
+        return;
+    }
+    
+    // If there's no order number, we can't proceed.
+    if (!orderNumber) {
+        timeElement.textContent = "--:--";
+        return;
+    }
+
+    const storageKey = `pickupTimeForOrder_${orderNumber}`;
+    let pickupTime = sessionStorage.getItem(storageKey);
+
+    // If a pickup time is NOT already stored for this order, create one.
+    if (!pickupTime) {
+        const prepTimeMinutes = 20; // Set estimated preparation time
+        const futureTime = new Date(Date.now() + prepTimeMinutes * 60000);
+
+        // Format the time into a user-friendly string (e.g., "4:35 PM")
+        pickupTime = futureTime.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+
+        // Save the newly generated time to sessionStorage
+        sessionStorage.setItem(storageKey, pickupTime);
+    }
+
+    // Display the final pickup time (either newly created or retrieved from storage)
+    timeElement.textContent = pickupTime;
+}

@@ -1,69 +1,88 @@
 export class Cart {
   
   constructor() {
-    this.shoppingCart = [];
+    // Initialize with an empty array. We will load from storage right after creation.
+    this.shoppingCart = []; 
+    
+    // Your abbreviation map is perfect, no changes needed here.
     this.abbreviationMap = {
-    // Sizes - use the actual values from Firebase
-    'S': 's',
-    'M': 'm',
-    'L': 'l',
-    // Spice Levels
-    'Mild': 'M',
-    'Spicy': 'S',
-    'Hot': 'H',
-    // Proteins
-    'Chicken': 'C',
-    'Beef': 'B',
-    'Pork': 'P',
+      // Sizes
+      'S': 's',
+      'M': 'm',
+      'L': 'l',
+      // Spice Levels
+      'Mild': 'M',
+      'Spicy': 'S',
+      'Hot': 'H',
+      // Proteins
+      'Chicken': 'C',
+      'Beef': 'B',
+      'Pork': 'P',
     };
   }
   
+  // This function is fine, no changes needed.
   _generateItemId(baseId, customizations) {
-  const customizationKeys = Object.keys(customizations); // Gets ONLY the keys that exist
-  customizationKeys.sort(); // Important for consistency
+    const customizationKeys = Object.keys(customizations);
+    customizationKeys.sort();
 
-  const customizationString = customizationKeys.map(key => {
-    const value = customizations[key];
-    const keyAbbreviation = key.substring(0, 2).toUpperCase(); // 'PR'
-    const valueAbbreviation = this.abbreviationMap[value] || value; // 'C' or 'B'
-    return `${keyAbbreviation}-${valueAbbreviation}`;
-  }).join('_');
+    const customizationString = customizationKeys.map(key => {
+      const value = customizations[key];
+      // A small fix here to handle values not in the map gracefully
+      const valueAbbreviation = this.abbreviationMap[value] || value.replace(/\s+/g, ''); 
+      const keyAbbreviation = key.substring(0, 2).toUpperCase();
+      return `${keyAbbreviation}-${valueAbbreviation}`;
+    }).join('_');
 
-  return `${baseId}_${customizationString}`;
-}
+    // Prevents adding a trailing underscore if there are no customizations
+    return customizationString ? `${baseId}_${customizationString}` : baseId;
+  }
 
-  
+  // --- MODIFIED addItem METHOD ---
   addItem(item, name_chinese, id, finalPrice, quantity, customizations = {}) {
-    const cartId = this._generateItemId(id, customizations);
+    const baseId = id; // The original ID, e.g., "B13"
+    const cartId = this._generateItemId(baseId, customizations);
+    
     const existingItem = this.shoppingCart.find(cartItem => cartItem.id === cartId);
+
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
       const newItem = {
-        id: cartId,          
+        id: cartId, // The complex ID, e.g., "B13_SI-S"
+        baseId: baseId, // The simple ID, needed for the admin panel lookup
         name: item,
         name_chinese: name_chinese, 
         price: finalPrice,
         quantity: quantity,
-        customizations: customizations 
+        customizations: customizations // The critical object
       };
       this.shoppingCart.push(newItem);
     }
-    console.log("--- Current Cart ---", this.shoppingCart);
+    
+    // --- THIS IS THE MOST IMPORTANT CHANGE ---
+    // Every time an item is added or updated, save the entire cart to localStorage.
+    this.save();
+    
+    console.log("--- Cart Updated and Saved ---", this.shoppingCart);
   }
 
-
-  cartLength(){
-    const count = this.shoppingCart.reduce((total, item) => total + item.quantity, 0);
-
-    return count;
+  // --- NEW save() METHOD ---
+  save() {
+    localStorage.setItem('cart', JSON.stringify(this.shoppingCart));
   }
 
-  getItems(){
+  // --- No changes to the methods below ---
+  cartLength() {
+    return this.shoppingCart.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  getItems() {
     return this.shoppingCart;
   }
 
-  loadFromStorage(savedItems) {
+  loadFromStorage() {
+    const savedItems = JSON.parse(localStorage.getItem('cart'));
     if (savedItems && Array.isArray(savedItems)) {
         this.shoppingCart = savedItems;
         console.log('Cart has been hydrated from localStorage.');

@@ -1,63 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="author" content="Connor Lau" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmed - The Gilded Spoon</title>
-    <!-- Load Tailwind CSS from CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Link to your external CSS file -->
+    <meta name="author" content="Connor Lau" />
+    <title>Order Confirmed - Star Chef</title>
+    
+    <!-- Google Fonts for an elegant, high-class feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+    <link
+         href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Asap+Condensed:wght@200;300;400&family=Birthstone&display=swap"
+         rel="stylesheet"
+         />
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Mai&display=swap" rel="stylesheet">
+    <!-- Your Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="thank-you-page">
-
-    <!-- Confirmation Card -->
-    <div class="card max-w-lg w-full rounded-xl p-8 md:p-12 text-center transition-all duration-300">
-        
-        <!-- Icon/Visual -->
-        <svg class="w-16 h-16 mx-auto mb-6 accent-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-
-        <!-- Main Title -->
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight accent-text">
-            Order Confirmed
-        </h1>
-        
-        
-        <!-- Subtitle/Thank You Message -->
-        <p class="text-xl text-gray-300 mb-8">
-            Your order is currently being processed for pickup.
-        </p>
-        <p class="text-gray-400 text-sm">
-            <!-- We give this span an ID to easily target it with JavaScript -->
-            Confirmation <span class="font-mono ml-1 text-gray-300" id="conf-number">...</span>
-        </p>
-        <!-- Readiness Time Display -->
-        <div class="bg-gray-800/50 p-6 rounded-lg mb-8">
-            <p class="text-lg font-light uppercase tracking-widest text-gray-400 mb-2">
-                Your Order Will Be Ready
-            </p>
-            <p class="text-6xl font-black accent-text" id="ready-time">
-                ...
-            </p>
-            <p class="text-sm text-gray-400 mt-2">
-                (Please arrive promptly to ensure peak quality)
-            </p>
+<body class="thank-you-page-background">
+    
+    <div class="card">
+        <div class="header">
+            <div class="restaurant-name">Star Chef</div>
+            <div class="chinese-chars">星厨</div>
         </div>
 
-        <!-- Details -->
-        <div class="space-y-1">
-        <p class="text-gray-400 text-sm">
-            <!--You will receive an email shortly with your detailed receipt. -->
-        </p>
+        <!-- The icon was missing from the reference image, but we'll keep it and space it correctly -->
+        
+        
+        <h1>Thank you for Your order</h1>
+        <p class="message">Your order has been sent to the kitchen</p>
+        
+        <!-- ✅ FIX: Added new classes for precise styling -->
+        <div class="confirmation-info">
+            <p class="conf-label">Your Confirmation Number</p>
+            <p class="conf-number" id="conf-number">#9999</p> <!-- Populated by JS -->
+        </div>
+        
+        <div class="pickup-section">
+            <div class="pickup-label">Ready for Pickup At</div>
+            <div class="pickup-time" id="ready-time">7:30 PM</div> <!-- Populated by JS -->
+        </div>
     </div>
-    
-    <!-- ... (rest of your HTML body) ... -->
 
-    <!-- JavaScript to set the dynamic time AND get the order number -->
-    <script type="module" src="thank-you.js"></script>
-    
+    <!-- Your existing JavaScript file -->
+    <script src="thank-you.js"></script>
 </body>
 </html>

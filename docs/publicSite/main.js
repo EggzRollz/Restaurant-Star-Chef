@@ -66,54 +66,82 @@ document.addEventListener("DOMContentLoaded", () => {
   if(modalContent) modalContent.addEventListener('click', (e) => e.stopPropagation());
 
   // --- Fetch data from Firebase ---
-  async function fetchMenuData() {
+async function fetchMenuData() {
     if (!menuContainer) {
-      console.log("Not on menu page, skipping menu data fetch.");
-      return;
+        console.log("Not on menu page, skipping menu data fetch.");
+        return;
     }
-    console.log("Attempting to fetch menu data from Firestore...");
+
+    // 1. --- Check for cached data first ---
+    const cachedMenu = localStorage.getItem('menuData');
+    const cacheTimestamp = localStorage.getItem('menuDataTimestamp');
+    const oneHour = 60 * 60 * 1000; // Cache duration: 1 hour in milliseconds
+
+    // Check if cache exists and is not older than one hour
+    if (cachedMenu && cacheTimestamp && (Date.now() - cacheTimestamp < oneHour)) {
+        console.log("Loading menu from local cache.");
+        try {
+            menuInventory = JSON.parse(cachedMenu); // Use the cached data
+            // --- The rest of your setup logic ---
+            if (menuInventory.length > 0) {
+                setupCategoryButtons();
+                handleCategoryClick('All');
+            }
+            return; // Important: Stop the function here
+        } catch (error) {
+            console.error("Error parsing cached menu data:", error);
+            // If parsing fails, proceed to fetch from Firestore
+        }
+    }
+    
+    // 2. --- If no valid cache, fetch from Firestore ---
+    console.log("Cache is empty or expired. Fetching menu data from Firestore...");
     if (!db) {
         console.error("Firestore database is not available.");
         return;
     }
+
     try {
-      const menuCollectionRef = collection(db, 'menuItems');
-      const querySnapshot = await getDocs(menuCollectionRef);
-      console.log(`Found ${querySnapshot.docs.length} documents in Firestore.`);
+        const menuCollectionRef = collection(db, 'menuItems');
+        const querySnapshot = await getDocs(menuCollectionRef);
+        console.log(`Found ${querySnapshot.docs.length} documents in Firestore.`);
 
-      menuInventory = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        
-        
-        // --- Data Validation and Transformation (Important!) ---
-        // This prevents errors if a document has missing fields.
-        return {
-          id: doc.id,
-          name: data.name_english || "Unnamed Item",
-          name_chinese: data.name_chinese || "Unnamed Item",
-          image: data.image,
-          price: data.pricing?.[0]?.price || 0.00, 
-          category: data.category_english || "Misc",
-          tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
-          addOns: data.addOns || [],
-          pricing: data.pricing || [],
-        };
-      });
+        menuInventory = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                name: data.name_english || "Unnamed Item",
+                name_chinese: data.name_chinese || "Unnamed Item",
+                image: data.image,
+                price: data.pricing?.[0]?.price || 0.00,
+                category: data.category_english || "Misc",
+                tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
+                addOns: data.addOns || [],
+                pricing: data.pricing || [],
+            };
+        });
 
-      
+        // 3. --- Store the newly fetched data in localStorage ---
+        if (menuInventory.length > 0) {
+            console.log("Saving fetched menu to local cache.");
+            localStorage.setItem('menuData', JSON.stringify(menuInventory));
+            localStorage.setItem('menuDataTimestamp', Date.now()); // Store the current time
 
-      if (menuInventory.length > 0) {
-        setupCategoryButtons();
-        handleCategoryClick('All');
-      } 
+            // --- Now run the setup logic ---
+            setupCategoryButtons();
+            handleCategoryClick('All');
+        }
     } catch (error) {
-      console.error("Error fetching menu data from Firestore:", error);
-      menuContainer.innerHTML = "<h1>Error loading menu. Please try again later.</h1>";
+        console.error("Error fetching menu data from Firestore:", error);
+        menuContainer.innerHTML = "<h1>Error loading menu. Please try again later.</h1>";
     }
-  }
+}
 
   // --- Start fetching the data ---
-  fetchMenuData();
+  if (menuContainer) {
+      fetchMenuData();
+  }
+
   
   // --- Rendering Logic ---
   
@@ -436,6 +464,7 @@ function openCustomizeModal(item) {
         const limitTextDisplay = document.createElement('div');
         limitTextDisplay.className = 'extra-cost-display'; // Re-use existing style
         titleGroup.appendChild(limitTextDisplay);
+
         if (limit !== undefined) {
             limitTextDisplay.textContent = `Select up to ${limit}.`;
         }else if (limit === undefined && freeLimit === undefined) {
@@ -444,6 +473,7 @@ function openCustomizeModal(item) {
           limitTextDisplay.textContent = `Select at least ${freeLimit}.`;
           const extraCostDisplay = document.createElement('div');
           extraCostDisplay.className = 'extra-cost-display';
+          extraCostDisplay.id = 'extaCostHighlight'
           extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
           titleGroup.appendChild(extraCostDisplay);
         }
@@ -610,92 +640,88 @@ function openCustomizeModal(item) {
       return; 
     }
 
+    // Clear any old validation errors from a previous click
     const oldErrors = document.querySelectorAll('#customOptions .validation-error');
     oldErrors.forEach(error => error.remove());
 
     const customizations = {};
     const optionGroups = document.querySelectorAll('#customOptions .option-group');
     let isFormValid = true; 
-    
-    // --- NEW: Variable to store a reference to the first error element ---
     let firstErrorElement = null;
 
     optionGroups.forEach(group => {
-    const titleElement = group.querySelector('h4');
-    const groupTitle = titleElement.textContent;
-    let isValidForThisGroup = true;
-    let errorMessage = '';
+      const titleElement = group.querySelector('h4');
+      if (!titleElement) return; // Skip groups without a title (e.g., pricing)
+      const groupTitle = titleElement.textContent.trim();
 
-    // Check for a required minimum selection on checkbox groups
-    const requiredMinimum = parseInt(group.dataset.freeLimit, 10);
-    if (!isNaN(requiredMinimum) && requiredMinimum > 0) {
-        const checkedCount = group.querySelectorAll('input[type="checkbox"]:checked').length;
-        if (checkedCount < requiredMinimum) {
-            isValidForThisGroup = false;
-            errorMessage = `You must select at least ${requiredMinimum} options.`;
+      let errorMessage = '';
+
+      const radioInputs = group.querySelectorAll('input[type="radio"]');
+      const checkboxInputs = group.querySelectorAll('input[type="checkbox"]');
+
+      // --- CASE 1: Handle Radio Button Groups ---
+      if (radioInputs.length > 0) {
+        const selectedRadio = group.querySelector('input[type="radio"]:checked');
+        if (selectedRadio) {
+          customizations[groupTitle] = selectedRadio.value;
         } else {
-            // It's valid, so gather the selected checkbox values
-            const selectedCheckboxes = group.querySelectorAll('input[type="checkbox"]:checked');
+          // A radio group is always required
+          isFormValid = false;
+          errorMessage = 'You must select an option.';
+        }
+      } 
+      // --- CASE 2: Handle ALL Checkbox Groups (Combo and Regular) ---
+      else if (checkboxInputs.length > 0) {
+        const selectedCheckboxes = group.querySelectorAll('input[type="checkbox"]:checked');
+        
+        // Validation: Check if a minimum is required (for combos)
+        const requiredMinimum = parseInt(group.dataset.freeLimit, 10);
+        if (!isNaN(requiredMinimum) && selectedCheckboxes.length < requiredMinimum) {
+            isFormValid = false;
+            errorMessage = `You must select at least ${requiredMinimum} options.`;
+        }
+        
+        // If any checkboxes are selected (and validation passed), add them.
+        // This now correctly captures REGULAR checkbox groups too!
+        if (selectedCheckboxes.length > 0) {
             customizations[groupTitle] = Array.from(selectedCheckboxes).map(cb => cb.value);
         }
-    } else {
-        // Check for a required selection on radio button groups
-        const radioInputs = group.querySelectorAll('input[type="radio"]');
-        if (radioInputs.length > 0) { // Only validate if it IS a radio group
-            const selectedRadio = group.querySelector('input[type="radio"]:checked');
-            if (selectedRadio) {
-                customizations[groupTitle] = selectedRadio.value;
-            } else {
-                isValidForThisGroup = false;
-                errorMessage = 'You must select an option.';
-            }
-        }
-    }
-
-    // If validation failed for this group, show the error message
-    if (!isValidForThisGroup) {
-        isFormValid = false; // Set the overall form validity to false
-
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'validation-error';
-        errorDiv.textContent = errorMessage;
-        
-        titleElement.insertAdjacentElement('afterend', errorDiv);
-        
-        // Keep track of the first error to scroll to it later
-        if (!firstErrorElement) {
-            firstErrorElement = errorDiv;
-        }
-    }
-});
-
-    // --- MODIFIED: STOP AND SCROLL IF VALIDATION FAILED ---
-    if (!isFormValid) {
-      // Check if we have an element to scroll to
-      if (firstErrorElement) {
-        // Scroll that first error into the user's view
-        firstErrorElement.scrollIntoView({
-          behavior: 'smooth', // Use a smooth animation
-          block: 'center'     // Try to center the error vertically
-        });
       }
-      return; // Stop the function here.
+
+      // If validation failed for this group, create and display the error message
+      if (errorMessage) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'validation-error';
+          errorDiv.textContent = errorMessage;
+          titleElement.insertAdjacentElement('afterend', errorDiv);
+          
+          if (!firstErrorElement) {
+              firstErrorElement = errorDiv;
+          }
+      }
+    });
+
+    // If the form is invalid, scroll to the first error and stop.
+    if (!isFormValid) {
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return; 
     }
 
-    // --- If we get here, the form was valid. Proceed as normal. ---
+    // --- Form is valid, proceed to add to cart ---
     const orderNotes = document.getElementById('order-notes').value.trim();
     if (orderNotes) {
       customizations['Special Instructions'] = orderNotes;
     }
 
+    // Your cart.addItem call is perfect. It will now receive the correct customizations.
     cart.addItem(currentItem.name, currentItem.name_chinese, currentItem.id, currentPrice, amount, customizations);
-    localStorage.setItem('cart', JSON.stringify(cart.getItems()));
     
     updateCartQuantityDisplay(cart);
     closeCustomizeModal();
   });
 }
-
 
   if (cartButton) {
     cartButton.addEventListener('click', () => {

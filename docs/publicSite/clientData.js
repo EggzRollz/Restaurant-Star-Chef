@@ -50,10 +50,10 @@ if (placeOrderBttn) {
 
         // --- The rest of your code remains the same ---
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
-            itemId: item.id, 
-            baseId: item.id.split('_')[0], 
+            itemId: item.baseId || item.id.split('_')[0], 
+    
             quantity: item.quantity,
-            customizations: item.customizations
+            customizations: item.customizations || {} // Also add a fallback for customizations
         }));
 
         if (cartPayload.length === 0) {
