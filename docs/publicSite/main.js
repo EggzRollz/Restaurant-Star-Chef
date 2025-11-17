@@ -428,23 +428,28 @@ function openCustomizeModal(item) {
             titleGroup.className = 'accordion-title-group';
             titleGroup.appendChild(addOnTitle);
 
-            const freeLimit = addOnGroupData.freeToppingLimit;
-            const postLimitPrice = addOnGroupData.postLimitPrice;
-            if (freeLimit !== undefined) {
-                const extraCostDisplay = document.createElement('div');
-                extraCostDisplay.className = 'extra-cost-display';
-                extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
-                titleGroup.appendChild(extraCostDisplay);
-            }
+         
             
-
-const limit = addOnGroupData.limit;
+        const freeLimit = addOnGroupData.freeToppingLimit;
+        const postLimitPrice = addOnGroupData.postLimitPrice;
+        const limit = addOnGroupData.limit;
+        const limitTextDisplay = document.createElement('div');
+        limitTextDisplay.className = 'extra-cost-display'; // Re-use existing style
+        titleGroup.appendChild(limitTextDisplay);
         if (limit !== undefined) {
-            const limitTextDisplay = document.createElement('div');
-            limitTextDisplay.className = 'extra-cost-display'; // Re-use existing style
-            limitTextDisplay.textContent = `Maximum choice of ${limit}.`;
-            titleGroup.appendChild(limitTextDisplay);
+            limitTextDisplay.textContent = `Select up to ${limit}.`;
+        }else if (limit === undefined && freeLimit === undefined) {
+          limitTextDisplay.textContent = `Select up to 1.`;
+        }else{
+          limitTextDisplay.textContent = `Select at least ${freeLimit}.`;
+          const extraCostDisplay = document.createElement('div');
+          extraCostDisplay.className = 'extra-cost-display';
+          extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
+          titleGroup.appendChild(extraCostDisplay);
         }
+        
+        
+        
         // *** MOVED AND CORRECTED SECTION END ***
 
         headerContainer.appendChild(titleGroup);
@@ -464,15 +469,6 @@ const limit = addOnGroupData.limit;
         headerContainer = addOnGroup; 
         optionsListContainer = addOnGroup; 
         headerContainer.appendChild(addOnTitle);
-        
-        const freeLimit = addOnGroupData.freeToppingLimit;
-        const postLimitPrice = addOnGroupData.postLimitPrice;
-        if (freeLimit !== undefined) {
-            const extraCostDisplay = document.createElement('div');
-            extraCostDisplay.className = 'extra-cost-display';
-            extraCostDisplay.textContent = `Includes 2 free toppings, +$${postLimitPrice.toFixed(2)} for additional selections.`;
-            optionsListContainer.appendChild(extraCostDisplay);
-        }
 
         // *** MOVED AND CORRECTED SECTION START (for Non-Combo Items) ***
         const limit = addOnGroupData.limit;

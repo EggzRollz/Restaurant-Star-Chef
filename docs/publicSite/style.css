@@ -1406,7 +1406,16 @@ hr.divider {
   color: #888; /* A nice light grey */
   margin-left: 4px; /* Optional: Adds a little space */
 }
+#modal-scroll-area {
+  /* This is the magic property you are missing. */
+  /* It tells the browser: "If the content is too tall, add a scrollbar!" */
+  overflow-y: auto;
 
+  /* You probably already have a rule like this, which is correct. */
+  /* This prevents the modal itself from getting too tall. */
+  /* Make sure you have one, e.g., max-height: 60vh; or max-height: 450px; */
+  max-height: 60vh; /* Adjust this value as needed */
+}
 .closeModalBttn {
   
   position: absolute;  
@@ -1754,7 +1763,7 @@ hr.divider {
 
 /* The "open" state for the accordion */
 .option-group.is-accordion.is-open .accordion-content {
-  max-height: 600px; /* A large enough value to show all content */
+  max-height: 5000px; /* A large enough value to show all content */
   transition: max-height 0.4s ease-in;
 }
 

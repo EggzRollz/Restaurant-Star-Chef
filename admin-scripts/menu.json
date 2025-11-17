@@ -59,30 +59,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -94,6 +70,43 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+                     {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -155,30 +168,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -190,12 +179,50 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+                     {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
             {"type": "combo"}    
           ]
-        },{
+        },
+        {
           "id": "FSH3",
           "name_chinese": "炸魚柳*****",
           "name_english": "Parsley & Preserved Egg Fish Soup Combo",
@@ -250,30 +277,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -285,6 +288,43 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+                     {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -346,30 +386,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -381,6 +397,43 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+                     {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -442,30 +495,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -477,6 +506,44 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            }
+            ,
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -538,30 +605,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -573,6 +616,44 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            }
+            ,
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -634,30 +715,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -669,6 +726,43 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -731,30 +825,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -766,6 +836,43 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
@@ -829,30 +936,6 @@
               ]
             },
             {
-              "title": "Choose a drink", 
-              "choices": [               
-                { "addOnName": "HK Style Milk Tea" },
-                { "addOnName": "Coffee" },
-                { "addOnName": "Milk Tea & Coffee"},
-                { "addOnName": "Lemon Tea" },
-                { "addOnName": "Lemon Water"},
-                { "addOnName": "Lemon with Honey" },
-                { "addOnName": "Lemon Coke" },
-                { "addOnName": "Soya Milk" },
-                { "addOnName": "Milk" },
-                { "addOnName": "Red Bean Freeze"},
-                { "addOnName": "Red Bean Freeze & Ice Cream" },
-                { "addOnName": "Grass Jelly"},
-                { "addOnName": "Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Red Bean & Grass Jelly Freeze" },
-                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" },
-                { "addOnName": "Mango Milkshake" },
-                { "addOnName": "Strawberry Milkshake" }
-            ]
-            },
-            {
               "title": "Choose side dishes",
               "multiSelect": true, 
               "limit": 2,
@@ -864,6 +947,43 @@
                 { "addOnName": "Deep Fried Fish Fillet", "price": 4.00},
                 { "addOnName": "Pan Fried Boneless Chicken", "price": 4.00 }
               ]
+            },
+            {
+              "title": "Choose a drink", 
+              "choices": [               
+                { "addOnName": "HK Style Milk Tea" },
+                      { "addOnName": "Coffee" ,"price" :1.50},
+                { "addOnName": "Milk Tea & Coffee"},
+                { "addOnName": "Lemon Tea" },
+                { "addOnName": "Lemon Water"},
+                { "addOnName": "Lemon with Honey" },
+                { "addOnName": "Lemon Coke" },
+                { "addOnName": "Soya Milk" },
+                { "addOnName": "Milk" },
+                { "addOnName": "Coke" },
+                { "addOnName": "Sprite" },
+                { "addOnName": "Diet Coke" },
+                { "addOnName": "Ginger Ale" },
+                { "addOnName": "Nestea" },
+                { "addOnName": "Cold HK Style Milk Tea","price" : 1.50},
+                { "addOnName": "Cold Coffee" ,"price" :1.50},
+                { "addOnName": "Cold Milk Tea & Coffee", "price" : 1.50},
+                { "addOnName": "Cold Lemon Tea", "price" : 1.50},
+                { "addOnName": "Cold Lemon Water"},
+                { "addOnName": "Cold Lemon with Honey", "price" : 1.50 },
+                { "addOnName": "Cold Lemon Coke", "price" : 1.50 },
+                { "addOnName": "Cold Soya Milk", "price" : 1.50 },
+                { "addOnName": "Milk", "price" : 1.50 },
+                { "addOnName": "Red Bean Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Red Bean & Grass Jelly Freeze", "price" : 1.50},
+                { "addOnName": "Red Bean Grass Jelly Freeze & Ice Cream", "price" : 1.50},
+                { "addOnName": "Mango Milkshake", "price" : 1.50},
+                { "addOnName": "Strawberry Milkshake", "price" : 1.50}
+                
+            ]
             }
           ],
           "tags":[
