@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();
 
-        const isStoreClosed = false;
-        //const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+        //const isStoreClosed = false;
+        const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
 
         // The button should be disabled if the store is closed OR if the cart is empty
         placeOrderBttn.disabled = isStoreClosed || isCartEmpty;
@@ -235,20 +235,24 @@ document.addEventListener("DOMContentLoaded", () => {
             // Filter out any default or empty values
             const validValues = customizationValues.filter(value => value && value !== 'default');
 
-            if (validValues.length > 0) {
-                // If there are valid customizations, loop through the values
-                validValues.forEach(value => {
-                    // Create a new span element for this single value
-                    const customSpan = document.createElement('span');
-                    customSpan.textContent = value;
-                    
-                    // Append this new span to the main customization container
-                    customizationEl.appendChild(customSpan);
-                });
-            } else {
-                // If there are no customizations, remove the container entirely
-                customizationEl.remove();
-            }
+                if (validValues.length > 0) {
+    // --- START OF THE NEW CODE ---
+
+    // Join all the customization values into one big string
+    const fullCustomizationText = validValues.join(', ');
+
+    // Replace every comma and the space that follows it with a comma and a line break tag
+    const htmlWithBreaks = fullCustomizationText.replace(/, /g, ',<br>');
+
+    // Set the HTML of the container. We use .innerHTML because it understands the <br> tag.
+    customizationEl.innerHTML = htmlWithBreaks;
+
+    // --- END OF THE NEW CODE ---
+
+} else {
+    // If there are no customizations, remove the container entirely
+    customizationEl.remove();
+}
 
             // 5. Append the finished clone to the cart container in the DOM
             cartContainer.appendChild(clone);

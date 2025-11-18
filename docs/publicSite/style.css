@@ -27,7 +27,7 @@ html {
     scroll-behavior: smooth;
     scrollbar-width: thin; 
     scrollbar-color: #666 transparent;
- 
+
 }
 
 body {
@@ -35,14 +35,463 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden; 
+    overflow-x: hidden;
+    
     font-family: Arial, Helvetica, sans-serif;
     background-color: #000000;
-
-    /* Add Firefox support for body too */
+    
+    /* --- REMOVE THESE TWO LINES --- */
+    /* perspective: 1px; */
+    /* transform-style:preserve-3d; */
+    
+    /* Firefox scrollbar support is fine to leave */
     scrollbar-width: thin; 
     scrollbar-color: #666 transparent;
 }
+
+main {
+    position: relative;
+    z-index: 2; /* Ensures it's layered on top of the parallax background */
+    background-color: #000;
+    
+    /* Brings the content forward in the 3D space, making it visible */
+    transform: translateZ(0);
+}
+.main-header {
+    top :  0;
+    left : 0;
+    right: auto;
+    width: calc(100% - 10px);
+    min-height : 60px; 
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+    backdrop-filter: blur(2px);
+    position: fixed !important;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+.main-header a {
+  color: white; 
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); 
+}
+.main-header.scrolled {
+    background-color: #000000; /* Change background to black */
+}
+.solid-header-page .main-header {
+  background-color: #000000; /* Use the same color as your .scrolled state */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Also add the shadow if you want it */
+}
+@media (max-width: 768px) {
+    .main-header {
+    top :  0;
+    left : 0;
+    right: auto;
+    width: calc(100% - 5px);
+    min-height : 60px; 
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+    backdrop-filter: blur(2px);
+    position: fixed !important;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+}
+
+
+.main-nav {
+    display: flex;
+    /* This is the key property! */
+    justify-content: space-between; 
+    align-items: center; /* Vertically aligns logo, links, and cart */
+    width: 100%;
+    height: 100%;
+    padding: 0 40px; /* Adds space on the sides so logo/cart aren't on the edge */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+
+.nav-links {
+    display: flex; /* This still needs to be flex to arrange the <li> items */
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Remove default margin from the <ul> */
+    gap: 13vw; /* This controls the spacing BETWEEN the links */
+
+    /* REMOVE ALL of the old positioning rules */
+    /* max-width, margin-left, margin-right, flex-grow are no longer needed */
+}
+
+
+
+
+.nav-links a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-family: 'Asap Condensed', sans-serif;
+  font-weight: 400;
+  fill: white;
+}
+
+.nav-links a:hover {
+  color: #A2956B;
+  transition: color 0.3s;
+}
+
+
+@media (max-width: 768px) {
+  .main-nav {
+    display: flex;
+    /* This is the key property! */
+    justify-content: space-between; 
+    align-items: center; /* Vertically aligns logo, links, and cart */
+    width: 100%;
+    height: 100%;
+    padding: 0 20px; /* Adds space on the sides so logo/cart aren't on the edge */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+  .nav-links {
+    position: fixed; 
+    
+    /* === THE FIX === */
+    top: 0;    /* 1. Anchor it to the top of the screen */
+    right: -26px;  /* Keep it on the right side */
+    height: 100vh; /* 2. Make it 100% of the viewport height */
+    
+    width: 60vw; /* A little wider can feel better on mobile */
+    max-width: 400px;
+    background-color: #000;
+    z-index: 1000;
+    justify-content: flex-start; 
+
+     /* Increase padding for better spacing from the top */
+    gap: 60px;          /* Now you can use gap to create controlled, small spacing */
+    /* Layout for items inside the menu */
+    display: flex;
+    flex-direction: column !important;
+    align-items: center; /* Center links horizontally */
+    padding-top: 100px;  /* Give space at the top for a close button or branding */
+
+    /* Animation properties */
+    opacity: 0;
+    /* 3. The transform now ONLY handles the horizontal slide */
+    transform: translateX(100%); 
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  }
+
+  /* --- The Mobile Menu Container (Visible State) --- */
+  .nav-links.active {
+    opacity: 1;
+    /* 4. We bring it back to its original spot on the screen */
+    transform: translateX(0);
+    padding-top:100px;
+  }
+
+  .nav-links li {
+    color: #A2956B;
+    text-align: center;
+    width: 100%; /* Ensure the link's clickable area is full-width */
+  }
+}
+
+
+.cart-button {
+  position: relative; /* Stays as the anchor for the quantity display */
+  background: transparent;
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0; /* Removes default button spacing */
+  margin-right: 5vw; /* Adds some space from the edge of the screen */
+}
+.cart-button i {
+  position: relative;
+}
+.cart-button:hover {
+  color: #A2956B;
+  transition: color 0.3s;
+}
+
+/* The red circular badge */
+.cart-quantity-display {
+  position: absolute;
+  top: -8px;    /* adjust for your icon size */
+  right: -11px;
+  background-color: red;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 0 3px rgba(0,0,0,0.6);
+}
+
+
+@media (max-width:768px) {
+  .cart-button {
+    position: absolute; /* Position it relative to the nav bar */
+    top: 50%; /* Center it vertically */
+    transform: translateY(-50%); /* This is a trick for perfect vertical centering */
+    right: 28%; /* Position it to the LEFT of the hamburger menu. Adjust as needed. */
+    z-index: 1100; /* Ensure it's on top */
+    margin-right: 0; /* We don't need margin when using absolute positioning */
+  }
+
+  /* Make sure your menu toggle is also positioned absolutely for alignment */
+  .menu-toggle {
+    display: block; /* Make sure it's visible */
+    position: absolute;
+    top: 47%;
+    transform: translateY(-50%);
+    left: 75%; /* Position on the far right */
+    z-index: 1100;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+}
+.overlay {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none; /* BY DEFAULT, it is NOT clickable */
+  transition: opacity 0.3s ease;
+  z-index: 50; /* A relatively low z-index is fine for the default state */
+}
+
+/* This rule should ONLY be applied via JavaScript when the mobile menu is opened */
+.overlay.active {
+  opacity: 1;
+  pointer-events: all; /* WHEN ACTIVE, it becomes clickable to block content */
+}
+
+.logo-link img {
+    height: 50px; 
+    width: auto;  
+    z-index: 1000;
+}
+@media (max-width: 768px) {
+    .logo-link img {
+        margin: 0 auto;   
+        display: flex;
+        height: 45px;
+        z-index: 100;
+    }
+}
+
+.splash-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Pushes it BEHIND the text, but INSIDE .fixed-background */
+
+    /* The parallax transform */
+    transform: translateZ(-1px) scale(2);
+    
+    /* Keep your existing background properties */
+    background-image: url('graphics/test.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.splash-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Place it BEHIND the text content */
+
+  /* The image for the specific page */
+ 
+  
+  /* Universal background settings */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* 
+  ========================================================================
+  THIS IS THE MAGIC KEY: It fixes the background to the browser window.
+  As the .splash-image div scrolls by, the background stays in place,
+  creating the parallax effect.
+  ========================================================================
+  */
+  background-attachment: fixed;
+}
+.fixed-background {
+    position: relative; /* Establishes a positioning context for its children */
+    height: 100vh;      /* Makes the splash section take up the full viewport height */
+    
+    /* Crucial for containing the 3D transformed children */
+    transform-style: preserve-3d;
+}
+.fixed-background::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(to top, black, transparent);
+  pointer-events: none;
+  z-index: 100;
+}
+.parallax-container {
+    height: 100vh; /* Takes up the full browser window height */
+    overflow-y: scroll; /* THIS is now the element that scrolls */
+    overflow-x: hidden;
+    
+    /* --- MOVE THE PARALLAX PROPERTIES HERE --- */
+    perspective: 1px;
+    transform-style: preserve-3d;
+
+    /* Add scrollbar styling for this container */
+    scrollbar-width: thin;
+    scrollbar-color: #666 transparent;
+    scroll-behavior: smooth;
+}
+
+/* You can also add the WebKit scrollbar styles for the new container */
+.parallax-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px; 
+}
+
+.parallax-container::-webkit-scrollbar-track {
+    background: none;
+}
+
+.parallax-container::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 3px; 
+}
+
+.parallax-container::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/* === PAGE-SPECIFIC IMAGES === */
+/* Add one of these for each page that needs a splash image */
+
+.splash-index {
+  background-image: url('graphics/test.jpg');
+}
+ 
+
+.splash-menu {
+  background-image: url('graphics/menuSplash.jpg'); /* Example for menu page */
+}
+
+.splash-about {
+  background-image: url('graphics/outsideRestaurant.png'); /* Example for about page */
+}
+
+@media (max-width: 768px) {
+  
+  /* Disable parallax on mobile for better performance */
+  .splash-image {
+    background-attachment: scroll; /* Or 'initial' */
+  }
+
+  .splash-menu {
+    background-position: 50% 25%; 
+  }
+
+  .splash-index {
+    background-position: 40% 25%;
+  }
+
+  .splash-about {
+    background-position: 72% 25%;
+  }
+}
+/* === GRADIENT OVERLAY (Stays the same) === */
+
+
+.splash-text {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 100;
+    width: 80%;
+    background: transparent;
+    border: none;
+    padding: 1em;
+    cursor: pointer;
+
+    transition: transform 0.1s ease-out;
+}
+.splash-text h1 {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 4rem;
+    margin: 0 0 -5px 0;
+}
+.splash-text p {
+    font-family: serif;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    color: white;
+    margin-top: 0;
+}
+
+
+.splash-text,
+.minor-splash-text, 
+.opening-hours-text, 
+.location-text {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.splash-text {
+    transform: translate(-50%, -50%) translateY(20px);
+}
+
+.minor-splash-text, 
+.opening-hours-text, 
+.location-text {
+    transform: translateY(20px);
+}
+
+/*
+  STEP 2: Define the FINAL (visible) state.
+  When the .visible class is added by JavaScript, the elements
+  will transition to being fully opaque and in their original position.
+*/
+.splash-text.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* This is the key fix! */
+}
+
+/* When .visible is added, all other text moves to its final position. */
+.minor-splash-text.visible, 
+.opening-hours-text.visible, 
+.location-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* --- Option 3: The Double Line Reveal --- */
 .our-menu {
   /* --- Positioning & Structure --- */
@@ -57,6 +506,9 @@ body {
   border: none;
   padding: 1em;
   cursor: pointer;
+
+  /* Optional: Add a transition for a slightly smoother start/stop */
+  transition: transform 0.1s ease-out;
 }
 
 .our-menu a {
@@ -129,366 +581,8 @@ body {
   }
   .menu-toggle.active {
     color: #A2956B;
-    background-color: #fffdfd20;
     }
 }
-.main-header {
-    top :  0;
-    left : 0;
-    width : 100%;
-    min-height : 60px; 
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
-    backdrop-filter: blur(2px);
-    position: fixed;
-    padding: 10px 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    z-index: 100;
-}
-.main-header a {
-  color: white; 
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); 
-}
-.main-header.scrolled {
-    background-color: #000000; /* Change background to black */
-}
-.solid-header-page .main-header {
-  background-color: #000000; /* Use the same color as your .scrolled state */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Also add the shadow if you want it */
-}
-@media (max-width: 768px) {
-    .main-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 10vh; /* Set an explicit height */
-        background-color: #000000;
-        padding: 0 20px; /* Use shorthand padding */
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        z-index: 100;
-        box-sizing: border-box;
-
-        /* --- THE FIX --- */
-        display: flex;           /* 1. Make the header a flex container */
-        align-items: center;     /* 2. Vertically center all its children */
-    }
-}
-
-
-.main-nav {
-    display: flex;
-    /* This is the key property! */
-    justify-content: space-between; 
-    align-items: center; /* Vertically aligns logo, links, and cart */
-    width: 100%;
-    height: 100%;
-    padding: 0 40px; /* Adds space on the sides so logo/cart aren't on the edge */
-    box-sizing: border-box; /* Ensures padding is included in the width */
-}
-
-.nav-links {
-    display: flex; /* This still needs to be flex to arrange the <li> items */
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Remove default margin from the <ul> */
-    gap: 13vw; /* This controls the spacing BETWEEN the links */
-
-    /* REMOVE ALL of the old positioning rules */
-    /* max-width, margin-left, margin-right, flex-grow are no longer needed */
-}
-
-
-
-
-.nav-links a {
-  color: rgb(255, 255, 255);
-  text-decoration: none;
-  font-family: 'Asap Condensed', sans-serif;
-  font-weight: 400;
-  fill: white;
-}
-
-.nav-links a:hover {
-  color: #A2956B;
-  transition: color 0.3s;
-}
-
-
-@media (max-width: 768px) {
-  .main-nav {
-    display: flex;
-    /* This is the key property! */
-    justify-content: space-between; 
-    align-items: center; /* Vertically aligns logo, links, and cart */
-    width: 100%;
-    height: 100%;
-    padding: 0 20px; /* Adds space on the sides so logo/cart aren't on the edge */
-    box-sizing: border-box; /* Ensures padding is included in the width */
-}
-  .nav-links {
-    position: fixed; 
-    
-    /* === THE FIX === */
-    top: 0;    /* 1. Anchor it to the top of the screen */
-    right: 0;  /* Keep it on the right side */
-    height: 100vh; /* 2. Make it 100% of the viewport height */
-    
-    width: 200px; /* A little wider can feel better on mobile */
-    background-color: #000;
-    z-index: 1000;
-    justify-content: flex-start; 
-
-     /* Increase padding for better spacing from the top */
-    gap: 60px;          /* Now you can use gap to create controlled, small spacing */
-    /* Layout for items inside the menu */
-    display: flex;
-    flex-direction: column !important;
-    align-items: center; /* Center links horizontally */
-    padding-top: 35%;  /* Give space at the top for a close button or branding */
-
-    /* Animation properties */
-    opacity: 0;
-    /* 3. The transform now ONLY handles the horizontal slide */
-    transform: translateX(100%); 
-    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
-  }
-
-  /* --- The Mobile Menu Container (Visible State) --- */
-  .nav-links.active {
-    opacity: 1;
-    /* 4. We bring it back to its original spot on the screen */
-    transform: translateX(0);
-    padding-top:35%;
-  }
-
-  .nav-links li {
-    color: #A2956B;
-    text-align: center;
-    width: 100%; /* Ensure the link's clickable area is full-width */
-  }
-}
-
-
-.cart-button {
-  position: relative; /* Stays as the anchor for the quantity display */
-  background: transparent;
-  color: rgb(255, 255, 255);
-  border: none;
-  cursor: pointer;
-  font-size: 1.3rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0; /* Removes default button spacing */
-  margin-right: 5vw; /* Adds some space from the edge of the screen */
-}
-.cart-button i {
-  position: relative;
-}
-.cart-button:hover {
-  color: #A2956B;
-  transition: color 0.3s;
-}
-
-/* The red circular badge */
-.cart-quantity-display {
-  position: absolute;
-  top: -8px;    /* adjust for your icon size */
-  right: -11px;
-  background-color: red;
-  color: white;
-  font-size: 0.65rem;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 15px;
-  height: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  box-shadow: 0 0 3px rgba(0,0,0,0.6);
-}
-
-
-@media (max-width:768px) {
-  .cart-button {
-    position: absolute; /* Position it relative to the nav bar */
-    top: 50%; /* Center it vertically */
-    transform: translateY(-50%); /* This is a trick for perfect vertical centering */
-    right: 28%; /* Position it to the LEFT of the hamburger menu. Adjust as needed. */
-    z-index: 1100; /* Ensure it's on top */
-    margin-right: 0; /* We don't need margin when using absolute positioning */
-  }
-
-  /* Make sure your menu toggle is also positioned absolutely for alignment */
-  .menu-toggle {
-    display: block; /* Make sure it's visible */
-    position: absolute;
-    top: 47%;
-    transform: translateY(-50%);
-    right: 10%; /* Position on the far right */
-    z-index: 1100;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.8rem;
-    cursor: pointer;
-  }
-}
-.overlay {
-  position: fixed;
-  top: 0; 
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.5);
-  opacity: 0;
-  pointer-events: none; /* BY DEFAULT, it is NOT clickable */
-  transition: opacity 0.3s ease;
-  z-index: 50; /* A relatively low z-index is fine for the default state */
-}
-
-/* This rule should ONLY be applied via JavaScript when the mobile menu is opened */
-.overlay.active {
-  opacity: 1;
-  pointer-events: all; /* WHEN ACTIVE, it becomes clickable to block content */
-}
-
-.logo-link img {
-    height: 50px; 
-    width: auto;  
-    z-index: 1000;
-}
-@media (max-width: 768px) {
-    .logo-link img {
-        margin: 0 auto;   
-        display: flex;
-        height: 45px;
-        z-index: 100;
-    }
-}
-
-
-.splash-image {
-  position: relative; 
-  width: 100%;
-  height: 110vh;
-  overflow: hidden;
-  z-index: 1;
-  /* Universal background settings */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center 40%; 
-  /* 
-    NOTICE: The specific 'background-image' url is GONE from here.
-  */
-}
-
-/* === PAGE-SPECIFIC IMAGES === */
-/* Add one of these for each page that needs a splash image */
-
-.splash-index {
-  background-image: url('graphics/test.jpg');
-}
-
-.splash-menu {
-  background-image: url('graphics/menuSplash.jpg'); /* Example for menu page */
-}
-
-.splash-about {
-  background-image: url('graphics/outsideRestaurant.png'); /* Example for about page */
-}
-
-
-/* === GRADIENT OVERLAY (Stays the same) === */
-.splash-image::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 70%;
-  background: linear-gradient(to top, black, transparent);
-  pointer-events: none;
-  z-index: 8;
-}
-
-@media (max-width: 768px) {
-  
-  .splash-menu {
-    background-position: 50% 25%; 
-  }
-
-  .splash-index {
-    background-position: 40% 25%;
-  }
-
-  .splash-about {
-    background-position: 72% 25%;
-  }
-}
-.splash-text {
-    position: absolute;
-    top: 42%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-align: center;
-    z-index: 10;
-    width: 80%;
-}
-.splash-text h1 {
-    font-family: "Great Vibes", cursive;
-    font-weight: 400;
-    font-style: normal;
-    color: #ffffff;
-    font-size: 4rem;
-    margin: 0 0 -5px 0;
-}
-.splash-text p {
-    font-family: serif;
-    font-size: 1.5rem;
-    line-height: 1.6;
-    color: white;
-    margin-top: 0;
-}
-
-
-.splash-text,
-.minor-splash-text, 
-.opening-hours-text, 
-.location-text {
-    opacity: 0;
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-.splash-text {
-    transform: translate(-50%, -50%) translateY(20px);
-}
-
-.minor-splash-text, 
-.opening-hours-text, 
-.location-text {
-    transform: translateY(20px);
-}
-
-/*
-  STEP 2: Define the FINAL (visible) state.
-  When the .visible class is added by JavaScript, the elements
-  will transition to being fully opaque and in their original position.
-*/
-.splash-text.visible {
-    opacity: 1;
-    transform: translate(-50%, -50%); /* This is the key fix! */
-}
-
-/* When .visible is added, all other text moves to its final position. */
-.minor-splash-text.visible, 
-.opening-hours-text.visible, 
-.location-text.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 
 /* --- Base Container & Text Grouping (.awards) --- */
 .awards {
@@ -496,12 +590,13 @@ body {
     flex-direction: column;
     text-align: center;
     justify-content: center;
-    margin-top: 120px;
-    margin-bottom: 100px;
-    max-width: 400px; 
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px; 
+    border-width:10px;
+    padding-top: 120px;
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-bottom: 100px;
+    background-color: black; 
+
 }
 
 /* --- Heading Styling (.awards h2) - KEPT Asap Condensed */
@@ -542,17 +637,26 @@ body {
     display: block; 
 }
 @media (max-width: 768px){
-  .awards{
+  .awards {
+    background-color: black;
+    color: white; /* Set default text color for the section */
+
+    /* The "Full Bleed" technique to break out of the parent container */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+
+    /* Apply your vertical padding + safe-area padding for mobile */
+    padding: 120px 1rem 100px;
+
+    /* These properties center the text content vertically */
     display: flex;
     flex-direction: column;
-    text-align: center;
     justify-content: center;
-    margin-top:80px;
-    margin-bottom:15px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    align-items: center;
+}
 }
 .gallery-wrapper {
   position: relative; /* Needed to position the buttons */
@@ -1047,9 +1151,6 @@ p{
 }
 
 
-.menu-nav-wrapper {
-  position: relative;
-}
 
 .menu-splash-text {
     position: absolute;
@@ -1086,18 +1187,39 @@ hr.divider {
   color: white;
   margin-bottom: 0; /* Remove default bottom margin from the paragraph */
 }
-
-
-
-.menu-nav {
-  width: 100%;
-  overflow-x: auto;
-  background: transparent; 
-  transition: all 0.3s ease;
-  display: flex;
-  justify-content: center;
-  
+.menu-nav-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 72px; /* Adjust this if your header is a different height */
+    z-index: 1000;
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #A2956B black; /* thumb-color track-color */
+    
 }
+
+
+/* 2. Keep the visual styles on the MENU-NAV */
+.menu-nav {
+    /* position: sticky;  <--- DELETED */
+    /* top: 74px;         <--- DELETED */
+    background-color: #000000;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding-top: 5vh;
+    border-bottom: 2px solid transparent; /* Start with a transparent border */
+    transition: border-color 0.3s ease;    /* Animate the color change smoothly */
+    padding-bottom: 20px;
+    
+}
+@media (min-width: 796px){
+  .menu-nav-wrapper.scrolled .menu-nav {
+  border-bottom-color: rgb(132, 132, 132);
+
+}
+
+}
+
 
 .menu-nav ul {
   display: flex;
@@ -1109,6 +1231,12 @@ hr.divider {
   list-style: none;
   white-space: nowrap; 
   padding-bottom: 20px;
+}
+@media (max-width: 796px){
+  .menu-nav ul {
+  padding-bottom:  0;;
+
+  }
 }
 
 
@@ -1127,23 +1255,52 @@ hr.divider {
   /* Remove margin-right since gap handles spacing now */
 }
 
-.menu-nav a:hover,
-.menu-nav a:focus {
-  color: #A2956B; 
-  outline: none;
+.menu-nav a {
+  /* Add a smooth transition for the color change */
+  transition: color 0.2s ease-in-out; 
 }
 
+/* Your styles for hover, focus, and active states */
+.menu-nav a:hover,
 .menu-nav a.active {
   color: #A2956B; 
 }
 
-.menu-nav::-webkit-scrollbar {
-  height: 6px;
+/* Accessibility Improvement: 
+   Instead of "outline: none", we provide a custom, non-intrusive focus style.
+   This is crucial for users who navigate with a keyboard. */
+.menu-nav a:focus {
+  color: #A2956B; 
+  outline: 2px solid transparent; /* Remove the default ugly outline */
+  outline-offset: 2px;
+  /* Add a subtle underline as a clear focus indicator */
+  text-decoration: underline; 
+  text-decoration-color: #A2956B;
 }
 
-.menu-nav::-webkit-scrollbar-thumb {  
+
+/* --- WebKit (Chrome, Safari, Edge) Scrollbar Styles --- */
+
+/* Set the height of the scrollbar */
+.menu-nav-wrapper::-webkit-scrollbar {
+  height: 8px; /* A little thicker than 6px for easier grabbing, but still thin */
+}
+
+/* Style the track (the bar the thumb slides in) */
+.menu-nav-wrapper::-webkit-scrollbar-track {
+  background: #2c2c2c; /* Dark background to make the gold pop */
+  border-radius: 20px;
+}
+
+/* Your style for the thumb (the draggable part) */
+.menu-nav-wrapper::-webkit-scrollbar-thumb {  
   background-color: #A2956B;
   border-radius: 20px;
+}
+
+/* Add a nice hover effect for better user experience */
+.menu-nav-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #bfae78; /* A slightly brighter version of your gold */
 }
 @media (max-width: 768px){
   
@@ -1158,19 +1315,7 @@ hr.divider {
   padding-bottom: 20px;
   }
 }
-.menu-nav.fixed {
-  position: fixed;
-  top: 20px;
-  left: 0;
-  right: 0;
-  background-color: #000000;
-  z-index: 10000;
-  padding-top:20px;
-  padding-bottom: 20px; 
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  top: var(--header-height);
-}
+
 
 
 
@@ -1187,6 +1332,19 @@ hr.divider {
     border-bottom: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
+  .menu-nav-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 6vh; /* Adjust this if your header is a different height */
+    z-index: 1000;
+    width: 100%;
+    overflow-x: scroll;
+    background-color: black;
+    scrollbar-width: thin;          /* "auto" or "thin" */
+    padding-left:5px;
+    padding-right:5px;
+}
+
 }
 .menu-placeholder {
   display: none;
@@ -1228,6 +1386,7 @@ hr.divider {
   margin: 0 auto; /* Centers the menu */
   padding-right: 20px;
   padding-left: 20px;
+  padding-top:5vh;
 }
 
 /* 2. Style each category section */
@@ -1816,36 +1975,56 @@ hr.divider {
 .is-accordion .accordion-content {
   margin-top: 0;    /* Explicitly remove any top margin from the content */
 }
-
 .checkout-background {
-    background-image: url('graphics/checkout.jpg');
-    background-color: black;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center 60%;
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    position: relative;
-    z-index: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    padding: 1rem;
+
+    /* --- REFINED RESTAURANT-STYLE BACKGROUND --- */
+
+    /* Layered background for a sophisticated look */
+    background-image:
+        /* 1. Cinematic Spotlight: Darkens top/bottom, leaves sides clear */
+        radial-gradient(ellipse 150% 85% at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.75) 100%),
+        
+        /* 2. Subtle Texture: A faint shimmer instead of a hard grid */
+        linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%),
+        linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.02) 75%);
+
+    background-size: 
+        100% 100%,     /* Spotlight covers the full viewport */
+        25px 25px,     /* A smaller, more detailed texture size */
+        25px 25px;
+    
+
+    background-position: 
+        0 0,           /* Position for spotlight */
+        0 0,           /* Positions for the two lattice layers to create a cross-hatch */
+        12px 12px;
 }
 
 .checkout-bar-container {
     background-color: white;
-    width: 60%;
-    max-width: 90%;
-    min-height: 100vh;
+    width: 75%;
+    /* Use max-width to ensure it doesn't get too wide on large screens */
+    max-width: 1200px; 
+    /* Use a min-height that's less than the viewport to avoid stretching */
+    min-height: 80vh; 
     display: flex;
     flex-direction: column;
     padding: 20px;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Slightly enhanced shadow */
     color: black;
     z-index: 1;
 }
-
-
 
 
 .checkout-logo-container {
@@ -1973,7 +2152,7 @@ input.input-error::placeholder {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1em;
+    gap: 0.5em;
     max-width: 12em;
 }
 
@@ -1987,6 +2166,7 @@ input.input-error::placeholder {
     color: #838383;
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     gap: 5px;
     word-break: break-word;  /* Break long words */
     overflow-wrap: break-word;  /* Ensure wrapping */
@@ -2854,9 +3034,8 @@ h1 {
 /* ===== ABOUT US SECTION ===== */
 .location-section {
   display: flex;
-  align-items: stretch; 
+
   width: 100%;
-  margin-top: 50px;
   /* A dark background makes the text pop */
   color: white; /* Set a default text color for the section */
 }
@@ -2865,12 +3044,16 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 60px 40px; /* More vertical padding gives it room to breathe */
-  
+  padding-top:0;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+  padding-left:5vw; /* More vertical padding gives it room to breathe */
+  padding-right:5vw;
   /* Use 'gap' for consistent spacing between elements. It's cleaner than margin! */
   gap: 25px; 
+  
 }
 
 .location-img {

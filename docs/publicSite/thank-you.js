@@ -55,7 +55,7 @@ function displayPickupTime(orderNumber) {
 
     // If a pickup time is NOT already stored for this order, create one.
     if (!pickupTime) {
-        const prepTimeMinutes = 20; // Set estimated preparation time
+        const prepTimeMinutes = 30; // Set estimated preparation time
         const futureTime = new Date(Date.now() + prepTimeMinutes * 60000);
 
         // Format the time into a user-friendly string (e.g., "4:35 PM")

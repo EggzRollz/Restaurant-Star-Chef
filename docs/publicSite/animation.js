@@ -1,305 +1,204 @@
-console.log("The script is running!");
+// =========================================================================
+//  IMMEDIATE SETUP (Mobile Menu, etc.)
+// =========================================================================
+console.log("Final animation script running!");
 
-const gallery = document.querySelector('.gallery');
-const images = document.querySelectorAll('.gallery img');
-const animatedTexts = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .location-text');
+// [DEBUG] Selecting elements for mobile menu
 const navLinks = document.querySelector('.nav-links');
 const menuToggle = document.querySelector('.menu-toggle');
 const overlay = document.querySelector('.overlay');
+console.log('[DEBUG] Mobile Menu Elements:', { navLinks, menuToggle, overlay });
 
-// Mobile menu - check elements exist first
 if (menuToggle && navLinks && overlay) {
+  console.log('[DEBUG] Mobile menu elements found. Attaching event listeners.');
+
+  const closeMenu = () => {
+    console.log('[DEBUG] closeMenu() called. Removing active classes.');
+    navLinks.classList.remove('active');
+    menuToggle.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.classList.remove('no-scroll');
+  };
+
   document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      menuToggle.classList.remove('active');
-      overlay.classList.remove('active');
-    });
+    console.log('[DEBUG] Attaching closeMenu listener to nav link:', link);
+    link.addEventListener('click', closeMenu);
   });
 
   menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
+    console.log('[DEBUG] Menu toggle clicked. Toggling active classes.');
     navLinks.classList.toggle('active');
+    menuToggle.classList.toggle('active');
     overlay.classList.toggle('active');
+    document.body.classList.toggle('no-scroll');
+    console.log('[DEBUG] `nav-links` active state is now:', navLinks.classList.contains('active'));
   });
-  
+
   overlay.addEventListener('click', () => {
-    navLinks.classList.remove('active');
-    overlay.classList.remove('active');
-  });
-}
-
-
-function isInView(el) {
-  if (!el) return false;
-  const rect = el.getBoundingClientRect();
-  const inView = rect.top <= window.innerHeight && rect.bottom >= 0;
-  return inView;
-}
-
-function revealElementsOnScroll() {
-  if (gallery) {
-    gallery.querySelectorAll('img').forEach((img) => {
-      if (isInView(img) && !img.classList.contains('visible')) {
-        img.classList.add('visible');
-      }
-    });
-  }
-  animatedTexts.forEach((el, index) => {
-    if (isInView(el) && !el.classList.contains('visible')) {
-      setTimeout(() => { el.classList.add('visible'); }, index * 150);
-    }
-  });
-}
-function setupMobileGalleryLoop() {
-  const gallery = document.querySelector('.gallery'); // Assuming gallery is defined here
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  
-  if (!gallery || !isMobile) return;
-
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  if (!prevBtn || !nextBtn) return;
-
-  // --- 1. CLONE IMAGES FOR THE LOOP ---
-  const originalItems = Array.from(gallery.children);
-  if (originalItems.length === 0) return;
-  
-  // Clone images for the infinite effect
-  originalItems.forEach(item => {
-    const clone = item.cloneNode(true);
-    // Ensure cloned items don't have the 'visible' class if you are using it
-    clone.classList.remove('visible'); 
-    gallery.appendChild(clone);
+    console.log('[DEBUG] Overlay clicked. Calling closeMenu().');
+    closeMenu();
   });
 
-  // This function will contain the logic that depends on element dimensions
-  function initializeGalleryLogic() {
-    let loopPoint = 0;
-    const gap = parseInt(window.getComputedStyle(gallery).gap) || 30;
-
-    // Calculate the exact width of the original set of images
-    originalItems.forEach(item => {
-      loopPoint += item.offsetWidth + gap;
-    });
-
-    // --- 2. THE LOOPING LOGIC ---
-    const handleLoop = () => {
-      if (loopPoint === 0) return; // Guard clause
-      
-      // If scrolled past the end of the original set, jump back silently
-      if (gallery.scrollLeft >= loopPoint) {
-        gallery.style.scrollBehavior = 'auto';
-        gallery.scrollLeft -= loopPoint;
-        gallery.style.scrollBehavior = 'smooth';
-      }
-      // Note: A backward loop is more complex and often not needed with this setup.
-      // The user can just scroll back normally.
-    };
-
-    // --- 3. BUTTON CLICK EVENTS ---
-    nextBtn.addEventListener('click', () => {
-      // It's safer to calculate scrollAmount here in case of resize
-      const scrollAmount = originalItems[0].offsetWidth + gap;
-      gallery.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    });
-
-    prevBtn.addEventListener('click', () => {
-      const scrollAmount = originalItems[0].offsetWidth + gap;
-      gallery.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    });
-
-    // --- 4. SCROLL EVENT LISTENER ---
-    // Use a timeout to check for the loop condition after the scroll has finished
-    let scrollTimer;
-    gallery.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(handleLoop, 150); // A shorter timeout is fine
-    });
-  }
-
-  // --- ROBUST INITIALIZATION ---
-  // Check if the document is already loaded. If so, run the logic immediately.
-  // Otherwise, wait for it to load.
-  if (document.readyState === 'complete') {
-    initializeGalleryLogic();
-  } else {
-    window.addEventListener('load', initializeGalleryLogic);
-  }
+} else {
+  console.warn('[DEBUG] WARNING: One or more mobile menu elements (.nav-links, .menu-toggle, .overlay) were not found. Mobile menu will not function.');
 }
 
-
-// Run the function on load and on scroll
-
+// =========================================================================
+//  MAIN SCRIPT (RUNS ON DOMCONTENTLOADED)
+// =========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("--- DOMContentLoaded: SCRIPT START ---");
 
+  // --- 1. ELEMENT SELECTIONS ---
+  console.log('[DEBUG] Step 1: Selecting main page elements...');
   const mainHeader = document.querySelector('.main-header');
   const menuNav = document.querySelector('.menu-nav');
   const menuNavWrapper = document.querySelector('.menu-nav-wrapper');
   const menuNavLinks = document.querySelectorAll('.menu-nav a');
-  
-  if (mainHeader) {
-    const scrollThreshold = 600; // Pixels to scroll before the header changes
+  const scrollIndicator = document.querySelector('.scroll-down-indicator');
+  const scroller = document.querySelector('.parallax-container');
+  const parallaxHero = document.querySelector('.fixed-background'); // The element pushing content down
 
-    function handleHeaderScroll() {
-      if (window.scrollY > scrollThreshold) {
-        mainHeader.classList.add('scrolled');
-      } else {
-        mainHeader.classList.remove('scrolled');
-      }
+  console.log('[DEBUG] Element Selection Results:', { mainHeader, menuNav, menuNavWrapper, menuNavLinks, scrollIndicator, scroller, parallaxHero });
+
+  if (!scroller) {
+    console.error("[DEBUG] CRITICAL ERROR: The .parallax-container was not found. All scroll-based animations and logic will be disabled.");
+    return;
+  }
+
+  // --- 2. DEFINE ALL SCROLL-RELATED FUNCTIONS ---
+  let stickyTriggerPoint = 0;
+  let headerHeight = 0;
+
+const setupStickyNav = () => {
+    console.log('[DEBUG] Running setupStickyNav() for CSS position:sticky...');
+    if (!mainHeader || !menuNav) {
+        console.warn("[DEBUG] WARNING: setupStickyNav() is missing .main-header or .menu-nav.");
+        return;
     }
     
-    window.addEventListener('scroll', handleHeaderScroll);
-    handleHeaderScroll(); 
-  }
-  setupMobileGalleryLoop();
-  if (menuNavLinks.length > 0) {
+    const headerHeight = mainHeader.offsetHeight;
+    console.log(`[DEBUG] Measured mainHeader.offsetHeight: ${headerHeight}px`);
+
+    // We directly tell the .menu-nav element where its 'sticking' point is from the top.
+    // The CSS will handle the rest.
+    menuNav.style.top = `${headerHeight}px`;
+    console.log(`%c[DEBUG] CSS 'top' property of .menu-nav set to ${headerHeight}px. CSS will now handle the sticky behavior.`, 'color: lightgreen; font-weight: bold;');
+
+    // We still set the wrapper height to prevent a layout jump when smooth-scrolling calculates positions.
+    const menuNavHeight = menuNav.offsetHeight;
+    //menuNavWrapper.style.height = `${menuNavHeight}px`;
+    console.log(`[DEBUG] Set .menu-nav-wrapper height to: ${menuNavHeight}px`);
+  };
+
+  const handleHeaderScroll = (scrollY) => {
+    if (!mainHeader) return;
+    if (scrollY > window.innerHeight * 1) {
+        if (!mainHeader.classList.contains('scrolled')) console.log('[DEBUG] Header passed 600px scroll. Adding .scrolled class.');
+        mainHeader.classList.add('scrolled');
+    } else {
+        if (mainHeader.classList.contains('scrolled')) console.log('[DEBUG] Header is above 600px scroll. Removing .scrolled class.');
+        mainHeader.classList.remove('scrolled');
+    }
+  };
+  
+  const handleScrollIndicator = (scrollY) => {
+    if (!scrollIndicator) return;
+    if (scrollY > 50) {
+        if (!scrollIndicator.classList.contains('fade-out')) console.log('[DEBUG] Scroll indicator passed 50px. Fading out.');
+        scrollIndicator.classList.add('fade-out');
+    } else {
+        if (scrollIndicator.classList.contains('fade-out')) console.log('[DEBUG] Scroll indicator is above 50px. Fading in.');
+        scrollIndicator.classList.remove('fade-out');
+    }
+  };
+  const handleWhiteLineBorder = (scrollY) => {
+    // Safety check in case the element doesn't exist
+    if (!menuNavWrapper) return;
+    
+    // Check if the user has scrolled past the trigger point
+    if (scrollY > 500) {
+      // Add the .scrolled class to trigger the white border in CSS
+      if (!menuNavWrapper.classList.contains('scrolled')) console.log('[DEBUG] Sticky nav active. Adding .scrolled class for white border.');
+      menuNavWrapper.classList.add('scrolled');
+    } else {
+      // Remove the class if the user scrolls back to the top
+      if (menuNavWrapper.classList.contains('scrolled')) console.log('[DEBUG] Sticky nav inactive. Removing .scrolled class.');
+      menuNavWrapper.classList.remove('scrolled');
+    }
+  };
+
+  // --- 3. CREATE MASTER SCROLL LISTENER ---
+  const onScroll = () => {
+    const scrollY = scroller.scrollTop;
+    // console.log(`[DEBUG] Scroll event fired. Y: ${Math.round(scrollY)}`); // This can be very noisy, uncomment if needed.
+    //handleStickyNavScroll(scrollY);
+    handleHeaderScroll(scrollY);
+    handleScrollIndicator(scrollY);
+    handleWhiteLineBorder(scrollY)
+  };
+
+  // --- 4. INITIALIZE EVERYTHING ---
+  console.log('[DEBUG] Step 4: Initializing listeners and setup functions.');
+  scroller.addEventListener('scroll', onScroll, { passive: true });
+  console.log('[DEBUG] Master scroll listener attached to .parallax-container.');
+  
+  // A small timeout ensures elements have their final dimensions before we measure them.
+  console.log('[DEBUG] Scheduling setupStickyNav() to run in 100ms.');
+  setTimeout(setupStickyNav, 100);
+
+  window.addEventListener('resize', setupStickyNav);
+  console.log('[DEBUG] Resize listener attached to window.');
+
+
+  // --- 5. SMOOTH SCROLLING FOR MENU LINKS ---
+  if (menuNavLinks.length > 0 && mainHeader && menuNav) {
     menuNavLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent default anchor behavior
-        
+        e.preventDefault();
         const targetId = link.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
         
-        // If it's the #next-section link (for "ALL" or "FRIED NOODLES")
-        if (targetId === '#next-section') {
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            // Calculate the offset (header + menu nav height)
-            const headerHeight = mainHeader ? mainHeader.offsetHeight : 0;
-            const menuNavHeight = menuNav ? menuNav.offsetHeight : 0;
-            const totalOffset = headerHeight + menuNavHeight;
-            
-            // Get the element's position
-            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-            const offsetPosition = elementPosition - totalOffset;
-            
-            // Smooth scroll to the calculated position
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-          }
+        if (targetElement) {
+          // Calculation needs a slight adjustment for sticky positioning
+          const headerHeight = mainHeader.offsetHeight;
+          const menuNavHeight = menuNav.offsetHeight;
+          // The total space taken up by the fixed/sticky elements at the top
+          const totalOffset = headerHeight + menuNavHeight;
+          
+          // The target's position from the top of the scroller, minus the offset
+          const scrollTarget = targetElement.offsetTop - totalOffset;
+          
+          scroller.scrollTo({ top: scrollTarget, behavior: 'smooth' });
         } else {
-          // For other category links, just scroll to the menu section
-          const menuSection = document.querySelector('#next-section');
-          if (menuSection) {
-            const headerHeight = mainHeader ? mainHeader.offsetHeight : 0;
-            const menuNavHeight = menuNav ? menuNav.offsetHeight : 0;
-            const totalOffset = headerHeight + menuNavHeight;
-            
-            const elementPosition = menuSection.getBoundingClientRect().top + window.scrollY;
-            const offsetPosition = elementPosition - totalOffset;
-            
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-          }
+            console.error(`[DEBUG] ERROR: Smooth scroll target element '${targetId}' not found.`);
         }
       });
     });
   }
 
-  if (mainHeader && menuNav && menuNavWrapper) {
-    
-    let headerHeight = 0;
-    let menuNavHeight = 0;
-    let originalWrapperTop = 0;
-    let isSticky = false;
-    
+  // --- 6. FADE-IN ELEMENTS ON SCROLL (INTERSECTION OBSERVER) ---
+  const elementsToWatch = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .location-text, .awards, .gallery img, .awards-plaque');
+  console.log(`[DEBUG] Step 6: Setting up Intersection Observer for ${elementsToWatch.length} elements.`);
 
-    function setupStickyNav() {
-      // Remove fixed class to get accurate measurements
-      const wasFixed = isSticky;
-      if (wasFixed) {
-        menuNav.classList.remove('fixed');
-        isSticky = false;
-      }
-      
-      // Force reflow
-      void menuNav.offsetHeight;
-
-      // Get header height
-      headerHeight = mainHeader.offsetHeight;
-      
-      // Get menu nav height BEFORE it becomes fixed
-      menuNavHeight = menuNav.offsetHeight;
-
-      // CRITICAL: Set the wrapper height IMMEDIATELY before any calculations
-      // This prevents the grid from shifting when nav becomes fixed
-      menuNavWrapper.style.height = `${menuNavHeight}px`;
-
-      // Get the wrapper's absolute position from top of document
-      const wrapperRect = menuNavWrapper.getBoundingClientRect();
-      originalWrapperTop = wrapperRect.top + window.scrollY;
-
-      // Set CSS variable
-      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-
-      // Recheck scroll position after setup
-      handleScroll();
-    }
-
-    function handleScroll() {
-      const scrollPosition = window.scrollY;
-      const triggerPoint = originalWrapperTop - headerHeight;
-
-      if (scrollPosition >= triggerPoint) {
-        if (!isSticky) {
-          menuNavWrapper.style.height = `${menuNavHeight}px`;
-          menuNav.classList.add('fixed');
-          isSticky = true;
+  if (elementsToWatch.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          console.log('[DEBUG] Element is intersecting (visible):', entry.target);
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+          console.log('[DEBUG] Unobserving element to save performance.');
         }
-      } else {
-        if (isSticky) {
-          menuNav.classList.remove('fixed');
-          isSticky = false;
-          // Keep the height to prevent shift
-          menuNavWrapper.style.height = `${menuNavHeight}px`;
-        }
-      }
-    }
-
-    // Setup on load
-    window.addEventListener('load', () => {
-      setTimeout(setupStickyNav, 100);
-    });
-    
-    // Recalculate on resize with debounce
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(setupStickyNav, 150);
-    });
-
-    // Initial setup
-    setupStickyNav();
-
-    // Handle scroll with requestAnimationFrame
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-  }
-
-  // Scroll indicator logic
-  const scrollIndicator = document.querySelector('.scroll-down-indicator');
-  if (scrollIndicator) { 
-      window.addEventListener('scroll', () => {
-          if (window.scrollY > 50) { 
-              scrollIndicator.classList.add('fade-out');
-          } else {
-              scrollIndicator.classList.remove('fade-out');
-          }
       });
+    }, {
+      root: scroller,
+      rootMargin: '0px 0px -50px 0px',
+      threshold: 0.1
+    });
+    elementsToWatch.forEach(el => observer.observe(el));
+    console.log('[DEBUG] All elements are now being observed.');
+  } else {
+      console.log('[DEBUG] No elements found to attach to the Intersection Observer.');
   }
-  revealElementsOnScroll(); 
-  window.addEventListener('scroll', revealElementsOnScroll)
 });
-

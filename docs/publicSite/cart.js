@@ -29,7 +29,7 @@ export class Cart {
     const customizationString = customizationKeys.map(key => {
       const value = customizations[key];
       // A small fix here to handle values not in the map gracefully
-      const valueAbbreviation = this.abbreviationMap[value] || value.replace(/\s+/g, ''); 
+      const valueAbbreviation = this.abbreviationMap[value] || String(value).replace(/\s+/g, ''); 
       const keyAbbreviation = key.substring(0, 2).toUpperCase();
       return `${keyAbbreviation}-${valueAbbreviation}`;
     }).join('_');
