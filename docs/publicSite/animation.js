@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const gallery = document.querySelector('.gallery');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
+  const ourMenuBttn = document.querySelector('.our-menu-button')
+
 
 
 // Check if all necessary gallery elements exist on the page
@@ -153,16 +155,22 @@ const setupStickyNav = () => {
     }
   };
   
-  const handleScrollIndicator = (scrollY) => {
-    if (!scrollIndicator) return;
-    if (scrollY > 50) {
-        if (!scrollIndicator.classList.contains('fade-out')) console.log('[DEBUG] Scroll indicator passed 50px. Fading out.');
-        scrollIndicator.classList.add('fade-out');
-    } else {
-        if (scrollIndicator.classList.contains('fade-out')) console.log('[DEBUG] Scroll indicator is above 50px. Fading in.');
-        scrollIndicator.classList.remove('fade-out');
+  const handleScrollFadeElements = (scrollY) => {
+    // Determine the condition once
+    const shouldFadeOut = scrollY > 50;
+
+    // Apply the logic to the scroll indicator if it exists
+    if (scrollIndicator) {
+        // classList.toggle is perfect for this.
+        // It adds the class if shouldFadeOut is true, and removes it if false.
+        scrollIndicator.classList.toggle('fade-out', shouldFadeOut);
     }
-  };
+
+    // Apply the exact same logic to the menu button if it exists
+    if (ourMenuBttn) {
+        ourMenuBttn.classList.toggle('fade-out', shouldFadeOut);
+    }
+};
   const handleWhiteLineBorder = (scrollY) => {
     // Safety check in case the element doesn't exist
     if (!menuNavWrapper) return;
@@ -179,13 +187,14 @@ const setupStickyNav = () => {
     }
   };
 
+  
   // --- 3. CREATE MASTER SCROLL LISTENER ---
   const onScroll = () => {
     const scrollY = scroller.scrollTop;
     // console.log(`[DEBUG] Scroll event fired. Y: ${Math.round(scrollY)}`); // This can be very noisy, uncomment if needed.
     //handleStickyNavScroll(scrollY);
     handleHeaderScroll(scrollY);
-    handleScrollIndicator(scrollY);
+    handleScrollFadeElements(scrollY);
     handleWhiteLineBorder(scrollY)
   };
 
@@ -229,7 +238,7 @@ const setupStickyNav = () => {
   }
 
   // --- 6. FADE-IN ELEMENTS ON SCROLL (INTERSECTION OBSERVER) ---
-  const elementsToWatch = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .location-text, .awards, .gallery img, .awards-plaque');
+  const elementsToWatch = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .location-text, .awards, .gallery img, .awards-plaque, .our-menu');
   console.log(`[DEBUG] Step 6: Setting up Intersection Observer for ${elementsToWatch.length} elements.`);
 
   if (elementsToWatch.length > 0) {

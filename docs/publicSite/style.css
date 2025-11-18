@@ -332,6 +332,7 @@ main {
   creating the parallax effect.
   ========================================================================
   */
+
   background-attachment: fixed;
 }
 .fixed-background {
@@ -511,15 +512,32 @@ main {
   left: 50%; 
   transform: translateX(-50%);
   z-index: 100;
-  
+  list-style-type: none;
   /* --- Visuals --- */
   background: transparent;
   border: none;
   padding: 1em;
   cursor: pointer;
-
   /* Optional: Add a transition for a slightly smoother start/stop */
-  transition: transform 0.1s ease-out;
+  text-decoration: none; 
+  
+
+  /* 
+    THE FIX, PART 1: 
+    Define the transition for when the element becomes VISIBLE again.
+    Opacity fades in over 1.5s. Visibility changes back instantly (0s delay).
+  */
+  
+}
+.our-menu-button{
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-out, visibility 0s;
+}
+.our-menu-button.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
 }
 
 .our-menu a {
@@ -527,11 +545,12 @@ main {
   color: #FFFFFF;
   text-decoration: none;
   font-family: "Birthstone", cursive;
-  font-size: 1.8em;
+  font-size: 2em;
   letter-spacing: 1px;
   position: relative;
   padding-bottom: 8px;
   transition: color 0.3s ease 0.1s; /* Slight delay on the text color change */
+  
 }
 
 /* --- The "Something Extra": Two lines stacked on top of each other --- */
@@ -570,6 +589,7 @@ main {
   /* The top white line scales to 0, revealing the gold one underneath */
   transform: scaleX(0); 
 }
+
 
 .menu-toggle {
   display: none; 
@@ -1140,7 +1160,7 @@ p{
     visibility: visible;
 
     /* Add the animation */
-    transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
     animation: bounce-svg 2s infinite;
 }
 @media (max-width:796px){
@@ -1160,7 +1180,7 @@ p{
     visibility: visible;
 
     /* Add the animation */
-    transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
     animation: bounce-svg 2s infinite;
   }
 
@@ -3219,4 +3239,3 @@ h1 {
   padding-bottom: 100px;
   }
 }
-
