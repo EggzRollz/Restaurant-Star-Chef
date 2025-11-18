@@ -56,7 +56,9 @@ main {
     
     /* Brings the content forward in the 3D space, making it visible */
     transform: translateZ(0);
+    
 }
+
 .main-header {
     top :  0;
     left : 0;
@@ -298,10 +300,10 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Pushes it BEHIND the text, but INSIDE .fixed-background */
+    z-index: 0; /* Pushes it BEHIND the text, but INSIDE .fixed-background */
 
     /* The parallax transform */
-    transform: translateZ(-1px) scale(2);
+    
     
     /* Keep your existing background properties */
     background-image: url('graphics/test.jpg');
@@ -319,7 +321,7 @@ main {
 
   /* The image for the specific page */
  
-  
+  transform: translateZ(-1px) scale(2);
   /* Universal background settings */
   background-size: cover;
   background-position: center;
@@ -340,6 +342,7 @@ main {
     
     /* Crucial for containing the 3D transformed children */
     transform-style: preserve-3d;
+    z-index:1;
 }
 .fixed-background::after {
   content: '';
@@ -510,14 +513,14 @@ main {
   top: 65%; 
   left: 50%; 
   transform: translateX(-50%);
-  z-index: 100;
-  
+  z-index: 200;
+  list-style-type: none;
   /* --- Visuals --- */
   background: transparent;
   border: none;
   padding: 1em;
   cursor: pointer;
-
+  text-decoration: none;
   /* Optional: Add a transition for a slightly smoother start/stop */
   transition: transform 0.1s ease-out;
 }
@@ -579,6 +582,24 @@ main {
   order: 3;
 }
 @media (max-width: 768px) {
+  .our-menu {
+  /* --- Positioning & Structure --- */
+  position: absolute; 
+  top: 55%; 
+  left: 50%; 
+  transform: translateX(-50%);
+  z-index: 200;
+  list-style-type: none;
+  /* --- Visuals --- */
+  background: transparent;
+  border: none;
+  padding: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  
+  /* Optional: Add a transition for a slightly smoother start/stop */
+  transition: transform 0.1s ease-out;
+}
   .menu-toggle {
     display: block;
     position: absolute;
@@ -607,7 +628,7 @@ main {
     padding-right: 25%;
     padding-bottom: 100px;
     background-color: black; 
-
+    z-index: 101;
 }
 
 /* --- Heading Styling (.awards h2) - KEPT Asap Condensed */

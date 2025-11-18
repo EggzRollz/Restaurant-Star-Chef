@@ -59,8 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const scroller = document.querySelector('.parallax-container');
   const parallaxHero = document.querySelector('.fixed-background'); // The element pushing content down
   const gallery = document.querySelector('.gallery');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
 
 // Check if all necessary gallery elements exist on the page
 if (gallery && prevBtn && nextBtn) {
@@ -102,9 +103,6 @@ if (gallery && prevBtn && nextBtn) {
     return;
   }
 
-  // --- 2. DEFINE ALL SCROLL-RELATED FUNCTIONS ---
-  let stickyTriggerPoint = 0;
-  let headerHeight = 0;
 
 const setupStickyNav = () => {
     console.log('[DEBUG] Running setupStickyNav() for CSS position:sticky...');
