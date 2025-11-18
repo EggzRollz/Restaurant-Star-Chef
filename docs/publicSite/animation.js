@@ -58,7 +58,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const scrollIndicator = document.querySelector('.scroll-down-indicator');
   const scroller = document.querySelector('.parallax-container');
   const parallaxHero = document.querySelector('.fixed-background'); // The element pushing content down
+  const gallery = document.querySelector('.gallery');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
 
+// Check if all necessary gallery elements exist on the page
+if (gallery && prevBtn && nextBtn) {
+  const images = gallery.querySelectorAll('img');
+
+  // This function will only run if there are images to scroll through
+  if (images.length > 0) {
+    nextBtn.addEventListener('click', () => {
+      // Get the width of the first image (they should all be the same)
+      const imageWidth = images[0].offsetWidth;
+      // Get the gap value from your CSS (it's 30px)
+      const gap = 30;
+      
+      // Use scrollBy for a smooth, relative scroll
+      gallery.scrollBy({
+        left: imageWidth + gap,
+        behavior: 'smooth'
+      });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      // Get the width of the first image
+      const imageWidth = images[0].offsetWidth;
+      // Get the gap value
+      const gap = 30;
+
+      // Scroll left by the same amount
+      gallery.scrollBy({
+        left: -(imageWidth + gap),
+        behavior: 'smooth'
+      });
+    });
+  }
+}
   console.log('[DEBUG] Element Selection Results:', { mainHeader, menuNav, menuNavWrapper, menuNavLinks, scrollIndicator, scroller, parallaxHero });
 
   if (!scroller) {

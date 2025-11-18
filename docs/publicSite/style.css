@@ -420,6 +420,17 @@ main {
   .splash-about {
     background-position: 72% 25%;
   }
+  .fixed-background::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(to top, black, transparent);
+  pointer-events: none;
+  z-index: 100;
+}
 }
 /* === GRADIENT OVERLAY (Stays the same) === */
 
@@ -1119,6 +1130,28 @@ p{
     /* Add the animation */
     transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
     animation: bounce-svg 2s infinite;
+}
+@media (max-width:796px){
+  .scroll-down-indicator {
+    position: absolute;
+    bottom: 17%;
+    left: 50%;
+    transform: translateX(-50%); /* Only centering is needed now */
+    z-index: 200;
+    
+    /* Set the color for the SVG inside */
+    color: white; 
+
+    /* Remove link underline */
+    text-decoration: none; 
+    opacity: 1;
+    visibility: visible;
+
+    /* Add the animation */
+    transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+    animation: bounce-svg 2s infinite;
+  }
+
 }
 
 .scroll-down-indicator.fade-out {
