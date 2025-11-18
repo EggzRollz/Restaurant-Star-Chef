@@ -511,7 +511,7 @@ main {
   top: 65%; 
   left: 50%; 
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 1000;
   list-style-type: none;
   /* --- Visuals --- */
   background: transparent;
@@ -532,12 +532,12 @@ main {
 .our-menu-button{
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.5s ease-out, visibility 0s;
+  transition: opacity 0.2s ease-out, visibility 0s;
 }
 .our-menu-button.fade-out {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
+  transition: opacity 0.2s ease-out, visibility 0s linear 0.2s;
 }
 
 .our-menu a {
