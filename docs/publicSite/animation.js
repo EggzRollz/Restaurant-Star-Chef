@@ -67,15 +67,36 @@ document.addEventListener('DOMContentLoaded', () => {
 if (gallery && prevBtn && nextBtn) {
   const images = gallery.querySelectorAll('img');
 
-  // This function will only run if there are images to scroll through
   if (images.length > 0) {
-    nextBtn.addEventListener('click', () => {
-      // Get the width of the first image (they should all be the same)
+    const gap = 30; // Define the gap once
+
+    // --- NEW: A function to handle the centering logic ---
+    const centerGallery = () => {
+      const middleIndex = Math.floor(images.length / 2);
       const imageWidth = images[0].offsetWidth;
-      // Get the gap value from your CSS (it's 30px)
-      const gap = 30;
+      const scrollAmount = middleIndex * (imageWidth + gap);
       
-      // Use scrollBy for a smooth, relative scroll
+      gallery.scrollTo({
+        left: scrollAmount,
+        behavior: 'auto' 
+      });
+    };
+
+    // --- NEW: Call the function when the page loads ---
+    window.addEventListener('load', centerGallery);
+
+    // --- NEW: Also call it when the window is resized ---
+    // We use a "debounce" timer to avoid running the code too often during a resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      // Wait 250ms after the user stops resizing, then run the function
+      resizeTimer = setTimeout(centerGallery, 250);
+    });
+
+    // --- YOUR EXISTING CLICK LOGIC ---
+    nextBtn.addEventListener('click', () => {
+      const imageWidth = images[0].offsetWidth;
       gallery.scrollBy({
         left: imageWidth + gap,
         behavior: 'smooth'
@@ -83,12 +104,7 @@ if (gallery && prevBtn && nextBtn) {
     });
 
     prevBtn.addEventListener('click', () => {
-      // Get the width of the first image
       const imageWidth = images[0].offsetWidth;
-      // Get the gap value
-      const gap = 30;
-
-      // Scroll left by the same amount
       gallery.scrollBy({
         left: -(imageWidth + gap),
         behavior: 'smooth'
@@ -103,6 +119,7 @@ if (gallery && prevBtn && nextBtn) {
     return;
   }
 
+ 
 
 const setupStickyNav = () => {
     console.log('[DEBUG] Running setupStickyNav() for CSS position:sticky...');
