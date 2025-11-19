@@ -1,91 +1,194 @@
-/* --- GLOBAL STYLES --- */
-body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clear font */
-    background-color: #e9ecef; /* Light gray background for contrast */
-    color: #212529; /* Darker text for readability */
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #212529;
+    overflow-x: hidden;
+}
+* {
+    box-sizing: border-box;
+}
+
+.overlayAdmin { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef;
+    color: #212529;
     margin: 0; 
     padding: 30px; 
 }
+
 h1 { 
     text-align: center; 
-    color: #a2956b; /* Primary blue color */
+    color: #a2956b; 
     margin-bottom: 30px;
 }
 
-/* --- ORDER CONTAINER --- */
 #live-orders-container { 
-    display: flex; 
-    flex-direction: column-reverse; /* Newest on top */ 
-    gap: 25px; 
-    max-width: 900px; /* Limit width for focus */
-    margin: 0 auto;
+    display: grid; 
+    
+    /* 'row' puts items side-by-side (Left to Right) */
+    /* This creates the standard Oldest -> Newest reading order */
+    display: grid;
+    /* Force 4 columns, but allow them to shrink (minmax) */
+    grid-template-columns: repeat(4, minmax(0, 1fr)); 
+    gap: 15px;
+    padding: 15px; /* Reduced padding slightly to fit better */
+    width: 100%;
 }
 
-/* --- ORDER CARD --- */
+/* --- ORDER CARD BASE --- */
 .order-card { 
+    width:100%;
     background-color: #ffffff; 
-    border: 1px solid #dee2e6; /* Subtle border */
-    border-left: 8px solid #007bff; /* Highlight strip (will change per status below) */
+    border: 1px solid #dee2e6; 
+    border-left: 10px solid #ccc; /* Default color, overridden below */
     border-radius: 8px; 
-    padding: 20px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Stronger, smoother shadow */
+    padding: 10px; 
+    height: auto; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
     transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    overflow: hidden; 
+    word-wrap: break-word; 
+    min-width: 0; /* Required for Firefox grid nested items */
 }
 
 .order-card:hover {
-    transform: translateY(-2px); /* Slight lift effect */
+    transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
+/* --- HEADER & LAYOUT --- */
+.order-header-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%;
+    border-bottom: 1px solid #dee2e6;
+
+    flex-wrap: wrap; 
+
+}
+
 .order-card h2 { 
-    margin-top: 0; 
-    border-bottom: 1px solid #adb5bd; /* Darker separator */
-    padding-bottom: 10px; 
+    margin: 0; 
     font-size: 1.5rem; 
-    display: flex; /* Flexbox for title and status span */
-    justify-content: space-between;
+    display: flex; 
     align-items: center;
+    gap: 5px;
 }
 
 .order-card p { margin: 8px 0; font-size: 0.95rem; }
-.order-card strong { color: #495057; } /* Darker key text */
+.order-card strong { color: #495057; } 
 
-
-/* --- STATUS BADGES --- */
-/* Base status style */
-.order-card h2 span.status { 
-    font-size: 0.75rem; 
+/* --- STATUS BADGES (Unified) --- */
+.order-card .status { 
+    font-size: 0.8rem; 
     font-weight: bold;
-    padding: 5px 10px; 
-    border-radius: 4px; 
-    color: #fff; /* White text for all badges */
-    float: none; /* Remove float for flexbox alignment */
     text-transform: uppercase;
+    color: #fff; 
+    padding: 6px 12px; 
+    border-radius: 4px; 
+    background-color: #6c757d; /* Fallback Grey */
+    vertical-align: middle;
+    white-space: nowrap; /* Prevents "IN PROGRESS" from wrapping */
 }
 
-/* Status-specific colors (You must ensure your JS adds these classes based on the order.status property) */
-.order-card[data-status="new"] { border-left-color: #dc3545; } /* Red for NEW */
-.order-card[data-status="new"] .status { background-color: #dc3545; }
+/* --- KITCHEN STATUS LOGIC --- */
 
-.order-card[data-status="in-progress"] { border-left-color: #ffc107; } /* Yellow for In Progress */
-.order-card[data-status="in-progress"] .status { background-color: #ffc107; color: #333; } /* Darker text for yellow */
+/* 1. STATUS: PENDING (New Order) -> RED w/ Pulse */
+.order-card[data-status="pending"] {
+    border-left-color: #dc3545;
+    background-color: #fff5f5; 
+    animation: pulse-red 2s infinite;
+}
+.order-card[data-status="pending"] .status {
+    background-color: #dc3545;
+}
 
-.order-card[data-status="ready"] { border-left-color: #28a745; } /* Green for Ready */
-.order-card[data-status="ready"] .status { background-color: #28a745; }
+/* 2. STATUS: PREPARING (Cooking) -> ORANGE */
+.order-card[data-status="preparing"] {
+    border-left-color: #fd7e14; 
+    background-color: #fff9f2;
+}
+.order-card[data-status="preparing"] .status {
+    background-color: #fd7e14;
+    color: #fff;
+}
 
+/* 3. STATUS: READY (Plated) -> GREEN */
+.order-card[data-status="ready"] {
+    border-left-color: #28a745;
+    background-color: #f0fff4;
+}
+.order-card[data-status="ready"] .status {
+    background-color: #28a745;
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+/* --- ACTION BUTTONS (Touch Friendly) --- */
+.action-buttons {
+    display: flex;
+    gap: 10px; 
+    align-items: center;
+}
+
+.btn-action {
+    padding: 12px 24px; /* Large for fingers */
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-action:active {
+    transform: scale(0.96);
+}
+
+.btn-start { background-color: #fd7e14; } /* Orange */
+.btn-ready { background-color: #a2956b; } /* Green */
+.btn-complete { background-color: #6c757d; } /* Grey */
+
+.btn-cancel-small {
+    background: none;
+    border: 1px solid #dee2e6;
+    color: #dc3545;
+    font-size: 1.5rem; /* Larger X */
+    width: 44px; /* Larger touch target */
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-cancel-small:hover {
+    background-color: #dc3545;
+    color: white;
+}
 
 /* --- ITEM LIST --- */
 .order-items-list { 
     list-style: none; 
     padding-left: 0; 
-    margin-top: 15px; 
 }
 .order-items-list li { 
-    border-top: 1px dashed #ced4da; /* Lighter dashed line */
-    padding: 10px 0; 
+    border-top: 1px dashed #ced4da;
     padding-left: 5px;
+    font-size: 1.1rem; /* Larger text for Chefs to read easily */
 }
-.order-items-list li:first-child { border-top: none; } /* Remove top border on first item */
+.order-items-list li:first-child { border-top: none; } 
 
 .item-details { 
     font-weight: bold; 
@@ -97,73 +200,388 @@ h1 {
     margin: 5px 0;
 }
 .item-customizations { 
-    color: #555; 
-    font-size: 0.9em; 
+    color: #333; /* Darker text for readability */
+    font-weight: 500;
+    font-size: 0.95em; 
     padding-left: 15px; 
-    border-left: 2px solid #ccc; /* Visual separation for customizations */
+    border-left: 3px solid #ccc; 
     margin-left: 10px;
     margin-top: 5px;
 }
-.order-header-container {
-    display: flex;
-    justify-content: space-between; /* Space out the H2 and the button */
-    align-items: center;
-    border-bottom: 1px solid #adb5bd; 
-    padding-bottom: 10px; 
-    margin-bottom: 10px; /* Space below the header */
-}
 
-/* Style for the actual button */
-.delete-order-btn {
-    background: #dc3545; /* Red background for delete action */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-    height: 35px; /* Keep it uniform */
-    line-height: 1;
-}
-
-.delete-order-btn:hover {
-    background: #c82333; /* Darker red on hover */
-}
-
-/* To ensure the H2 inside the container doesn't have double padding/margin */
-.order-card h2 {
-    margin-bottom: 0; /* Remove margin from H2 itself */
-    border-bottom: none; /* Remove the border, as the container now handles it */
-    padding-bottom: 0;
-}
-
+/* --- TOTALS SECTION --- */
 .totals-container {
-    margin-top: 15px; /* Space above the totals */
-    padding-top: 10px; /* Space below the dividing line */
-    border-top: 1px dashed #ccc; /* A line to separate items from totals */
+    margin-top: 15px; 
+    padding-top: 10px; 
+    border-top: 1px dashed #ccc; 
 }
 
-/* Style for each line (Subtotal, HST, Total) */
 .total-line {
-    display: flex; /* This is the key for alignment */
-    justify-content: space-between; /* Pushes the label and value to opposite ends */
-    margin: 5px 0; /* Vertical spacing between lines */
+    display: flex; 
+    justify-content: space-between; 
+    margin: 5px 0; 
     font-size: 0.95em;
     color: #333;
 }
 
-/* Make the final total line stand out */
 .total-line.total {
-    font-size: 1.1em; /* Larger font size */
-    margin-top: 10px; /* More space above the final total */
+    font-size: 1.2em; 
+    margin-top: 10px; 
     padding-top: 5px;
     border-top: 1px solid #ddd;
     color: #000;
 }
-
-/* The strong tags inside the final total line are already bold, this is optional */
 .total-line.total strong {
-    font-weight: 600; /* A bit bolder */
+    font-weight: 700; 
+}
+
+/* --- Google Fonts & Global Styles --- */
+/* The font import is now in the HTML for better performance */
+
+.main-header-admin {
+    background-color: #a2956b;
+    padding: 15px 30px;
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+:root {
+    --gold: #a2956b;
+    --dark-bg: #0f0f0f;
+    --card-bg: #141414;
+    --light-text: #f4f4f4;
+    --subtle-border: #333;
+}
+
+/* --- GLOBAL & LAYOUT --- */
+.overlayLogin {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--dark-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* A very faint texture in the background */
+.overlayLogin::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23a2956b" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- THE CARD (Elegant & Solid) --- */
+.login-container {
+    position: relative;
+    z-index: 2;
+    
+    width: 100%;
+    max-width: 380px; /* Slightly narrower for elegance */
+    padding: 4rem 3rem;
+    
+    background-color: var(--card-bg);
+    
+    /* Sharp, thin gold border */
+    border: 1px solid var(--gold); 
+    border-radius: 2px; /* Very slight radius, almost square */
+    
+    /* sophisticated drop shadow, not glowing */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8); 
+}
+
+/* --- TYPOGRAPHY --- */
+.login-form h2 {
+    color: var(--gold);
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-size: 3.8rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    line-height: 1;
+    /* No shadow, just crisp text */
+}
+
+/* --- INPUTS --- */
+.input-group {
+    position: relative;
+    margin-bottom: 2.5rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1rem;
+    color: var(--light-text);
+    background-color: transparent;
+    border: none;
+    
+    /* Very subtle grey line initially */
+    border-bottom: 1px solid var(--subtle-border);
+    
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.4s ease;
+    letter-spacing: 1px; /* Increases readability */
+}
+
+/* Label styling - Clean sans-serif */
+.input-group label {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    font-size: 0.85rem;
+    text-transform: uppercase; /* Adds structure */
+    letter-spacing: 2px;
+    color: rgba(244, 244, 244, 0.4);
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+/* Focus State */
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -15px;
+    font-size: 0.7rem;
+    color: var(--gold);
+}
+
+.input-group input:focus {
+    /* Solid gold line, no glow */
+    border-bottom: 1px solid var(--gold);
+}
+
+/* Autofill fix */
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover, 
+.input-group input:-webkit-autofill:focus, 
+.input-group input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--card-bg) inset !important;
+    -webkit-text-fill-color: var(--light-text) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* --- BUTTON (Gold Leaf Style) --- */
+button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 1.5rem;
+    
+    background-color: var(--gold);
+    color: #111; /* Dark text on gold background */
+    border: 1px solid var(--gold);
+    
+    border-radius: 2px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    /* Invert style on hover */
+    background-color: transparent;
+    color: var(--gold);
+}
+
+/* --- LINKS --- */
+.bottom-text {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(244, 244, 244, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bottom-text a {
+    color: var(--light-text);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 5px;
+    transition: color 0.3s;
+}
+
+.bottom-text a:hover {
+    color: var(--gold);
+}
+
+
+
+
+
+
+.history-card h3 {
+    margin: 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+#history-orders-container {
+    display: grid;
+    /* Force 4 columns, but allow them to shrink (minmax) */
+    grid-template-columns: repeat(4, minmax(0, 1fr)); 
+    gap: 15px;
+    padding: 15px; /* Reduced padding slightly to fit better */
+    width: 100%;
+}
+
+.history-card {
+    background-color: #f9f9f9;
+    border-left: 5px solid #888;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    opacity: 0.95; 
+    
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+
+    /* IMPORTANT: Handle text overflow */
+    overflow: hidden; 
+    word-wrap: break-word; 
+    min-width: 0; /* Required for Firefox grid nested items */
+}
+/* ... (Keep your other styles for headers, buttons, details, etc.) ... */
+
+
+/* --- RESPONSIVE: BREAKPOINTS --- */
+/* Even though you want 25%, that is too small for tablets/phones. 
+   These rules override the 25% logic on smaller screens. */
+
+/* Laptops / Small Desktops (Under 1200px): Switch to 3 per row (33%) */
+@media (max-width: 1200px) {
+    #history-orders-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tablets (Under 900px): Switch to 2 per row (50%) */
+@media (max-width: 900px) {
+    #history-orders-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Phones (Under 600px): Switch to 1 per row (100%) */
+@media (max-width: 600px) {
+    #history-orders-container {
+        grid-template-columns: 1fr; 
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.controls-container {
+    background-color: #ffffff;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-group label {
+    font-weight: bold;
+    color: #333;
+}
+
+.control-group input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.secondary-btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 9px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.secondary-btn:hover {
+    background-color: #555;
+}
+
+.status-label {
+    margin-left: auto; /* Pushes label to far right */
+    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
 }

@@ -1,46 +1,82 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "../publicSite/main.js";
 
-// Initialize Firebase services
+// --- 2. INITIALIZE ---
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app); 
-const firestore = getFirestore(app); 
+const auth = getAuth(app);
+const db = getFirestore(app); // We use 'db' for Firestore now
 
+// Global Variables
 let menuItemsMap = {};
+const logoutBtn = document.getElementById("logout-btn"); // Make sure ID matches your HTML
 
+// --- 3. AUTH LISTENER ---
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is logged in. Safe to load orders.
+    console.log("Welcome Kitchen Staff:", user.email);
+    
+    // Load the menu data first (for reference), then start listening for orders
+    loadMenuData();
+    
+  } else {
+    // No user logged in. Kick them out!
+    console.log("No access. Redirecting to login...");
+    window.location.href = "login.html";
+  }
+});
 
-/**
- * Fetches all menu items from Firestore and stores them in the menuItemsMap.
- */
+// Logout Button Logic
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        signOut(auth).then(() => window.location.href = "login.html");
+    });
+}
+
+// --- 4. LOAD MENU DATA ---
+// (This function was actually fine, just updated to use 'db')
 async function loadMenuData() {
     console.log("Fetching menu data...");
-    const querySnapshot = await getDocs(collection(firestore, "menuItems"));
-    querySnapshot.forEach((doc) => {
-        menuItemsMap[doc.id] = doc.data();
-    });
-    console.log("Menu data loaded. Ready to process orders.");
-}
-async function deleteOrder(orderNumber) {
-    if (!confirm(`Are you sure you want to remove Order #${orderNumber} from the queue?`)) {
-        return; // User cancelled the operation
-    }
-    
     try {
-        const orderRef = ref(db, 'orders/' + orderNumber);
-        await remove(orderRef);
-        console.log(`Order #${orderNumber} successfully removed.`);
-        // Since we are using onValue, the UI will automatically refresh after removal!
+        const querySnapshot = await getDocs(collection(db, "menuItems"));
+        querySnapshot.forEach((doc) => {
+            menuItemsMap[doc.id] = doc.data();
+        });
+        console.log("Menu data loaded.", menuItemsMap);
     } catch (error) {
-        console.error("Error removing order:", error);
-        alert(`Failed to remove Order #${orderNumber}. Check console for details.`);
+        console.error("Error loading menu:", error);
     }
 }
-/**
- * Helper function to parse customizations from itemId (e.g., E1_PR-C -> "Protein: C")
- * NOTE: This helper uses .createElement and .textContent internally for safety!
- */
+
+// --- 5. DELETE ORDER ---
+// UPDATED: Now requires 'orderId' (the Firestore document ID) AND 'orderNumber' (for the alert)
+async function deleteOrder(orderId, orderNumber) {
+     if (!confirm(`Mark Order #${orderNumber} as Completed?`)) return;
+        const cardToRemove = document.getElementById(`card-${orderId}`);
+    if (cardToRemove) {
+        cardToRemove.remove();
+    }
+
+    try {
+        const orderRef = doc(db, "orders", orderId);
+        
+        // INSTEAD OF DELETING, WE UPDATE THE STATUS
+        await updateDoc(orderRef, {
+            status: 'resolved'
+        });
+        
+        console.log(`Order #${orderNumber} marked as completed.`);
+        // The onSnapshot listener in this file will automatically remove it 
+        // because your query should filter out 'completed' items.
+        
+    } catch (error) {
+        console.error("Error completing order:", error);
+        alert("Error updating order. Check permissions.");
+    }
+}
+
 
 const renderCustomizationsFromObject = (item) => {
     const customizationContainer = document.createElement('div');
@@ -53,8 +89,6 @@ const renderCustomizationsFromObject = (item) => {
         customizationContainer.appendChild(span);
         return customizationContainer;
     }
-
-    // Loop through the customization key/value pairs (e.g., {Protein: 'C', Size: 'L'})
     Object.entries(item.customizations).forEach(([key, value]) => {
         const customP = document.createElement('p');
         
@@ -71,10 +105,6 @@ const renderCustomizationsFromObject = (item) => {
     return customizationContainer;
 };
 
-const CUSTOMIZATION_TO_DB_KEY_MAP = {
-  Size: 'size',
-  Temperature: 'temp'
-};
 
 function calculateVerifiedItemPrice(menuItem, orderItem) {
     console.group(`[Price Verification] for: ${menuItem.name_english}`);
@@ -174,188 +204,193 @@ function calculateVerifiedItemPrice(menuItem, orderItem) {
     
     return finalPrice;
 }
+// --- SOUND SETUP ---
+const notificationSound = new Audio("./sounds/chinese.mp3");
+let isFirstLoad = true;
 
-function createOrderCard(order) {
+// --- MAIN LISTENER ---
+function listenForLiveOrders() {
+    const ordersContainer = document.getElementById('live-orders-container');
+    
+    // Listen to Firestore 'orders' collection, sorted by date
+    const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+        // 1. SOUND LOGIC (Using Firestore docChanges is much cleaner!)
+        if (!isFirstLoad) {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    // New order came in! Play sound.
+                    notificationSound.play().catch(e => console.warn("Sound blocked:", e));
+                }
+            });
+        }
+        isFirstLoad = false;
+
+
+        ordersContainer.innerHTML = ""; 
+        
+        if (snapshot.empty) {
+            ordersContainer.innerHTML = "<p>No active orders.</p>";
+            return;
+        }
+
+        snapshot.forEach((docSnapshot) => {
+            const orderData = docSnapshot.data();
+            const orderId = docSnapshot.id; 
+            if (orderData.status === 'resolved') {
+                return; // Skip this iteration
+             }
+            // Pass both ID and Data to the card creator
+            createOrderCard(orderId, orderData, ordersContainer);
+        });
+    });
+}
+
+// --- CARD CREATOR (Async) ---
+async function createOrderCard(orderId, order, container) {
     const orderCard = document.createElement('div');
     orderCard.className = 'order-card';
     orderCard.setAttribute('data-status', order.status.toLowerCase());
+    orderCard.id = `card-${orderId}`;
 
-    // --- CONFIGURATION ---
-    const HST_RATE = 0.13; // 13% HST. Change this value if your tax rate is different.
-
-    // --- INITIALIZE TOTALS ---
-    let subtotal = 0;
-
-    // --- 1. Order Header Container ---
+    // --- 1. HEADER & BUTTONS ---
     const headerContainer = document.createElement('div');
     headerContainer.className = 'order-header-container';
 
     const h2 = document.createElement('h2');
     h2.textContent = `Order #${order.orderNumber} `;
-    
     const statusSpan = document.createElement('span');
     statusSpan.className = 'status';
     statusSpan.textContent = order.status;
     h2.appendChild(statusSpan);
 
-    // --- 2. The Close/Delete Button ---
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = '✖'; 
-    deleteButton.className = 'delete-order-btn';
-    deleteButton.title = `Mark Order #${order.orderNumber} as complete and remove.`;
-    deleteButton.addEventListener('click', () => deleteOrder(order.orderNumber));
-
-    headerContainer.appendChild(h2);
-    headerContainer.appendChild(deleteButton);
-
-    // --- 3. Details (Customer, Phone, Time) ---
-    const customerP = document.createElement('p');
-    customerP.innerHTML = `<strong>Customer:</strong> ${order.customerName}`; 
-    const phoneP = document.createElement('p');
-    phoneP.innerHTML = `<strong>Phone:</strong> ${order.phoneNumber}`;
-    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true }; 
-    const formattedTime = new Date(order.orderDate).toLocaleTimeString(undefined, timeOptions);
-    const timeP = document.createElement('p');
-    timeP.innerHTML = `<strong>Time:</strong> ${formattedTime}`;
-
-    // --- 4. Items List ---
-    const itemsH3 = document.createElement('h3');
-    itemsH3.textContent = 'Items:';
-    const itemsUl = document.createElement('ul');
-    itemsUl.className = 'order-items-list'; 
-
-    const itemsFragment = document.createDocumentFragment();
-
-    order.items.forEach(item => {
-        const baseId = item.itemId.split('_')[0]; 
-        const menuItem = menuItemsMap[baseId]; 
-
-        const li = document.createElement('li');
-        
-        if (!menuItem || !menuItem.name_english) { 
-            li.textContent = `Error: Item ID "${baseId}" not found.`;
-            itemsFragment.appendChild(li);
-            return; 
-        }
-
-        const itemDetailsDiv = document.createElement('div');
-        itemDetailsDiv.className = 'item-details';
-        itemDetailsDiv.textContent = `${item.quantity} x ${menuItem.name_english}`;
-        
-        const itemPriceDiv = document.createElement('div');
-    itemPriceDiv.className = 'item-price';
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'action-buttons';
     
-    // Use the new, secure price calculation function.
-    const singleItemPrice = calculateVerifiedItemPrice(menuItem, item);
+    const doneBtn = document.createElement('button');
+    doneBtn.textContent = '✔ Entered in POS (Clear)'; 
+    doneBtn.className = 'btn-action btn-ready';
+    
+    // UPDATED: Pass the orderId (string) AND orderNumber (int)
+    doneBtn.onclick = () => deleteOrder(orderId, order.orderNumber); 
 
-    if (singleItemPrice !== null) {
-        const lineItemTotal = item.quantity * singleItemPrice;
-        subtotal += lineItemTotal; // Add to the running subtotal for the order
-        itemPriceDiv.textContent = `$${lineItemTotal.toFixed(2)}`;
-    } else {
-        itemPriceDiv.textContent = 'Price Error'; // Make it clear if calculation failed
+    
+    buttonContainer.appendChild(doneBtn);
+    headerContainer.appendChild(h2);
+    headerContainer.appendChild(buttonContainer);
+
+    // --- 2. CUSTOMER DETAILS ---
+    const detailsDiv = document.createElement('div');
+
+    
+    // Handle timestamp conversion from Firestore Timestamp
+    let dateString = "Unknown Date";
+    if(order.orderDate && order.orderDate.seconds) {
+        dateString = new Date(order.orderDate.seconds * 1000).toLocaleDateString();
+    }
+    let timeString = "Unknown";
+    if(order.orderDate && order.orderDate.seconds) {
+        timeString = new Date(order.orderDate.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
     }
 
-        const itemCodeP = document.createElement('p');
-        itemCodeP.className = 'item-id-code';
-        itemCodeP.innerHTML = `Item Code: <strong>${baseId}</strong>`; 
+    detailsDiv.innerHTML = `
+        <p><strong>Customer:</strong> ${order.customerName}</p>
+        <p><strong>Phone:</strong> <a href="tel:${order.phoneNumber}">${order.phoneNumber}</a></p>
+        <p><strong>Date:</strong> ${dateString}</p>
+        <p><strong>Time:</strong> ${timeString}</p>
+        <h3>Items:</h3>
+    `;
 
-        const customizationsDiv = renderCustomizationsFromObject(item); 
+    // --- 3. ITEMS CONTAINER (Empty for now) ---
+    const itemsUl = document.createElement('ul');
+    itemsUl.className = 'order-items-list';
+    itemsUl.innerHTML = "<em>Loading items...</em>";
 
-        li.appendChild(itemDetailsDiv);
-        li.appendChild(itemPriceDiv);
-        li.appendChild(itemCodeP);
-        li.appendChild(customizationsDiv); 
-
-        itemsFragment.appendChild(li);
-    });
-
-    itemsUl.appendChild(itemsFragment); 
-
-    // --- 5. NEW: Create Totals Section ---
-    const hst = subtotal * HST_RATE;
-    const total = subtotal + hst;
-
+    // --- 4. TOTALS CONTAINER (Empty for now) ---
     const totalsContainer = document.createElement('div');
     totalsContainer.className = 'totals-container';
 
-    const subtotalP = document.createElement('p');
-    subtotalP.className = 'total-line subtotal';
-    // Using spans for easy flexbox alignment
-    subtotalP.innerHTML = `<span>Subtotal:</span> <span>$${subtotal.toFixed(2)}</span>`;
-
-    const hstP = document.createElement('p');
-    hstP.className = 'total-line hst';
-    hstP.innerHTML = `<span>HST (${(HST_RATE * 100).toFixed(0)}%):</span> <span>$${hst.toFixed(2)}</span>`;
-
-    const totalP = document.createElement('p');
-    totalP.className = 'total-line total';
-    totalP.innerHTML = `<strong>Total:</strong> <strong>$${total.toFixed(2)}</strong>`;
-    
-    totalsContainer.appendChild(subtotalP);
-    totalsContainer.appendChild(hstP);
-    totalsContainer.appendChild(totalP);
-
-    // --- 6. Assemble the Card ---
+    // Append everything to card
     orderCard.appendChild(headerContainer);
-    orderCard.appendChild(customerP);
-    orderCard.appendChild(phoneP);
-    orderCard.appendChild(timeP);
-    orderCard.appendChild(itemsH3);
+    orderCard.appendChild(detailsDiv);
     orderCard.appendChild(itemsUl);
-    orderCard.appendChild(totalsContainer); // <-- Add the new totals section
+    orderCard.appendChild(totalsContainer);
+    
 
-    return orderCard;
-}
+    container.appendChild(orderCard);
 
-// ... (rest of admin.js code remains the same) ...
+    try {
+        const itemsRef = collection(db, "orders", orderId, "orderList");
+        const itemsSnapshot = await getDocs(itemsRef);
+        
+        itemsUl.innerHTML = ""; // Clear "Loading..."
+        
+        let subtotal = 0;
+        const HST_RATE = 0.13;
 
-function renderOrders(ordersObject) {
-    const container = document.getElementById('live-orders-container');
-    if (!container) return;
+        itemsSnapshot.forEach((itemDoc) => {
+            const item = itemDoc.data();
+            const li = document.createElement('li');
 
-    // Clear the container using a safe method
-    container.textContent = ''; 
+            // Lookup Menu Item
+            const baseId = item.itemId; // In Firestore we saved this cleanly
+            const menuItem = menuItemsMap[baseId];
 
-    if (!ordersObject) {
-        const noOrders = document.createElement('p');
-        noOrders.textContent = 'No orders found.';
-        container.appendChild(noOrders);
-        return;
+            // Verify Price Logic
+            let finalPrice = 0;
+            let priceHtml = "";
+            
+            if (menuItem) {
+                const verifiedPrice = calculateVerifiedItemPrice(menuItem, item);
+                finalPrice = verifiedPrice || 0;
+                
+                if (Math.abs(finalPrice - item.price) > 0.05) {
+                     priceHtml = `<span style="color:red; text-decoration:line-through">$${(item.price * item.quantity).toFixed(2)}</span> <span style="color:green">$${(finalPrice * item.quantity).toFixed(2)}</span>`;
+                } else {
+                    priceHtml = `$${(finalPrice * item.quantity).toFixed(2)}`;
+                }
+            } else {
+                // Fallback if menu item deleted
+                finalPrice = item.price;
+                priceHtml = `$${(finalPrice * item.quantity).toFixed(2)} (Item Not in Menu DB)`;
+            }
+
+            subtotal += (finalPrice * item.quantity);
+
+            // Build Item HTML
+            li.innerHTML = `
+                <div class="item-details">${item.quantity} x ${menuItem.name_english}</div>
+                <div class="item-chinese-name">${menuItem ? menuItem.name_chinese : ''}</div>
+                <div class="item-price">${priceHtml}</div>
+                <div class="item-id-code">ID: <strong>${baseId}</strong></div>
+            `;
+            
+            // Add Customizations
+            li.appendChild(renderCustomizationsFromObject(item));
+            itemsUl.appendChild(li);
+        });
+
+        // --- 6. CALCULATE & RENDER TOTALS ---
+        const hst = subtotal * HST_RATE;
+        const total = subtotal + hst;
+
+        totalsContainer.innerHTML = `
+            <p class="total-line subtotal"><span>Subtotal:</span> <span>$${subtotal.toFixed(2)}</span></p>
+            <p class="total-line hst"><span>HST (13%):</span> <span>$${hst.toFixed(2)}</span></p>
+            <p class="total-line total"><strong>Total:</strong> <strong>$${total.toFixed(2)}</strong></p>
+        `;
+
+    } catch (err) {
+        console.error("Error loading items for order", orderId, err);
+        itemsUl.innerHTML = "<li style='color:red'>Error loading items. Check console.</li>";
     }
-
-    const ordersArray = Object.values(ordersObject);
-    
-    // Use a DocumentFragment to minimize DOM manipulations
-    const fragment = document.createDocumentFragment();
-
-    // Render each order
-    ordersArray.forEach(order => {
-        const orderCard = createOrderCard(order); // Call the helper to build the card
-        fragment.appendChild(orderCard);
-    });
-    
-    // Append all cards to the container in a single, efficient step
-    container.appendChild(fragment);
 }
 
-/**
- * Sets up the real-time listener for the 'orders' path in the database.
- */
-function listenForLiveOrders() {
-    const ordersRef = ref(db, 'orders/');
-    onValue(ordersRef, (snapshot) => {
-        const ordersData = snapshot.val();
-        console.log("Received new order data:", ordersData);
-        renderOrders(ordersData);
-    });
-}
-
-// --- Main Application Flow ---
+// --- INITIALIZER ---
 async function initializeAdmin() {
-    await loadMenuData(); // First, load the menu so we can display item names
-    listenForLiveOrders(); // Then, start listening for orders
+    await loadMenuData(); 
+    listenForLiveOrders(); 
 }
 
-// Start the application
 initializeAdmin();

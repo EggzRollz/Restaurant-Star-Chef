@@ -176,7 +176,6 @@ main {
     transform: translateX(100%); 
     transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
   }
-
   /* --- The Mobile Menu Container (Visible State) --- */
   .nav-links.active {
     opacity: 1;
@@ -184,7 +183,6 @@ main {
     transform: translateX(0);
     padding-top:100px;
   }
-
   .nav-links li {
     color: #A2956B;
     text-align: center;
@@ -244,13 +242,24 @@ main {
     margin-right: 0; /* We don't need margin when using absolute positioning */
   }
 
+  
+}
+.menu-toggle {
+  display: none; 
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: auto;
+  order: 3;
+}
+
+@media (max-width: 768px) {
   /* Make sure your menu toggle is also positioned absolutely for alignment */
   .menu-toggle {
     display: block; /* Make sure it's visible */
     position: absolute;
     top: 47%;
     transform: translateY(-50%);
-    left: 75%; /* Position on the far right */
+    left: 85%; /* Position on the far right */
     z-index: 1100;
     background: none;
     border: none;
@@ -258,6 +267,9 @@ main {
     font-size: 1.8rem;
     cursor: pointer;
   }
+  .menu-toggle.active {
+    color: #A2956B;
+    }
 }
 .overlay {
   position: fixed;
@@ -591,29 +603,6 @@ main {
 }
 
 
-.menu-toggle {
-  display: none; 
-  font-size: 24px;
-  cursor: pointer;
-  margin-left: auto;
-  order: 3;
-}
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-    position: absolute;
-    right: 16px;  
-    font-size: 28px;
-    z-index: 1100;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-  .menu-toggle.active {
-    color: #A2956B;
-    }
-}
 
 /* --- Base Container & Text Grouping (.awards) --- */
 
@@ -627,12 +616,12 @@ main {
     left: 50%;
     transform: translateX(-50%);
     box-sizing: border-box;
-
+    text-align: center;
     /* Apply your vertical padding + safe-area padding for mobile */
     border-width:10px;
     padding-top: 120px;
-    padding-left: 25%;
-    padding-right: 25%;
+    padding-left: 32%;
+    padding-right: 32%;
     padding-bottom: 100px;
 
     /* These properties center the text content vertically */
@@ -901,7 +890,7 @@ main {
 /* Mobile layout */
 @media (max-width: 768px) {
   .minor-splash-container {
-    margin-top: 15px;
+    margin-top: 50px;
     gap: 40px;
   }
   
@@ -2865,13 +2854,14 @@ h1 {
 	text-shadow: none; /* Ensure there is no glow */
 }
 .opening-hours-section {
+  background-color: black;
   display: flex;
   /* We add 'align-items: stretch' to make sure both columns are the same height */
   align-items: stretch; 
   width: 100%;
-  margin-top: 200px;
   /* You can add a gap here if you want space between them */
   /* gap: 30px; */ 
+  margin:0 !important;
 }
 
 /* --- The Image Column (First 50%) --- */
@@ -2907,6 +2897,41 @@ h1 {
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   z-index: 10;
+}
+
+@media (max-width:796px){
+  .opening-hours-text {
+  background-color: black;
+  /* This is the other key: 'flex: 1' tells it to take up the OTHER equal share. */
+  flex: 1;
+  /* We REMOVE the 'width: 10%' which was causing the problem. */
+
+  /* We now use flexbox AGAIN to center the text perfectly inside this column */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers vertically */
+  align-items: center;     /* Centers horizontally */
+  
+   /* Add some padding so text isn't stuck to the edges */
+  padding-left:30px !important;
+  padding-right:30px !important;
+  /* Your animation styles are perfect and stay the same */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  z-index: 10;
+}
+.opening-hours-section {
+  background-color: black;
+  display: flex;
+  /* We add 'align-items: stretch' to make sure both columns are the same height */
+  align-items: stretch; 
+  width: 100%;
+
+  /* You can add a gap here if you want space between them */
+  /* gap: 30px; */ 
+}
+
 }
 
 /* Your original h2/sub styles for font can go here */

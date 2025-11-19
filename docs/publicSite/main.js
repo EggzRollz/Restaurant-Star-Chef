@@ -1,21 +1,12 @@
 
 import { Cart } from './cart.js';  
 import { mergeSort, filterBy } from './algorithms.js';
-
+import { firebaseConfig } from "../config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAd-LuABfQtKfugGXYY20_S1uwwyNV6ZVw",
-  authDomain: "star-chef-restaurant.firebaseapp.com",
-  projectId: "star-chef-restaurant",
-  storageBucket: "star-chef-restaurant.firebasestorage.app",
-  messagingSenderId: "924721320321",
-  appId: "1:924721320321:web:41644950fe66ee58eed880",
-  measurementId: "G-BKD21L9889"
-};
 
 // --- Initialize Firebase and Firestore ---
 let db; // Declare db here in the global scope

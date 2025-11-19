@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Chef - Staff Login</title>
+    <link
+         href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Asap+Condensed:wght@200;300;400&family=Birthstone&display=swap"
+         rel="stylesheet"
+         />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="overlayLogin">
+    <div class="login-container">
+        <form class="login-form">
+            <h2>Star Chef</h2>
+            <div class="input-group">
+                <label for="email"></label>
+                <input type="email" id="email" name="email" placeholder="EMAIL" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password"></label>
+                <!-- id="password" matches your JS. Good. -->
+                <input type="password" id="password" name="password" placeholder="PASSWORD" required>
+            </div>
+            
+            <!-- ADDED id="login-btn" to match your JS -->
+            <button type="submit" id="login-btn">Login</button>
+            
+            <div class="bottom-text">
+                <p>Staff Access Only</p>
+            </div>
+        </form>
+    </div>
+</div>
+    <!-- CRITICAL: Link your JavaScript file here -->
+    <script type="module" src="login.js"></script>
+</body>
+</html>

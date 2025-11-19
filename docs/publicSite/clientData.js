@@ -1,63 +1,99 @@
+// --- 1. IMPORTS ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { firebaseConfig } from "./main.js";
+import { 
+    getFirestore, 
+    collection, 
+    doc, 
+    runTransaction, 
+    writeBatch, 
+    serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { firebaseConfig } from "../config.js";
 import { validateCheckoutForm } from './checkout.js';
 
-// Initialize Firebase
+// --- 2. INITIALIZE ---
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db = getFirestore(app);
 
-// Select DOM elements needed for submission
+// DOM Elements
 const placeOrderBttn = document.getElementById("place-order-button");
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const phone = document.getElementById("phone");
 
-async function getOrderNumber(db) {
-    const counterRef = ref(db, "ordercount");
-    const result = await runTransaction(counterRef, (currentCount) => {
-        return (currentCount === null) ? 1000 : currentCount + 1;
-    });
-    return result.snapshot.val();
+// --- 3. HELPER: GET ORDER NUMBER (With Daily Reset) ---
+async function getNextOrderNumber(db) {
+    const counterRef = doc(db, "counters", "orderCounter");
+
+    // Get today's date as a string YYYY-MM-DD (e.g., "2023-10-27")
+    // This ensures we compare strictly by date, not time.
+    const todayStr = new Date().toISOString().split('T')[0]; 
+
+    try {
+        return await runTransaction(db, async (transaction) => {
+            const sfDoc = await transaction.get(counterRef);
+            
+            let nextNum;
+            
+            if (!sfDoc.exists()) {
+                // First order ever? Start at 1000
+                nextNum = 1000;
+            } else {
+                const data = sfDoc.data();
+                const lastDate = data.lastResetDate;
+
+                if (lastDate !== todayStr) {
+                    // DATA MISMATCH: It is a new day! Reset to 1000
+                    nextNum = 1000;
+                } else {
+                    // SAME DAY: Increment the number
+                    nextNum = data.current + 1;
+                }
+            }
+
+            // Update the counter with the new number AND today's date
+            transaction.set(counterRef, { 
+                current: nextNum,
+                lastResetDate: todayStr
+            });
+
+            return nextNum;
+        });
+    } catch (e) {
+        console.error("Counter transaction failed: ", e);
+        throw e;
+    }
 }
 
-/**
- * Writes the final order data to the Firebase Realtime Database.
- */
-function writeOrderData(orderDetails) {
-    return set(ref(db, 'orders/' + orderDetails.orderNumber), orderDetails);
-}
-
-
+// --- 4. EVENT LISTENER ---
 if (placeOrderBttn) {
     placeOrderBttn.addEventListener("click", async (event) => {
         event.preventDefault(); 
         
-        // --- MODIFIED: Capture the result object from the validation function ---
+        // Validation
         const validationResult = validateCheckoutForm();
-
-        // --- MODIFIED: Check the 'isValid' property and scroll if invalid ---
         if (!validationResult.isValid) {
-            // Use the returned element to scroll it into view
             if (validationResult.firstInvalidField) {
                 validationResult.firstInvalidField.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center' // This centers the field in the viewport
+                    behavior: 'smooth', block: 'center'
                 });
             }
-            return; // Stop the function execution
+            return; 
         }
 
-        // --- The rest of your code remains the same ---
+        // Payload Setup
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
             itemId: item.baseId || item.id.split('_')[0], 
-    
+            title: item.title || "Unknown Item", 
+            price: item.price || 0,
+            status: 'pending',
             quantity: item.quantity,
-            customizations: item.customizations || {} // Also add a fallback for customizations
+            customizations: item.customizations || {} 
         }));
 
         if (cartPayload.length === 0) {
-            alert("Your cart is empty. Please add items before placing an order.");
+            alert("Your cart is empty.");
             return; 
         }
         
@@ -65,26 +101,47 @@ if (placeOrderBttn) {
         placeOrderBttn.textContent = "Placing Order...";
 
         try {
-            const newOrderNumber = await getOrderNumber(db);
-            const orderDetails = {
-                orderNumber: newOrderNumber,
+            // 1. Get Order Number (Resets to 1000 if it's a new day)
+            const newOrderNumber = await getNextOrderNumber(db);
+
+            // 2. Start Batch
+            const batch = writeBatch(db);
+            const newOrderRef = doc(collection(db, "orders"));
+            const newHistoryRef = doc(db, "history", newOrderRef.id);
+
+            // 3. Set Main Order Data
+            const orderData = {
+                orderId: newOrderRef.id, 
+                orderNumber: newOrderNumber, 
                 customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
                 phoneNumber: phone.value.trim(),
-                orderDate: new Date().toISOString(),
+                orderDate: serverTimestamp(), 
                 status: 'new',
-                items: cartPayload
+                totalItems: cartPayload.length 
             };
-
-            await writeOrderData(orderDetails);
             
-            console.log("Order submitted successfully!", orderDetails);
+            batch.set(newOrderRef, orderData);
+            
+            // 4. Add Items to Subcollection
+            cartPayload.forEach((item) => {
+                const orderDatabaseRef = doc(collection(db, "orders", newOrderRef.id, "orderList"));
+                
+               
+              
+                batch.set(orderDatabaseRef, item); 
+              
+            });
+
+            // 5. Commit
+            await batch.commit();
+            
+            console.log("Order submitted successfully!", newOrderNumber);
             localStorage.removeItem('cart');
             window.location.href = `thank-you.html?order=${newOrderNumber}`;
 
         } catch (error) {
             console.error("Error placing order: ", error);
-            alert("There was an error placing your order. Please try again.");
-            
+            alert("Error placing order. Please try again.");
             placeOrderBttn.disabled = false;
             placeOrderBttn.textContent = "Place Order";
         }

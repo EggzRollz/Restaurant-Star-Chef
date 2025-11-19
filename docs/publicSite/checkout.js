@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();
 
-        //const isStoreClosed = false;
-        const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+        const isStoreClosed = false;
+        //const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
 
         // The button should be disabled if the store is closed OR if the cart is empty
         placeOrderBttn.disabled = isStoreClosed || isCartEmpty;
@@ -358,4 +358,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updatePickupTime();
     updateButtonState();
     setInterval(updatePickupTime, 1000);
+
+    window.addEventListener('pageshow', function(event) {
+        if (cart) {
+            cart.loadFromStorage();
+            updateCartQuantityDisplay(cart);
+            console.log("Page restored. Cart re-synced from storage.");
+        }
+    });
 });
