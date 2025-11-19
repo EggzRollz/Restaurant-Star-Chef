@@ -9,9 +9,9 @@ import {
     orderBy, 
     limit, 
     onSnapshot,
-    Timestamp // <--- NEW IMPORT REQUIRED
+    Timestamp 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { firebaseConfig } from "../config.js"; 
+import { firebaseConfig } from "../publicSite/config.js";
 
 // --- INITIALIZE ---
 const app = initializeApp(firebaseConfig);
@@ -20,15 +20,20 @@ const db = getFirestore(app);
 
 // Global Variables
 let menuItemsMap = {};
-let currentUnsubscribe = null; // To manage switching listeners
+let currentUnsubscribe = null; 
 
 // --- AUTH & STARTUP ---
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("History Access Granted:", user.email);
+
+    // FIX 1: Force clear the Date Input to prevent browser caching issues
+    const datePicker = document.getElementById("history-date-picker");
+    if (datePicker) datePicker.value = "";
+
     loadMenuData().then(() => {
         setupCalendarControls();
-        fetchHistoryQuery("RECENT"); // Default view
+        fetchHistoryQuery("RECENT"); // Always start with Recent
     });
   } else {
     window.location.href = "login.html";
@@ -59,6 +64,8 @@ function setupCalendarControls() {
     const datePicker = document.getElementById("history-date-picker");
     const resetBtn = document.getElementById("reset-history-btn");
     
+    if (!datePicker || !resetBtn) return;
+
     // 1. On Date Change
     datePicker.addEventListener("change", (e) => {
         const selectedDate = e.target.value;
@@ -79,7 +86,7 @@ function fetchHistoryQuery(mode, dateString = null) {
     const container = document.getElementById('history-orders-container');
     const filterLabel = document.getElementById('active-filter-label');
 
-    // Stop previous listener to avoid memory leaks/duplicate data
+    // Stop previous listener
     if (currentUnsubscribe) {
         currentUnsubscribe();
         currentUnsubscribe = null;
@@ -91,9 +98,8 @@ function fetchHistoryQuery(mode, dateString = null) {
     const ordersRef = collection(db, "orders");
 
     if (mode === "DATE" && dateString) {
-        // Create Start and End timestamps for the selected day
+        // Fix timezone: Create date at local midnight
         const start = new Date(dateString);
-        // Fix timezone offset issue by treating dateString as local midnight
         start.setHours(0, 0, 0, 0);
         
         const end = new Date(dateString);
@@ -102,10 +108,8 @@ function fetchHistoryQuery(mode, dateString = null) {
         const startTimestamp = Timestamp.fromDate(start);
         const endTimestamp = Timestamp.fromDate(end);
 
-        filterLabel.textContent = `Viewing: ${dateString}`;
+        if (filterLabel) filterLabel.textContent = `Viewing: ${dateString}`;
 
-        // Query: Status Resolved AND Date Range
-        // NOTE: This requires a Firestore Composite Index
         historyQuery = query(
             ordersRef, 
             where("status", "==", "resolved"), 
@@ -115,7 +119,7 @@ function fetchHistoryQuery(mode, dateString = null) {
         );
     } else {
         // Default: Last 50
-        filterLabel.textContent = "Viewing: Latest Orders";
+        if (filterLabel) filterLabel.textContent = "Viewing: Latest Orders";
         historyQuery = query(
             ordersRef, 
             where("status", "==", "resolved"), 
@@ -132,7 +136,7 @@ function fetchHistoryQuery(mode, dateString = null) {
             container.innerHTML = `
                 <div style="text-align:center; padding: 20px; color: #666;">
                     <h3>No orders found.</h3>
-                    <p>${mode === 'DATE' ? 'No completed orders on this date.' : 'History is empty.'}</p>
+                    <p>${mode === 'DATE' ? 'No resolved orders on this date.' : 'History is empty.'}</p>
                 </div>`;
             return;
         }
@@ -145,10 +149,10 @@ function fetchHistoryQuery(mode, dateString = null) {
         // Check for Index Error
         if (error.code === 'failed-precondition' || error.message.includes("index")) {
             container.innerHTML = `
-                <p class="error-text">
+                <div style="padding:15px; border: 1px solid red; background: #fff0f0; color: red;">
                     <strong>System Requirement:</strong> This search requires a Firestore Index.<br>
                     Open your browser console (F12) and click the link provided by Firebase to create it automatically.
-                </p>`;
+                </div>`;
         } else {
             container.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
         }
@@ -164,14 +168,17 @@ async function createHistoryCard(orderId, order, container) {
     const headerDiv = document.createElement('div');
     headerDiv.className = 'order-header-container';
     const h2 = document.createElement('h2');
-    let dateStr = order.orderDate?.seconds ? new Date(order.orderDate.seconds * 1000).toLocaleString() : "Unknown Date";
-    h2.innerHTML = `Order #${order.orderNumber} <span class="order-date">(${dateStr})</span>`;
+    let dateStr = "Unknown Date";
+    if(order.orderDate && order.orderDate.seconds) {
+        dateStr = new Date(order.orderDate.seconds * 1000).toLocaleString();
+    }
+    h2.innerHTML = `Order #${order.orderNumber || 'N/A'} <span class="order-date">(${dateStr})</span>`;
     headerDiv.appendChild(h2);
 
     // Details
     const detailsDiv = document.createElement('div');
     detailsDiv.className = 'customer-details';
-    detailsDiv.innerHTML = `<p><strong>${order.customerName}</strong> | <a href="tel:${order.phoneNumber}">${order.phoneNumber}</a></p>`;
+    detailsDiv.innerHTML = `<p><strong>${order.customerName || 'Guest'}</strong> | <a href="tel:${order.phoneNumber}">${order.phoneNumber || ''}</a></p>`;
 
     // Items List
     const itemsUl = document.createElement('ul');
@@ -205,7 +212,12 @@ async function createHistoryCard(orderId, order, container) {
             const item = doc.data();
             const menuItem = menuItemsMap[item.itemId]; 
             
-            const verifiedPrice = calculateVerifiedItemPrice(menuItem, item) || item.price;
+            // FIX 2: Safe Price Calculation (If menu item deleted, use saved price)
+            let verifiedPrice = item.price;
+            if (menuItem) {
+                verifiedPrice = calculateVerifiedItemPrice(menuItem, item) || item.price;
+            }
+
             const lineTotal = verifiedPrice * item.quantity;
             subtotal += lineTotal;
 
@@ -213,7 +225,9 @@ async function createHistoryCard(orderId, order, container) {
             
             const detailsDiv = document.createElement('div');
             detailsDiv.className = 'item-details';
-            detailsDiv.textContent = `${item.quantity} x ${menuItem ? menuItem.name_english : item.title}`;
+            // FIX 3: Safe Name Display (If menu item deleted, use saved title)
+            const itemName = menuItem ? menuItem.name_english : (item.title || "Unknown Item");
+            detailsDiv.textContent = `${item.quantity} x ${itemName}`;
             
             const idDiv = document.createElement('div');
             idDiv.className = 'item-id';

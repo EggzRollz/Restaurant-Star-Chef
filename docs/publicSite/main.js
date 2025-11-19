@@ -1,10 +1,8 @@
-
 import { Cart } from './cart.js';  
-import { mergeSort, filterBy } from './algorithms.js';
-import { firebaseConfig } from "../config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
+import { firebaseConfig } from "./config.js";
 
 
 
@@ -20,7 +18,7 @@ try {
   const container = document.getElementById('menu-items-container');
   if(container) container.innerHTML = "<h1>Error: Could not connect to the menu database.</h1>";
 }
-export { db, firebaseConfig };
+
 
 export function updateCartQuantityDisplay(cart) {
     const cartQuantityDisplay = document.getElementById('cartQuantityDisplay');

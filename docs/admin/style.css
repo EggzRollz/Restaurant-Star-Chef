@@ -22,7 +22,32 @@ h1 {
     color: #a2956b; 
     margin-bottom: 30px;
 }
+.btn-nav {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.btn-nav:hover {
+    text-decoration: underline;
+}
 
+/* --- Logout Button Style --- */
+.btn-logout {
+    background-color: #333; /* Dark Grey/Black */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+    background-color: #555; /* Lighter Grey on hover */
+}
 #live-orders-container { 
     display: grid; 
     

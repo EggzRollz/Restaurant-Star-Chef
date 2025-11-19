@@ -1,25 +1,30 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { firebaseConfig } from "../publicSite/main.js";
+
+
+import { firebaseConfig } from "../publicSite/config.js";
 
 // --- 2. INITIALIZE ---
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // We use 'db' for Firestore now
+const db = getFirestore(app); 
 
 // Global Variables
 let menuItemsMap = {};
-const logoutBtn = document.getElementById("logout-btn"); // Make sure ID matches your HTML
+const logoutBtn = document.getElementById("logout-btn");
 
-// --- 3. AUTH LISTENER ---
-onAuthStateChanged(auth, (user) => {
+// --- 3. AUTH LISTENER (The Fix) ---
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // User is logged in. Safe to load orders.
+    // 1. User is confirmed logged in.
     console.log("Welcome Kitchen Staff:", user.email);
     
-    // Load the menu data first (for reference), then start listening for orders
-    loadMenuData();
+    // 2. Load the menu data FIRST (wait for it)
+    await loadMenuData();
+
+    // 3. THEN start listening for orders
+    listenForLiveOrders();
     
   } else {
     // No user logged in. Kick them out!
@@ -36,7 +41,6 @@ if (logoutBtn) {
 }
 
 // --- 4. LOAD MENU DATA ---
-// (This function was actually fine, just updated to use 'db')
 async function loadMenuData() {
     console.log("Fetching menu data...");
     try {
@@ -49,6 +53,7 @@ async function loadMenuData() {
         console.error("Error loading menu:", error);
     }
 }
+
 
 // --- 5. DELETE ORDER ---
 // UPDATED: Now requires 'orderId' (the Firestore document ID) AND 'orderNumber' (for the alert)
@@ -204,9 +209,10 @@ function calculateVerifiedItemPrice(menuItem, orderItem) {
     
     return finalPrice;
 }
-// --- SOUND SETUP ---
 const notificationSound = new Audio("./sounds/chinese.mp3");
-let isFirstLoad = true;
+
+// 1. Capture the exact time this page was opened
+const pageLoadTime = new Date(); 
 
 // --- MAIN LISTENER ---
 function listenForLiveOrders() {
@@ -216,18 +222,27 @@ function listenForLiveOrders() {
     const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
 
     onSnapshot(q, (snapshot) => {
-        // 1. SOUND LOGIC (Using Firestore docChanges is much cleaner!)
-        if (!isFirstLoad) {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type === "added") {
-                    // New order came in! Play sound.
-                    notificationSound.play().catch(e => console.warn("Sound blocked:", e));
+        
+        // --- SOUND LOGIC (Timestamp Check) ---
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const orderData = change.doc.data();
+
+                // Convert Firestore Timestamp to a Javascript Date object
+                let orderDateObj = new Date(0); // default to epoch if missing
+                if (orderData.orderDate && orderData.orderDate.seconds) {
+                    orderDateObj = new Date(orderData.orderDate.seconds * 1000);
                 }
-            });
-        }
-        isFirstLoad = false;
 
+                // CONDITIONAL: Only play sound if the order was created AFTER the page loaded
+                if (orderDateObj > pageLoadTime) {
+                    console.log("New order detected! Playing sound.");
+                    notificationSound.play().catch(e => console.warn("Sound blocked (user interaction needed):", e));
+                }
+            }
+        });
 
+        // --- RENDERING LOGIC ---
         ordersContainer.innerHTML = ""; 
         
         if (snapshot.empty) {
@@ -239,9 +254,8 @@ function listenForLiveOrders() {
             const orderData = docSnapshot.data();
             const orderId = docSnapshot.id; 
             if (orderData.status === 'resolved') {
-                return; // Skip this iteration
+                return; 
              }
-            // Pass both ID and Data to the card creator
             createOrderCard(orderId, orderData, ordersContainer);
         });
     });
