@@ -10,7 +10,8 @@ const db = getFirestore(app);
 
 // SOUND VARIABLES - Only ONE audio object needed
 let notificationAudio = new Audio("./sounds/chinese.mp3");
-let soundEnabled = false;
+let soundEnabled = localStorage.getItem('soundEnabled') === 'true'; // Load saved state
+
 
 // 1. Capture the exact time this page was opened
 const pageLoadTime = new Date(); 
@@ -38,6 +39,7 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html";
   }
 });
+
 function initializeSoundButton() {
     const enableSoundBtn = document.getElementById('enable-sound-btn');
     
@@ -49,6 +51,9 @@ function initializeSoundButton() {
     // Audio is already created at the top, just set volume
     notificationAudio.volume = 1.0;
 
+    // Set initial button state based on saved preference
+    updateSoundButtonUI(enableSoundBtn, soundEnabled);
+
     enableSoundBtn.addEventListener('click', () => {
         if (!soundEnabled) {
             // Try to play sound as a test
@@ -56,6 +61,7 @@ function initializeSoundButton() {
             notificationAudio.play()
                 .then(() => {
                     soundEnabled = true;
+                    localStorage.setItem('soundEnabled', 'true'); // Save to localStorage
                     updateSoundButtonUI(enableSoundBtn, true);
                     console.log('✓ Sound notifications enabled');
                 })
@@ -66,13 +72,29 @@ function initializeSoundButton() {
         } else {
             // Disable sound
             soundEnabled = false;
+            localStorage.setItem('soundEnabled', 'false'); // Save to localStorage
             updateSoundButtonUI(enableSoundBtn, false);
             console.log('✗ Sound notifications disabled');
         }
     });
 }
-
-// Update button appearance
+if (soundEnabled) {
+    // If sound is enabled from previous page, unlock it silently on first interaction
+    const unlockAudio = () => {
+        const tempAudio = notificationAudio.cloneNode();
+        tempAudio.volume = 0;
+        tempAudio.play().then(() => {
+            console.log('Audio unlocked on this page');
+        }).catch(() => {
+            console.log('Audio still locked, waiting for more interaction');
+        });
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('keydown', unlockAudio);
+    };
+    
+    document.addEventListener('click', unlockAudio, { once: true });
+    document.addEventListener('keydown', unlockAudio, { once: true });
+}
 function updateSoundButtonUI(button, isEnabled) {
     const icon = button.querySelector('.sound-icon');
     const text = button.querySelector('.sound-text');
@@ -90,7 +112,7 @@ function updateSoundButtonUI(button, isEnabled) {
 
 function playNewOrderSound() {
     if (soundEnabled && notificationAudio) {
-        notificationAudio.currentTime = 0; // Reset to start
+        notificationAudio.currentTime = 0;
         notificationAudio.play().catch((error) => {
             console.error('Failed to play notification sound:', error);
         });
