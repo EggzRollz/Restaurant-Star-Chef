@@ -7,7 +7,10 @@ import { firebaseConfig } from "./config.js";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); 
+const notificationSound = new Audio("./sounds/chinese.mp3");
 
+// 1. Capture the exact time this page was opened
+const pageLoadTime = new Date(); 
 // Global Variables
 let menuItemsMap = {};
 const logoutBtn = document.getElementById("logout-btn");
@@ -37,7 +40,21 @@ if (logoutBtn) {
         signOut(auth).then(() => window.location.href = "login.html");
     });
 }
+const startButton = document.getElementById('start-orders-button');
 
+startButton.addEventListener('click', () => {
+    // 1. Attempt to play a sound immediately on click
+    notificationSound.play().catch(e => {
+        // If the sound fails to play here, it means the browser still blocked it.
+        console.warn("Autoplay block still active, but listener is starting.", e);
+    });
+    
+    // 2. Start the main listener after the user interaction
+    listenForLiveOrders();
+    
+    // 3. Optional: Remove the button once listening starts
+    startButton.style.display = 'none';
+});
 // --- 4. LOAD MENU DATA ---
 async function loadMenuData() {
     console.log("Fetching menu data...");
@@ -81,7 +98,7 @@ async function deleteOrder(orderId, orderNumber) {
 }
 
 
-const renderCustomizationsFromObject = (item) => {
+function renderCustomizationsFromObject(item) { 
     const customizationContainer = document.createElement('div');
     customizationContainer.className = 'item-customizations';
     
@@ -207,57 +224,11 @@ function calculateVerifiedItemPrice(menuItem, orderItem) {
     
     return finalPrice;
 }
-const notificationSound = new Audio("./sounds/chinese.mp3");
 
-// 1. Capture the exact time this page was opened
-const pageLoadTime = new Date(); 
+
 
 // --- MAIN LISTENER ---
-function listenForLiveOrders() {
-    const ordersContainer = document.getElementById('live-orders-container');
-    
-    // Listen to Firestore 'orders' collection, sorted by date
-    const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
 
-    onSnapshot(q, (snapshot) => {
-        
-        // --- SOUND LOGIC (Timestamp Check) ---
-        snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-                const orderData = change.doc.data();
-
-                // Convert Firestore Timestamp to a Javascript Date object
-                let orderDateObj = new Date(0); // default to epoch if missing
-                if (orderData.orderDate && orderData.orderDate.seconds) {
-                    orderDateObj = new Date(orderData.orderDate.seconds * 1000);
-                }
-
-                // CONDITIONAL: Only play sound if the order was created AFTER the page loaded
-                if (orderDateObj > pageLoadTime) {
-                    console.log("New order detected! Playing sound.");
-                    notificationSound.play().catch(e => console.warn("Sound blocked (user interaction needed):", e));
-                }
-            }
-        });
-
-        // --- RENDERING LOGIC ---
-        ordersContainer.innerHTML = ""; 
-        
-        if (snapshot.empty) {
-            ordersContainer.innerHTML = "<p>No active orders.</p>";
-            return;
-        }
-
-        snapshot.forEach((docSnapshot) => {
-            const orderData = docSnapshot.data();
-            const orderId = docSnapshot.id; 
-            if (orderData.status === 'resolved') {
-                return; 
-             }
-            createOrderCard(orderId, orderData, ordersContainer);
-        });
-    });
-}
 // --- CARD CREATOR (Async) ---
 async function createOrderCard(orderId, order, container) {
     const orderCard = document.createElement('div');
@@ -398,4 +369,49 @@ async function createOrderCard(orderId, order, container) {
         console.error("Error rendering items for order", orderId, err);
         itemsUl.innerHTML = "<li style='color:red'>Error displaying items. Check console.</li>";
     }
+}
+function listenForLiveOrders() {
+    const ordersContainer = document.getElementById('live-orders-container');
+    
+    // Listen to Firestore 'orders' collection, sorted by date
+    const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+        
+        // --- SOUND LOGIC (Timestamp Check) ---
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const orderData = change.doc.data();
+
+                // Convert Firestore Timestamp to a Javascript Date object
+                let orderDateObj = new Date(0); // default to epoch if missing
+                if (orderData.orderDate && orderData.orderDate.seconds) {
+                    orderDateObj = new Date(orderData.orderDate.seconds * 1000);
+                }
+
+                // CONDITIONAL: Only play sound if the order was created AFTER the page loaded
+                if (orderDateObj > pageLoadTime) {
+                    console.log("New order detected! Playing sound.");
+                    notificationSound.play().catch(e => console.warn("Sound blocked (user interaction needed):", e));
+                }
+            }
+        });
+
+        // --- RENDERING LOGIC ---
+        ordersContainer.innerHTML = ""; 
+        
+        if (snapshot.empty) {
+            ordersContainer.innerHTML = "<p>No active orders.</p>";
+            return;
+        }
+
+        snapshot.forEach((docSnapshot) => {
+            const orderData = docSnapshot.data();
+            const orderId = docSnapshot.id; 
+            if (orderData.status === 'resolved') {
+                return; 
+             }
+            createOrderCard(orderId, orderData, ordersContainer);
+        });
+    });
 }

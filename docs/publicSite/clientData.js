@@ -78,7 +78,7 @@ if (placeOrderBttn) {
             }
             return; 
         }
-
+        
         // Payload Setup
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
             itemId: item.baseId || item.id.split('_')[0], 
@@ -112,8 +112,8 @@ if (placeOrderBttn) {
             // Pass your custom ID as the second argument to doc()
             const newOrderRef = doc(db, "orders", customDocId); 
             
-            const selectedTime = selectedPickupTimeInput.value;
-
+            let selectedTime = selectedPickupTimeInput.value;
+            
             // 4. Set Main Order Data
             const orderData = {
                 orderId: newOrderRef.id, // This will now be your custom ID

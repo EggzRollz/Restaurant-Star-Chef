@@ -5,14 +5,19 @@ const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const phone = document.getElementById("phone");
 const clientInfoContainer = document.getElementById('client-info-container');
+const pickupTimeTrigger = document.getElementById('pickupTimeTrigger');
+const selectedPickupTimeInput = document.getElementById('selectedPickupTime');
 const formFields = [firstName, lastName, phone];
+
 
 export function validateCheckoutForm() {
     let firstInvalidField = null;
 
     // Clear previous errors before re-validating
     formFields.forEach(field => field.classList.remove('input-error'));
-
+    if (pickupTimeTrigger) {
+        pickupTimeTrigger.classList.remove('pickup-time-trigger-error');
+    }
     // Check each field individually
     const isFirstNameEmpty = firstName.value.trim() === '';
 
@@ -38,8 +43,29 @@ export function validateCheckoutForm() {
             firstInvalidField = phone;
         }
     }
+    const isPickupTimeEmpty = !selectedPickupTimeInput || selectedPickupTimeInput.value.trim() === '';
+    if (isPickupTimeEmpty) {
+        // Store the original text to restore later
+        const originalText = pickupTimeTrigger.textContent;
+        
+        // Add error styling to the button
+        pickupTimeTrigger.classList.add('pickup-time-trigger-error');
+        
+       
+        
+        // Restore original text after 3 seconds
+        setTimeout(() => {
+            if (pickupTimeTrigger.classList.contains('pickup-time-trigger-error')) {
+                pickupTimeTrigger.textContent = originalText;
+            }
+        }, 3000);
+        
+        if (!firstInvalidField) {
+            firstInvalidField = pickupTimeTrigger;
+        }
+    }
 
-    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty;
+    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty || isPickupTimeEmpty;
 
     if (areAnyFieldsEmpty) {
         if (clientInfoContainer) {
