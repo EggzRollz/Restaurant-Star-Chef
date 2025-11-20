@@ -275,6 +275,29 @@ h1 {
 
 
 
+@media (max-width: 1200px) {
+    #live-orders-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tablets (Under 900px): Switch to 2 per row (50%) */
+@media (max-width: 900px) {
+    #live-orders-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Phones (Under 600px): Switch to 1 per row (100%) */
+@media (max-width: 600px) {
+    #live-orders-container {
+        grid-template-columns: 1fr; 
+    }
+}
+
+
+
+
 
 
 
@@ -550,9 +573,6 @@ button:hover {
         grid-template-columns: 1fr; 
     }
 }
-
-
-
 
 
 

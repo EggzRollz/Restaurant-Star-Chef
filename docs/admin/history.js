@@ -228,6 +228,17 @@ async function createHistoryCard(orderId, order, container) {
             priceDiv.className = 'item-price';
             priceDiv.textContent = `$${lineTotal.toFixed(2)}`;
 
+           /*   
+            let displayTime = "ASAP"; // Default
+            if (order.pickupTime && order.pickupTime.trim() !== "") {
+                displayTime = order.pickupTime;
+            }
+            const orderTime = document.createElement('div');
+            orderTime.className = 'order-pickup-time';
+            orderTime.textContent = `Pickup Time: ${displayTime}`;
+            detailsDiv.appendChild(orderTime);
+            */
+
             li.appendChild(detailsDiv);
             li.appendChild(priceDiv);
             li.appendChild(renderCustomizationsFromObject(item));
