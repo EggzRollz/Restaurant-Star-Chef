@@ -630,3 +630,66 @@ button:hover {
     color: #666;
     font-size: 0.9rem;
 }
+
+
+.sound-toggle-btn {
+    position: fixed;
+    
+    right: 20px;
+    z-index: 9999;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0, 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+
+    transition: all 0.3s ease;
+    width: 20%;
+}
+
+.sound-toggle-btn:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sound-toggle-btn:active {
+    transform: translateY(0);
+}
+
+.sound-toggle-btn.enabled {
+    background-color: #4CAF50;
+}
+
+.sound-toggle-btn.enabled:hover {
+    background-color: #45a049;
+}
+
+.sound-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.sound-text {
+    font-size: 14px;
+}
+
+/* Optional: Pulse animation when disabled */
+.sound-toggle-btn:not(.enabled) {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}

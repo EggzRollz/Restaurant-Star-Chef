@@ -7,13 +7,17 @@ import { firebaseConfig } from "./config.js";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); 
-const notificationSound = new Audio("./sounds/chinese.mp3");
+
+// SOUND VARIABLES - Only ONE audio object needed
+let notificationAudio = new Audio("./sounds/chinese.mp3");
+let soundEnabled = false;
 
 // 1. Capture the exact time this page was opened
 const pageLoadTime = new Date(); 
 // Global Variables
 let menuItemsMap = {};
 const logoutBtn = document.getElementById("logout-btn");
+
 
 // --- 3. AUTH LISTENER (The Fix) ---
 onAuthStateChanged(auth, async (user) => {
@@ -23,7 +27,8 @@ onAuthStateChanged(auth, async (user) => {
    
     // 2. Load the menu data FIRST (wait for it)
     await loadMenuData();
-
+    initializeSoundButton();
+    
     // 3. THEN start listening for orders
     listenForLiveOrders();
     
@@ -33,6 +38,94 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html";
   }
 });
+function initializeSoundButton() {
+    const enableSoundBtn = document.getElementById('enable-sound-btn');
+    
+    if (!enableSoundBtn) {
+        console.error('Enable sound button not found');
+        return;
+    }
+
+    // Audio is already created at the top, just set volume
+    notificationAudio.volume = 1.0;
+
+    enableSoundBtn.addEventListener('click', () => {
+        if (!soundEnabled) {
+            // Try to play sound as a test
+            notificationAudio.currentTime = 0;
+            notificationAudio.play()
+                .then(() => {
+                    soundEnabled = true;
+                    updateSoundButtonUI(enableSoundBtn, true);
+                    console.log('✓ Sound notifications enabled');
+                })
+                .catch((error) => {
+                    console.error('Failed to enable sound:', error);
+                    alert('Could not enable sound. Please check browser permissions.');
+                });
+        } else {
+            // Disable sound
+            soundEnabled = false;
+            updateSoundButtonUI(enableSoundBtn, false);
+            console.log('✗ Sound notifications disabled');
+        }
+    });
+}
+
+// Update button appearance
+function updateSoundButtonUI(button, isEnabled) {
+    const icon = button.querySelector('.sound-icon');
+    const text = button.querySelector('.sound-text');
+    
+    if (isEnabled) {
+        button.classList.add('enabled');
+        icon.textContent = '🔊';
+        text.textContent = 'Sounds Enabled';
+    } else {
+        button.classList.remove('enabled');
+        icon.textContent = '🔇';
+        text.textContent = 'Enable Sounds';
+    }
+}
+
+function playNewOrderSound() {
+    if (soundEnabled && notificationAudio) {
+        notificationAudio.currentTime = 0; // Reset to start
+        notificationAudio.play().catch((error) => {
+            console.error('Failed to play notification sound:', error);
+        });
+    } else {
+        console.log('Sound not enabled - user needs to click "Enable Sounds" button');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Logout Button Logic
 if (logoutBtn) {
@@ -40,21 +133,7 @@ if (logoutBtn) {
         signOut(auth).then(() => window.location.href = "login.html");
     });
 }
-const startButton = document.getElementById('start-orders-button');
 
-startButton.addEventListener('click', () => {
-    // 1. Attempt to play a sound immediately on click
-    notificationSound.play().catch(e => {
-        // If the sound fails to play here, it means the browser still blocked it.
-        console.warn("Autoplay block still active, but listener is starting.", e);
-    });
-    
-    // 2. Start the main listener after the user interaction
-    listenForLiveOrders();
-    
-    // 3. Optional: Remove the button once listening starts
-    startButton.style.display = 'none';
-});
 // --- 4. LOAD MENU DATA ---
 async function loadMenuData() {
     console.log("Fetching menu data...");
@@ -383,16 +462,15 @@ function listenForLiveOrders() {
             if (change.type === "added") {
                 const orderData = change.doc.data();
 
-                // Convert Firestore Timestamp to a Javascript Date object
-                let orderDateObj = new Date(0); // default to epoch if missing
+                let orderDateObj = new Date(0);
                 if (orderData.orderDate && orderData.orderDate.seconds) {
                     orderDateObj = new Date(orderData.orderDate.seconds * 1000);
                 }
 
-                // CONDITIONAL: Only play sound if the order was created AFTER the page loaded
+                // ONLY play if order is new AND user has enabled sounds
                 if (orderDateObj > pageLoadTime) {
-                    console.log("New order detected! Playing sound.");
-                    notificationSound.play().catch(e => console.warn("Sound blocked (user interaction needed):", e));
+                    console.log("New order detected!");
+                    playNewOrderSound(); // This now checks soundEnabled
                 }
             }
         });
