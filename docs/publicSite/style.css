@@ -2524,7 +2524,7 @@ input.input-error::placeholder {
 }
 
 /* The container for all the options */
-.custom-options {
+.dropdown-options {
     position: absolute;
     top: 100%; /* This is the key to making it drop DOWN */
     left: 0;
@@ -2538,12 +2538,12 @@ input.input-error::placeholder {
     max-height: 200px; /* Prevent super long lists */
     overflow-y: auto; /* Add a scrollbar if needed */
 
- 
+    /* Hide it by default */
+    display: none;
 }
 
-
 /* Show the options when the 'open' class is added */
-.pickup-time-dropdown-container.open .custom-options {
+.pickup-time-dropdown-container.open .dropdown-options {
     display: block;
 }
 
@@ -3350,13 +3350,4 @@ h1 {
 
 body h1{
     font-family: "Noto Sans Display", sans-serif;
-}
-
-#customOptions.custom-options {
-    display: block !important;      /* Make it visible */
-    position: static !important;    /* Put it back in the normal layout flow */
-    max-height: none !important;    /* Let it grow as tall as needed */
-    box-shadow: none !important;    /* Remove the "dropdown" shadow */
-    border: none !important;        /* Remove the border */
-    margin-bottom: 20px;            /* Add some space before the cart button */
 }
