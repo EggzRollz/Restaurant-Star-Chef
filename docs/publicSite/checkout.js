@@ -15,6 +15,7 @@ export function validateCheckoutForm() {
 
     // Check each field individually
     const isFirstNameEmpty = firstName.value.trim() === '';
+
     if (isFirstNameEmpty) {
         firstName.classList.add('input-error');
         if (!firstInvalidField) {
@@ -60,16 +61,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartHST = document.getElementById('hst');
     const cartTotalElement = document.getElementById('cart-total');
     const placeOrderBttn = document.getElementById("place-order-button");
-    const summaryBox = document.querySelector('.cart-total-summary');
-    const wrapper = document.querySelector('.checkout-content-wrapper');
     const emptyMessageEl = document.getElementById('cartEmptyMessage');
     const pickupTimeElement = document.getElementById('pickup-time');
     const timeBoxElement = document.getElementById('time-box');
+    const pickupDropdown = document.getElementById('pickupTimeDropdown');
+    const pickupDropdownContainer = document.getElementById('pickupTimeDropdownContainer');
+    const pickupTimeTrigger = document.getElementById('pickupTimeTrigger');
+    const pickupTimeOptions = document.getElementById('pickupTimeOptions');
+    const selectedPickupTimeInput = document.getElementById('selectedPickupTime');
+    let choices = null;
     const cart = new Cart();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     cart.loadFromStorage(savedItems);
-   
+    if (pickupTimeTrigger) {
+        pickupTimeTrigger.addEventListener('click', () => {
+            updatePickupTime(); // Recalculate times immediately before opening
+            pickupDropdownContainer.classList.toggle('open');
+        });
+    }
+
+    if (pickupTimeOptions) {
+        pickupTimeOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (option) {
+                const selectedValue = option.getAttribute('data-value');
+                
+                // This will display the calculated time (e.g., "7:45 PM") in the box
+                pickupTimeTrigger.textContent = selectedValue; 
+                selectedPickupTimeInput.value = selectedValue;
+                
+                pickupDropdownContainer.classList.remove('open');
+            }
+        });
+    }
     formFields.forEach(field => {
         if (field) {
             // This listener handles real-time input cleanup and length limiting
@@ -79,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (field === phone) {
                     e.target.value = e.target.value.replace(/[^0-9]/g, '').substring(0, 10);
                 } else if (field === firstName || field === lastName) {
-                    e.target.value = e.target.value.replace(/[^a-zA-Z\s'-]/g, '');
+                    e.target.value = e.target.value.replace(/[^a-zA-Z\s'-]/g, '').substring(0, 35);
                 }
             });
 
@@ -87,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
             field.addEventListener('keydown', (event) => {
                 const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
                 const isShortcut = (event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase());
+                
 
                 if (allowedKeys.includes(event.key) || isShortcut) {
                     return;
@@ -124,48 +150,113 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateButtonState() {
         const isCartEmpty = cart.getItems().length === 0;
         const now = new Date();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
-
+ 
         const isStoreClosed = false;
         //const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
 
         // The button should be disabled if the store is closed OR if the cart is empty
         placeOrderBttn.disabled = isStoreClosed || isCartEmpty;
     }
-    
-    function updatePickupTime() {
-        const now = new Date();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
 
-        const isBeforeOpening = currentHour < 11;
-        const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+ 
+// 3. (Optional but recommended) Close when clicking outside
+window.addEventListener('click', (e) => {
+    if (!pickupDropdownContainer.contains(e.target)) {
+        pickupDropdownContainer.classList.remove('open');
+    }
+});
 
-        if (isBeforeOpening || isAfterClosing) {
-            // Store is closed - update UI
-            pickupTimeElement.textContent = "No more orders are being processed tonight. Please try again tomorrow.";
-            timeBoxElement.classList.add('store-closed');
-        } else {
-            // Store is open - show pickup time
-            timeBoxElement.classList.remove('store-closed');
-            
-            const pickupTime = new Date(); 
-            pickupTime.setMinutes(pickupTime.getMinutes() + 30);
-            const minutes = pickupTime.getMinutes();
-            let hours24 = pickupTime.getHours();
-            const ampm = hours24 >= 12 ? 'PM' : 'AM';
-            let hours12 = hours24 % 12;
-            if (hours12 === 0) { hours12 = 12; }
-            const paddedMinutes = String(minutes).padStart(2, '0');
-            const displayTime = `Estimated pickup time ${hours12}:${paddedMinutes} ${ampm}`;
-            pickupTimeElement.textContent = displayTime;
-        }
-        
-        // Always call updateButtonState to handle both store hours and cart status
-        updateButtonState(); 
+    function formatTime(dateObj) {
+        let hours = dateObj.getHours();
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        if (hours === 0) hours = 12;
+        return `${hours}:${minutes} ${ampm}`;
     }
 
+    function updatePickupTime() {
+    const previouslySelectedTime = selectedPickupTimeInput.value;
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    const isBeforeOpening = currentHour < 11;
+    const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+
+    // This logic seems reversed, I've flipped it to what I think you intend:
+    // This block should run if the store is OPEN.
+    if ((isBeforeOpening && isAfterClosing)) {
+        if (timeBoxElement) timeBoxElement.classList.remove('store-closed');
+        if (pickupDropdownContainer) pickupDropdownContainer.classList.remove('hidden');
+        
+     
+        const asapDate = new Date(now.getTime() + 25 * 60000);
+        const asapTimeString = formatTime(asapDate);
+        const closingTime = new Date();
+        closingTime.setHours(21, 30, 0, 0); // Set closing time to 9:30 PM
+        const firstAvailablePickup = new Date(now.getTime() + 30 * 60000);
+        const firstMinutes = firstAvailablePickup.getMinutes();
+
+        const remainder = firstMinutes % 15;
+        if (remainder !== 0) {
+            firstAvailablePickup.setMinutes(firstMinutes + (15 - remainder));
+        }
+        firstAvailablePickup.setSeconds(0, 0);
+
+        const remainingTimeOptionsArr = [];
+        let currentTimeSlot = new Date(firstAvailablePickup.getTime());
+
+        while (currentTimeSlot < closingTime) {
+                remainingTimeOptionsArr.push(formatTime(currentTimeSlot));
+                currentTimeSlot.setMinutes(currentTimeSlot.getMinutes() + 15);
+            }
+        const optionsContainer = document.getElementById('pickupTimeOptions');
+            if (!optionsContainer) return; // Safety check
+        optionsContainer.innerHTML = ''; // Clear previous options
+
+        if (remainingTimeOptionsArr.length > 0) {
+            const asapDiv = document.createElement('div');
+                asapDiv.classList.add('custom-option');
+
+                asapDiv.innerHTML = `ASAP <span style="font-size: 0.85em; opacity: 0.7;">(${asapTimeString})</span>`; 
+                asapDiv.setAttribute('data-value', asapTimeString); 
+                optionsContainer.appendChild(asapDiv);
+            remainingTimeOptionsArr.forEach(time => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.classList.add('custom-option');
+                    optionDiv.textContent = time;
+                    optionDiv.setAttribute('data-value', time);
+                    optionsContainer.appendChild(optionDiv);
+                });
+              const isValidSelection = (previouslySelectedTime === asapTimeString) || 
+                                         (remainingTimeOptionsArr.includes(previouslySelectedTime));
+
+                if (previouslySelectedTime && isValidSelection) {
+                    pickupTimeTrigger.textContent = previouslySelectedTime;
+                    selectedPickupTimeInput.value = previouslySelectedTime; 
+                } else {
+                    pickupTimeTrigger.textContent = "Select a Time";
+                    selectedPickupTimeInput.value = ""; 
+                }
+            } else {
+                pickupTimeTrigger.textContent = "No more pickup times available for today";
+            }
+        } else { 
+            // Store Closed Logic
+            if(pickupTimeElement) pickupTimeElement.textContent = "No more orders are being processed tonight. Please try again tomorrow.";
+            if(timeBoxElement) timeBoxElement.classList.add('store-closed');
+            if (pickupDropdownContainer) pickupDropdownContainer.classList.add('hidden');
+        }
+
+        updateButtonState();
+    }
+
+
+
+
+ 
     function updateTotals() {
     // THE FIX: Use cart.getItems() instead of the outdated savedItems array
     const currentCartItems = cart.getItems();
@@ -236,12 +327,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const validValues = customizationValues.filter(value => value && value !== 'default');
 
                 if (validValues.length > 0) {
-    // --- START OF THE NEW CODE ---
-
-    // Join all the customization values into one big string
+ 
     const fullCustomizationText = validValues.join(', ');
-
-    // Replace every comma and the space that follows it with a comma and a line break tag
     const htmlWithBreaks = fullCustomizationText.replace(/, /g, ',<br>');
 
     // Set the HTML of the container. We use .innerHTML because it understands the <br> tag.
@@ -357,7 +444,8 @@ document.addEventListener("DOMContentLoaded", () => {
     handleStickySummary();
     updatePickupTime();
     updateButtonState();
-    setInterval(updatePickupTime, 1000);
+    setInterval(updatePickupTime, 60000);
+
 
     window.addEventListener('pageshow', function(event) {
         if (cart) {

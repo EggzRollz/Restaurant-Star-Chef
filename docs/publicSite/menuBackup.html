@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta name="author" content="Connor Lau" />
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Star Chef</title>
+      <link rel="canonical" href="https://starchef.ca/menu.html" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/graphics/favicon/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/graphics/favicon/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/graphics/favicon/favicon-16x16.png">
+      <link rel="manifest" href="/graphics/favicon/site.webmanifest">
+      <link rel="icon" href="/graphics/favicon/favicon.ico">
+      <meta name="msapplication-TileColor" content="#da532c">
+      <meta name="theme-color" content="#ffffff">
+      <link rel="stylesheet" href="style.css" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+         href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Asap+Condensed:wght@200;300;400&family=Birthstone&display=swap"
+         rel="stylesheet"
+         />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <div class="overlay"></div>
+      <header class="main-header">
+      <nav class="main-nav">
+         <a href="index.html" class="logo-link">
+         <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
+         </a>
+         <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+         <ul class="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="menu.html">MENU</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="tel:+9052098181"><i class="fa-solid fa-phone"></i></span>(905)209-8181</a></li>
+         </ul>
+         <button class="cart-button">
+         <i class="fa-solid fa-cart-shopping"></i>
+         <span id="cartQuantityDisplay" class="cart-quantity-display">0</span>
+         </button>
+      </nav>
+       </header>
+       
+      <div class="parallax-container">
+         <!-- 1. FIXED BACKGROUND LAYER -->
+         <div class="fixed-background">
+            <div class="splash-image splash-menu">
+               <div class="splash-text">
+                  <h1>Menus</h1>
+                  <hr class="divider"/>
+                  <p class="subtitle">Explore from our finest picks</p>
+               </div>
+            </div>
+            <a href="#next-section" class="scroll-down-indicator" aria-label="Scroll down">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+               </svg>
+            </a>
+         </div>
+         
+        
+         <main>
+            <div  id="next-section" class="menu-nav-wrapper">
+               <nav id="menuNav" class="menu-nav">
+                  <ul>
+                     <li><a href="#All" data-category="All">ALL</a></li>
+                     <li><a href="#Popular" data-category="Popular">POPULAR</a></li>
+                     <li><a href="#FishSoupNoodles" data-category="Fish Soup Noodles">FISH SOUP NOODLES</a></li>
+                     <li><a href="#next-section" data-category="Fried Noodle">FRIED NOODLES</a></li>
+                     <li><a href="#Rice" data-category="Rice">RICE</a></li>
+                     <li><a href="#StirFry" data-category="Stir Fry">STIR FRY</a></li>
+                     <li><a href="#Soup" data-category="Soup">SOUP</a></li>
+                     <li><a href="#SoupNoodles" data-category="Soup Noodle">SOUP NOODLES</a></li>
+                     <li><a href="#Congee" data-category="Congee">CONGEE</a></li>
+                     <li><a href="#Beverages" data-category="Beverages">BEVERAGES</a></li>
+                  </ul>
+               </nav>
+            </div>
+            <div class="menu-placeholder"></div>
+            <div class="menu-grid">
+               <!-- JS will add menu items here -->
+            </div>
+            <!-- End of menu-grid -->
+            <!-- GOOD: The modal is now outside the grid and safe from being cleared -->
+             </div>
+            <div id="customize" class="modal hidden">
+               <div class="modal-content">
+                  <div class="scroll-area" >
+                     <button id="close-modal" class="closeModalBttn">X</button>
+                     <img id ="modal-image" class="modal-image" loading="lazy">
+                     <h2 id="customize-title" class="itemName"></h2>
+                     <h2 id="customize-chinese-title" class="itemName"></h2>
+                     <h3 id="default-price" class="defaultPrice"></h3>
+                     <!-- This container will be cleared and refilled with size/temp options -->
+                     <div id="customOptions" class="custom-options"></div>
+                     <div class="option-group">
+                        <h4>Special Instructions</h4>
+                        <textarea 
+                           id="order-notes" 
+                           class="order-notes-textarea" 
+                           placeholder="e.g., extra spicy, no onions, allergy note..."
+                           ></textarea>
+                     </div>
+                  </div>
+                  <!-- Move these OUTSIDE customOptions so they don't get deleted -->
+                  <div class="quantity-controls">
+                     <button id="decreaseBttn" class="quantityBttn" aria-label="subtract">-</button>
+                     <p id="quantity-display" class="quantity-display">0</p>
+                     <button id="increaseBttn" class="quantityBttn" aria-label="add">+</button>
+                     <button id="submitBttn" class="submitBttn" aria-label="submit">ADD TO CART</button>
+                  </div>
+               </div>
+            </div>
+         </main>
+      <script type="module" src="main.js"></script>
+      <script type="module" src="animation.js"></script>
+   </body>
+</html>

@@ -26,16 +26,15 @@ if (menuToggle && navLinks && overlay) {
   });
 
   menuToggle.addEventListener('click', () => {
-    console.log('[DEBUG] Menu toggle clicked. Toggling active classes.');
+   
     navLinks.classList.toggle('active');
     menuToggle.classList.toggle('active');
     overlay.classList.toggle('active');
     document.body.classList.toggle('no-scroll');
-    console.log('[DEBUG] `nav-links` active state is now:', navLinks.classList.contains('active'));
   });
 
   overlay.addEventListener('click', () => {
-    console.log('[DEBUG] Overlay clicked. Calling closeMenu().');
+    
     closeMenu();
   });
 

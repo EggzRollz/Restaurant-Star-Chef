@@ -11,7 +11,7 @@ import {
     onSnapshot,
     Timestamp 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { firebaseConfig } from "../publicSite/config.js";
+import { firebaseConfig } from "./config.js";
 
 // --- INITIALIZE ---
 const app = initializeApp(firebaseConfig);
@@ -98,11 +98,13 @@ function fetchHistoryQuery(mode, dateString = null) {
     const ordersRef = collection(db, "orders");
 
     if (mode === "DATE" && dateString) {
-        // Fix timezone: Create date at local midnight
-        const start = new Date(dateString);
+        const [year, month, day] = dateString.split('-').map(Number);
+
+        
+        const start = new Date(year, month - 1, day);
         start.setHours(0, 0, 0, 0);
         
-        const end = new Date(dateString);
+        const end = new Date(year, month - 1, day);
         end.setHours(23, 59, 59, 999);
 
         const startTimestamp = Timestamp.fromDate(start);
@@ -164,55 +166,44 @@ async function createHistoryCard(orderId, order, container) {
     const card = document.createElement('div');
     card.className = 'order-card history-card'; 
 
-    // Header
+    // Header (No changes here)
     const headerDiv = document.createElement('div');
-    headerDiv.className = 'order-header-container';
-    const h2 = document.createElement('h2');
-    let dateStr = "Unknown Date";
-    if(order.orderDate && order.orderDate.seconds) {
-        dateStr = new Date(order.orderDate.seconds * 1000).toLocaleString();
-    }
-    h2.innerHTML = `Order #${order.orderNumber || 'N/A'} <span class="order-date">(${dateStr})</span>`;
-    headerDiv.appendChild(h2);
+    // ...
+    card.appendChild(headerDiv);
 
-    // Details
+    // Details (No changes here)
     const detailsDiv = document.createElement('div');
-    detailsDiv.className = 'customer-details';
-    detailsDiv.innerHTML = `<p><strong>${order.customerName || 'Guest'}</strong> | <a href="tel:${order.phoneNumber}">${order.phoneNumber || ''}</a></p>`;
+    // ...
+    card.appendChild(detailsDiv);
 
     // Items List
     const itemsUl = document.createElement('ul');
     itemsUl.className = 'order-items-list';
-    itemsUl.textContent = "Loading items..."; 
 
     // Totals
     const totalsDiv = document.createElement('div');
     totalsDiv.className = 'totals-container';
 
-    card.appendChild(headerDiv);
-    card.appendChild(detailsDiv);
     card.appendChild(itemsUl);
     card.appendChild(totalsDiv);
     
     container.appendChild(card);
 
-    // Fetch Sub-collection items
+    // --- MODIFIED LOGIC: NO MORE DATABASE FETCH ---
     try {
-        const itemsRef = collection(db, "orders", orderId, "orderList");
-        const itemsSnapshot = await getDocs(itemsRef);
+        const itemsArray = order.items || []; // Read items from the main order object
         
         itemsUl.innerHTML = ""; 
         let subtotal = 0;
         
-        if (itemsSnapshot.empty) {
+        if (itemsArray.length === 0) {
             itemsUl.innerHTML = "<li>No items found in this order.</li>";
         }
 
-        itemsSnapshot.forEach((doc) => {
-            const item = doc.data();
+        // Loop through the array directly
+        itemsArray.forEach((item) => {
             const menuItem = menuItemsMap[item.itemId]; 
             
-            // FIX 2: Safe Price Calculation (If menu item deleted, use saved price)
             let verifiedPrice = item.price;
             if (menuItem) {
                 verifiedPrice = calculateVerifiedItemPrice(menuItem, item) || item.price;
@@ -225,7 +216,6 @@ async function createHistoryCard(orderId, order, container) {
             
             const detailsDiv = document.createElement('div');
             detailsDiv.className = 'item-details';
-            // FIX 3: Safe Name Display (If menu item deleted, use saved title)
             const itemName = menuItem ? menuItem.name_english : (item.title || "Unknown Item");
             detailsDiv.textContent = `${item.quantity} x ${itemName}`;
             
@@ -253,11 +243,10 @@ async function createHistoryCard(orderId, order, container) {
         `;
 
     } catch (e) {
-        console.error("Error fetching items:", e);
-        itemsUl.innerHTML = '<li class="error-text">Error loading items.</li>';
+        console.error("Error rendering items:", e);
+        itemsUl.innerHTML = '<li class="error-text">Error displaying items.</li>';
     }
 }
-
 // --- HELPERS (Price Calculation) ---
 function calculateVerifiedItemPrice(menuItem, orderItem) {
     if (!menuItem || !menuItem.pricing) return null;

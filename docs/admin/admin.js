@@ -1,9 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-import { firebaseConfig } from "../publicSite/config.js";
+import { firebaseConfig } from "./config.js";
 
 // --- 2. INITIALIZE ---
 const app = initializeApp(firebaseConfig);
@@ -19,7 +17,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // 1. User is confirmed logged in.
     console.log("Welcome Kitchen Staff:", user.email);
-    
+   
     // 2. Load the menu data FIRST (wait for it)
     await loadMenuData();
 
@@ -260,7 +258,6 @@ function listenForLiveOrders() {
         });
     });
 }
-
 // --- CARD CREATOR (Async) ---
 async function createOrderCard(orderId, order, container) {
     const orderCard = document.createElement('div');
@@ -285,11 +282,8 @@ async function createOrderCard(orderId, order, container) {
     const doneBtn = document.createElement('button');
     doneBtn.textContent = '✔ Entered in POS (Clear)'; 
     doneBtn.className = 'btn-action btn-ready';
-    
-    // UPDATED: Pass the orderId (string) AND orderNumber (int)
     doneBtn.onclick = () => deleteOrder(orderId, order.orderNumber); 
 
-    
     buttonContainer.appendChild(doneBtn);
     headerContainer.appendChild(h2);
     headerContainer.appendChild(buttonContainer);
@@ -297,31 +291,47 @@ async function createOrderCard(orderId, order, container) {
     // --- 2. CUSTOMER DETAILS ---
     const detailsDiv = document.createElement('div');
 
-    
-    // Handle timestamp conversion from Firestore Timestamp
+    // A. Handle Date/Time Strings
     let dateString = "Unknown Date";
+    let timeString = "Unknown Time";
+    
     if(order.orderDate && order.orderDate.seconds) {
-        dateString = new Date(order.orderDate.seconds * 1000).toLocaleDateString();
-    }
-    let timeString = "Unknown";
-    if(order.orderDate && order.orderDate.seconds) {
-        timeString = new Date(order.orderDate.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+        const jsDate = new Date(order.orderDate.seconds * 1000);
+        dateString = jsDate.toLocaleDateString();
+        timeString = jsDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
     }
 
+    // B. Handle Pickup Time Logic Explicitly
+    // If order.pickupTime exists in DB, use it. Otherwise, use "ASAP".
+    // inside createOrderCard function...
+
+    // 1. Extract the time safely
+    let displayTime = "ASAP"; // Default
+    if (order.pickupTime && order.pickupTime.trim() !== "") {
+        displayTime = order.pickupTime;
+    }
+
+    // 2. Generate the HTML
     detailsDiv.innerHTML = `
         <p><strong>Customer:</strong> ${order.customerName}</p>
         <p><strong>Phone:</strong> <a href="tel:${order.phoneNumber}">${order.phoneNumber}</a></p>
         <p><strong>Date:</strong> ${dateString}</p>
         <p><strong>Time:</strong> ${timeString}</p>
+        
+        <!-- 3. Display it clearly -->
+        <p style="font-size: 1.2rem; color: red; border: 1px solid red; padding: 5px;">
+            <strong>Pickup Time:</strong> ${displayTime}
+        </p>
+        
         <h3>Items:</h3>
     `;
 
-    // --- 3. ITEMS CONTAINER (Empty for now) ---
+    // --- 3. ITEMS CONTAINER ---
     const itemsUl = document.createElement('ul');
     itemsUl.className = 'order-items-list';
     itemsUl.innerHTML = "<em>Loading items...</em>";
 
-    // --- 4. TOTALS CONTAINER (Empty for now) ---
+    // --- 4. TOTALS CONTAINER ---
     const totalsContainer = document.createElement('div');
     totalsContainer.className = 'totals-container';
 
@@ -331,33 +341,33 @@ async function createOrderCard(orderId, order, container) {
     orderCard.appendChild(itemsUl);
     orderCard.appendChild(totalsContainer);
     
-
     container.appendChild(orderCard);
 
+    // --- PROCESS ITEMS ---
     try {
-        const itemsRef = collection(db, "orders", orderId, "orderList");
-        const itemsSnapshot = await getDocs(itemsRef);
+        const itemsArray = order.items || []; 
+
+        if (itemsArray.length === 0) {
+            itemsUl.innerHTML = "<li>No items found in this order.</li>";
+            return; 
+        }
         
-        itemsUl.innerHTML = ""; // Clear "Loading..."
+        itemsUl.innerHTML = ""; 
         
         let subtotal = 0;
         const HST_RATE = 0.13;
 
-        itemsSnapshot.forEach((itemDoc) => {
-            const item = itemDoc.data();
+        itemsArray.forEach((item) => {
             const li = document.createElement('li');
-
-            // Lookup Menu Item
-            const baseId = item.itemId; // In Firestore we saved this cleanly
+            const baseId = item.itemId; 
             const menuItem = menuItemsMap[baseId];
 
-            // Verify Price Logic
             let finalPrice = 0;
             let priceHtml = "";
             
             if (menuItem) {
                 const verifiedPrice = calculateVerifiedItemPrice(menuItem, item);
-                finalPrice = verifiedPrice || 0;
+                finalPrice = verifiedPrice !== null ? verifiedPrice : item.price; 
                 
                 if (Math.abs(finalPrice - item.price) > 0.05) {
                      priceHtml = `<span style="color:red; text-decoration:line-through">$${(item.price * item.quantity).toFixed(2)}</span> <span style="color:green">$${(finalPrice * item.quantity).toFixed(2)}</span>`;
@@ -365,27 +375,23 @@ async function createOrderCard(orderId, order, container) {
                     priceHtml = `$${(finalPrice * item.quantity).toFixed(2)}`;
                 }
             } else {
-                // Fallback if menu item deleted
                 finalPrice = item.price;
                 priceHtml = `$${(finalPrice * item.quantity).toFixed(2)} (Item Not in Menu DB)`;
             }
 
             subtotal += (finalPrice * item.quantity);
 
-            // Build Item HTML
             li.innerHTML = `
-                <div class="item-details">${item.quantity} x ${menuItem.name_english}</div>
+                <div class="item-details">${item.quantity} x ${menuItem ? menuItem.name_english : 'Unknown Item'}</div>
                 <div class="item-chinese-name">${menuItem ? menuItem.name_chinese : ''}</div>
                 <div class="item-price">${priceHtml}</div>
                 <div class="item-id-code">ID: <strong>${baseId}</strong></div>
             `;
             
-            // Add Customizations
             li.appendChild(renderCustomizationsFromObject(item));
             itemsUl.appendChild(li);
         });
 
-        // --- 6. CALCULATE & RENDER TOTALS ---
         const hst = subtotal * HST_RATE;
         const total = subtotal + hst;
 
@@ -396,15 +402,7 @@ async function createOrderCard(orderId, order, container) {
         `;
 
     } catch (err) {
-        console.error("Error loading items for order", orderId, err);
-        itemsUl.innerHTML = "<li style='color:red'>Error loading items. Check console.</li>";
+        console.error("Error rendering items for order", orderId, err);
+        itemsUl.innerHTML = "<li style='color:red'>Error displaying items. Check console.</li>";
     }
 }
-
-// --- INITIALIZER ---
-async function initializeAdmin() {
-    await loadMenuData(); 
-    listenForLiveOrders(); 
-}
-
-initializeAdmin();

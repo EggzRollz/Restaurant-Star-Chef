@@ -2143,6 +2143,7 @@ hr.divider {
     gap: 15px;
 }
 
+
 .form-group input {
     width: 100%;
     padding: 12px 15px;
@@ -2477,7 +2478,88 @@ input.input-error::placeholder {
     color: #721c24; /* Darker red for good contrast */
     font-weight: bold;
 }
+/* --- Elegant Custom Dropdown Styling --- */
 
+/* The main container */
+.pickup-time-dropdown-container {
+    position: relative; /* CRUCIAL for positioning the options */
+    margin-top: 8px;
+}
+
+/* The visible box that the user clicks */
+.custom-select-trigger {
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333333;
+    background-color: #fcfcfc;
+    border: 1px solid #d1cdc1;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    user-select: none; /* Prevents text from being highlighted on click */
+}
+
+/* Add the custom arrow to the trigger */
+.custom-select-trigger::after {
+    content: '▼';
+    font-size: 1rem;
+    color: #6b6351;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.2s ease; /* For rotating the arrow */
+}
+
+/* Style the trigger when the dropdown is open */
+.pickup-time-dropdown-container.open .custom-select-trigger {
+    border-color: #aa8c2c;
+    box-shadow: 0 0 0 3px rgba(170, 140, 44, 0.15);
+}
+
+/* Rotate the arrow when open */
+.pickup-time-dropdown-container.open .custom-select-trigger::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* The container for all the options */
+.custom-options {
+    position: absolute;
+    top: 100%; /* This is the key to making it drop DOWN */
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #d1cdc1;
+    border-top: none; /* Avoids double border */
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    z-index: 10; /* Make sure it appears above other content */
+    max-height: 200px; /* Prevent super long lists */
+    overflow-y: auto; /* Add a scrollbar if needed */
+
+ 
+}
+
+
+/* Show the options when the 'open' class is added */
+.pickup-time-dropdown-container.open .custom-options {
+    display: block;
+}
+
+/* THIS IS WHERE YOU STYLE THE INDIVIDUAL OPTIONS */
+.custom-option {
+    padding: 12px 15px;
+    color: #333333;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* The elegant hover effect you couldn't do before */
+.custom-option:hover {
+    background-color: #aa8c2c; /* The classy gold accent */
+    color: #ffffff; /* White text on hover */
+}
 /* The main container - now a "card" */
 .cart-empty-message {
     text-align: center;
@@ -3263,4 +3345,18 @@ h1 {
   object-fit: cover;
   padding-bottom: 100px;
   }
+}
+
+
+body h1{
+    font-family: "Noto Sans Display", sans-serif;
+}
+
+#customOptions.custom-options {
+    display: block !important;      /* Make it visible */
+    position: static !important;    /* Put it back in the normal layout flow */
+    max-height: none !important;    /* Let it grow as tall as needed */
+    box-shadow: none !important;    /* Remove the "dropdown" shadow */
+    border: none !important;        /* Remove the border */
+    margin-bottom: 20px;            /* Add some space before the cart button */
 }

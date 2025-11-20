@@ -5,6 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Star Chef</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/graphics/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/graphics/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/graphics/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/graphics/favicon/site.webmanifest">
+    <link rel="icon" href="/graphics/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="canonical" href="https://starchef.ca/checkout.html" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,6 +20,7 @@
   href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Asap+Condensed:wght@200;300;400&family=Birthstone&display=swap"
   rel="stylesheet"
 />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,8 +100,23 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     </div>
                     <div class="detail-text">
-                        <div class="detail-title">Estimated Time for Pickup</div>
-                        <div class="detail-info" id="pickup-time">Calculating...</div>
+                        <div class="detail-title">Time for Pickup</div>
+                        <div class="detail-info" id="pickup-time">Select a Time for Pickup</div>
+                        <div class="pickup-time-dropdown-container" id="pickupTimeDropdownContainer">
+
+                          <!-- This is the visible, styled box the user clicks on -->
+                          <div class="custom-select-trigger" id="pickupTimeTrigger">
+
+                          </div>
+
+                          <div class="custom-options" id="pickupTimeOptions">
+                              <!-- Options will be populated by JavaScript here -->
+                          </div>
+
+                          <!-- A hidden input to store the actual value for your form -->
+                          <input type="hidden" name="pickupTime" id="selectedPickupTime">
+                        
+                      </div>
                     </div>
                 </div>
             </div>

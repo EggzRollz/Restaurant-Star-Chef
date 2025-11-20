@@ -21,6 +21,8 @@ const placeOrderBttn = document.getElementById("place-order-button");
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const phone = document.getElementById("phone");
+const selectedPickupTimeInput = document.getElementById('selectedPickupTime');
+
 
 // --- 3. HELPER: GET ORDER NUMBER (With Daily Reset) ---
 async function getNextOrderNumber(db) {
@@ -37,22 +39,17 @@ async function getNextOrderNumber(db) {
             let nextNum;
             
             if (!sfDoc.exists()) {
-                // First order ever? Start at 1000
                 nextNum = 1000;
             } else {
                 const data = sfDoc.data();
                 const lastDate = data.lastResetDate;
 
                 if (lastDate !== todayStr) {
-                    // DATA MISMATCH: It is a new day! Reset to 1000
                     nextNum = 1000;
                 } else {
-                    // SAME DAY: Increment the number
                     nextNum = data.current + 1;
                 }
             }
-
-            // Update the counter with the new number AND today's date
             transaction.set(counterRef, { 
                 current: nextNum,
                 lastResetDate: todayStr
@@ -85,7 +82,7 @@ if (placeOrderBttn) {
         // Payload Setup
         const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
             itemId: item.baseId || item.id.split('_')[0], 
-            title: item.title || "Unknown Item", 
+            title: item.name || "Unknown Item", 
             price: item.price || 0,
             status: 'pending',
             quantity: item.quantity,
@@ -100,50 +97,72 @@ if (placeOrderBttn) {
         placeOrderBttn.disabled = true;
         placeOrderBttn.textContent = "Placing Order...";
 
-        try {
-            // 1. Get Order Number (Resets to 1000 if it's a new day)
+         try {
+            // 1. Get Order Number
             const newOrderNumber = await getNextOrderNumber(db);
 
-            // 2. Start Batch
-            const batch = writeBatch(db);
-            const newOrderRef = doc(collection(db, "orders"));
-            const newHistoryRef = doc(db, "history", newOrderRef.id);
+            const now = new Date();
+            // Formats the date to "YYYY-MM-DD_HH-MM-SS"
+            const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
+        
+            const customDocId = `${formattedDate}_${newOrderNumber}`; // Example: "2025-11-20_08-10-15_1001"
 
-            // 3. Set Main Order Data
+            // 3. Start Batch and create reference WITH the custom ID
+            const batch = writeBatch(db);
+            // Pass your custom ID as the second argument to doc()
+            const newOrderRef = doc(db, "orders", customDocId); 
+            
+            const selectedTime = selectedPickupTimeInput.value;
+
+            // 4. Set Main Order Data
             const orderData = {
-                orderId: newOrderRef.id, 
+                orderId: newOrderRef.id, // This will now be your custom ID
                 orderNumber: newOrderNumber, 
                 customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
                 phoneNumber: phone.value.trim(),
                 orderDate: serverTimestamp(), 
+                pickupTime: selectedTime,
                 status: 'new',
-                totalItems: cartPayload.length 
+                totalItems: cartPayload.length, 
+                items: cartPayload
             };
             
             batch.set(newOrderRef, orderData);
             
             // 4. Add Items to Subcollection
             cartPayload.forEach((item) => {
-                const orderDatabaseRef = doc(collection(db, "orders", newOrderRef.id, "orderList"));
-                
-               
-              
-                batch.set(orderDatabaseRef, item); 
-              
+                const itemRef = doc(collection(db, "orders", newOrderRef.id, "orderList"));
+                batch.set(itemRef, item); 
             });
 
-            // 5. Commit
+            // 5. Commit the batch write
             await batch.commit();
             
             console.log("Order submitted successfully!", newOrderNumber);
             localStorage.removeItem('cart');
-            window.location.href = `thank-you.html?order=${newOrderNumber}`;
+            if (!selectedTime || selectedTime === "") {
+                console.warn("Hidden input was empty. Defaulting to ASAP.");
+                selectedTime = "ASAP"; 
+            }
+
+            // 3. Encode and Redirect
+            const encodedTime = encodeURIComponent(selectedTime);
+            window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}`;
+
 
         } catch (error) {
             console.error("Error placing order: ", error);
-            alert("Error placing order. Please try again.");
-            placeOrderBttn.disabled = false;
-            placeOrderBttn.textContent = "Place Order";
+            
+            // --- MODIFIED CATCH BLOCK ---
+            alert("An error occurred while placing your order. Please wait a moment and try again.");
+            
+            placeOrderBttn.textContent = "Error - Try Again";
+
+            // Cooldown to prevent runaway loops
+            setTimeout(() => {
+                placeOrderBttn.disabled = false;
+                placeOrderBttn.textContent = "Place Order";
+            }, 5000); // 5 second cooldown
         }
     });
 }

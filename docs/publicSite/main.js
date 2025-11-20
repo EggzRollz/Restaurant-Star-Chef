@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Fetch data from Firebase ---
 async function fetchMenuData() {
     if (!menuContainer) {
-        console.log("Not on menu page, skipping menu data fetch.");
+        
         return;
     }
 
@@ -93,7 +93,7 @@ async function fetchMenuData() {
     try {
         const menuCollectionRef = collection(db, 'menuItems');
         const querySnapshot = await getDocs(menuCollectionRef);
-        console.log(`Found ${querySnapshot.docs.length} documents in Firestore.`);
+
 
         menuInventory = querySnapshot.docs.map(doc => {
             const data = doc.data();
@@ -219,7 +219,6 @@ function createMenuItemElement(item) {
         itemImg.alt = item.name;
     } else {
       const categoryFileName = item.category.replace(/ \/ /g, '-');
-      console.log(`Fallback for category: "[${item.category}]"`); 
       itemImg.src = `graphics/category_fallback/${categoryFileName}.png`; 
       itemImg.alt = `A placeholder image for the ${item.category} category`
     }
@@ -262,19 +261,27 @@ function createMenuItemElement(item) {
     return link; // Return the link directly as the grid item
 }
 
-
 function renderSingleCategory(categoryName) {
+  // Guard clause - Perfect.
   if (!menuContainer) return;
-  menuContainer.innerHTML = '';
+
+  // 1. Clear the container efficiently - You did this correctly!
+  while (menuContainer.firstChild) {
+    menuContainer.removeChild(menuContainer.firstChild);
+  }
 
   const lowerCaseCategory = categoryName.toLowerCase();
   
-  // Simple, unified filtering: just check if the tag exists
+  // 2. Filter just for the single category that was clicked. No loop needed.
   const filteredItems = menuInventory.filter(item => 
     item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
   );
 
+  // 3. Check if any items were found AFTER filtering.
   if (filteredItems.length > 0) {
+    // Use a fragment for performance - You did this correctly!
+    const fragment = document.createDocumentFragment();
+
     const section = document.createElement('section');
     section.classList.add('menu-group');
 
@@ -288,15 +295,21 @@ function renderSingleCategory(categoryName) {
     filteredItems.sort((a, b) => a.name.localeCompare(b.name));
     filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
 
+    // IMPORTANT: Add the header to the section first!
     section.appendChild(header);
     section.appendChild(list);
-    menuContainer.appendChild(section);
+
+    // Add the fully built section to the fragment
+    fragment.appendChild(section);
+
+    // Append the entire fragment to the DOM in one operation.
+    menuContainer.appendChild(fragment);
+
   } else {
+    // If no items are found, display the message.
     menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
   }
 }
-
-  
 // In main.js
 
 function renderAllItemsByCategory() {
@@ -623,12 +636,13 @@ function openCustomizeModal(item) {
     updateCartButtonPrice();
     updateQuantityDisplay();
   });
+
   if (submitBttn) {
   submitBttn.addEventListener("click", () => {
     if (amount <= 0 || !currentItem) {
-      return; 
+      return;
     }
-
+    
     // Clear any old validation errors from a previous click
     const oldErrors = document.querySelectorAll('#customOptions .validation-error');
     oldErrors.forEach(error => error.remove());
@@ -639,6 +653,7 @@ function openCustomizeModal(item) {
     let firstErrorElement = null;
 
     optionGroups.forEach(group => {
+      
       const titleElement = group.querySelector('h4');
       if (!titleElement) return; // Skip groups without a title (e.g., pricing)
       const groupTitle = titleElement.textContent.trim();
@@ -647,9 +662,9 @@ function openCustomizeModal(item) {
 
       const radioInputs = group.querySelectorAll('input[type="radio"]');
       const checkboxInputs = group.querySelectorAll('input[type="checkbox"]');
-
       // --- CASE 1: Handle Radio Button Groups ---
       if (radioInputs.length > 0) {
+        
         const selectedRadio = group.querySelector('input[type="radio"]:checked');
         if (selectedRadio) {
           customizations[groupTitle] = selectedRadio.value;
@@ -731,5 +746,4 @@ function openCustomizeModal(item) {
   if(customizeModal) customizeModal.addEventListener('click', (e) => {
       if (e.target === customizeModal) closeCustomizeModal();
   });
-
 });
