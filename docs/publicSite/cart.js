@@ -66,12 +66,29 @@ export class Cart {
     
     console.log("--- Cart Updated and Saved ---", this.shoppingCart);
   }
+  
+  updateQuantity(index, newQuantity) {
+    const items = this.getItems();
+    if (items[index]) {
+        // 1. Update the quantity
+        items[index].quantity = newQuantity;
+
+        // 2. If quantity is 0 or less, remove the item
+        if (items[index].quantity <= 0) {
+            items.splice(index, 1);
+        }
+
+        // 3. Save to local storage
+        this.save(); 
+    }
+}
 
   // --- NEW save() METHOD ---
   save() {
     localStorage.setItem('cart', JSON.stringify(this.shoppingCart));
   }
 
+  
   // --- No changes to the methods below ---
   cartLength() {
     return this.shoppingCart.reduce((total, item) => total + item.quantity, 0);

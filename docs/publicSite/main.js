@@ -1,7 +1,6 @@
 import { Cart } from './cart.js';  
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
+import { getFirestore, collection, getDocs, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { firebaseConfig } from "./config.js";
 
 
@@ -18,6 +17,14 @@ try {
   const container = document.getElementById('menu-items-container');
   if(container) container.innerHTML = "<h1>Error: Could not connect to the menu database.</h1>";
 }
+enableIndexedDbPersistence(db)
+  .catch((err) => {
+      if (err.code == 'failed-precondition') {
+          console.log("Persistence failed: Multiple tabs open");
+      } else if (err.code == 'unimplemented') {
+          console.log("Persistence not available in this browser");
+      }
+  });
 
 
 export function updateCartQuantityDisplay(cart) {
@@ -36,8 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const customizeModal = document.getElementById('customize');
   const modalContent = document.querySelector('.modal-content');
   const menuContainer = document.querySelector('.menu-grid');
-  const cartButton = document.querySelector('.cart-button');
   const menuNavSlider = document.getElementById('menuNav');
+  
   // --- State variables ---
   let currentItem = null; // Store the whole item object
   let currentPrice = 0;
@@ -45,6 +52,42 @@ document.addEventListener("DOMContentLoaded", () => {
   let menuInventory = [];
   const savedCartStr = localStorage.getItem('cart');
     
+
+  function handleCartUpdate() {
+    console.log("🔄 Cart Update Event Detected - Syncing UI...");
+
+    // A. Re-load data from storage to ensure we have the latest version
+    const freshItems = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.loadFromStorage(freshItems); 
+
+    // B. Update the Red Badge
+    updateCartQuantityDisplay(cart);
+
+    // C. Update the Sidebar Preview HTML
+    if (typeof renderSidebarCart === "function") {
+        renderSidebarCart();
+    }
+
+    // D. Update Checkout HTML (If we are on the checkout page)
+    // Assuming your checkout render function is named 'renderCartItems'
+    if (typeof renderCartItems === "function") {
+        renderCartItems();
+    }
+    
+    // E. Update Checkout Totals (If function exists)
+    if (typeof updateTotals === "function") {
+        updateTotals();
+    }
+}
+
+// 2. LISTEN FOR THE EVENT
+// This listens for our custom 'cartUpdated' signal
+window.addEventListener('cartUpdated', handleCartUpdate);
+
+// Also listen for 'storage' events (fixes sync if you have multiple tabs open)
+window.addEventListener('storage', () => {
+    handleCartUpdate();
+});
   // Checking if a cart already exists
   if (savedCartStr) {
       const savedCartItems = JSON.parse(savedCartStr);
@@ -722,16 +765,16 @@ function openCustomizeModal(item) {
     // Your cart.addItem call is perfect. It will now receive the correct customizations.
     cart.addItem(currentItem.name, currentItem.name_chinese, currentItem.id, currentPrice, amount, customizations);
     
-    updateCartQuantityDisplay(cart);
+
+    // 2. Fire the Signal! 
+    // This tells the Preview and Checkout to update themselves immediately.
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+
     closeCustomizeModal();
   });
 }
 
-  if (cartButton) {
-    cartButton.addEventListener('click', () => {
-      window.location.href = 'checkout.html'; // Change to your cart page filename
-    });
-  }
+
   function closeCustomizeModal() {
     if(customizeModal) customizeModal.classList.add('hidden');
   }

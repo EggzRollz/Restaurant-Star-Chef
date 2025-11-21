@@ -1,46 +1,4 @@
-// =========================================================================
-//  IMMEDIATE SETUP (Mobile Menu, etc.)
-// =========================================================================
-console.log("Final animation script running!");
 
-// [DEBUG] Selecting elements for mobile menu
-const navLinks = document.querySelector('.nav-links');
-const menuToggle = document.querySelector('.menu-toggle');
-const overlay = document.querySelector('.overlay');
-console.log('[DEBUG] Mobile Menu Elements:', { navLinks, menuToggle, overlay });
-
-if (menuToggle && navLinks && overlay) {
-  console.log('[DEBUG] Mobile menu elements found. Attaching event listeners.');
-
-  const closeMenu = () => {
-    console.log('[DEBUG] closeMenu() called. Removing active classes.');
-    navLinks.classList.remove('active');
-    menuToggle.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.classList.remove('no-scroll');
-  };
-
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    console.log('[DEBUG] Attaching closeMenu listener to nav link:', link);
-    link.addEventListener('click', closeMenu);
-  });
-
-  menuToggle.addEventListener('click', () => {
-   
-    navLinks.classList.toggle('active');
-    menuToggle.classList.toggle('active');
-    overlay.classList.toggle('active');
-    document.body.classList.toggle('no-scroll');
-  });
-
-  overlay.addEventListener('click', () => {
-    
-    closeMenu();
-  });
-
-} else {
-  console.warn('[DEBUG] WARNING: One or more mobile menu elements (.nav-links, .menu-toggle, .overlay) were not found. Mobile menu will not function.');
-}
 
 // =========================================================================
 //  MAIN SCRIPT (RUNS ON DOMCONTENTLOADED)

@@ -41,9 +41,24 @@
           <li><a href="tel:+9052098181"><i class="fa-solid fa-phone"></i></span>(905)209-8181</a></li>
         </ul>
         <button class="cart-button">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span id="cartQuantityDisplay" class="cart-quantity-display">0</span>
-      </button>
+         <i class="fa-solid fa-cart-shopping"></i>
+         <span id="cartQuantityDisplay" class="cart-quantity-display">0</span>
+         </button>
+         <div class="cart-preview">
+               <h2>Your Cart</h2>
+                <div id="cart-items-container" class="cart-items-container">
+                  <!-- Items will appear here -->
+               </div>
+               
+                  <p id="cartEmptyMessage" class="empty-cart-text">Your cart is empty.</p>
+               <div class="cart-footer">
+               <div class="cart-total-row">
+                     <span>Subtotal:</span>
+                     <span id="sidebar-cart-total">$0.00</span>
+               </div>
+               <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+            </div>
+         </div>
       </nav>
       </header>
 
@@ -122,15 +137,18 @@
             </div>
         </div>
                 <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
-                <div id="cartEmptyMessage" class="cart-empty-message hidden">
+                <div id="checkoutEmptyMessage" class="cart-empty-message hidden">
                     <h2>Your Cart is Empty</h2>
                     <p>Looks like you haven't added anything yet.</p>
                     <!-- Change href="/index.html" to your main shop page -->
                 </div>
-                <div class="checkout-item-list">
+                <div class="checkout-item-list"id="checkoutItemContainer">
                   
                   
-                  <template id="cart-item-template">
+                 
+                    <div id="checkoutItemContainer" class="checkout-info"></div>
+                </div> 
+                 <template id="cart-item-template">
                       <div class="cart-item">
                           <!-- Wrapper for Name, Price, and Quantity -->
                           <div class="cart-item-details">
@@ -151,9 +169,6 @@
                           <div class="cart-item-total-price"></div>
                       </div>
                   </template>
-                    <div id="checkoutItemContainer" class="checkout-info"></div>
-                </div> 
-                
             </div>
 
             <!-- Column 2: The summary box that will be sticky -->
@@ -185,5 +200,6 @@
     <script type="module" src="animation.js"></script>
     <script type="module" src="checkout.js"></script>
     <script type="module" src="clientData.js"></script>
+    <script type="module" src="cartPreview.js"></script>
 </body>
 </html>

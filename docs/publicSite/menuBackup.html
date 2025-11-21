@@ -32,6 +32,9 @@
          </a>
          <button class="menu-toggle" aria-label="Toggle menu">☰</button>
          <ul class="nav-links">
+             <li class="close-btn-li"> 
+        <button id="closeMenuBtn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+    </li>
             <li><a href="index.html">HOME</a></li>
             <li><a href="menu.html">MENU</a></li>
             <li><a href="about.html">ABOUT</a></li>
@@ -41,9 +44,47 @@
          <i class="fa-solid fa-cart-shopping"></i>
          <span id="cartQuantityDisplay" class="cart-quantity-display">0</span>
          </button>
+         <div class="cart-preview">
+            
+            <button id="closeCartBtn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+           
+               <h2>Your Cart</h2>
+                <div id="cart-items-container" class="cart-items-container">
+                  <!-- Items will appear here -->
+               </div>
+               
+                  <p id="cartEmptyMessage" class="empty-cart-text">Your cart is empty.</p>
+               <div class="cart-footer">
+               <div class="cart-total-row">
+                     <span>Subtotal:</span>
+                     <span id="sidebar-cart-total">$0.00</span>
+               </div>
+               <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+            </div>
+         </div>
       </nav>
        </header>
-       
+       <template id="cart-item-template">
+                      <div class="cart-item">
+                          <!-- Wrapper for Name, Price, and Quantity -->
+                          <div class="cart-item-details">
+                              <div class="cart-item-name"></div> <!-- Placeholder for name -->
+                              <div class="cart-item-name-chinese"></div>
+                              <div class="cart-item-defaultPrice"></div> <!-- Placeholder for price -->
+                              <div class="quantity-mod-container">
+                                  <button class="decrease-buttn" data-index="">-</button>
+                                  <span class="quantity-value"></span> <!-- Placeholder for quantity -->
+                                  <button class="increase-buttn" data-index="">+</button>
+                              </div>
+                          </div>
+
+                          <!-- Placeholder for customizations. We'll add this with JS if it exists -->
+                          <div class="cart-item-customization"></div>
+                          
+                          <!-- Placeholder for total price -->
+                          <div class="cart-item-total-price"></div>
+                      </div>
+                  </template>
       <div class="parallax-container">
          <!-- 1. FIXED BACKGROUND LAYER -->
          <div class="fixed-background">
@@ -116,6 +157,7 @@
             </div>
          </main>
       <script type="module" src="main.js"></script>
+      <script type="module" src="cartPreview.js"></script>
       <script type="module" src="animation.js"></script>
    </body>
 </html>

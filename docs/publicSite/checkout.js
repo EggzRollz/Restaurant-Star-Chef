@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartHST = document.getElementById('hst');
     const cartTotalElement = document.getElementById('cart-total');
     const placeOrderBttn = document.getElementById("place-order-button");
-    const emptyMessageEl = document.getElementById('cartEmptyMessage');
     const pickupTimeElement = document.getElementById('pickup-time');
     const timeBoxElement = document.getElementById('time-box');
     const pickupDropdown = document.getElementById('pickupTimeDropdown');
@@ -301,8 +300,9 @@ window.addEventListener('click', (e) => {
         // Get references to the template and the container
         const template = document.getElementById('cart-item-template');
         const cartContainer = document.getElementById('checkoutItemContainer');
+        const emptyMessageEl = document.getElementById('checkoutEmptyMessage');
 
-        if (!cartContainer || !template) {
+        if (!cartContainer || !template || !emptyMessageEl) {
             console.error("Cart container or template not found!");
             return;
         }
@@ -319,7 +319,7 @@ window.addEventListener('click', (e) => {
         } else {
             emptyMessageEl.classList.add('hidden');
         }
-
+        
         // Loop through each item and render it using the template
         itemsToRender.forEach((item, index) => {
             // 1. Clone the template's content
@@ -446,13 +446,18 @@ window.addEventListener('click', (e) => {
 
         if (target.matches('.increase-buttn')) {
             itemToModify.quantity++;
-        } else if (target.matches('.decrease-buttn')) {
+            // Save and Signal
+            localStorage.setItem('cart', JSON.stringify(cart.getItems()));
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
+        } 
+        else if (target.matches('.decrease-buttn')) {
             itemToModify.quantity--;
-            
-            // If quantity is zero or less, remove the item from the array
             if (itemToModify.quantity <= 0) {
                 currentCartItems.splice(index, 1);
             }
+            // Save and Signal
+            localStorage.setItem('cart', JSON.stringify(cart.getItems()));
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
         
         // The cart's internal array is now correctly updated.
