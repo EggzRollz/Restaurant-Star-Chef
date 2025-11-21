@@ -178,25 +178,44 @@ async function fetchMenuData() {
   // --- Rendering Logic ---
   
   function setupCategoryButtons() {
-    document.querySelectorAll('[data-category]').forEach(link => {
-      link.addEventListener("click", event => {
-        event.preventDefault(); 
-        
-       
-        if (menuNavSlider) {
-            const sliderWidth = menuNavSlider.offsetWidth;
-            const linkListItem = link.parentElement;
-            const targetScrollLeft = linkListItem.offsetLeft + (linkListItem.offsetWidth / 2) - (sliderWidth / 2);
-    
-            // Animate the scroll
-            menuNavSlider.scrollTo({
-              left: targetScrollLeft,
-              behavior: 'smooth'
-            });
-        }
+    const scrollContainer = document.querySelector('.parallax-container') || window;
 
-        handleCategoryClick(link.dataset.category);
-      });
+    document.querySelectorAll('[data-category]').forEach(link => {
+        link.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            // 1. Render items
+            handleCategoryClick(link.dataset.category);
+
+            // 2. HARDCODED SCROLL (Phone vs Desktop)
+            setTimeout(() => {
+                // --- SETTINGS START ---
+                const mobileBreakpoint = 900; // Pixel width for "Mobile"
+                const desktopScrollPos = 600; // Scroll amount for Desktop
+                const mobileScrollPos = 500;  // Scroll amount for Phones
+                // --- SETTINGS END ---
+
+                // Check if screen width is less than or equal to 768px
+                const targetScroll = window.innerWidth <= mobileBreakpoint 
+                    ? mobileScrollPos 
+                    : desktopScrollPos;
+
+                scrollContainer.scrollTo({
+                    top: targetScroll,
+                    behavior: 'smooth'
+                });
+            }, 20);
+
+            // 3. Slider Animation
+            const menuNavSlider = document.getElementById('menuNav');
+            if (menuNavSlider) {
+                const sliderWidth = menuNavSlider.offsetWidth;
+                const linkListItem = link.parentElement;
+                const targetScrollLeft = linkListItem.offsetLeft + (linkListItem.offsetWidth / 2) - (sliderWidth / 2);
+                menuNavSlider.scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
+            }
+        });
     });
   }
 
@@ -217,7 +236,7 @@ async function fetchMenuData() {
 // --- In main.js ---
 
 function createMenuItemElement(item) {
-  console.log(item); 
+
     const MODIFIERS = {
         spicy: { iconFile: 'svg/pepper.svg', title: 'Spicy' },
         cold: { iconFile: 'svg/snowflake.svg', title: 'Cold/Iced' },
@@ -298,6 +317,7 @@ function createMenuItemElement(item) {
 
     link.addEventListener('click', e => {
         e.preventDefault();
+        
         openCustomizeModal(item);
     });
 
@@ -407,6 +427,7 @@ function openCustomizeModal(item) {
   updateQuantityDisplay();
   let basePrice = 0;
   let addOnPrice = 0;
+
   // --- GET HTML ELEMENTS ---
   const title = document.getElementById('customize-title');
   const chineseTitle = document.getElementById('customize-chinese-title');
@@ -414,8 +435,12 @@ function openCustomizeModal(item) {
   const defaultPrice = document.getElementById('default-price');
   const modalImage = document.getElementById('modal-image');
   const orderNotesTextarea = document.getElementById('order-notes');
-  const scrollArea = document.getElementById('modal-scroll-area');
+  
+  // --- FIX: Select by CLASS instead of ID, and include fallback ---
+  const scrollArea = document.querySelector('.scroll-area') || document.querySelector('.modal-content');
+
   let selectedAddOnPrices = {};
+
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
   chineseTitle.textContent = item.name_chinese;
@@ -426,7 +451,7 @@ function openCustomizeModal(item) {
       orderNotesTextarea.value = '';
   }
   
-  // --- (Image and Pricing sections are unchanged) ---
+  // --- (Image and Pricing sections) ---
   if (item.image) {
     modalImage.src = 'graphics/' + item.image;
     modalImage.alt = item.name;
@@ -477,6 +502,7 @@ function openCustomizeModal(item) {
     });
     optionsContainer.appendChild(pricingGroup);
   }
+
   // --- HANDLE ADD-ONS ---
   if (item.addOns && item.addOns.length > 0) {
     const isComboItem = item.tags && item.tags.some(tag => tag.toLowerCase() === 'combo');
@@ -501,61 +527,63 @@ function openCustomizeModal(item) {
             titleGroup.className = 'accordion-title-group';
             titleGroup.appendChild(addOnTitle);
 
-         
+            const freeLimit = addOnGroupData.freeToppingLimit;
+            const postLimitPrice = addOnGroupData.postLimitPrice;
+            const limit = addOnGroupData.limit;
+            const limitTextDisplay = document.createElement('div');
+            limitTextDisplay.className = 'extra-cost-display'; 
+            titleGroup.appendChild(limitTextDisplay);
+
+            if (limit !== undefined) {
+                limitTextDisplay.textContent = `Select up to ${limit}.`;
+            } else if (limit === undefined && freeLimit === undefined) {
+              limitTextDisplay.textContent = `Select up to 1.`;
+            } else {
+              limitTextDisplay.textContent = `Select at least ${freeLimit}.`;
+              const extraCostDisplay = document.createElement('div');
+              extraCostDisplay.className = 'extra-cost-display';
+              extraCostDisplay.id = 'extaCostHighlight'
+              extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
+              titleGroup.appendChild(extraCostDisplay);
+            }
+
+            headerContainer.appendChild(titleGroup);
+            headerContainer.appendChild(toggleIcon);
             
-        const freeLimit = addOnGroupData.freeToppingLimit;
-        const postLimitPrice = addOnGroupData.postLimitPrice;
-        const limit = addOnGroupData.limit;
-        const limitTextDisplay = document.createElement('div');
-        limitTextDisplay.className = 'extra-cost-display'; // Re-use existing style
-        titleGroup.appendChild(limitTextDisplay);
+            optionsListContainer = document.createElement('div');
+            optionsListContainer.className = 'accordion-content';
 
-        if (limit !== undefined) {
-            limitTextDisplay.textContent = `Select up to ${limit}.`;
-        }else if (limit === undefined && freeLimit === undefined) {
-          limitTextDisplay.textContent = `Select up to 1.`;
-        }else{
-          limitTextDisplay.textContent = `Select at least ${freeLimit}.`;
-          const extraCostDisplay = document.createElement('div');
-          extraCostDisplay.className = 'extra-cost-display';
-          extraCostDisplay.id = 'extaCostHighlight'
-          extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
-          titleGroup.appendChild(extraCostDisplay);
-        }
-        
-        
-        
-        // *** MOVED AND CORRECTED SECTION END ***
+            headerContainer.addEventListener('click', () => {
+            // 1. Find all other accordions that are currently open
+            const allAccordions = optionsContainer.querySelectorAll('.option-group.is-accordion');
 
-        headerContainer.appendChild(titleGroup);
-        headerContainer.appendChild(toggleIcon);
-        
-        optionsListContainer = document.createElement('div');
-        optionsListContainer.className = 'accordion-content';
+            // 2. Loop through them and close any that aren't the one currently being clicked
+            allAccordions.forEach(acc => {
+                if (acc !== addOnGroup) {
+                    acc.classList.remove('is-open');
+                }
+            });
 
-        headerContainer.addEventListener('click', () => {
+            // 3. Toggle the state of the clicked accordion
             addOnGroup.classList.toggle('is-open');
         });
-        
-        addOnGroup.appendChild(headerContainer);
-        addOnGroup.appendChild(optionsListContainer); 
+            
+            addOnGroup.appendChild(headerContainer);
+            addOnGroup.appendChild(optionsListContainer); 
 
-    } else {
-        headerContainer = addOnGroup; 
-        optionsListContainer = addOnGroup; 
-        headerContainer.appendChild(addOnTitle);
+        } else {
+            headerContainer = addOnGroup; 
+            optionsListContainer = addOnGroup; 
+            headerContainer.appendChild(addOnTitle);
 
-        // *** MOVED AND CORRECTED SECTION START (for Non-Combo Items) ***
-        const limit = addOnGroupData.limit;
-        if (limit !== undefined) {
-            const limitTextDisplay = document.createElement('div');
-            limitTextDisplay.className = 'extra-cost-display';
-            limitTextDisplay.textContent = `Maximum choice of ${limit}.`;
-            // Append it right after the title
-            optionsListContainer.appendChild(limitTextDisplay);
+            const limit = addOnGroupData.limit;
+            if (limit !== undefined) {
+                const limitTextDisplay = document.createElement('div');
+                limitTextDisplay.className = 'extra-cost-display';
+                limitTextDisplay.textContent = `Maximum choice of ${limit}.`;
+                optionsListContainer.appendChild(limitTextDisplay);
+            }
         }
-        // *** MOVED AND CORRECTED SECTION END ***
-    }
         if (addOnGroupData.freeToppingLimit) {
             addOnGroup.dataset.freeLimit = addOnGroupData.freeToppingLimit;
         }
@@ -592,19 +620,14 @@ function openCustomizeModal(item) {
             const groupTitle = input.name;
             const groupElement = input.closest('.option-group');
             
-            // *** NEW VALIDATION SECTION START ***
             const limit = addOnGroupData.limit;
             
-            // This validation only applies to multi-select checkboxes with a defined limit.
             if (input.type === 'checkbox' && limit !== undefined) {
                 const checkedCount = groupElement.querySelectorAll('input[type="checkbox"]:checked').length;
-                
-                // Find or create the error message element for this group
                 let errorElement = groupElement.querySelector('.limit-error');
                 if (!errorElement) {
                     errorElement = document.createElement('div');
                     errorElement.className = 'limit-error';
-                    // Insert it right after the title/header for visibility
                     const header = groupElement.querySelector('h4') || groupElement.querySelector('.accordion-header');
                     if (header) {
                         header.insertAdjacentElement('afterend', errorElement);
@@ -612,17 +635,13 @@ function openCustomizeModal(item) {
                 }
                 
                 if (checkedCount > limit) {
-                    // Prevent the action by un-checking the box
                     input.checked = false; 
-                    // Display the error
                     errorElement.textContent = `You can only select up to ${limit} items.`;
                     errorElement.style.display = 'block';
                 } else {
-                    // If the user is within the limit, hide the error message
                     errorElement.style.display = 'none';
                 }
             }
-            // *** NEW VALIDATION SECTION END ***
 
             const freeLimit = addOnGroupData.freeToppingLimit;
             const postLimitPrice = addOnGroupData.postLimitPrice;
@@ -657,13 +676,18 @@ function openCustomizeModal(item) {
   updateTotalPrice();
   updateCartButtonPrice(); 
   customizeModal.classList.remove('hidden');
+
+  // --- FIX: Reset Scroll Position Logic ---
+  // Using requestAnimationFrame ensures this runs AFTER the modal is rendered and visible
   requestAnimationFrame(() => {
     if (scrollArea) {
+      console.log("Resetting scroll position to top");
       scrollArea.scrollTop = 0;
+    } else {
+        console.warn("Could not find .scroll-area to reset scroll position");
     }
   });
 }
-
   function updateCartButtonPrice() {
     if(submitBttn) submitBttn.textContent = `ADD TO CART - $${(currentPrice * amount).toFixed(2)}`;
   }
