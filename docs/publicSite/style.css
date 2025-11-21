@@ -614,6 +614,7 @@ main {
     background-color: var(--dark-bg);
     border-top: 1px solid var(--gold-accent);
     margin-top: auto; /* Pushes to bottom */
+    
    
 }
 @media (max-width: 789px) {
@@ -622,42 +623,68 @@ main {
       background-color: var(--dark-bg);
       border-top: 1px solid var(--gold-accent);
       margin-top: auto; /* Pushes to bottom */
+      margin-bottom:20px;
+      min-height:10vh;
   }
 }
 
 /* Subtotal Row */
-.cart-preview .cart-total-row {
+.cart-preview {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
     font-family: 'Noto Sans Display', sans-serif;
     font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
+.cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Noto Sans Display', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 #sidebar-cart-total {
     color: var(--gold-accent);
     font-weight: 600;
     font-size: 1.3rem;
 }
 
-/* Checkout Button (The Centerpiece) */
 .cart-preview .checkout-btn {
     display: block;
     width: 100%;
-    padding: 15px 5px;
-    background-color: var(--gold-accent);
-    color: #000; /* Black text on Gold background for contrast */
-    text-align: center;
+    padding: 14px ;
+    margin-top: 8px;
+    cursor: pointer;
     text-decoration: none;
-    text-transform: uppercase;
-    font-family: 'Noto Sans Display', sans-serif;
+    /* TRANSPARENT BG */
+    background-color: transparent;
+    
+    /* GOLD BORDER */
+    border: 1px solid var(--gold-accent, #c5a059);
+    
+    /* GOLD TEXT - No white here */
+    color: var(--gold-accent, #c5a059); 
+    
+    font-family: "Noto Sans Display", sans-serif;
+    font-size: 0.95rem;
     font-weight: 600;
+    text-transform: uppercase;
     letter-spacing: 2px;
-    border: 1px solid var(--gold-accent);
+    
+    /* Color change only, no movement */
     transition: all 0.3s ease;
+}
+
+.cart-preview .checkout-btn:hover {
+    /* Fills with Gold */
+    background-color: var(--gold-accent, #c5a059);
+    
+    /* Text turns Black (vital for contrast on gold bg) */
+    color: #000000; 
 }
 
 @media (max-width: 789px) {
@@ -666,11 +693,6 @@ main {
 
     }
 }
-.cart-preview .checkout-btn:hover {
-    background-color: transparent;
-    color: var(--gold-accent);
-}
-
 
 
 
