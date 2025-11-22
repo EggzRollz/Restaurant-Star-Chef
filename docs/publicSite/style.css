@@ -1529,8 +1529,6 @@ p{
     line-height: 1.6;
     color:white;
 }
-
-
 .scroll-down-indicator {
     position: absolute;
     bottom: 10%;
@@ -1550,6 +1548,7 @@ p{
     transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
     animation: bounce-svg 2s infinite;
 }
+
 @media (max-width:796px){
   .scroll-down-indicator {
     position: absolute;
@@ -2105,6 +2104,40 @@ hr.divider {
   margin: -2rem -2rem 1.5rem -2rem; /* Top | L/R | Bottom | L/R */
   }
 }
+.modal-image-wrapper {
+    position: relative; /* This makes the absolute child stick to this box */
+    width: 100%;        /* Ensure it takes full width of the modal area */
+    display: block;
+}
+
+/* 2. The Indicator itself */
+.scroll-customizations-indicator {
+    position: absolute; /* Floating on top of the wrapper */
+    
+    /* Center perfectly */
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    z-index: 15;
+    
+    /* Appearance */
+    color: rgb(255, 255, 255); /* White usually looks best over photos */
+    filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5)); /* Adds a shadow so it's visible on bright images */
+    
+    /* Animation */
+    animation: bounce-svg 2s infinite;
+}
+
+.scroll-customizations-indicator svg {
+    width: 2rem; /* Made slightly larger for visibility */
+    height: 2rem;
+}
+@media (max-width: 1000px){
+  .scroll-customizations-indicator {
+    display:none;
+  }
+}
 .order-notes-textarea {
   width: 100%;
   min-height: 80px; /* Give it a decent starting height */
@@ -2133,6 +2166,7 @@ hr.divider {
   overflow-y: auto;        /* scrollable content */
   padding-bottom: 2rem;
   padding-left: 2rem;
+  scroll-behavior: smooth;
   padding-right: 2rem;
   flex: 1;                 /* takes remaining space above bottom bar */
 }

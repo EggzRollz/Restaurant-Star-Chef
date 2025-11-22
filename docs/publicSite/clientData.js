@@ -97,72 +97,90 @@ if (placeOrderBttn) {
         placeOrderBttn.disabled = true;
         placeOrderBttn.textContent = "Placing Order...";
 
-         try {
+        try {
             // 1. Get Order Number
             const newOrderNumber = await getNextOrderNumber(db);
 
             const now = new Date();
-            // Formats the date to "YYYY-MM-DD_HH-MM-SS"
             const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
-        
-            const customDocId = `${formattedDate}_${newOrderNumber}`; // Example: "2025-11-20_08-10-15_1001"
+            const customDocId = `${formattedDate}_${newOrderNumber}`;
 
-            // 3. Start Batch and create reference WITH the custom ID
+            // 2. Start Batch and create reference WITH the custom ID
             const batch = writeBatch(db);
-            // Pass your custom ID as the second argument to doc()
             const newOrderRef = doc(db, "orders", customDocId); 
             
             let selectedTime = selectedPickupTimeInput.value;
-            
-            // 4. Set Main Order Data
-            const orderData = {
-                orderId: newOrderRef.id, // This will now be your custom ID
-                orderNumber: newOrderNumber, 
-                customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
-                phoneNumber: phone.value.trim(),
-                orderDate: serverTimestamp(), 
-                pickupTime: selectedTime,
-                status: 'new',
-                totalItems: cartPayload.length, 
-                items: cartPayload
-            };
-            
-            batch.set(newOrderRef, orderData);
-            
-            // 4. Add Items to Subcollection
-            cartPayload.forEach((item) => {
-                const itemRef = doc(collection(db, "orders", newOrderRef.id, "orderList"));
-                batch.set(itemRef, item); 
-            });
-
-            // 5. Commit the batch write
-            await batch.commit();
-            
-            console.log("Order submitted successfully!", newOrderNumber);
-            localStorage.removeItem('cart');
             if (!selectedTime || selectedTime === "") {
                 console.warn("Hidden input was empty. Defaulting to ASAP.");
                 selectedTime = "ASAP"; 
             }
+          
+            
+            
+            // 3. Set Main Order Data (with items embedded)
+            const orderData = {
+                orderId: newOrderRef.id,
+                orderNumber: newOrderNumber, 
+                customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
+                phoneNumber: '+1' + phone.value.replace(/\D/g, ''),
+                orderDate: serverTimestamp(), 
+                pickupTime: selectedTime,
+                status: 'new',
+                totalItems: cartPayload.length, 
+                items: cartPayload  // All items stored here
+            };
+            
+            batch.set(newOrderRef, orderData);
+            
+            // REMOVED: No more subcollection writes!
+            // This saves X writes per order (where X = number of items)
 
-            // 3. Encode and Redirect
+            // 4. Commit the batch write
+            await batch.commit();
+            
+            console.log("Order submitted successfully!", newOrderNumber);
+            
+            try {
+                // Replace this URL with the one you got from Google Cloud Function
+                const SMS_FUNCTION_URL = "https://send-order-text-924721320321.northamerica-northeast2.run.app"; 
+
+                // We use 'await' to ensure the request sends before the page changes.
+                // It is fast (usually < 1 second).
+                await fetch(SMS_FUNCTION_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
+                        phoneNumber: phone.value.trim(), // Make sure your input captures the full number!
+                        orderNumber: newOrderNumber,
+                        pickupTime: selectedTime
+                    })
+                });
+                console.log("SMS Request sent!");
+            } catch (smsError) {
+                // If the text fails (e.g., server down), we simply log it.
+                // We DO NOT stop the redirect, because the order is already in the database.
+                console.warn("Failed to send SMS, but order was saved:", smsError);
+            }
+            localStorage.removeItem('cart');
+            
+            // 5. Encode and Redirect
+            const encodedPhoneNumber = encodeURIComponent(phone.value.trim()); 
+
             const encodedTime = encodeURIComponent(selectedTime);
-            window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}`;
-
+            window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}&phone=${encodedPhoneNumber}`;
 
         } catch (error) {
             console.error("Error placing order: ", error);
             
-            // --- MODIFIED CATCH BLOCK ---
             alert("An error occurred while placing your order. Please wait a moment and try again.");
             
             placeOrderBttn.textContent = "Error - Try Again";
 
-            // Cooldown to prevent runaway loops
             setTimeout(() => {
                 placeOrderBttn.disabled = false;
                 placeOrderBttn.textContent = "Place Order";
-            }, 5000); // 5 second cooldown
+            }, 5000);
         }
     });
 }

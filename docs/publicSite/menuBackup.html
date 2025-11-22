@@ -134,7 +134,16 @@
                <div class="modal-content">
                   <div class="scroll-area" >
                      <button id="close-modal" class="closeModalBttn">X</button>
-                     <img id ="modal-image" class="modal-image" loading="lazy">
+                     <div class="modal-image-wrapper">
+                        <img id="modal-image" class="modal-image" loading="lazy">
+                        
+                        <!-- The Indicator (Make sure you added the SVG inside like we discussed before) -->
+                        <a href="#customize-title" class="scroll-customizations-indicator" aria-label="Scroll down">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                           </svg>
+                        </a>
+                     </div>
                      <h2 id="customize-title" class="itemName"></h2>
                      <h2 id="customize-chinese-title" class="itemName"></h2>
                      <h3 id="default-price" class="defaultPrice"></h3>

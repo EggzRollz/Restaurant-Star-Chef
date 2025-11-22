@@ -1,6 +1,6 @@
 import { Cart } from './cart.js';  
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, collection, getDocs, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, enableIndexedDbPersistence, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { firebaseConfig } from "./config.js";
 
 
@@ -97,47 +97,50 @@ window.addEventListener('storage', () => {
 
   if(modalContent) modalContent.addEventListener('click', (e) => e.stopPropagation());
 
-  // --- Fetch data from Firebase ---
+// --- Optimized Fetch Logic ---
 async function fetchMenuData() {
-    if (!menuContainer) {
-        
-        return;
-    }
-
-    // 1. --- Check for cached data first ---
-    const cachedMenu = localStorage.getItem('menuData');
-    const cacheTimestamp = localStorage.getItem('menuDataTimestamp');
-    const oneHour = 60 * 60 * 1000; // Cache duration: 1 hour in milliseconds
-
-    // Check if cache exists and is not older than one hour
-    if (cachedMenu && cacheTimestamp && (Date.now() - cacheTimestamp < oneHour)) {
-        console.log("Loading menu from local cache.");
-        try {
-            menuInventory = JSON.parse(cachedMenu); // Use the cached data
-            // --- The rest of your setup logic ---
-            if (menuInventory.length > 0) {
-                setupCategoryButtons();
-                handleCategoryClick('All');
-            }
-            return; // Important: Stop the function here
-        } catch (error) {
-            console.error("Error parsing cached menu data:", error);
-            // If parsing fails, proceed to fetch from Firestore
-        }
-    }
-    
-    // 2. --- If no valid cache, fetch from Firestore ---
-    console.log("Cache is empty or expired. Fetching menu data from Firestore...");
+    if (!menuContainer) return;
     if (!db) {
         console.error("Firestore database is not available.");
         return;
     }
-
     try {
+        // 1. Check for a server update (Costs 1 Read)
+        const metadataRef = doc(db, "metadata", "menuInfo");
+        let serverVersion = null;
+        
+        try {
+            const metadataSnap = await getDoc(metadataRef);
+            if (metadataSnap.exists()) {
+                const data = metadataSnap.data();
+                // Convert Firestore Timestamp to milliseconds for comparison
+                serverVersion = data.lastUpdated?.toMillis?.() || data.lastUpdated;
+            }
+        } catch (e) {
+            console.warn("Could not fetch metadata, defaulting to full fetch.");
+        }
+        
+        // 2. Check Local Storage
+        const localVersion = localStorage.getItem('menuVersion');
+        const cachedMenu = localStorage.getItem('menuData');
+        
+        // 3. If versions match and we have data, USE CACHE (Costs 0 extra Reads)
+        if (serverVersion && localVersion === String(serverVersion) && cachedMenu) {
+            console.log(`Menu version ${serverVersion} is up to date. Loading from local cache.`);
+            try {
+                menuInventory = JSON.parse(cachedMenu);
+                initMenu(); // Run setup
+                return; 
+            } catch (e) {
+                console.error("Cache parse error, refetching...");
+            }
+        }
+        
+        // 4. Versions didn't match (or first visit), Fetch EVERYTHING
+        console.log("New menu version detected. Fetching from Firestore...");
         const menuCollectionRef = collection(db, 'menuItems');
         const querySnapshot = await getDocs(menuCollectionRef);
-
-
+        
         menuInventory = querySnapshot.docs.map(doc => {
             const data = doc.data();
             return {
@@ -152,23 +155,42 @@ async function fetchMenuData() {
                 pricing: data.pricing || [],
             };
         });
-
-        // 3. --- Store the newly fetched data in localStorage ---
+        
+        // 5. Save Data AND the new Version to cache
         if (menuInventory.length > 0) {
-            console.log("Saving fetched menu to local cache.");
+            // Sort immediately to save processing later
+            menuInventory.sort((a, b) => a.name.localeCompare(b.name));
+            
             localStorage.setItem('menuData', JSON.stringify(menuInventory));
-            localStorage.setItem('menuDataTimestamp', Date.now()); // Store the current time
-
-            // --- Now run the setup logic ---
-            setupCategoryButtons();
-            handleCategoryClick('All');
+            
+            // Only save version if we successfully got one from server
+            if (serverVersion) {
+                localStorage.setItem('menuVersion', String(serverVersion)); 
+            }
+            
+            initMenu();
         }
     } catch (error) {
         console.error("Error fetching menu data from Firestore:", error);
-        menuContainer.innerHTML = "<h1>Error loading menu. Please try again later.</h1>";
+        // Fallback: Try to load stale cache if network fails
+        const cachedMenu = localStorage.getItem('menuData');
+        if (cachedMenu) {
+            console.log("Using stale cache due to network error");
+            menuInventory = JSON.parse(cachedMenu);
+            initMenu();
+        } else {
+            menuContainer.innerHTML = "<h1>Error loading menu. Please try again later.</h1>";
+        }
     }
 }
 
+// Helper function to initialize the UI (prevents code duplication)
+function initMenu() {
+    if (menuInventory.length > 0) {
+        setupCategoryButtons();
+        handleCategoryClick('All');
+    }
+}
   // --- Start fetching the data ---
   if (menuContainer) {
       fetchMenuData();
@@ -277,6 +299,7 @@ function createMenuItemElement(item) {
     itemImg.classList.add("item-img");
     itemImg.loading = 'lazy'; 
     if (item.image) {
+        itemImg.src = 'graphics/' + item.image.replace(/\.(png|jpg|jpeg)$/, '.webp')
         itemImg.src = 'graphics/' + item.image;
         itemImg.alt = item.name;
     } else {

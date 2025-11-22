@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Get the order number from the URL and display it.
     const orderNumber = displayOrderNumber();
     displayPickupTime();
+    displayPhoneNumber()
     
 });
 
@@ -46,5 +47,21 @@ function displayPickupTime() {
         // If the URL says &time= (empty) or isn't there, default to ASAP
         timeElement.textContent = "ASAP"; 
         console.log("No time found in URL, defaulting to ASAP");
+    }
+}
+
+function displayPhoneNumber() {
+    const phoneNumberElement = document.getElementById('conf-phoneNumber');
+    if (!phoneNumberElement) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const rawPhone = urlParams.get('phone');
+    const cleanPhone = decodeURIComponent(rawPhone || "").trim();
+    if (cleanPhone) {
+        phoneNumberElement.innerHTML = `Confirmation text sent to:<br><strong>${cleanPhone}</strong>`
+        console.log("Phone number displayed:", cleanPhone);
+    } else {
+        console.error("Phone number not found in URL parameters. (URL should be like '...?phone=1234')");
+        phoneNumberElement.textContent = '#N/A';
     }
 }

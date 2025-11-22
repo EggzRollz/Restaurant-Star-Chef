@@ -36,8 +36,10 @@ export function validateCheckoutForm() {
         }
     }
 
-    const isPhoneEmpty = phone.value.trim() === '';
-    if (isPhoneEmpty) {
+    const phoneDigits = phone.value.replace(/\D/g, ''); // Remove all non-digits
+    const isPhoneInvalid = phoneDigits.length !== 10;
+    
+    if (isPhoneInvalid) {
         phone.classList.add('input-error');
         if (!firstInvalidField) {
             firstInvalidField = phone;
@@ -65,7 +67,7 @@ export function validateCheckoutForm() {
         }
     }
 
-    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneEmpty || isPickupTimeEmpty;
+    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneInvalid || isPickupTimeEmpty;
 
     if (areAnyFieldsEmpty) {
         if (clientInfoContainer) {
@@ -97,7 +99,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let choices = null;
     const cart = new Cart();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
-
+    function handleCheckoutSync() {
+        console.log("Checkout page detected cart update!");
+        
+        // 1. Reload from storage
+        const freshItems = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.loadFromStorage(freshItems);
+        
+        // 2. Re-render everything
+        renderCartItems();
+        updateTotals();
+        updateButtonState();
+        updateCartQuantityDisplay(cart);
+    }
+    
+    // Listen for updates from other parts of the app
+    window.addEventListener('cartUpdated', handleCheckoutSync);
+    window.addEventListener('storage', handleCheckoutSync);
     cart.loadFromStorage(savedItems);
     if (pickupTimeTrigger) {
         pickupTimeTrigger.addEventListener('click', () => {
@@ -212,7 +230,7 @@ window.addEventListener('click', (e) => {
 
     // This logic seems reversed, I've flipped it to what I think you intend:
     // This block should run if the store is OPEN.
-    if (!(isBeforeOpening && isAfterClosing)) {
+    if (!(isBeforeOpening || isAfterClosing)) {
         if (timeBoxElement) timeBoxElement.classList.remove('store-closed');
         if (pickupDropdownContainer) pickupDropdownContainer.classList.remove('hidden');
         
@@ -426,19 +444,16 @@ window.addEventListener('click', (e) => {
     }
     
     // Event Listeners
-    if (cartContainer) {
+   if (cartContainer) {
     cartContainer.addEventListener('click', (event) => {
         const target = event.target;
         const index = target.dataset.index;
 
-        // Exit if the click wasn't on a button with an index
         if (index === undefined) return;
 
-        // --- THE FIX: Get the items directly from the cart object ---
         const currentCartItems = cart.getItems();
         const itemToModify = currentCartItems[index];
 
-        // Safety check in case something goes wrong
         if (!itemToModify) {
             console.error(`Could not find item at index ${index} to modify.`);
             return;
@@ -446,24 +461,20 @@ window.addEventListener('click', (e) => {
 
         if (target.matches('.increase-buttn')) {
             itemToModify.quantity++;
-            // Save and Signal
-            localStorage.setItem('cart', JSON.stringify(cart.getItems()));
-            window.dispatchEvent(new CustomEvent('cartUpdated'));
         } 
         else if (target.matches('.decrease-buttn')) {
             itemToModify.quantity--;
             if (itemToModify.quantity <= 0) {
                 currentCartItems.splice(index, 1);
             }
-            // Save and Signal
-            localStorage.setItem('cart', JSON.stringify(cart.getItems()));
-            window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
         
-        // The cart's internal array is now correctly updated.
-        // Now save the updated cart and re-render the UI.
-        saveCartAndRender();
-        updateCartQuantityDisplay(cart);
+        // ⭐ ONLY SAVE ONCE AND SIGNAL ⭐
+        localStorage.setItem('cart', JSON.stringify(cart.getItems()));
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+        
+        // Don't call saveCartAndRender() here - let the event handler do it
+        // The 'cartUpdated' event will trigger handleCheckoutSync() which re-renders everything
     });
 }
 

@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot, setDoc, serverTimestamp,limit, where  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "./config.js";
 
 // --- 2. INITIALIZE ---
@@ -9,7 +9,7 @@ const auth = getAuth(app);
 const db = getFirestore(app); 
 
 // SOUND VARIABLES - Only ONE audio object needed
-let notificationAudio = new Audio("./sounds/chinese.mp3");
+let notificationAudio = new Audio("./sounds/yo_phone_linging.mp3");
 let soundEnabled = localStorage.getItem('soundEnabled') === 'true'; // Load saved state
 
 
@@ -29,7 +29,8 @@ onAuthStateChanged(auth, async (user) => {
     // 2. Load the menu data FIRST (wait for it)
     await loadMenuData();
     initializeSoundButton();
-    
+
+    initializeCacheButton();
     // 3. THEN start listening for orders
     listenForLiveOrders();
     
@@ -78,23 +79,7 @@ function initializeSoundButton() {
         }
     });
 }
-if (soundEnabled) {
-    // If sound is enabled from previous page, unlock it silently on first interaction
-    const unlockAudio = () => {
-        const tempAudio = notificationAudio.cloneNode();
-        tempAudio.volume = 0;
-        tempAudio.play().then(() => {
-            console.log('Audio unlocked on this page');
-        }).catch(() => {
-            console.log('Audio still locked, waiting for more interaction');
-        });
-        document.removeEventListener('click', unlockAudio);
-        document.removeEventListener('keydown', unlockAudio);
-    };
-    
-    document.addEventListener('click', unlockAudio, { once: true });
-    document.addEventListener('keydown', unlockAudio, { once: true });
-}
+
 function updateSoundButtonUI(button, isEnabled) {
     const icon = button.querySelector('.sound-icon');
     const text = button.querySelector('.sound-text');
@@ -155,7 +140,45 @@ if (logoutBtn) {
         signOut(auth).then(() => window.location.href = "login.html");
     });
 }
+async function invalidateMenuCache() {
+    console.log("Button clicked! Starting cache invalidation...");
+    
+    if (!db) {
+        console.error("Database not initialized!");
+        alert("❌ Database not available");
+        return;
+    }
+    
+    const metadataRef = doc(db, "metadata", "menuInfo");
+    
+    try {
+        console.log("Attempting to write to Firestore...");
+        
+        await setDoc(metadataRef, {
+            lastUpdated: serverTimestamp()
+        }, { merge: true });
+        
+        console.log("Write successful!");
+        alert("✅ Menu cache updated! Users will fetch fresh data.");
+        
+    } catch (error) {
+        console.error("Error updating metadata:", error);
+        alert("❌ Failed to invalidate cache: " + error.message);
+    }
+}
 
+// Add this NEW function right after
+function initializeCacheButton() {
+    const updateCacheBtn = document.getElementById('update-cache-btn');
+    
+    if (!updateCacheBtn) {
+        console.error('Update cache button not found in DOM');
+        return;
+    }
+    
+    console.log('Cache update button found, attaching listener...');
+    updateCacheBtn.addEventListener('click', invalidateMenuCache);
+}
 // --- 4. LOAD MENU DATA ---
 async function loadMenuData() {
     console.log("Fetching menu data...");
@@ -474,8 +497,14 @@ async function createOrderCard(orderId, order, container) {
 function listenForLiveOrders() {
     const ordersContainer = document.getElementById('live-orders-container');
     
-    // Listen to Firestore 'orders' collection, sorted by date
-    const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
+    // CHANGE: Only fetch orders that aren't resolved
+    const q = query(
+        collection(db, "orders"), 
+        where("status", "!=", "resolved"), // Only active orders
+        orderBy("status"), // Required when using != operator
+        orderBy("orderDate", "desc"),
+        limit(50)
+    );
 
     onSnapshot(q, (snapshot) => {
         
@@ -489,10 +518,9 @@ function listenForLiveOrders() {
                     orderDateObj = new Date(orderData.orderDate.seconds * 1000);
                 }
 
-                // ONLY play if order is new AND user has enabled sounds
                 if (orderDateObj > pageLoadTime) {
                     console.log("New order detected!");
-                    playNewOrderSound(); // This now checks soundEnabled
+                    playNewOrderSound();
                 }
             }
         });
@@ -508,9 +536,7 @@ function listenForLiveOrders() {
         snapshot.forEach((docSnapshot) => {
             const orderData = docSnapshot.data();
             const orderId = docSnapshot.id; 
-            if (orderData.status === 'resolved') {
-                return; 
-             }
+            // No need to filter anymore, query already does it
             createOrderCard(orderId, orderData, ordersContainer);
         });
     });

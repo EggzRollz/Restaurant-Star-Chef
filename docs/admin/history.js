@@ -165,24 +165,16 @@ function fetchHistoryQuery(mode, dateString = null) {
     }
 });
 }
-async function testFetchOrder() {
-    const testOrderId = "2025-11-20_17-36-48_1015"; // Use the actual order ID from your screenshot
-    const docRef = doc(db, "orders", testOrderId);
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-        console.log("Direct fetch - Full data:", docSnap.data());
-        console.log("Direct fetch - Pickup time:", docSnap.data().pickupTime);
-    }
-}
-testFetchOrder();
+
 // --- CARD CREATOR ---
 // --- CARD CREATOR (MODIFIED) ---
+// --- CARD CREATOR (FIXED) ---
 async function createHistoryCard(orderId, order, container) {
    
     const card = document.createElement('div');
     card.className = 'order-card history-card';
-const headerDiv = document.createElement('div');
+    
+    const headerDiv = document.createElement('div');
     headerDiv.className = 'order-header';
     
     let dateString = "Unknown Date";
@@ -220,27 +212,20 @@ const headerDiv = document.createElement('div');
     card.appendChild(totalsDiv);
     container.appendChild(card);
 
-    // --- MODIFIED LOGIC: FETCH FROM SUBCOLLECTION ---
+    // --- FIXED: READ FROM MAIN ORDER DOCUMENT ---
     try {
-        // NEW: Create a reference to the 'orderList' subcollection for this specific order
-        const itemsRef = collection(db, "orders", orderId, "orderList");
+        // Items are already in the order document from placeorder.js line 111
+        const itemsArray = order.items || [];
         
-        // NEW: Execute the query to get all item documents from the subcollection
-        const itemsSnapshot = await getDocs(itemsRef);
-
-        // NEW: Convert the snapshot into a plain array of item objects
-        const itemsArray = itemsSnapshot.docs.map(doc => doc.data());
-        
-        console.log(`Order [${orderId}] - Fetched ${itemsArray.length} items from its subcollection.`);
+        console.log(`Order [${orderId}] - ${itemsArray.length} items from order document.`);
 
         itemsUl.innerHTML = ""; 
         let subtotal = 0;
         
         if (itemsArray.length === 0) {
-            itemsUl.innerHTML = "<li>No items found in this order's subcollection.</li>";
+            itemsUl.innerHTML = "<li>No items found in this order.</li>";
         }
 
-        // The rest of your logic remains EXACTLY THE SAME, as it already works with an array.
         itemsArray.forEach((item) => {
             const menuItem = menuItemsMap[item.itemId]; 
             if (!menuItem) {
@@ -263,7 +248,7 @@ const headerDiv = document.createElement('div');
             detailsDiv.textContent = `${item.quantity} x ${itemName}`;
             
             const idDiv = document.createElement('div');
-idDiv.className = 'item-id';
+            idDiv.className = 'item-id';
             idDiv.textContent = `ID: ${item.itemId}`;
             detailsDiv.appendChild(idDiv);
 
@@ -271,7 +256,6 @@ idDiv.className = 'item-id';
             priceDiv.className = 'item-price';
             priceDiv.textContent = `$${lineTotal.toFixed(2)}`;
 
-            
             li.appendChild(detailsDiv);
             li.appendChild(priceDiv);
             li.appendChild(renderCustomizationsFromObject(item));
