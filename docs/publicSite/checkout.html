@@ -32,7 +32,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <script type="application/ld+json">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Restaurant",
@@ -47,6 +48,7 @@
   }
 }
 </script>
+
   </head>
   <body class="solid-header-page">
   <div class="overlay"></div>
@@ -160,8 +162,41 @@
                       </div>
                     </div>
                 </div>
+                <div class="order-detail-item">
+            <div class="order-icon-wrapper">
+                <i class="fa-regular fa-credit-card" style="font-size: 20px;"></i>
+            </div>
+            <div class="detail-text">
+                <div class="detail-title">Payment Method</div>
+                <div class="payment-options-row">
+                    <label class="radio-label">
+                        <input type="radio" name="paymentMethod" value="store" checked>
+                        <span>Pay at Store</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="paymentMethod" value="online">
+                        <span>Pay Online</span>
+                    </label>
+                </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- 2. THE NEW POP-OUT SECTION (Hidden by default) -->
+<div id="online-payment-container" class="hidden">
+    <div class="checkout-title">PAYMENT INFORMATION</div>
+    <div class="order-details-box">
+        <div class="order-details-content" style="padding: 20px;">
+            <!-- Stripe will inject the UI into this specific div -->
+            <div id="payment-element"></div>
+            
+            <!-- Error messages appear here -->
+            <div id="payment-message" class="hidden" style="color: red; margin-top: 10px;"></div>
+        </div>
+    </div>
+</div>
+
                 <div id="checkoutTitle" class="checkout-title">YOUR CART</div>
                 <div id="checkoutEmptyMessage" class="cart-empty-message hidden">
                     <h2>Your Cart is Empty</h2>

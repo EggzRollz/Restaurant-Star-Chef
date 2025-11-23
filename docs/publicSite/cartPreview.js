@@ -24,10 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update badge immediately
     updateCartQuantityDisplay(cart);
 
-    // =======================================================
-    // 1.5. SYNC LOGIC (THE MISSING BRIDGE)
-    // This listens for the 'cartUpdated' shout from your Menu file
-    // =======================================================
     function handleSync() {
         console.log("Sidebar detected update!");
         // 1. Re-read the database (LocalStorage)

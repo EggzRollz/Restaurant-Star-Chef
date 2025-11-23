@@ -10,6 +10,8 @@ const selectedPickupTimeInput = document.getElementById('selectedPickupTime');
 const formFields = [firstName, lastName, phone];
 
 
+
+
 export function validateCheckoutForm() {
     let firstInvalidField = null;
 
@@ -96,9 +98,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const pickupTimeTrigger = document.getElementById('pickupTimeTrigger');
     const pickupTimeOptions = document.getElementById('pickupTimeOptions');
     const selectedPickupTimeInput = document.getElementById('selectedPickupTime');
+    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+    const onlinePaymentContainer = document.getElementById('online-payment-container');
     let choices = null;
     const cart = new Cart();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const stripe = Stripe("pk_test_51SWctgGoQxdZDWdoSxxfc3aRRgygJUc69RP9vTzMQBCQrdkdmN0LZQS9iQxrkNsLZNciuqr4yJH7yP9v5O6Kg0b600lqhXMv4f"); 
+
+    let elements;
+    let paymentElement;
+
+    
+
     function handleCheckoutSync() {
         console.log("Checkout page detected cart update!");
         
@@ -299,19 +310,24 @@ window.addEventListener('click', (e) => {
 
 
 
+
  
-    function updateTotals() {
-    // THE FIX: Use cart.getItems() instead of the outdated savedItems array
+ function updateTotals() {
+    // 1. Get items (Fast, local memory access)
     const currentCartItems = cart.getItems();
-    const subtotal = currentCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    // The rest of the function is the same and will now work correctly
+    // 2. Calculate
+    const subtotal = currentCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const hstAmount = subtotal * 0.13;
     const finalTotal = subtotal + hstAmount;
 
+    // 3. Update DOM (Visuals)
     if (cartSubTotalElement) cartSubTotalElement.textContent = `$${subtotal.toFixed(2)}`;
     if (cartHST) cartHST.textContent = `$${hstAmount.toFixed(2)}`;
     if (cartTotalElement) cartTotalElement.textContent = `$${finalTotal.toFixed(2)}`;
+
+    // 4. *** NEW: Return the value so other functions can use it ***
+    return finalTotal;
 }
 
     function renderCartItems() {
@@ -486,6 +502,7 @@ window.addEventListener('click', (e) => {
     handleStickySummary();
     updatePickupTime();
     updateButtonState();
+    togglePaymentSection();
     setInterval(updatePickupTime, 60000);
 
 
