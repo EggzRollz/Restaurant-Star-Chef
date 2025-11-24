@@ -407,9 +407,10 @@ async function createOrderCard(orderId, order, container) {
     detailsDiv.innerHTML = `
         <p><strong>Customer:</strong> ${order.customerName}</p>
         <p><strong>Phone:</strong> <a href="tel:${order.phoneNumber}">${order.phoneNumber}</a></p>
+        <p><strong>Payment:</strong> ${order.paymentMethod}</p>
         <p><strong>Date:</strong> ${dateString}</p>
         <p><strong>Time:</strong> ${timeString}</p>        
-        <strong>Pickup Time:</strong> ${displayTime}</p>
+        <p><strong>Pickup Time:</strong> ${displayTime}</p>
         
         <h3>Items:</h3>
     `;

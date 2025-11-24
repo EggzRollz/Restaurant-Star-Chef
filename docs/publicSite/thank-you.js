@@ -58,7 +58,7 @@ function displayPhoneNumber() {
     const rawPhone = urlParams.get('phone');
     const cleanPhone = decodeURIComponent(rawPhone || "").trim();
     if (cleanPhone) {
-        phoneNumberElement.innerHTML = `Confirmation text sent to:<br><strong>${cleanPhone}</strong>`
+        phoneNumberElement.innerHTML = `Confirmation Text Sent To:<br><strong>${cleanPhone}</strong>`
         console.log("Phone number displayed:", cleanPhone);
     } else {
         console.error("Phone number not found in URL parameters. (URL should be like '...?phone=1234')");

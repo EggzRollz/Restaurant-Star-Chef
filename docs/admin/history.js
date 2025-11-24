@@ -195,6 +195,7 @@ async function createHistoryCard(orderId, order, container) {
         <h3>Order #${order.orderNumber || orderId}</h3>
         <p><strong>Customer:</strong> ${order.customerName || 'N/A'}</p>
         <p><strong>Phone:</strong> ${order.phoneNumber || 'N/A'}</p>
+        <p><strong>Payment:</strong> ${order.paymentMethod}</p>
         <p><strong>Date:</strong> ${dateString}</p>
         <p><strong>Time:</strong> ${timeString}</p>
         <p><strong>Pickup Time:</strong> ${displayTime}</p>

@@ -75,13 +75,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const items = cart.getItems();
             const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const total = subtotal * 1.13; // Adding HST
-            const amountInCents = Math.round(total * 100);
+            const cartItems = cart.getItems().map(item => ({
+                id: item.baseId || item.id, // The ID used in your Firestore 'menu' collection
+                quantity: item.quantity,
+                options: item.customizations // Only if options cost extra money
+            }));
 
-            if (amountInCents > 50 && !isStripeInitialized) {
+            if (cartItems.length > 0 && !isStripeInitialized) {
                 placeOrderBttn.disabled = true;
                 placeOrderBttn.textContent = "Loading Payment...";
                 
-                await initializeStripeElement(amountInCents);
+                await initializeStripeElement(cartItems);
                 
                 placeOrderBttn.disabled = false;
                 placeOrderBttn.textContent = "Place Order";
@@ -92,14 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function initializeStripeElement(amountInCents) {
+    async function initializeStripeElement(cartItems) {
     try {
-        const FUNCTION_URL = "https://us-central1-star-chef-restaurant.cloudfunctions.net/createPaymentIntent"; 
+        const FUNCTION_URL = "https://createpaymentintent-276czbbs6q-uc.a.run.app"; 
 
         const response = await fetch(FUNCTION_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: amountInCents }),
+            body: JSON.stringify({ items: cartItems }), // <--- SAFE
         });
 
         if (!response.ok) throw new Error("Network response was not ok");
@@ -163,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
             itemId: item.baseId || item.id.split('_')[0], 
             title: item.name || "Unknown Item", 
             price: item.price || 0,
-            status: 'pending',
             quantity: item.quantity,
             customizations: item.customizations || {} 
         }));
@@ -191,7 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
             status: 'new',
             totalItems: cartPayload.length, 
             items: cartPayload,
-            // Add Payment Info
             paymentMethod: paymentDetails.method, // 'online' or 'instore'
             paymentStatus: paymentDetails.status, // 'paid' or 'unpaid'
             stripeId: paymentDetails.stripeId || null
@@ -229,13 +231,14 @@ document.addEventListener("DOMContentLoaded", () => {
         placeOrderBttn.addEventListener("click", async (event) => {
             event.preventDefault(); 
             
-            // Validation
+            // 1. Validate Standard Fields (Name, Phone, Time)
             const validationResult = validateCheckoutForm();
+            
             if (!validationResult.isValid) {
                 if (validationResult.firstInvalidField) {
                     validationResult.firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-                return; 
+                return; // Stop here if personal info is missing
             }
 
             const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
@@ -244,17 +247,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 return; 
             }
 
+            // 2. Check Payment Method Selection
+            const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+            
+            if (!selectedMethod) {
+                alert("Please select a payment method.");
+                return;
+            }
+
+            // 3. Special Validation for Online Payment
+            if (selectedMethod === 'online') {
+                // If user clicked "Online" but the form didn't load (or they didn't wait)
+                if (!stripe || !elements) {
+                    alert("Please wait for the payment form to load.");
+                    return;
+                }
+            }
+
             placeOrderBttn.disabled = true;
             placeOrderBttn.textContent = "Processing...";
 
             try {
-                const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-
                 // === PATH A: ONLINE PAYMENT ===
                 if (selectedMethod === 'online') {
-                    if (!stripe || !elements) throw new Error("Stripe not ready");
-
-                    // 1. Process Payment
+                    
+                    // Process Payment
                     const { error, paymentIntent } = await stripe.confirmPayment({
                         elements,
                         confirmParams: { return_url: window.location.href },
@@ -262,9 +279,29 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     if (error) {
-                        // Failed
+                        // --- NEW: HANDLE STRIPE VALIDATION ERRORS VISUALLY ---
                         console.error(error);
-                        alert(error.message || "Payment Failed");
+
+                        // If fields are empty or invalid, Stripe throws type "validation_error" or "card_error"
+                        if (error.type === "validation_error" || error.type === "card_error") {
+                            
+                            const paymentContainer = document.getElementById('online-payment-container');
+                            
+                            // 1. Add your red/shake animation class
+                            paymentContainer.classList.add('highlight-error');
+                            
+                            // 2. Scroll to the payment section
+                            paymentContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                            // 3. Remove class after animation (matches your existing logic)
+                            setTimeout(() => {
+                                paymentContainer.classList.remove('highlight-error');
+                            }, 2500);
+                        } else {
+                            // Technical errors (network issues, etc)
+                            alert(error.message || "Payment Failed");
+                        }
+
                         placeOrderBttn.disabled = false;
                         placeOrderBttn.textContent = "Place Order";
                         return; // STOP HERE
@@ -282,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // === PATH B: PAY IN STORE ===
                 else {
                     await finalizeOrderInDatabase({
-                        method: 'instore',
+                        method: 'in-store',
                         status: 'unpaid',
                         stripeId: null
                     });
