@@ -17,6 +17,7 @@ let stripe;
 let elements;
 let isStripeInitialized = false;
 let paymentElement;
+let currentPaymentIntentId = null;
 
 // --- 3. HELPER: GET ORDER NUMBER (Your original code) ---
 async function getNextOrderNumber(db) {
@@ -109,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) throw new Error("Network response was not ok");
             const { clientSecret } = await response.json();
-
+            currentPaymentIntentId = clientSecret.split('_secret_')[0];
             const appearance = { 
                 theme: 'stripe',
                 variables: {
@@ -137,9 +138,61 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Payment system error. Please refresh.");
         }
     }
-    // --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
-    // This runs AFTER payment is confirmed (or immediately for cash)
+async function updateStripeTotal() {
+    if (!currentPaymentIntentId) return;
+
+    // --- FIX: Create a local instance of Cart to avoid "ReferenceError" ---
+    // This ensures the function works no matter where it is placed in your file.
+    const cart = new Cart(); 
+    cart.loadFromStorage(); 
     
+    const rawItems = cart.getItems();
+
+    // If cart is empty, don't update (let the listener handle unmounting)
+    if (rawItems.length === 0) return;
+
+    const placeOrderBttn = document.getElementById("place-order-button");
+    const originalText = placeOrderBttn.textContent;
+    
+    // Disable button while updating price
+    placeOrderBttn.disabled = true;
+    placeOrderBttn.textContent = "Updating Price...";
+
+    const cartItems = rawItems.map(item => ({
+        id: item.baseId || item.id.split('_')[0],
+        quantity: item.quantity || 1,
+        options: item.customizations || {} 
+    }));
+
+    try {
+        const UPDATE_URL = "https://updatepaymentintent-276czbbs6q-uc.a.run.app"; 
+
+        const response = await fetch(UPDATE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                paymentIntentId: currentPaymentIntentId,
+                items: cartItems 
+            }), 
+        });
+
+        if (!response.ok) {
+             const errorData = await response.json();
+             throw new Error(errorData.error || "Update failed");
+        }
+        console.log("Stripe price updated successfully");
+
+    } catch (e) {
+        console.error("Price update failed", e);
+        // Force a reload of the payment element to prevent "Price Mismatch" errors
+        isStripeInitialized = false; 
+        document.getElementById('payment-element').innerHTML = "";
+        alert("There was an error updating your cart total. Please refresh the page.");
+    } finally {
+        placeOrderBttn.disabled = false;
+        placeOrderBttn.textContent = originalText;
+    }
+}
 // --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
 // This runs AFTER payment is confirmed (or immediately for cash)
 async function finalizeOrderInDatabase(paymentDetails) {
@@ -327,23 +380,37 @@ try {
         radio.addEventListener('change', togglePaymentSection);
     });
 
-    window.addEventListener('cartUpdated', () => {
+    window.addEventListener('cartUpdated', async () => {
+    // Refresh cart data
+    cart.loadFromStorage();
+    const hasItems = cart.getItems().length > 0;
+
+    const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
+    const isOnline = selectedOption && selectedOption.value === 'online';
+
+    // SCENARIO 1: Online, Initialized, and Cart has items -> UPDATE PRICE
+    if (isOnline && isStripeInitialized && hasItems) {
+        await updateStripeTotal();
+    }
+    // SCENARIO 2: Online, Not Initialized, and Cart has items -> LOAD STRIPE
+    else if (isOnline && !isStripeInitialized && hasItems) {
+        togglePaymentSection();
+    }
+    // SCENARIO 3: Cart is empty OR User switched to 'In-Store' -> CLEAN UP
+    else {
+        // Hide container
+        onlinePaymentContainer.classList.add('hidden');
         
-        if (isStripeInitialized) {
-            isStripeInitialized = false;
-            
-           
-            if (paymentElement) {
-                paymentElement.unmount();
-                paymentElement = null;
-            }
-
-            document.getElementById('payment-element').innerHTML = "";
-            onlinePaymentContainer.classList.add('hidden');
-            
-            const onlineRadio = document.querySelector('input[value="online"]');
-            if(onlineRadio) onlineRadio.checked = false;
-
+        // If we have an element mounted, unmount it to be safe
+        if (paymentElement) {
+            paymentElement.unmount();
+            paymentElement = null;
         }
-    });
+        
+        // Reset state
+        isStripeInitialized = false;
+        currentPaymentIntentId = null;
+        document.getElementById('payment-element').innerHTML = "";
+    }
+});
 });

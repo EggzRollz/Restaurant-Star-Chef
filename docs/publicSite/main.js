@@ -463,12 +463,11 @@ function openCustomizeModal(item) {
   const scrollArea = document.querySelector('.scroll-area') || document.querySelector('.modal-content');
 
   let selectedAddOnPrices = {};
-
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
   chineseTitle.textContent = item.name_chinese;
   optionsContainer.innerHTML = ''; 
-  defaultPrice.textContent = ''; 
+  defaultPrice.textContent = `$${item.pricing[0].price.toFixed(2)}`; 
 
   if (orderNotesTextarea) {
       orderNotesTextarea.value = '';
@@ -489,9 +488,10 @@ function openCustomizeModal(item) {
     currentPrice = basePrice + addOnPrice;
     updateCartButtonPrice(); 
   };
+  console.log("version 0.2")
+ 
 
   if (item.pricing.length === 1) {
-    defaultPrice.textContent = "$ " + item.pricing[0].price.toFixed(2);
     basePrice = item.pricing[0].price;
   } else if (item.pricing && item.pricing.length > 0) {
     const pricingGroup = document.createElement('div');
@@ -505,11 +505,15 @@ function openCustomizeModal(item) {
     const pricingTitle = document.createElement('h4');
     pricingTitle.textContent = optionGroupTitle;
     pricingGroup.appendChild(pricingTitle);
-    item.pricing.forEach(priceOption => {
+    item.pricing.forEach((priceOption,index) => {
         const label = document.createElement('label');
         const radio = document.createElement('input');
         radio.type = 'radio'; radio.name = optionGroupTitle;
         radio.value = priceOption[optionTypeKey]; radio.dataset.price = priceOption.price;
+        if (index === 0) {
+            radio.checked = true;
+            basePrice = priceOption.price; 
+        }
         label.appendChild(radio);
         label.append(` ${priceOption[optionTypeKey]}`);
         const priceSpan = document.createElement('span');

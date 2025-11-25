@@ -248,7 +248,7 @@ window.addEventListener('click', (e) => {
 
     // This logic seems reversed, I've flipped it to what I think you intend:
     // This block should run if the store is OPEN.
-    if ((isBeforeOpening || isAfterClosing)) {
+    if (!(isBeforeOpening || isAfterClosing)) {
         if (timeBoxElement) timeBoxElement.classList.remove('store-closed');
         if (pickupDropdownContainer) pickupDropdownContainer.classList.remove('hidden');
         

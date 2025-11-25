@@ -8,6 +8,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); 
 
+
 // SOUND VARIABLES - Only ONE audio object needed
 let notificationAudio = new Audio("./sounds/yo_phone_linging.mp3");
 let soundEnabled = localStorage.getItem('soundEnabled') === 'true'; // Load saved state
@@ -25,7 +26,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // 1. User is confirmed logged in.
     console.log("Welcome Kitchen Staff:", user.email);
-   
+   console.log("TEST0.1111111")
     // 2. Load the menu data FIRST (wait for it)
     await loadMenuData();
     initializeSoundButton();
@@ -468,33 +469,32 @@ async function createOrderCard(orderId, order, container) {
 
         itemsArray.forEach((item) => {
             const li = document.createElement('li');
-            const baseId = item.itemId; 
-            const menuItem = menuItemsMap[baseId];
-
-            let finalPrice = 0;
-            let priceHtml = "";
             
+            // 1. GET DATA FROM LOCAL MAP
+            // We use this to get the English Name, Chinese Name, and Pricing Rules
+            const menuItem = menuItemsMap[item.itemId];
+            
+            // 2. CALCULATE PRICE 
+            // We are not "verifying" against the client anymore. 
+            // We are simply calculating the cost based on the trusted rules in your DB.
+            let unitPrice = 0;
             if (menuItem) {
-                const verifiedPrice = calculateVerifiedItemPrice(menuItem, item);
-                finalPrice = verifiedPrice !== null ? verifiedPrice : item.price; 
-                
-                if (Math.abs(finalPrice - item.price) > 0.05) {
-                     priceHtml = `<span style="color:red; text-decoration:line-through">$${(item.price * item.quantity).toFixed(2)}</span> <span style="color:green">$${(finalPrice * item.quantity).toFixed(2)}</span>`;
-                } else {
-                    priceHtml = `$${(finalPrice * item.quantity).toFixed(2)}`;
-                }
+                // We reuse your existing helper function just to do the math
+                const calculated = calculateVerifiedItemPrice(menuItem, item);
+                unitPrice = calculated !== null ? calculated : 0;
             } else {
-                finalPrice = item.price;
-                priceHtml = `$${(finalPrice * item.quantity).toFixed(2)} (Item Not in Menu DB)`;
+                console.warn(`Item ID ${item.itemId} not found in menu cache.`);
             }
 
-            subtotal += (finalPrice * item.quantity);
+            const lineTotal = unitPrice * item.quantity;
+            subtotal += lineTotal;
 
+            // 3. RENDER CLEAN HTML (No Red/Green checks)
             li.innerHTML = `
                 <div class="item-details">${item.quantity} x ${menuItem ? menuItem.name_english : 'Unknown Item'}</div>
                 <div class="item-chinese-name">${menuItem ? menuItem.name_chinese : ''}</div>
-                <div class="item-price">${priceHtml}</div>
-                <div class="item-id-code">ID: <strong>${baseId}</strong></div>
+                <div class="item-price">$${lineTotal.toFixed(2)}</div>
+                <div class="item-id-code">ID: <strong>${item.itemId}</strong></div>
             `;
             
             li.appendChild(renderCustomizationsFromObject(item));

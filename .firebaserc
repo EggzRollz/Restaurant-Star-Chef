@@ -7,6 +7,9 @@
       "hosting": {
         "restaurant": [
           "star-chef-restaurant"
+        ],
+        "admin": [
+          "starchefadmin"
         ]
       }
     }

@@ -1,15 +1,4 @@
 {
-  "hosting": {
-    "public": "docs/publicSite",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "headers": [{
-      "source": "**/*.@(js|css)",
-      "headers": [{
-        "key": "Cache-Control",
-        "value": "public, max-age=60, must-revalidate"
-      }]
-    }]
-  },
   "functions": [
     {
       "source": "functions",
@@ -22,6 +11,40 @@
         "firebase-debug.*.log",
         "*.local"
       ]
+    }
+  ],
+  "hosting": [
+    {
+      "target": "restaurant",
+      "public": "docs/publicSite",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "headers": [{
+        "source": "**/*.@(js|css)",
+        "headers": [{
+          "key": "Cache-Control",
+          "value": "public, max-age=60, must-revalidate"
+        }]
+      }]
+    },
+    {
+      "target": "admin",
+      "public": "docs/admin",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "headers": [{
+        "source": "**/*.@(js|css)",
+        "headers": [{
+          "key": "Cache-Control",
+          "value": "public, max-age=60, must-revalidate"
+        }]
+      }]
     }
   ]
 }

@@ -623,7 +623,7 @@ main {
       background-color: var(--dark-bg);
       border-top: 1px solid var(--gold-accent);
       margin-top: auto; /* Pushes to bottom */
-      margin-bottom:20px;
+      margin-bottom:40px;
       min-height:10vh;
   }
 }
