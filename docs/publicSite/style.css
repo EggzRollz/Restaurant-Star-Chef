@@ -695,9 +695,32 @@ main {
 }
 
 
+.fixed-black{
+  background-color: black;
+  
+    position: relative; /* Establishes a positioning context for its children */
+    height: 100vh;      /* Makes the splash section take up the full viewport height */
+    
+    /* Crucial for containing the 3D transformed children */
+   z-index:1;
+}
 
+.splash-black {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Pushes it BEHIND the text, but INSIDE .fixed-background */
 
-
+    /* The parallax transform */
+    transform: translateZ(-1px) scale(2);
+    
+    /* Keep your existing background properties */
+    background-color: black;
+    background-size: cover;
+    background-position: center;
+}
 
 
 

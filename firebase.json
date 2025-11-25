@@ -1,11 +1,14 @@
 {
   "hosting": {
     "public": "docs/publicSite",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [{
+      "source": "**/*.@(js|css)",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "public, max-age=60, must-revalidate"
+      }]
+    }]
   },
   "functions": [
     {

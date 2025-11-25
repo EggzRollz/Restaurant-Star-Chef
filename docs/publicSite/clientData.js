@@ -16,6 +16,7 @@ const db = getFirestore(app);
 let stripe;
 let elements;
 let isStripeInitialized = false;
+let paymentElement;
 
 // --- 3. HELPER: GET ORDER NUMBER (Your original code) ---
 async function getNextOrderNumber(db) {
@@ -65,22 +66,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 4. PAYMENT UI LOGIC ---
     async function togglePaymentSection() {
+        
         const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
         if (!selectedOption) return;
 
-        if (selectedOption.value === 'online'  && cart.getItems().length > 0) {
+        cart.loadFromStorage(); 
+        if (selectedOption.value === 'online' && cart.getItems().length > 0) {
             onlinePaymentContainer.classList.remove('hidden');
             
-            // Calculate Total
-            const items = cart.getItems();
-            const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const total = subtotal * 1.13; // Adding HST
             const cartItems = cart.getItems().map(item => ({
-                id: item.baseId || item.id, // The ID used in your Firestore 'menu' collection
-                quantity: item.quantity,
-                options: item.customizations // Only if options cost extra money
+                id: item.baseId || item.id.split('_')[0],
+                quantity: item.quantity || 1,
+                options: item.customizations || {} 
             }));
 
+            // Only initialize if we haven't already, OR if the cart changed (handled by listener below)
             if (cartItems.length > 0 && !isStripeInitialized) {
                 placeOrderBttn.disabled = true;
                 placeOrderBttn.textContent = "Loading Payment...";
@@ -95,190 +95,150 @@ document.addEventListener("DOMContentLoaded", () => {
             onlinePaymentContainer.classList.add('hidden');
         }
     }
+    
 
     async function initializeStripeElement(cartItems) {
-    try {
-        const FUNCTION_URL = "https://createpaymentintent-276czbbs6q-uc.a.run.app"; 
-
-        const response = await fetch(FUNCTION_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ items: cartItems }), // <--- SAFE
-        });
-
-        if (!response.ok) throw new Error("Network response was not ok");
-        const { clientSecret } = await response.json();
-
-        // --- START OF STYLING SECTION ---
-        const appearance = { 
-            theme: 'stripe', // Options: 'stripe', 'night', 'flat'
-            
-            variables: {
-                // 1. Primary Brand Color (Used for focus outlines and the "Pay" checkmark)
-                colorPrimary: '#c7b884ff', // Example: Red
-
-                // 2. Background Color of the inputs
-                colorBackground: '#ffffff',
-
-                // 3. Text Color
-                colorText: '#30313d',
-
-                // 4. Border Radius (Rounded corners)
-                borderRadius: '4px',
-
-                // 5. Font Family (Match your website font)
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            },
-            
-            // Advanced Rules (CSS-like)
-            rules: {
-                '.Input': {
-                    border: '1px solid #ccc', // Light grey border
-                    boxShadow: 'none',        // Remove default shadow
-                    padding: '12px',          // More spacing inside
-                },
-                '.Input:focus': {
-                    border: '1px solid #a2956b', // Red border when clicking inside
-                    boxShadow: '0 0 0 1px #e0ce94ff', // Red glow
-                },
-                '.Label': {
-                    fontWeight: '500', // Make labels slightly bolder
-                    color: '#444',
-                }
-            }
-        };
-        // --- END OF STYLING SECTION ---
-
-        elements = stripe.elements({ appearance, clientSecret });
-        const paymentElement = elements.create("payment", { layout: "tabs" });
-        paymentElement.mount("#payment-element");
-
-    } catch (error) {
-        console.error("Failed to load Stripe:", error);
-        alert("Payment system error. Please refresh.");
-    }
-}
-
-    // --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
-    // This runs AFTER payment is confirmed (or immediately for cash)
-    async function finalizeOrderInDatabase(paymentDetails) {
-        // 1. Get Payload
-        const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
-            itemId: item.baseId || item.id.split('_')[0], 
-            title: item.name || "Unknown Item", 
-            price: item.price || 0,
-            quantity: item.quantity,
-            customizations: item.customizations || {} 
-        }));
-
-        // 2. Get Order Number
-        const newOrderNumber = await getNextOrderNumber(db);
-        const now = new Date();
-        const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
-        const customDocId = `${formattedDate}_${newOrderNumber}`;
-
-        // 3. Batch Write
-        const batch = writeBatch(db);
-        const newOrderRef = doc(db, "orders", customDocId); 
-        
-        let selectedTime = selectedPickupTimeInput.value;
-        if (!selectedTime || selectedTime === "") selectedTime = "ASAP"; 
-        
-        const orderData = {
-            orderId: newOrderRef.id,
-            orderNumber: newOrderNumber, 
-            customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
-            phoneNumber: '+1' + phone.value.replace(/\D/g, ''),
-            orderDate: serverTimestamp(), 
-            pickupTime: selectedTime,
-            status: 'new',
-            totalItems: cartPayload.length, 
-            items: cartPayload,
-            paymentMethod: paymentDetails.method, // 'online' or 'instore'
-            paymentStatus: paymentDetails.status, // 'paid' or 'unpaid'
-            stripeId: paymentDetails.stripeId || null
-        };
-        
-        batch.set(newOrderRef, orderData);
-        await batch.commit();
-        
-        // 4. Send SMS
         try {
-            const SMS_FUNCTION_URL = "https://send-order-text-924721320321.northamerica-northeast2.run.app"; 
-            await fetch(SMS_FUNCTION_URL, {
+            const FUNCTION_URL = "https://createpaymentintent-276czbbs6q-uc.a.run.app"; 
+
+            const response = await fetch(FUNCTION_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
-                    phoneNumber: phone.value.trim(),
-                    orderNumber: newOrderNumber,
-                    pickupTime: selectedTime
-                })
+                body: JSON.stringify({ items: cartItems }), 
             });
-        } catch (smsError) {
-            console.warn("Failed to send SMS, but order was saved:", smsError);
+
+            if (!response.ok) throw new Error("Network response was not ok");
+            const { clientSecret } = await response.json();
+
+            const appearance = { 
+                theme: 'stripe',
+                variables: {
+                    colorPrimary: '#c7b884ff',
+                    colorBackground: '#ffffff',
+                    colorText: '#30313d',
+                    borderRadius: '4px',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                },
+                rules: {
+                    '.Input': { border: '1px solid #ccc', boxShadow: 'none', padding: '12px' },
+                    '.Input:focus': { border: '1px solid #a2956b', boxShadow: '0 0 0 1px #e0ce94ff' },
+                    '.Label': { fontWeight: '500', color: '#444' }
+                }
+            };
+
+            elements = stripe.elements({ appearance, clientSecret });
+            
+            // Create and assign to global variable so we can unmount it later
+            paymentElement = elements.create("payment", { layout: "tabs" });
+            paymentElement.mount("#payment-element");
+
+        } catch (error) {
+            console.error("Failed to load Stripe:", error);
+            alert("Payment system error. Please refresh.");
+        }
+    }
+    // --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
+    // This runs AFTER payment is confirmed (or immediately for cash)
+    
+// --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
+// This runs AFTER payment is confirmed (or immediately for cash)
+async function finalizeOrderInDatabase(paymentDetails) {
+    // 1. Get Payload
+    const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
+        itemId: item.baseId || item.id.split('_')[0], 
+        title: item.name || "Unknown Item", 
+        price: item.price || 0,
+        quantity: item.quantity,
+        customizations: item.customizations || {} 
+    }));
+
+    // 2. Get Order Number
+    const newOrderNumber = await getNextOrderNumber(db);
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
+    const customDocId = `${formattedDate}_${newOrderNumber}`;
+
+    // 3. Batch Write
+    const batch = writeBatch(db);
+    const newOrderRef = doc(db, "orders", customDocId); 
+    
+    let selectedTime = selectedPickupTimeInput.value;
+    if (!selectedTime || selectedTime === "") selectedTime = "ASAP"; 
+    
+    const orderData = {
+        orderId: newOrderRef.id,
+        orderNumber: newOrderNumber, 
+        customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
+        phoneNumber: '+1' + phone.value.replace(/\D/g, ''),
+        orderDate: serverTimestamp(), 
+        pickupTime: selectedTime,
+        status: 'new',
+        totalItems: cartPayload.length, 
+        items: cartPayload,
+        paymentMethod: paymentDetails.method, // 'online' or 'instore'
+        paymentStatus: paymentDetails.status, // 'paid' or 'unpaid'
+        stripeId: paymentDetails.stripeId || null
+    };
+    
+    batch.set(newOrderRef, orderData);
+    await batch.commit();
+    
+    // 4. Send SMS
+    
+
+    // 5. Cleanup & Redirect
+    localStorage.removeItem('cart');
+    const encodedPhoneNumber = encodeURIComponent(phone.value.trim()); 
+    const encodedTime = encodeURIComponent(selectedTime);
+    window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}&phone=${encodedPhoneNumber}`;
+}
+
+// --- 6. MAIN CLICK LISTENER ---
+if (placeOrderBttn) {
+    placeOrderBttn.addEventListener("click", async (event) => {
+        event.preventDefault(); 
+        
+        // 1. Validate Standard Fields (Name, Phone, Time)
+        const validationResult = validateCheckoutForm();
+        
+        if (!validationResult.isValid) {
+            if (validationResult.firstInvalidField) {
+                validationResult.firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return; // Stop here if personal info is missing
         }
 
-        // 5. Cleanup & Redirect
-        localStorage.removeItem('cart');
-        const encodedPhoneNumber = encodeURIComponent(phone.value.trim()); 
-        const encodedTime = encodeURIComponent(selectedTime);
-        window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}&phone=${encodedPhoneNumber}`;
-    }
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cartItems.length === 0) {
+            alert("Your cart is empty.");
+            return; 
+        }
 
-    // --- 6. MAIN CLICK LISTENER ---
-    if (placeOrderBttn) {
-        placeOrderBttn.addEventListener("click", async (event) => {
-            event.preventDefault(); 
-            
-            // 1. Validate Standard Fields (Name, Phone, Time)
-            const validationResult = validateCheckoutForm();
-            
-            if (!validationResult.isValid) {
-                if (validationResult.firstInvalidField) {
-                    validationResult.firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                return; // Stop here if personal info is missing
-            }
+        // 2. Check Payment Method Selection
+        const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
 
-            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cartItems.length === 0) {
-                alert("Your cart is empty.");
-                return; 
-            }
+// Prepare Cart Items for the function
+const cartItemsForServer = JSON.parse(localStorage.getItem('cart')).map(item => ({
+    id: item.baseId || item.id.split('_')[0],
+    quantity: item.quantity,
+    options: item.customizations || {} 
+}));
 
-            // 2. Check Payment Method Selection
-            const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-            
-            if (!selectedMethod) {
-                alert("Please select a payment method.");
-                return;
-            }
+placeOrderBttn.disabled = true;
+placeOrderBttn.textContent = "Processing...";
 
-            // 3. Special Validation for Online Payment
-            if (selectedMethod === 'online') {
-                // If user clicked "Online" but the form didn't load (or they didn't wait)
-                if (!stripe || !elements) {
-                    alert("Please wait for the payment form to load.");
-                    return;
-                }
-            }
+try {
+    // === PATH A: ONLINE PAYMENT ===
+    if (selectedMethod === 'online') {
+        
+        // 1. Confirm Payment with Stripe
+        const { error, paymentIntent } = await stripe.confirmPayment({
+            elements,
+            confirmParams: { return_url: window.location.href },
+            redirect: "if_required" 
+        });
 
-            placeOrderBttn.disabled = true;
-            placeOrderBttn.textContent = "Processing...";
-
-            try {
-                // === PATH A: ONLINE PAYMENT ===
-                if (selectedMethod === 'online') {
-                    
-                    // Process Payment
-                    const { error, paymentIntent } = await stripe.confirmPayment({
-                        elements,
-                        confirmParams: { return_url: window.location.href },
-                        redirect: "if_required" 
-                    });
-
-                    if (error) {
+        if (error) {
                         // --- NEW: HANDLE STRIPE VALIDATION ERRORS VISUALLY ---
                         console.error(error);
 
@@ -288,7 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             const paymentContainer = document.getElementById('online-payment-container');
                             
                             // 1. Add your red/shake animation class
-                            paymentContainer.classList.add('highlight-error');
                             
                             // 2. Scroll to the payment section
                             paymentContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -309,13 +268,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // Success! Now save to DB
                     if (paymentIntent && paymentIntent.status === "succeeded") {
-                        await finalizeOrderInDatabase({
-                            method: 'online',
-                            status: 'paid',
-                            stripeId: paymentIntent.id
-                        });
-                    }
-                } 
+           
+            const VERIFY_URL = "https://verifyandcreateorder-276czbbs6q-uc.a.run.app"; // <--- UPDATE THIS URL AFTER DEPLOYING
+            
+            const response = await fetch(VERIFY_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    paymentIntentId: paymentIntent.id,
+                    cartItems: cartItemsForServer,
+                    customerDetails: {
+                        name: `${firstName.value.trim()} ${lastName.value.trim()}`,
+                        phone: '+1' + phone.value.replace(/\D/g, '')
+                    },
+                    scheduledTime: selectedPickupTimeInput.value
+                }), 
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "Order verification failed");
+            }
+
+            // Success!
+            localStorage.removeItem('cart');
+            const rawPhone = phone.value.trim();
+            const rawTime = selectedPickupTimeInput.value || "ASAP";
+
+            // 2. Encode them for the URL (Safety for special characters like spaces or :)
+            const encodedPhone = encodeURIComponent(rawPhone);
+            const encodedTime = encodeURIComponent(rawTime);
+
+            // 3. Redirect
+            window.location.href = `thank-you.html?order=${result.orderNumber}&phone=${encodedPhone}&time=${encodedTime}`;;
+        }
+    } 
                 // === PATH B: PAY IN STORE ===
                 else {
                     await finalizeOrderInDatabase({
@@ -339,15 +327,23 @@ document.addEventListener("DOMContentLoaded", () => {
         radio.addEventListener('change', togglePaymentSection);
     });
 
-    // Handle Cart Updates (Reset Payment if cart changes)
     window.addEventListener('cartUpdated', () => {
+        
         if (isStripeInitialized) {
             isStripeInitialized = false;
+            
+           
+            if (paymentElement) {
+                paymentElement.unmount();
+                paymentElement = null;
+            }
+
             document.getElementById('payment-element').innerHTML = "";
             onlinePaymentContainer.classList.add('hidden');
+            
             const onlineRadio = document.querySelector('input[value="online"]');
             if(onlineRadio) onlineRadio.checked = false;
-            alert("Cart updated. Please select payment method again.");
+
         }
     });
 });

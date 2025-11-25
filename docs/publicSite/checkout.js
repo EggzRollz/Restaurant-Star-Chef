@@ -10,8 +10,6 @@ const selectedPickupTimeInput = document.getElementById('selectedPickupTime');
 const formFields = [firstName, lastName, phone];
 
 
-
-
 export function validateCheckoutForm() {
     let firstInvalidField = null;
 
@@ -102,12 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const onlinePaymentContainer = document.getElementById('online-payment-container');
     let choices = null;
     const cart = new Cart();
+    
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
     const stripe = Stripe("pk_test_51SWctgGoQxdZDWdoSxxfc3aRRgygJUc69RP9vTzMQBCQrdkdmN0LZQS9iQxrkNsLZNciuqr4yJH7yP9v5O6Kg0b600lqhXMv4f"); 
 
     let elements;
     let paymentElement;
-
+    console.log("UPDATEDDDDDD 0.6")
     
 
     function handleCheckoutSync() {
@@ -233,15 +232,23 @@ window.addEventListener('click', (e) => {
     const previouslySelectedTime = selectedPickupTimeInput.value;
 
     const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
+    
+   
+    const storeTimeJSON = now.toLocaleString("en-US", {
+        timeZone: "America/Toronto"
+    });
+    const storeTime = new Date(storeTimeJSON);
 
+   
+    const currentHour = storeTime.getHours();
+    const currentMinute = storeTime.getMinutes();
+   
     const isBeforeOpening = currentHour < 11;
     const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
 
     // This logic seems reversed, I've flipped it to what I think you intend:
     // This block should run if the store is OPEN.
-    if (!(isBeforeOpening || isAfterClosing)) {
+    if ((isBeforeOpening || isAfterClosing)) {
         if (timeBoxElement) timeBoxElement.classList.remove('store-closed');
         if (pickupDropdownContainer) pickupDropdownContainer.classList.remove('hidden');
         
@@ -414,6 +421,10 @@ window.addEventListener('click', (e) => {
         renderCartItems();
     }
 
+
+    
+    // Add listener to radios in this file too, just to be safe
+   
     function handleStickySummary() {
         const summaryBox = document.querySelector('.cart-total-summary');
         const wrapper = document.querySelector('.checkout-content-wrapper');
@@ -459,6 +470,10 @@ window.addEventListener('click', (e) => {
         }
     }
     
+
+
+
+
     // Event Listeners
    if (cartContainer) {
     cartContainer.addEventListener('click', (event) => {
@@ -502,9 +517,7 @@ window.addEventListener('click', (e) => {
     handleStickySummary();
     updatePickupTime();
     updateButtonState();
-    togglePaymentSection();
     setInterval(updatePickupTime, 60000);
-
 
     window.addEventListener('pageshow', function(event) {
         if (cart) {
@@ -513,4 +526,5 @@ window.addEventListener('click', (e) => {
             console.log("Page restored. Cart re-synced from storage.");
         }
     });
+    
 });

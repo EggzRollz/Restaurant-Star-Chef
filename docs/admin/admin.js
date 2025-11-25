@@ -398,20 +398,40 @@ async function createOrderCard(orderId, order, container) {
 
 
     // 1. Extract the time safely
-    let displayTime = "ASAP"; // Default
+    let displayTime = "ASAP"; 
     if (order.pickupTime && order.pickupTime.trim() !== "") {
         displayTime = order.pickupTime;
     }
 
-    // 2. Generate the HTML
+    // --- C. NEW: PAYMENT STATUS BADGE ---
+    // We check paymentStatus because your security rules guarantee this is accurate.
+    let paymentHtml = "";
+    
+    if (order.paymentStatus === 'paid') {
+        // CLEAN GREEN LOOK
+        paymentHtml = `
+            <div class="payment-status-strip paid">
+                <span>✔ PAID ONLINE</span>
+            </div>
+        `;
+    } else {
+        // URGENT RED LOOK (With Money Icon)
+        paymentHtml = `
+            <div class="payment-status-strip unpaid">
+                <span>UNPAID - COLLECT CASH</span>
+            </div>
+        `;
+    }
+
+    // 2. Generate the HTML (Updated to remove the wrapping div style you had before)
     detailsDiv.innerHTML = `
+        ${paymentHtml}
         <p><strong>Customer:</strong> ${order.customerName}</p>
         <p><strong>Phone:</strong> <a href="tel:${order.phoneNumber}">${order.phoneNumber}</a></p>
-        <p><strong>Payment:</strong> ${order.paymentMethod}</p>
         <p><strong>Date:</strong> ${dateString}</p>
-        <p><strong>Time:</strong> ${timeString}</p>        
-        <p><strong>Pickup Time:</strong> ${displayTime}</p>
-        
+        <p><strong>Time Placed:</strong> ${timeString}</p>        
+        <p style="font-size: 1.1em; color: #000;"><strong>Pickup Time:</strong> ${displayTime}</p>
+        <hr>
         <h3>Items:</h3>
     `;
 
