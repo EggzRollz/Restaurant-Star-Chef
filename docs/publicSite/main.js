@@ -98,88 +98,120 @@ window.addEventListener('storage', () => {
   if(modalContent) modalContent.addEventListener('click', (e) => e.stopPropagation());
 
 // --- Optimized Fetch Logic ---
+// --- ROBUST FETCH: HANDLES WRAPPERS & NAME MAPPING ---
 async function fetchMenuData() {
     if (!menuContainer) return;
-    if (!db) {
-        console.error("Firestore database is not available.");
-        return;
-    }
+
     try {
-        // 1. Check for a server update (Costs 1 Read)
-        const metadataRef = doc(db, "metadata", "menuInfo");
-        let serverVersion = null;
+        console.log("Loading complex menu.json...");
+        const response = await fetch('./menu.json');
         
-        try {
-            const metadataSnap = await getDoc(metadataRef);
-            if (metadataSnap.exists()) {
-                const data = metadataSnap.data();
-                // Convert Firestore Timestamp to milliseconds for comparison
-                serverVersion = data.lastUpdated?.toMillis?.() || data.lastUpdated;
-            }
-        } catch (e) {
-            console.warn("Could not fetch metadata, defaulting to full fetch.");
+        if (!response.ok) throw new Error("menu.json not found");
+
+        const rawData = await response.json();
+        let flatList = [];
+        let categoryGroups = [];
+
+        // --- STEP 1: DETECT STRUCTURE ---
+        if (Array.isArray(rawData)) {
+            categoryGroups = rawData;
+        } 
+        else if (rawData.menu && Array.isArray(rawData.menu)) {
+            categoryGroups = rawData.menu;
         }
-        
-        // 2. Check Local Storage
-        const localVersion = localStorage.getItem('menuVersion');
-        const cachedMenu = localStorage.getItem('menuData');
-        
-        // 3. If versions match and we have data, USE CACHE (Costs 0 extra Reads)
-        if (serverVersion && localVersion === String(serverVersion) && cachedMenu) {
-            console.log(`Menu version ${serverVersion} is up to date. Loading from local cache.`);
-            try {
-                menuInventory = JSON.parse(cachedMenu);
-                initMenu(); // Run setup
-                return; 
-            } catch (e) {
-                console.error("Cache parse error, refetching...");
+        else if (rawData.categories && Array.isArray(rawData.categories)) {
+            categoryGroups = rawData.categories;
+        }
+        else if (rawData.items && Array.isArray(rawData.items)) {
+            categoryGroups = [rawData];
+        } 
+        else {
+            const values = Object.values(rawData);
+            if (values.length > 0 && Array.isArray(values[0])) {
+                 categoryGroups = values[0];
+            } else {
+                 categoryGroups = values;
             }
         }
-        
-        // 4. Versions didn't match (or first visit), Fetch EVERYTHING
-        console.log("New menu version detected. Fetching from Firestore...");
-        const menuCollectionRef = collection(db, 'menuItems');
-        const querySnapshot = await getDocs(menuCollectionRef);
-        
-        menuInventory = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,
-                name: data.name_english || "Unnamed Item",
-                name_chinese: data.name_chinese || "Unnamed Item",
-                image: data.image,
-                price: data.pricing?.[0]?.price || 0.00,
-                category: data.category_english || "Misc",
-                tags: [data.category_english, ...(data.tags?.map(t => t.type) || [])],
-                addOns: data.addOns || [],
-                pricing: data.pricing || [],
-            };
+
+        console.log(`Structure detection found ${categoryGroups.length} category groups.`);
+
+        // --- STEP 2: FLATTEN DATA ---
+        categoryGroups.forEach(group => {
+            const catName = group.category_name_english || group.category_name_chinese || "Misc";
+
+            if (group.items && Array.isArray(group.items)) {
+                group.items.forEach(item => {
+                    // A. Ensure ID
+                    if (!item.id) item.id = `${catName}_${Math.random().toString(36).substr(2, 9)}`;
+
+                    // B. Ensure Tags
+                    if (!item.tags) item.tags = [];
+
+                    // C. Auto-Tag Category
+                    const alreadyTagged = item.tags.some(t => t.type && t.type.toLowerCase() === catName.toLowerCase());
+                    if (!alreadyTagged) {
+                        item.tags.push({ type: catName });
+                    }
+
+                    // D. Set property
+                    item.category = catName; 
+
+                    // E. Ensure Chinese Name exists
+                    if (!item.name_chinese) item.name_chinese = "";
+
+                    // --- F. FIX: MAP 'name_english' TO 'name' ---
+                    // This prevents the sort crash
+                    if (!item.name) {
+                        item.name = item.name_english || item.name_chinese || "Unnamed Item";
+                    }
+
+                    // G. Add to list
+                    flatList.push(item);
+                });
+            }
         });
-        
-        // 5. Save Data AND the new Version to cache
-        if (menuInventory.length > 0) {
-            // Sort immediately to save processing later
-            menuInventory.sort((a, b) => a.name.localeCompare(b.name));
-            
-            localStorage.setItem('menuData', JSON.stringify(menuInventory));
-            
-            // Only save version if we successfully got one from server
-            if (serverVersion) {
-                localStorage.setItem('menuVersion', String(serverVersion)); 
+
+        console.log(`Successfully flattened ${flatList.length} items.`);
+        menuInventory = flatList;
+
+        // --- STEP 3: OPTIONAL FIRESTORE STATUS CHECK ---
+        if (db) {
+            try {
+                const metadataRef = doc(db, "metadata", "menuInfo"); 
+                const metadataSnap = await getDoc(metadataRef);
+                
+                if (metadataSnap.exists()) {
+                    const data = metadataSnap.data();
+                    const soldOutMap = data.soldOut || {};
+                    
+                    menuInventory.forEach(item => {
+                        if (soldOutMap[item.id] === true) {
+                            item.isSoldOut = true; 
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn("Could not check inventory status.", e);
             }
-            
-            initMenu();
         }
+
+        // --- STEP 4: RENDER ---
+        // Now this works because every item is guaranteed to have a .name property
+        menuInventory.sort((a, b) => a.name.localeCompare(b.name));
+        
+        initMenu();
+
     } catch (error) {
-        console.error("Error fetching menu data from Firestore:", error);
-        // Fallback: Try to load stale cache if network fails
+        console.error("Error parsing menu:", error);
+        
+        // Fallback
         const cachedMenu = localStorage.getItem('menuData');
         if (cachedMenu) {
-            console.log("Using stale cache due to network error");
             menuInventory = JSON.parse(cachedMenu);
             initMenu();
         } else {
-            menuContainer.innerHTML = "<h1>Error loading menu. Please try again later.</h1>";
+            menuContainer.innerHTML = "<h1>Error loading menu data.</h1>";
         }
     }
 }
@@ -248,19 +280,23 @@ function initMenu() {
 }
 
 // --- In main.js ---
-
 function createMenuItemElement(item) {
-
     const MODIFIERS = {
         spicy: { iconFile: 'svg/pepper.svg', title: 'Spicy' },
         cold: { iconFile: 'svg/snowflake.svg', title: 'Cold/Iced' },
         nuts: { iconFile: 'svg/peanut.svg', title: 'Peanuts' }
     };
 
-
     const link = document.createElement('a');
     link.href = '#';
     link.classList.add('item-container-link');
+
+    // Sold Out Visuals
+    if (item.isSoldOut) {
+        link.style.pointerEvents = 'none';
+        link.style.opacity = '0.6';
+        link.style.filter = 'grayscale(100%)'; 
+    }
 
     const itemContainer = document.createElement('div');
     itemContainer.classList.add('item-container');
@@ -270,39 +306,43 @@ function createMenuItemElement(item) {
 
     const itemNameDiv = document.createElement('div');
     itemNameDiv.classList.add("item-name");
-    itemNameDiv.textContent = `${item.name}`;
+    itemNameDiv.textContent = item.isSoldOut ? `${item.name} (Sold Out)` : item.name;
 
     const itemChineseNameDiv = document.createElement('div');
     itemChineseNameDiv.classList.add("item-name");
     itemChineseNameDiv.textContent = `${item.name_chinese}`;
 
- 
-    const lowerCaseTags = item.tags.map(tag => tag.toLowerCase());
+    // --- FIX: Safely convert tags to lowercase strings ---
+    const lowerCaseTags = (item.tags || []).map(tag => {
+        const val = (typeof tag === 'object' && tag.type) ? tag.type : tag;
+        return val ? val.toLowerCase() : "";
+    });
 
- 
-
-    
-    // --- The rest of your function continues as normal ---
     const itemPriceDiv = document.createElement('div');
     itemPriceDiv.classList.add("item-price");
-    itemPriceDiv.textContent = `$${item.pricing[0].price.toFixed(2)}`;
+    // Ensure pricing exists to prevent crash
+    const priceDisplay = (item.pricing && item.pricing[0]) ? item.pricing[0].price.toFixed(2) : "0.00";
+    itemPriceDiv.textContent = `$${priceDisplay}`;
 
     const itemImg = document.createElement('img');
     itemImg.classList.add("item-img");
     itemImg.loading = 'lazy'; 
+    
     if (item.image) {
-        itemImg.src = 'graphics/' + item.image.replace(/\.(png|jpg|jpeg)$/, '.webp')
         itemImg.src = 'graphics/' + item.image;
         itemImg.alt = item.name;
     } else {
-      const categoryFileName = item.category.replace(/ \/ /g, '-');
-      itemImg.src = `graphics/category_fallback/${categoryFileName}.png`; 
-      itemImg.alt = `A placeholder image for the ${item.category} category`
+        // Safe fallback for category name
+        const catName = item.category || "Misc";
+        const categoryFileName = catName.replace(/ \/ /g, '-');
+        itemImg.src = `graphics/category_fallback/${categoryFileName}.png`; 
+        itemImg.alt = `A placeholder image for the ${catName} category`;
     }
 
-       itemInfo.appendChild(itemNameDiv);
+    itemInfo.appendChild(itemNameDiv);
     itemInfo.appendChild(itemChineseNameDiv);
     itemInfo.appendChild(itemPriceDiv);
+    
     const modifierContainer = document.createElement('div');
     modifierContainer.classList.add('modifier-container');
 
@@ -313,8 +353,6 @@ function createMenuItemElement(item) {
             icon.src = `${MODIFIERS[modifierKey].iconFile}`;
             icon.alt = MODIFIERS[modifierKey].title;
             icon.title = MODIFIERS[modifierKey].title;
-            
-            // 2. Add the icon to our new container, NOT to itemInfo
             modifierContainer.appendChild(icon);
         }
     }
@@ -322,97 +360,48 @@ function createMenuItemElement(item) {
         itemInfo.appendChild(modifierContainer);
     }
 
-   itemContainer.appendChild(itemInfo);
+    itemContainer.appendChild(itemInfo);
     itemContainer.appendChild(itemImg);
     link.appendChild(itemContainer);
-    
-    // --- RETURN THE LINK DIRECTLY, NOT THE <li> ---
-    // itemEl.appendChild(link);
-    // return itemEl;
 
-    link.addEventListener('click', e => {
-        e.preventDefault();
-        
-        openCustomizeModal(item);
-    });
+    if (!item.isSoldOut) {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            openCustomizeModal(item);
+        });
+    }
 
-    return link; // Return the link directly as the grid item
+    return link; 
 }
 
-function renderSingleCategory(categoryName) {
-  // Guard clause - Perfect.
-  if (!menuContainer) return;
-
-  // 1. Clear the container efficiently - You did this correctly!
-  while (menuContainer.firstChild) {
-    menuContainer.removeChild(menuContainer.firstChild);
-  }
-
-  const lowerCaseCategory = categoryName.toLowerCase();
-  
-  // 2. Filter just for the single category that was clicked. No loop needed.
-  const filteredItems = menuInventory.filter(item => 
-    item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
-  );
-
-  // 3. Check if any items were found AFTER filtering.
-  if (filteredItems.length > 0) {
-    // Use a fragment for performance - You did this correctly!
-    const fragment = document.createDocumentFragment();
-
-    const section = document.createElement('section');
-    section.classList.add('menu-group');
-
-    const header = document.createElement('h2');
-    header.textContent = categoryName; 
-    header.classList.add('menu-group-title');
-
-    const list = document.createElement('ul');
-    list.classList.add('item-list-grid');
-    
-    filteredItems.sort((a, b) => a.name.localeCompare(b.name));
-    filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
-
-    // IMPORTANT: Add the header to the section first!
-    section.appendChild(header);
-    section.appendChild(list);
-
-    // Add the fully built section to the fragment
-    fragment.appendChild(section);
-    
-    // Append the entire fragment to the DOM in one operation.
-    menuContainer.appendChild(fragment);
-   
-  } else {
-    // If no items are found, display the message.
-    menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
-  }
-}
 // In main.js
-
 function renderAllItemsByCategory() {
   if (!menuContainer) return;
   menuContainer.innerHTML = '';
 
-  // Display order - these should match your tag names
+  // Display order - Ensure these match the "category_name_english" in your JSON exactly
   const categoryOrder = [
-    "Popular",      // Tag: popular
-    "Fish Soup Noodle",        // Tag: sides
-    "Congee",       // Tag: congee
-    "Fried Noodle", // Tag: fried noodle
-    "Rice",         // Tag: rice
-    "Soup",         // Tag: soup (simplified from "Soup / Noodles")
-    "Soup Noodle",  // Tag: soup noodle
-    "Stir Fry",     // Tag: stir fry
-    "Beverages"     // Tag: beverages
+    "Popular",      
+    "Fish Soup Noodle",        
+    "Congee",       
+    "Fried Noodle", 
+    "Rice",         
+    "Soup",         
+    "Soup Noodle",  
+    "Stir Fry",     
+    "Beverages"     
   ];
 
   categoryOrder.forEach(displayCategory => {
     const lowerCaseCategory = displayCategory.toLowerCase();
     
-    // Same simple filtering for everything
+    // --- FIX: Handle Tags as Objects ({type: "..."}) OR Strings ---
     const filteredItems = menuInventory.filter(item => 
-      item.tags.some(tag => tag.toLowerCase() === lowerCaseCategory)
+      item.tags && item.tags.some(tag => {
+        // Extract the string value regardless of format
+        const tagValue = (typeof tag === 'object' && tag.type) ? tag.type : tag;
+        return tagValue && tagValue.toLowerCase() === lowerCaseCategory;
+      })
     );
     
     if (filteredItems.length > 0) {
@@ -427,7 +416,9 @@ function renderAllItemsByCategory() {
       const list = document.createElement('ul');
       list.classList.add('item-list-grid');
       
+      // Sort items alphabetically within the category
       filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+      
       filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
       
       section.appendChild(list);
@@ -435,7 +426,52 @@ function renderAllItemsByCategory() {
     }
   });
 }
+function renderSingleCategory(categoryName) {
+  if (!menuContainer) return;
 
+  // 1. Clear the container
+  menuContainer.innerHTML = '';
+
+  const lowerCaseCategory = categoryName.toLowerCase();
+  
+  // 2. Filter logic (Updated to handle your complex JSON tags)
+  const filteredItems = menuInventory.filter(item => 
+    item.tags && item.tags.some(tag => {
+        // Handle if tag is a string ("spicy") or an object ({type: "spicy"})
+        const tagValue = (typeof tag === 'object' && tag.type) ? tag.type : tag;
+        return tagValue && tagValue.toLowerCase() === lowerCaseCategory;
+    })
+  );
+
+  // 3. Render
+  if (filteredItems.length > 0) {
+    const fragment = document.createDocumentFragment();
+
+    const section = document.createElement('section');
+    section.classList.add('menu-group');
+
+    const header = document.createElement('h2');
+    header.textContent = categoryName; 
+    header.classList.add('menu-group-title');
+
+    const list = document.createElement('ul');
+    list.classList.add('item-list-grid');
+    
+    // Sort A-Z
+    filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+    
+    filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
+
+    section.appendChild(header);
+    section.appendChild(list);
+    fragment.appendChild(section);
+    
+    menuContainer.appendChild(fragment);
+   
+  } else {
+    menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
+  }
+}
 function openCustomizeModal(item) {
   console.log("Opening modal for item:", item);
   currentItem = item;
@@ -452,15 +488,18 @@ function openCustomizeModal(item) {
   const modalImage = document.getElementById('modal-image');
   const orderNotesTextarea = document.getElementById('order-notes');
   
-  // --- FIX: Select by CLASS instead of ID, and include fallback ---
+  // FIX: Select by CLASS instead of ID, and include fallback
   const scrollArea = document.querySelector('.scroll-area') || document.querySelector('.modal-content');
 
   let selectedAddOnPrices = {};
+
   // --- RESET AND POPULATE MODAL ---
   title.textContent = item.name;
   chineseTitle.textContent = item.name_chinese;
   optionsContainer.innerHTML = ''; 
-  defaultPrice.textContent = `$${item.pricing[0].price.toFixed(2)}`; 
+  // Ensure pricing exists
+  const displayPrice = (item.pricing && item.pricing[0]) ? item.pricing[0].price : 0;
+  defaultPrice.textContent = `$${displayPrice.toFixed(2)}`; 
 
   if (orderNotesTextarea) {
       orderNotesTextarea.value = '';
@@ -471,9 +510,18 @@ function openCustomizeModal(item) {
     modalImage.src = 'graphics/' + item.image;
     modalImage.alt = item.name;
   } else {
-    const categoryFileName = item.category.replace(/ \/ /g, '-');
+    // Safe fallback for category name
+    const catName = item.category || "Misc";
+    const categoryFileName = catName.replace(/ \/ /g, '-');
     modalImage.src = `graphics/category_fallback/${categoryFileName}.png`; 
-    modalImage.alt = `A placeholder image for the ${item.category} category`
+    modalImage.alt = `A placeholder image for the ${catName} category`;
+  }
+  
+  // Handle Sold Out visual in modal (Grayscale)
+  if (item.isSoldOut) {
+      modalImage.style.filter = 'grayscale(100%)';
+  } else {
+      modalImage.style.filter = 'none';
   }
   modalImage.style.display = 'block';
 
@@ -481,9 +529,9 @@ function openCustomizeModal(item) {
     currentPrice = basePrice + addOnPrice;
     updateCartButtonPrice(); 
   };
-  console.log("version 0.3")
- 
+  console.log("version 0.4 - Fix Tags");
 
+  // --- PRICING OPTIONS ---
   if (item.pricing.length === 1) {
     basePrice = item.pricing[0].price;
   } else if (item.pricing && item.pricing.length > 0) {
@@ -491,13 +539,16 @@ function openCustomizeModal(item) {
     pricingGroup.className = 'option-group';
     let optionTypeKey = 'temp'; 
     let optionGroupTitle = 'Temperature';
+    
     if (item.pricing[0].size && item.pricing[0].size !== 'default') {
         optionTypeKey = 'size';
         optionGroupTitle = 'Size';
     }
+    
     const pricingTitle = document.createElement('h4');
     pricingTitle.textContent = optionGroupTitle;
     pricingGroup.appendChild(pricingTitle);
+    
     item.pricing.forEach((priceOption,index) => {
         const label = document.createElement('label');
         const radio = document.createElement('input');
@@ -525,7 +576,12 @@ function openCustomizeModal(item) {
 
   // --- HANDLE ADD-ONS ---
   if (item.addOns && item.addOns.length > 0) {
-    const isComboItem = item.tags && item.tags.some(tag => tag.toLowerCase() === 'combo');
+    
+    // --- FIX: Safely check for 'combo' tag ---
+    const isComboItem = item.tags && item.tags.some(tag => {
+        const val = (typeof tag === 'object' && tag.type) ? tag.type : tag;
+        return val && val.toLowerCase() === 'combo';
+    });
 
     item.addOns.forEach(addOnGroupData => {
         const addOnGroup = document.createElement('div');
@@ -533,7 +589,6 @@ function openCustomizeModal(item) {
 
         let headerContainer;
         let optionsListContainer;
-        let titleGroup;
         const addOnTitle = document.createElement('h4');
         addOnTitle.textContent = addOnGroupData.title;
 
@@ -563,7 +618,7 @@ function openCustomizeModal(item) {
               const extraCostDisplay = document.createElement('div');
               extraCostDisplay.className = 'extra-cost-display';
               extraCostDisplay.id = 'extaCostHighlight'
-              extraCostDisplay.textContent = `+$${postLimitPrice.toFixed(2)} for additional selections.`;
+              extraCostDisplay.textContent = `+$${postLimitPrice ? postLimitPrice.toFixed(2) : "0.00"} for additional selections.`;
               titleGroup.appendChild(extraCostDisplay);
             }
 
@@ -574,24 +629,20 @@ function openCustomizeModal(item) {
             optionsListContainer.className = 'accordion-content';
 
             headerContainer.addEventListener('click', () => {
-            // 1. Find all other accordions that are currently open
-            const allAccordions = optionsContainer.querySelectorAll('.option-group.is-accordion');
-
-            // 2. Loop through them and close any that aren't the one currently being clicked
-            allAccordions.forEach(acc => {
-                if (acc !== addOnGroup) {
-                    acc.classList.remove('is-open');
-                }
+                const allAccordions = optionsContainer.querySelectorAll('.option-group.is-accordion');
+                allAccordions.forEach(acc => {
+                    if (acc !== addOnGroup) {
+                        acc.classList.remove('is-open');
+                    }
+                });
+                addOnGroup.classList.toggle('is-open');
             });
-
-            // 3. Toggle the state of the clicked accordion
-            addOnGroup.classList.toggle('is-open');
-        });
             
             addOnGroup.appendChild(headerContainer);
             addOnGroup.appendChild(optionsListContainer); 
 
         } else {
+            // Standard View
             headerContainer = addOnGroup; 
             optionsListContainer = addOnGroup; 
             headerContainer.appendChild(addOnTitle);
@@ -604,6 +655,7 @@ function openCustomizeModal(item) {
                 optionsListContainer.appendChild(limitTextDisplay);
             }
         }
+        
         if (addOnGroupData.freeToppingLimit) {
             addOnGroup.dataset.freeLimit = addOnGroupData.freeToppingLimit;
         }
@@ -612,7 +664,6 @@ function openCustomizeModal(item) {
         addOnGroupData.choices.forEach(choice => {
             const choiceName = (typeof choice === 'object') ? choice.addOnName : choice;
             const freeLimit = addOnGroupData.freeToppingLimit;
-
             const choicePrice = (freeLimit !== undefined) ? 0 : ((typeof choice === 'object' && choice.price) ? choice.price : 0);
             
             const label = document.createElement('label');
@@ -639,7 +690,6 @@ function openCustomizeModal(item) {
             const input = event.target;
             const groupTitle = input.name;
             const groupElement = input.closest('.option-group');
-            
             const limit = addOnGroupData.limit;
             
             if (input.type === 'checkbox' && limit !== undefined) {
@@ -697,14 +747,9 @@ function openCustomizeModal(item) {
   updateCartButtonPrice(); 
   customizeModal.classList.remove('hidden');
 
-  // --- FIX: Reset Scroll Position Logic ---
-  // Using requestAnimationFrame ensures this runs AFTER the modal is rendered and visible
   requestAnimationFrame(() => {
     if (scrollArea) {
-      console.log("Resetting scroll position to top");
       scrollArea.scrollTop = 0;
-    } else {
-        console.warn("Could not find .scroll-area to reset scroll position");
     }
   });
 }

@@ -141,33 +141,85 @@ if (logoutBtn) {
         signOut(auth).then(() => window.location.href = "login.html");
     });
 }
-async function invalidateMenuCache() {
-    console.log("Button clicked! Starting cache invalidation...");
-    
-    if (!db) {
-        console.error("Database not initialized!");
-        alert("❌ Database not available");
-        return;
-    }
-    
-    const metadataRef = doc(db, "metadata", "menuInfo");
-    
+async function syncMenuToFirestore() {
+    const btn = document.getElementById('sync-button'); // ID of your button
+    if (btn) btn.disabled = true;
+
     try {
-        console.log("Attempting to write to Firestore...");
+        console.log("📥 Fetching public menu.json...");
         
-        await setDoc(metadataRef, {
-            lastUpdated: serverTimestamp()
-        }, { merge: true });
+        // 1. Fetch the JSON file from your own live site (or relative path)
+        const response = await fetch('./menu.json'); 
+        // OR if your admin site is in a different folder: fetch('../docs/publicSite/menu.json')
         
-        console.log("Write successful!");
-        alert("✅ Menu cache updated! Users will fetch fresh data.");
-        
+        if (!response.ok) throw new Error("Could not find menu.json");
+        const rawData = await response.json();
+
+        // 2. Flatten the Data (Same logic as main.js)
+        let flatList = [];
+        let categoryGroups = [];
+
+        // Structure detection
+        if (Array.isArray(rawData)) categoryGroups = rawData;
+        else if (rawData.menu) categoryGroups = rawData.menu;
+        else if (rawData.categories) categoryGroups = rawData.categories;
+        else categoryGroups = Object.values(rawData).length > 0 && Array.isArray(Object.values(rawData)[0]) ? Object.values(rawData)[0] : Object.values(rawData);
+
+        // Flattening loop
+        categoryGroups.forEach(group => {
+            const catName = group.category_name_english || group.category_name_chinese || "Misc";
+            if (group.items) {
+                group.items.forEach(item => {
+                    if (!item.id) item.id = `${catName}_${Math.random().toString(36).substr(2, 9)}`;
+                    // We only need critical data for the backend
+                    flatList.push({
+                        id: item.id,
+                        name: item.name_english || item.name_chinese,
+                        pricing: item.pricing,
+                        addOns: item.addOns || []
+                    });
+                });
+            }
+        });
+
+        console.log(`✅ Processed ${flatList.length} items. Starting Upload...`);
+
+        // 3. Upload to Firestore in Batches (Max 500 ops per batch)
+        const db = getFirestore();
+        let batch = writeBatch(db);
+        let operationCount = 0;
+        let batchCount = 0;
+
+        for (const item of flatList) {
+            const docRef = doc(db, "menuItems", item.id);
+            batch.set(docRef, item);
+            operationCount++;
+
+            if (operationCount >= 400) {
+                await batch.commit();
+                console.log(`📦 Batch ${++batchCount} committed.`);
+                batch = writeBatch(db); // Start new batch
+                operationCount = 0;
+            }
+        }
+
+        // Commit remaining items
+        if (operationCount > 0) {
+            await batch.commit();
+        }
+
+        alert("✅ Success! Database synced with menu.json.");
+
     } catch (error) {
-        console.error("Error updating metadata:", error);
-        alert("❌ Failed to invalidate cache: " + error.message);
+        console.error("Sync Error:", error);
+        alert("❌ Error syncing menu: " + error.message);
+    } finally {
+        if (btn) btn.disabled = false;
     }
 }
 
+// Make it available to your HTML button
+window.syncMenuToFirestore = syncMenuToFirestore;
 // Add this NEW function right after
 function initializeCacheButton() {
     const updateCacheBtn = document.getElementById('update-cache-btn');
@@ -178,7 +230,7 @@ function initializeCacheButton() {
     }
     
     console.log('Cache update button found, attaching listener...');
-    updateCacheBtn.addEventListener('click', invalidateMenuCache);
+    updateCacheBtn.addEventListener('click', syncMenuToFirestore);
 }
 // --- 4. LOAD MENU DATA ---
 async function loadMenuData() {
