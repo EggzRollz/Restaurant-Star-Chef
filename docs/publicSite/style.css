@@ -1482,8 +1482,9 @@ main {
   padding-bottom:40px;
   padding-left:20px;
   padding-right:20px;
-  
+  overflow-x: none;
   font-family: "Asap Condensed", sans-serif;
+  
 }
 
 .footer-container {
@@ -1712,14 +1713,11 @@ hr.divider {
     padding-bottom: 20px;
     
 }
-@media (min-width: 796px){
+
   .menu-nav-wrapper.scrolled .menu-nav {
-  border-bottom-color: rgb(132, 132, 132);
+   border-bottom-color: rgb(132, 132, 132);
 
-}
-
-}
-
+  }
 
 .menu-nav ul {
   display: flex;

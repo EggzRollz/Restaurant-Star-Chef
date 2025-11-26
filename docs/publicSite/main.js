@@ -20,9 +20,9 @@ try {
 enableIndexedDbPersistence(db)
   .catch((err) => {
       if (err.code == 'failed-precondition') {
-          console.log("Persistence failed: Multiple tabs open");
+          console.warn('Firebase persistence enabled in another tab already.');
       } else if (err.code == 'unimplemented') {
-          console.log("Persistence not available in this browser");
+          console.warn('Current browser does not support persistence.');
       }
   });
 
