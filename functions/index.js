@@ -59,44 +59,73 @@ function calculateVerifiedItemPrice(menuItem, orderItem) {
     return basePrice + addOnPrice;
 }
 
-
-async function getCachedMenuItem(itemId) {
+async function getMenuItemsBatch(itemIds) {
+    const uniqueIds = [...new Set(itemIds)]; // Remove duplicates
     const now = Date.now();
-    const cachedItem = menuCache[itemId];
+    const missedIds = [];
+    const itemMap = {}; // Will hold { itemId: itemData }
 
-    // Return cached item if it exists and is less than 10 mins old
-    if (cachedItem && (now - cachedItem.timestamp < CACHE_DURATION)) {
-        return cachedItem.data;
+    // 1. Check Cache first
+    uniqueIds.forEach(id => {
+        const cached = menuCache[id];
+        if (cached && (now - cached.timestamp < CACHE_DURATION)) {
+            itemMap[id] = cached.data;
+        } else {
+            missedIds.push(id);
+        }
+    });
+
+    // 2. If we have everything in cache, return immediately
+    if (missedIds.length === 0) return itemMap;
+
+    // 3. Fetch ONLY missing items in ONE Firestore call (batch read)
+    // Note: getAll supports passing a list of document references
+    const refs = missedIds.map(id => admin.firestore().collection('menuItems').doc(id));
+    
+    if (refs.length > 0) {
+        const snapshots = await admin.firestore().getAll(...refs);
+        
+        snapshots.forEach(snap => {
+            if (snap.exists) {
+                const data = snap.data();
+                // Important: Ensure the data has the ID attached for easy reference later
+                // (If your DB data doesn't have an 'id' field, this adds it safely)
+                if (!data.id) data.id = snap.id; 
+
+                // Save to Cache
+                menuCache[snap.id] = { data: data, timestamp: now };
+                itemMap[snap.id] = data;
+            }
+        });
     }
 
-    // Otherwise, read from Firebase
-    const docRef = admin.firestore().collection('menuItems').doc(itemId);
-    const docSnap = await docRef.get();
-
-    if (docSnap.exists) {
-        const data = docSnap.data();
-        // Save to cache
-        menuCache[itemId] = { data: data, timestamp: now };
-        return data;
-    }
-    return null;
+    return itemMap;
 }
-
-
 // --- 2. SHARED DB CALCULATION HELPER (Prevents Code Duplication) ---
 // This fixes the missing function error and ensures security across all endpoints
 async function calculateCartTotal(items) {
     let calculatedTotal = 0;
     let itemSummary = [];
-    const COLLECTION_NAME = 'menuItems'; 
+    
+    if (!items || items.length === 0) {
+        return { subtotal: 0, tax: 0, totalWithTax: 0, amountInCents: 0, itemSummary: [] };
+    }
 
+    // 1. Extract IDs from the cart
+    const itemIds = items.map(i => i.id);
+
+    // 2. FETCH ALL ITEMS AT ONCE (Optimization: 1 Read vs N Reads)
+    const dbItemMap = await getMenuItemsBatch(itemIds);
+
+    // 3. Calculate using the Map
     for (const item of items) {
         if (!item.quantity || item.quantity <= 0) continue; 
 
-        // ✅ USE THE CACHE FUNCTION
-        const dbData = await getCachedMenuItem(item.id);
+        // Get data from our new map
+        const dbData = dbItemMap[item.id];
 
         if (dbData) {
+            // Use your existing math helper
             const price = calculateVerifiedItemPrice(dbData, { customizations: item.options || {} });
 
             if (price !== null && !isNaN(price)) {
@@ -119,7 +148,6 @@ async function calculateCartTotal(items) {
         itemSummary: itemSummary
     };
 }
-
 
 // --- 3. CREATE INTENT ---
 exports.createPaymentIntent = onRequest(

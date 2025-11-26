@@ -383,29 +383,49 @@ try {
     paymentRadios.forEach(radio => {
         radio.addEventListener('change', togglePaymentSection);
     });
+let debounceTimer = null; // Variable to track the timer
 
-    window.addEventListener('cartUpdated', async () => {
+window.addEventListener('cartUpdated', async () => {
+    // 1. Cancel the previous timer immediately (Stop the pending API call)
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = null;
+    }
+
     // Refresh cart data
     cart.loadFromStorage();
     const hasItems = cart.getItems().length > 0;
 
     const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
     const isOnline = selectedOption && selectedOption.value === 'online';
+    const placeOrderBttn = document.getElementById("place-order-button");
 
-    // SCENARIO 1: Online, Initialized, and Cart has items -> UPDATE PRICE
+    // SCENARIO 1: Online, Initialized, and Cart has items -> UPDATE PRICE (DEBOUNCED)
     if (isOnline && isStripeInitialized && hasItems) {
-        await updateStripeTotal();
+        
+        // UX: Update button immediately so user knows something is happening
+        if (placeOrderBttn) {
+            placeOrderBttn.disabled = true;
+            placeOrderBttn.textContent = "Calculating..."; 
+        }
+
+        // START TIMER: Only call backend if user stops clicking for 1 second
+        debounceTimer = setTimeout(async () => {
+            await updateStripeTotal(); 
+        }, 1000); 
     }
-    // SCENARIO 2: Online, Not Initialized, and Cart has items -> LOAD STRIPE
+    
+    // SCENARIO 2: Online, Not Initialized -> LOAD STRIPE (No debounce needed, runs once)
     else if (isOnline && !isStripeInitialized && hasItems) {
         togglePaymentSection();
     }
+    
     // SCENARIO 3: Cart is empty OR User switched to 'In-Store' -> CLEAN UP
     else {
         // Hide container
         onlinePaymentContainer.classList.add('hidden');
         
-        // If we have an element mounted, unmount it to be safe
+        // If we have an element mounted, unmount it
         if (paymentElement) {
             paymentElement.unmount();
             paymentElement = null;
@@ -415,6 +435,12 @@ try {
         isStripeInitialized = false;
         currentPaymentIntentId = null;
         document.getElementById('payment-element').innerHTML = "";
+        
+        // Reset button text since we aren't calculating anymore
+        if (placeOrderBttn) {
+            placeOrderBttn.disabled = false;
+            placeOrderBttn.textContent = "Place Order";
+        }
     }
 });
 });
