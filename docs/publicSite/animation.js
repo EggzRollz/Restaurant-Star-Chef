@@ -168,31 +168,6 @@ const setupStickyNav = () => {
   console.log('[DEBUG] Resize listener attached to window.');
 
 
-  // --- 5. SMOOTH SCROLLING FOR MENU LINKS ---
-  if (menuNavLinks.length > 0 && mainHeader && menuNav) {
-    menuNavLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-          // Calculation needs a slight adjustment for sticky positioning
-          const headerHeight = mainHeader.offsetHeight;
-          const menuNavHeight = menuNav.offsetHeight;
-          // The total space taken up by the fixed/sticky elements at the top
-          const totalOffset = headerHeight + menuNavHeight;
-          
-          // The target's position from the top of the scroller, minus the offset
-          const scrollTarget = targetElement.offsetTop - totalOffset;
-          
-          scroller.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-        } else {
-            console.error(`[DEBUG] ERROR: Smooth scroll target element '${targetId}' not found.`);
-        }
-      });
-    });
-  }
 
   // --- 6. FADE-IN ELEMENTS ON SCROLL (INTERSECTION OBSERVER) ---
   const elementsToWatch = document.querySelectorAll('.splash-text, .minor-splash-text, .opening-hours-text, .location-text, .awards, .gallery img, .awards-plaque, .our-menu');

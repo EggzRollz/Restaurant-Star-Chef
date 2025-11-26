@@ -19,6 +19,10 @@ let isStripeInitialized = false;
 let paymentElement;
 let currentPaymentIntentId = null;
 
+
+
+
+
 // --- 3. HELPER: GET ORDER NUMBER (Your original code) ---
 async function getNextOrderNumber(db) {
     const counterRef = doc(db, "counters", "orderCounter");

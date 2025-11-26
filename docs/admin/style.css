@@ -206,12 +206,25 @@ h1 {
 /* --- ITEM LIST --- */
 .order-items-list { 
     list-style: none; 
-    padding-left: 0; 
+    padding-left: 0;
+     
 }
-.order-items-list li { 
-    border-top: 1px dashed #ced4da;
-    padding-left: 5px;
-    font-size: 1.1rem; /* Larger text for Chefs to read easily */
+.order-items-list li:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.06); /* 6% dark overlay */
+    border-radius: 4px; /* Optional: rounds the corners of the stripe */
+}
+
+/* 2. Add some breathing room so the background color looks good */
+.order-items-list li {
+    padding: 8px 6px; /* 8px top/bottom, 6px left/right */
+    margin-bottom: 2px; /* Tiny gap between items */
+    border-top: none; /* Remove the old dashed line if you prefer the solid colors */
+    border-bottom: 1px dashed #dee2e6; /* Move separator to bottom if you keep it */
+}
+
+/* Remove border from the very last item so it looks clean */
+.order-items-list li:last-child {
+    border-bottom: none;
 }
 .order-items-list li:first-child { border-top: none; } 
 
@@ -350,7 +363,24 @@ h1 {
 }
 
 
+.card-success {
+    border-color: #28a745 !important;
+    background-color: #d4edda !important;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+    pointer-events: none; /* Prevent double clicking */
+}
 
+/* State 2: Fade Out & Shrink */
+.card-removing {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px); /* Shrink and drop down */
+    max-height: 0; /* Collapse space so grid rearranges */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}
 
 
 

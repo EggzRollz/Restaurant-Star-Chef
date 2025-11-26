@@ -439,7 +439,7 @@ main {
     position: fixed; 
     top: 0;
     right: 0; /* Fix to 0 to align with edge */
-    height: 100vh;
+    height: 100dvh;
     width: 60vw;
     max-width: 400px;
     
@@ -596,6 +596,32 @@ main {
 #cart-items-container .cart-item-total-price {
     display: none; 
 }
+/* --- OPTION 2: GHOST SHRINK --- */
+@keyframes ghostExit {
+    0% {
+        transform: scale(1);
+        filter: blur(0px);
+        opacity: 1;
+        max-height: 120px;
+        margin-bottom: 25px;
+    }
+    100% {
+        transform: scale(0.9); /* Shrinks slightly */
+        filter: blur(10px); /* Becomes blurry */
+        opacity: 0;
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border: none;
+    }
+}
+
+.cart-item.removing {
+    animation: ghostExit 0.4s ease-out forwards;
+    pointer-events: none;
+    overflow: hidden;
+}
 
 /* 8. Empty Cart Message */
 #cartEmptyMessage {
@@ -623,7 +649,7 @@ main {
       background-color: var(--dark-bg);
       border-top: 1px solid var(--gold-accent);
       margin-top: auto; /* Pushes to bottom */
-      margin-bottom:40px;
+      margin-bottom:10px;
       min-height:10vh;
   }
 }
@@ -668,7 +694,7 @@ main {
     
     /* GOLD TEXT - No white here */
     color: var(--gold-accent, #c5a059); 
-    
+    text-align: center;
     font-family: "Noto Sans Display", sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
@@ -1456,7 +1482,7 @@ main {
   padding-bottom:40px;
   padding-left:20px;
   padding-right:20px;
-
+  
   font-family: "Asap Condensed", sans-serif;
 }
 
@@ -1464,7 +1490,7 @@ main {
   display: flex;
   flex-wrap: wrap; 
   justify-content: space-between; 
-  gap: 10%; 
+  gap: 4%; 
   max-width: 1200px;
   margin: 0 auto; 
   padding-bottom: 30px;
@@ -2488,6 +2514,7 @@ hr.divider {
 .is-accordion .accordion-content {
   margin-top: 0;    /* Explicitly remove any top margin from the content */
 }
+
 .checkout-background {
     min-height: 100vh;
     width: 100%;
@@ -3226,9 +3253,10 @@ input.input-error::placeholder {
 	--text-main: #e0e0e0;
 	--text-muted: #888888;
 
-	--font-header: 'Cinzel', serif;
-	--font-body: 'Inter', sans-serif;
-	--font-chinese: 'Noto Serif SC', serif;
+	/* Simplified font system - only what's needed */
+	--font-display: 'Great Vibes', cursive;
+	--font-chinese: 'Yuji Mai', serif;
+	--font-body: "Asap Condensed", sans-serif;
 }
 
 * {
@@ -3238,10 +3266,10 @@ input.input-error::placeholder {
 }
 
 /* ========================================= 
-   2. Background & Atmosphere 
+   Background & Atmosphere 
 ========================================= */
 body.thank-you-page-background {
-	min-height: 100vh; /* Use min-height to be more flexible */
+	min-height: 100vh;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -3249,47 +3277,34 @@ body.thank-you-page-background {
 	background-color: var(--bg-dark);
 	color: var(--text-main);
 	font-family: var(--font-body);
-	overflow-x: hidden; /* Prevent horizontal scroll */
-    padding: 1rem; /* Add some padding so the card doesn't touch the edges on mobile */
+	overflow-x: hidden;
+	padding: 1rem;
 
 	/* Cinematic Lighting & Subtle Lattice Pattern */
 	background-image:
-		/* Strong Vignette for focus */
 		radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, #000000 100%),
-		/* Subtle Cross-hatch/Lattice texture */
 		linear-gradient(45deg, rgba(20, 20, 20, 1) 25%, transparent 25%, transparent 75%, rgba(20, 20, 20, 1) 75%, rgba(20, 20, 20, 1)),
 		linear-gradient(45deg, rgba(20, 20, 20, 1) 25%, transparent 25%, transparent 75%, rgba(20, 20, 20, 1) 75%, rgba(20, 20, 20, 1));
-	background-size: 100% 100%,
-		30px 30px,
-		30px 30px;
-	background-position: 0 0,
-		0 0,
-		15px 15px;
+	background-size: 100% 100%, 30px 30px, 30px 30px;
+	background-position: 0 0, 0 0, 15px 15px;
 }
 
 /* ========================================= 
-   3. The Card (Main Container) 
+   The Card (Main Container) 
 ========================================= */
 .card {
-	background: rgba(19, 20, 24, 0.85); /* Semi-transparent dark */
-	backdrop-filter: blur(10px); /* Glassmorphism */
-	border: 1px solid rgba(212, 175, 55, 0.2); /* Faint gold border */
-	
-    /* DYNAMIC PADDING:
-       clamp(MIN, PREFERRED, MAX)
-       Vertical padding: min 2rem, max 3rem, scales with 4% of viewport width.
-       Horizontal padding: min 1.5rem, max 4rem, scales with 6% of viewport width. */
+	background: rgba(19, 20, 24, 0.85);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(212, 175, 55, 0.2);
 	padding: clamp(2rem, 1rem + 4vw, 3rem) clamp(1.5rem, 1rem + 6vw, 4rem);
-
 	max-width: 500px;
-	width: 100%; /* Changed from 90% to 100% since body has padding now */
+	width: 100%;
 	text-align: center;
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
 	position: relative;
 	animation: fadeUp 1.2s ease-out forwards;
 }
 
-/* Top/Bottom Gold Accents on Card */
 .card::before,
 .card::after {
 	content: '';
@@ -3310,84 +3325,41 @@ body.thank-you-page-background {
 }
 
 /* ========================================= 
-   4. Header & Branding 
+   Header & Branding 
 ========================================= */
 .header {
-    /* DYNAMIC MARGIN: Reduces on small screens */
 	margin-bottom: clamp(1.5rem, 1rem + 2vw, 2.5rem);
 }
 
 .restaurant-name {
-
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-style: normal;
+	font-size: 4rem;
 	letter-spacing: 4px;
 	color: rgb(173, 171, 171);
 	margin-bottom: 0.5rem;
-  font-family: "Great Vibes", cursive;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 4rem;
-
 }
 
 .chinese-chars {
-	font-family: "Yuji Mai", serif;
-  font-weight: 100;
-	/* DYNAMIC FONT-SIZE: Scales from 1.5rem up to 1.8rem */
-    font-size: clamp(1.5rem, 2rem + 1vw, 3rem);
+	font-family: var(--font-chinese);
+	font-weight: 100;
+	font-size: clamp(1.5rem, 2rem + 1vw, 3rem);
 	color: rgb(142, 142, 142);
 	opacity: 0.8;
-  
 }
 
 /* ========================================= 
-   5. Icon Animation (Checkmark) 
+   Content Typography 
 ========================================= */
-.icon-container {
-	margin-bottom: 1.5rem;
-	display: flex;
-	justify-content: center;
-}
-
-.checkmark {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	display: block;
-	stroke-width: 2;
-	stroke: var(--gold-primary);
-	stroke-miterlimit: 10;
-	box-shadow: inset 0px 0px 0px var(--gold-primary);
-	animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
-}
-
-.checkmark-circle {
-	stroke-dasharray: 166;
-	stroke-dashoffset: 166;
-	stroke-width: 1;
-	stroke-miterlimit: 10;
-	stroke: var(--gold-primary);
-	fill: none;
-	animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.checkmark-check {
-	transform-origin: 50% 50%;
-	stroke-dasharray: 48;
-	stroke-dashoffset: 48;
-	animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-}
-
-/* ========================================= 
-   6. Content Typography 
-========================================= */
-h1 {
-	font-family: var(--font-header);
+.card h1 {
+	font-family: var(--font-body);
 	color: var(--gold-light);
-    /* DYNAMIC FONT-SIZE: Scales from 1.6rem up to 1.8rem */
 	font-size: clamp(1.6rem, 1.4rem + 1vw, 1.8rem);
-	font-weight: 400;
+	font-weight: 200; /* Slightly bolder for hierarchy */
 	margin-bottom: 1rem;
-	text-transform: capitalize;
+	letter-spacing: 0.5px; /* Subtle spacing for elegance */
+	
 	/* Gold gradient text effect */
 	background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa8c2c);
 	-webkit-background-clip: text;
@@ -3395,6 +3367,7 @@ h1 {
 	color: transparent;
 	background-size: 200% auto;
 	animation: shine 3s linear infinite;
+  text-transform: uppercase;
 }
 
 .message {
@@ -3407,36 +3380,92 @@ h1 {
 }
 
 .pickup-section {
-	/* DYNAMIC MARGIN: Reduces on small screens */
-    margin: clamp(1rem, 5rem + 1.5vw, 1.25rem) 0;
+	margin: clamp(1rem, 5rem + 1.5vw, 1.25rem) 0;
 	padding: 1.5rem;
-	border-radius: 6px; /* Softly rounded corners for a modern feel */
-	
-	/* The core of the new style */
-	background-color: rgba(0, 0, 0, 0.2); /* A darker, transparent base */
-	border: 1px solid rgba(224, 224, 224, 0.1); /* A very faint light border for definition */
-	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow for a recessed look */
+	border-radius: 6px;
+	background-color: rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(224, 224, 224, 0.1);
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .pickup-label {
-	font-family: var(--font-header);
-	font-size: 0.9rem;
+	font-family: var(--font-body);
+	font-size: 0.75rem;
 	letter-spacing: 2px;
 	text-transform: uppercase;
-	color: var(--text-muted); /* Muted color to give prominence to the time */
+	color: var(--text-muted);
 	margin-bottom: 0.5rem;
-	font-weight: 400;
+	font-weight: 500;
 }
 
 .pickup-time {
-	font-family: var(--font-header);
-    /* DYNAMIC FONT-SIZE: This was the biggest issue. 
-       Now it scales smoothly from a minimum of 2.2rem up to a max of 2.8rem */
+	font-family: var(--font-body);
 	font-size: clamp(2.2rem, 1.5rem + 3.5vw, 2.8rem);
-	color: var(--text-main); /* Crisp, high-contrast off-white */
+	color: var(--text-main);
 	font-weight: 700;
 	letter-spacing: 1px;
-	text-shadow: none; /* Ensure there is no glow */
+	text-shadow: none;
+}
+
+/* Container Spacing */
+.action-container {
+	margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+	padding-bottom: 0.5rem;
+}
+/* BUTTON STYLE: Underline Draw */
+.btn-keep-shopping {
+display: inline-block;
+position: relative;
+text-decoration: none;
+font-family: var(--font-header);
+font-size: 0.85rem;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(--text-main);
+padding: 0.5rem 0; /* Minimal padding */
+margin: 0 1rem;
+background: transparent;
+}
+
+.btn-keep-shopping::after {
+content: '';
+position: absolute;
+left: 0;
+bottom: -5px;
+width: 100%;
+height: 1px;
+background: var(--gold-primary);
+/* Animation setup */
+transform: scaleX(0);
+transform-origin: right;
+transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.btn-keep-shopping:hover {
+color: var(--gold-primary);
+text-shadow: 0 0 15px rgba(212, 175, 55, 0.8); /* Strong glow on text */
+}
+.btn-keep-shopping:hover::after {
+transform: scaleX(1);
+transform-origin: left;
+box-shadow: 0 0 10px rgba(212, 175, 55, 1); /* Glow on the line */
+}
+
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes shine {
+	to {
+		background-position: 200% center;
+	}
 }
 .opening-hours-section {
   background-color: black;

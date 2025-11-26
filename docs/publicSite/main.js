@@ -212,22 +212,14 @@ function initMenu() {
 
             // 2. HARDCODED SCROLL (Phone vs Desktop)
             setTimeout(() => {
-                // --- SETTINGS START ---
-                const mobileBreakpoint = 900; // Pixel width for "Mobile"
-                const desktopScrollPos = 600; // Scroll amount for Desktop
-                const mobileScrollPos = 500;  // Scroll amount for Phones
-                // --- SETTINGS END ---
-
-                // Check if screen width is less than or equal to 768px
-                const targetScroll = window.innerWidth <= mobileBreakpoint 
-                    ? mobileScrollPos 
-                    : desktopScrollPos;
-
-                scrollContainer.scrollTo({
-                    top: targetScroll,
-                    behavior: 'smooth'
-                });
-            }, 20);
+                if (scrollContainer) {
+                    scrollContainer.scrollTo({
+                        // clientHeight of the container is exactly equal to 100vh
+                        top: scrollContainer.clientHeight -30, 
+                        behavior: 'smooth'
+                    });
+                }
+            }, 10);
 
             // 3. Slider Animation
             const menuNavSlider = document.getElementById('menuNav');
@@ -387,10 +379,10 @@ function renderSingleCategory(categoryName) {
 
     // Add the fully built section to the fragment
     fragment.appendChild(section);
-
+    
     // Append the entire fragment to the DOM in one operation.
     menuContainer.appendChild(fragment);
-
+   
   } else {
     // If no items are found, display the message.
     menuContainer.innerHTML = `<p>No items found in the "${categoryName}" category.</p>`;
@@ -443,6 +435,7 @@ function renderAllItemsByCategory() {
     }
   });
 }
+
 function openCustomizeModal(item) {
   console.log("Opening modal for item:", item);
   currentItem = item;
@@ -488,7 +481,7 @@ function openCustomizeModal(item) {
     currentPrice = basePrice + addOnPrice;
     updateCartButtonPrice(); 
   };
-  console.log("version 0.2")
+  console.log("version 0.3")
  
 
   if (item.pricing.length === 1) {

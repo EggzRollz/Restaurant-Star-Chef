@@ -67,7 +67,7 @@ export function validateCheckoutForm() {
         }
     }
 
-    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneInvalid || isPickupTimeEmpty;
+    const areAnyFieldsEmpty = isFirstNameEmpty || isLastNameEmpty || isPhoneInvalid || isPickupTimeEmpty ;
 
     if (areAnyFieldsEmpty) {
         if (clientInfoContainer) {
@@ -199,19 +199,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // SINGLE SOURCE OF TRUTH for button state
+    
+ // SINGLE SOURCE OF TRUTH for button state
     function updateButtonState() {
         const isCartEmpty = cart.getItems().length === 0;
         const now = new Date();
+        const storeTimeJSON = now.toLocaleString("en-US", {
+        timeZone: "America/Toronto"
+            });
+            const storeTime = new Date(storeTimeJSON);
+
+        
+            const currentHour = storeTime.getHours();
+            const currentMinute = storeTime.getMinutes();
  
-        const isStoreClosed = false;
-        //const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+        
+        const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
 
         // The button should be disabled if the store is closed OR if the cart is empty
         placeOrderBttn.disabled = isStoreClosed || isCartEmpty;
     }
 
- 
 // 3. (Optional but recommended) Close when clicking outside
 window.addEventListener('click', (e) => {
     if (!pickupDropdownContainer.contains(e.target)) {
@@ -245,7 +253,7 @@ window.addEventListener('click', (e) => {
    
     const isBeforeOpening = currentHour < 11;
     const isAfterClosing = (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
-
+    
     // This logic seems reversed, I've flipped it to what I think you intend:
     // This block should run if the store is OPEN.
     if (!(isBeforeOpening || isAfterClosing)) {
@@ -474,41 +482,69 @@ window.addEventListener('click', (e) => {
 
 
 
-    // Event Listeners
-   if (cartContainer) {
+if (cartContainer) {
     cartContainer.addEventListener('click', (event) => {
         const target = event.target;
-        const index = target.dataset.index;
+        // Look for the closest button in case user clicked the icon inside
+        const button = target.closest('button'); 
+        
+        // Safety check: ensure we actually clicked a button
+        if (!button) return;
 
+        // Get index from the button (ensure your HTML puts data-index on the button)
+        const index = button.dataset.index;
         if (index === undefined) return;
 
         const currentCartItems = cart.getItems();
         const itemToModify = currentCartItems[index];
 
         if (!itemToModify) {
-            console.error(`Could not find item at index ${index} to modify.`);
+            console.error(`Could not find item at index ${index}.`);
             return;
         }
 
-        if (target.matches('.increase-buttn')) {
+        // --- INCREASE ---
+        if (button.matches('.increase-buttn')) {
             itemToModify.quantity++;
+            saveAndTriggerUpdate();
         } 
-        else if (target.matches('.decrease-buttn')) {
-            itemToModify.quantity--;
-            if (itemToModify.quantity <= 0) {
-                currentCartItems.splice(index, 1);
+        
+        // --- DECREASE ---
+        else if (button.matches('.decrease-buttn')) {
+            
+            // CHECK: Will this click remove the item? (Quantity is 1)
+            if (itemToModify.quantity <= 1) {
+                
+                // 1. Find the visual row in the DOM
+                const cartItemRow = button.closest('.cart-item');
+
+                if (cartItemRow) {
+                    // 2. Add the animation class
+                    cartItemRow.classList.add('removing');
+
+                    // 3. WAIT for animation to finish (400ms), then update data
+                    setTimeout(() => {
+                        currentCartItems.splice(index, 1);
+                        saveAndTriggerUpdate(); 
+                    }, 400); // Matches CSS animation duration
+                    
+                    // RETURN EARLY so we don't save twice
+                    return; 
+                }
             }
+
+            // Normal decrease (Quantity > 1)
+            itemToModify.quantity--;
+            saveAndTriggerUpdate();
         }
-        
-        // ⭐ ONLY SAVE ONCE AND SIGNAL ⭐
-        localStorage.setItem('cart', JSON.stringify(cart.getItems()));
-        window.dispatchEvent(new CustomEvent('cartUpdated'));
-        
-        // Don't call saveCartAndRender() here - let the event handler do it
-        // The 'cartUpdated' event will trigger handleCheckoutSync() which re-renders everything
     });
 }
 
+// Helper function to avoid repeating code
+function saveAndTriggerUpdate() {
+    localStorage.setItem('cart', JSON.stringify(cart.getItems()));
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+}
     window.addEventListener('scroll', handleStickySummary);
     window.addEventListener('resize', handleStickySummary);
 

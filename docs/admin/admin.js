@@ -197,31 +197,44 @@ async function loadMenuData() {
 
 // --- 5. DELETE ORDER ---
 // UPDATED: Now requires 'orderId' (the Firestore document ID) AND 'orderNumber' (for the alert)
+// --- 5. DELETE ORDER ---
+// UPDATED: Now requires 'orderId' (the Firestore document ID) AND 'orderNumber' (for the alert)
 async function deleteOrder(orderId, orderNumber) {
-     if (!confirm(`Mark Order #${orderNumber} as Completed?`)) return;
-        const cardToRemove = document.getElementById(`card-${orderId}`);
+    // 1. Confirm intention
+    if (!confirm(`Mark Order #${orderNumber} as Completed?`)) return;
+
+    const cardToRemove = document.getElementById(`card-${orderId}`);
+
+    // 2. Perform Visual Animation (Optimistic UI)
     if (cardToRemove) {
+        // Step A: "Success" Flash (Visual confirmation)
+        cardToRemove.classList.add('card-success');
+        
+        // Remove the 'pending' pulse animation so it doesn't conflict
+        cardToRemove.style.animation = 'none'; 
+
+        await new Promise(resolve => setTimeout(resolve, 200));
+        cardToRemove.classList.add('card-removing');
+
+        await new Promise(resolve => setTimeout(resolve, 500));
         cardToRemove.remove();
     }
 
+    // 3. Update Database in Background
     try {
         const orderRef = doc(db, "orders", orderId);
         
-        // INSTEAD OF DELETING, WE UPDATE THE STATUS
         await updateDoc(orderRef, {
             status: 'resolved'
         });
         
-        console.log(`Order #${orderNumber} marked as completed.`);
-        // The onSnapshot listener in this file will automatically remove it 
-        // because your query should filter out 'completed' items.
+        console.log(`Order #${orderNumber} marked as completed in DB.`);
         
     } catch (error) {
         console.error("Error completing order:", error);
-        alert("Error updating order. Check permissions.");
+        alert("Error updating order. Check internet connection.");
     }
 }
-
 
 function renderCustomizationsFromObject(item) { 
     const customizationContainer = document.createElement('div');
