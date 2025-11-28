@@ -1,18 +1,32 @@
-import { Cart } from './cart.js';  
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-import { firebaseConfig } from "./config.js";
+import { Cart } from './cart.js';
 
 // Helper function to update the red number badge on the cart icon
-export function updateCartQuantityDisplay(cart) {
-    const cartQuantityDisplay = document.getElementById('cartQuantityDisplay');
-    if(cartQuantityDisplay) {
-        cartQuantityDisplay.textContent = cart.cartLength(); 
+export function updateCartQuantityDisplay(cart, element = null) {
+    const displayEl = element || document.getElementById('cartQuantityDisplay');
+    if(displayEl) {
+        displayEl.textContent = cart.cartLength(); 
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. INITIALIZE CART
+    // 1. CACHE ALL ELEMENTS (This was missing in your snippet)
+    const elements = {
+        badge: document.getElementById('cartQuantityDisplay'),
+        overlay: document.querySelector('.overlay'),
+        cartButton: document.querySelector('.cart-button'),
+        closeMenuBtn: document.getElementById('closeMenuBtn'),
+        closeCartBtn: document.getElementById('closeCartBtn'),
+        menuToggle: document.querySelector('.menu-toggle'),
+        cartPreview: document.querySelector('.cart-preview'),
+        navLinks: document.querySelector('.nav-links'),
+        sidebarContainer: document.getElementById('cart-items-container'),
+        sidebarTotalEl: document.getElementById('sidebar-cart-total'),
+        sidebarEmptyMsg: document.getElementById('cartEmptyMessage') || document.querySelector('.empty-cart-text'),
+        template: document.getElementById('cart-item-template'),
+        navLinksAnchors: document.querySelectorAll('.nav-links a')
+    };
+
+    // 2. INITIALIZE CART
     const cart = new Cart();
     const savedItems = JSON.parse(localStorage.getItem('cart')) || [];
     
@@ -22,8 +36,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     // Update badge immediately
-    updateCartQuantityDisplay(cart);
+    updateCartQuantityDisplay(cart, elements.badge);
 
+    // 3. EVENT DELEGATION (Optimized)
+    if (elements.sidebarContainer) {
+        elements.sidebarContainer.addEventListener('click', (e) => {
+            const target = e.target;
+            const button = target.closest('button');
+            
+            if (!button) return;
+
+            // Get the index from the button's data attribute
+            const index = parseInt(button.dataset.index, 10);
+            if (isNaN(index)) return;
+
+            const items = cart.getItems();
+            let hasChanged = false;
+
+            if (button.classList.contains('increase-buttn')) {
+                items[index].quantity++;
+                hasChanged = true;
+            } else if (button.classList.contains('decrease-buttn')) {
+                items[index].quantity--;
+                if (items[index].quantity <= 0) {
+                    items.splice(index, 1);
+                }
+                hasChanged = true;
+            }
+
+            if (hasChanged) {
+                // Update Storage
+                localStorage.setItem('cart', JSON.stringify(items));
+                // Dispatch event
+                window.dispatchEvent(new CustomEvent('cartUpdated'));
+            }
+        });
+    }
+
+    // 4. SYNC LOGIC
     function handleSync() {
         console.log("Sidebar detected update!");
         // 1. Re-read the database (LocalStorage)
@@ -32,183 +82,141 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // 2. Re-draw the Sidebar and Badge
         renderSidebarCart();
-        updateCartQuantityDisplay(cart);
+        updateCartQuantityDisplay(cart, elements.badge);
     }
 
     // Listen for the custom signal from the Menu/Checkout
     window.addEventListener('cartUpdated', handleSync);
-    
     // Listen for changes from other tabs
     window.addEventListener('storage', handleSync);
-    // =======================================================
 
-
-    // 2. SELECT ELEMENTS
-    const overlay = document.querySelector('.overlay');
-    const cartButton = document.querySelector('.cart-button');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const closeCartBtn = document.getElementById('closeCartBtn');
-    const menuToggle = document.querySelector('.menu-toggle');
-    const cartPreview = document.querySelector('.cart-preview');
-    const navLinks = document.querySelector('.nav-links');
-    
-    
-    // Sidebar Elements
-    const sidebarContainer = document.getElementById('cart-items-container');
-    const sidebarTotalEl = document.getElementById('sidebar-cart-total');
-    const sidebarEmptyMsg = document.getElementById('cartEmptyMessage') || document.querySelector('.empty-cart-text');
-
-    // 3. RENDER FUNCTION
+    // 5. RENDER FUNCTION
     function renderSidebarCart() {
-        // Get fresh items from the cart object
-        const items = cart.getItems(); 
-        const template = document.getElementById('cart-item-template');
-
+        // Use the cached elements object
+        const { sidebarContainer, template, sidebarEmptyMsg, sidebarTotalEl } = elements;
+        
         if (!sidebarContainer || !template) return;
 
-        // Clear the current HTML to prevent duplicates
-        sidebarContainer.innerHTML = ''; 
-        let totalAmount = 0; 
+        const items = cart.getItems();
+        let totalAmount = 0;
 
-        // --- Handle Empty State ---
+        // Use a Fragment to minimize reflows
+        const fragment = document.createDocumentFragment();
+
+        // Handle Empty State
         if (items.length === 0) {
             if (sidebarEmptyMsg) sidebarEmptyMsg.style.display = 'block';
             if (sidebarTotalEl) sidebarTotalEl.textContent = '$0.00';
-            updateCartQuantityDisplay(cart); 
+            sidebarContainer.innerHTML = '';
+            updateCartQuantityDisplay(cart, elements.badge);
+            return; 
         } else {
             if (sidebarEmptyMsg) sidebarEmptyMsg.style.display = 'none';
         }
 
-        // --- Loop through items ---
         items.forEach((item, index) => {
-            // Calculate Total
             totalAmount += (item.price * item.quantity);
-            
             const clone = template.content.cloneNode(true);
-            
-            // Fill in basic data
+
+            // Set Text Content
             clone.querySelector('.cart-item-name').textContent = item.name;
             clone.querySelector('.cart-item-defaultPrice').textContent = `$${item.price.toFixed(2)}`;
             clone.querySelector('.quantity-value').textContent = item.quantity;
             clone.querySelector('.cart-item-total-price').textContent = `$${(item.price * item.quantity).toFixed(2)}`;
 
-            // --- Customization Display Logic ---
+            // Set Data-Index for Event Delegation (Crucial!)
+            const incBtn = clone.querySelector('.increase-buttn');
+            const decBtn = clone.querySelector('.decrease-buttn');
+            if (incBtn) incBtn.dataset.index = index;
+            if (decBtn) decBtn.dataset.index = index;
+
+            // Customization Logic
             const customizationEl = clone.querySelector('.cart-item-customization');
             if (customizationEl) {
-                if (item.customizations && Object.keys(item.customizations).length > 0) {
-                    const customizationValues = Object.values(item.customizations);
-                    const validValues = customizationValues.filter(value => value && value !== 'default');
-                    
-                    if (validValues.length > 0) {
-                        const formattedValues = validValues.map(v => Array.isArray(v) ? v.join(', ') : v);
-                        customizationEl.innerHTML = formattedValues.join(', ');
-                    } else {
-                        customizationEl.remove();
-                    }
+                const customizationValues = item.customizations ? Object.values(item.customizations) : [];
+                const validValues = customizationValues.filter(value => value && value !== 'default');
+
+                if (validValues.length > 0) {
+                    // Flatten arrays if any, then join
+                    const formattedValues = validValues.map(v => Array.isArray(v) ? v.join(', ') : v);
+                    customizationEl.innerHTML = formattedValues.join(', ');
                 } else {
                     customizationEl.remove();
                 }
             }
 
-            // --- BUTTON LOGIC ---
-            const decreaseBtn = clone.querySelector('.decrease-buttn');
-            const increaseBtn = clone.querySelector('.increase-buttn');
-
-            if(increaseBtn) increaseBtn.addEventListener("click", () => {
-                items[index].quantity++;
-                
-                // 1. Update Storage
-                localStorage.setItem('cart', JSON.stringify(items));
-                
-                // 2. Shout to everyone (including self) that cart changed
-                window.dispatchEvent(new CustomEvent('cartUpdated'));
-            });
-
-            if(decreaseBtn) decreaseBtn.addEventListener("click", () => {
-                items[index].quantity--; 
-                if (items[index].quantity <= 0) items.splice(index, 1);
-                
-                // 1. Update Storage
-                localStorage.setItem('cart', JSON.stringify(items));
-                
-                // 2. Shout to everyone (including self) that cart changed
-                window.dispatchEvent(new CustomEvent('cartUpdated'));
-            });
-
-            sidebarContainer.appendChild(clone);
+            fragment.appendChild(clone);
         });
 
-        // Update Final Totals
+        // Single DOM update
+        sidebarContainer.innerHTML = '';
+        sidebarContainer.appendChild(fragment);
+
         if (sidebarTotalEl) sidebarTotalEl.textContent = `$${totalAmount.toFixed(2)}`;
     }
-
+    
     // Initial Render
     renderSidebarCart();
 
-    if (cartButton && cartPreview && overlay && navLinks && menuToggle) {
+    // 6. UI INTERACTION LOGIC
+    if (elements.cartButton && elements.cartPreview && elements.overlay && elements.navLinks && elements.menuToggle) {
         
-        // Helper to close everything (used for Overlay click)
+        // Helper to close everything
         const closeAll = () => {
-            navLinks.classList.remove('active');
-            menuToggle.classList.remove('active');
-            cartPreview.classList.remove('active');
-            overlay.classList.remove('active');
+            elements.navLinks.classList.remove('active');
+            elements.menuToggle.classList.remove('active');
+            elements.cartPreview.classList.remove('active');
+            elements.overlay.classList.remove('active');
             document.body.classList.remove('no-scroll');
         };
 
-        // --- 1. CART OPEN LOGIC ---
-        cartButton.addEventListener('click', (e) => {
+        // --- CART OPEN LOGIC ---
+        elements.cartButton.addEventListener('click', (e) => {
             e.stopPropagation();
             renderSidebarCart(); 
-            
-            // REMOVED: closeMobileMenu() call to stop the "either/or" behavior
-            
-            cartPreview.classList.add('active'); // Directly add active
-            overlay.classList.add('active');
+            elements.cartPreview.classList.add('active');
+            elements.overlay.classList.add('active');
             document.body.classList.add('no-scroll');
         });
 
-        // --- 2. HAMBURGER MENU OPEN LOGIC ---
-        menuToggle.addEventListener('click', (e) => {
+        // --- HAMBURGER MENU OPEN LOGIC ---
+        elements.menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            
-            // REMOVED: closeCart() call to stop the "either/or" behavior
-            
-            navLinks.classList.add('active'); // Directly add active
-            menuToggle.classList.add('active');
-            overlay.classList.add('active');
+            elements.navLinks.classList.add('active');
+            elements.menuToggle.classList.add('active');
+            elements.overlay.classList.add('active');
             document.body.classList.add('no-scroll');
         });
 
-        // --- 3. "X" BUTTON LOGIC FOR CART ---
-        if (closeCartBtn) {
-            closeCartBtn.addEventListener('click', () => {
-                cartPreview.classList.remove('active');
-                // Only remove overlay if the Menu isn't also open (optional safety check)
-                if (!navLinks.classList.contains('active')) {
-                    overlay.classList.remove('active');
+        // --- "X" BUTTON LOGIC FOR CART ---
+        if (elements.closeCartBtn) {
+            elements.closeCartBtn.addEventListener('click', () => {
+                elements.cartPreview.classList.remove('active');
+                if (!elements.navLinks.classList.contains('active')) {
+                    elements.overlay.classList.remove('active');
                     document.body.classList.remove('no-scroll');
                 }
             });
         }
 
-        // --- 4. "X" BUTTON LOGIC FOR MENU ---
-        if (closeMenuBtn) {
-            closeMenuBtn.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuToggle.classList.remove('active');
-                // Only remove overlay if the Cart isn't also open (optional safety check)
-                if (!cartPreview.classList.contains('active')) {
-                    overlay.classList.remove('active');
+        // --- "X" BUTTON LOGIC FOR MENU ---
+        if (elements.closeMenuBtn) {
+            elements.closeMenuBtn.addEventListener('click', () => {
+                elements.navLinks.classList.remove('active');
+                elements.menuToggle.classList.remove('active');
+                if (!elements.cartPreview.classList.contains('active')) {
+                    elements.overlay.classList.remove('active');
                     document.body.classList.remove('no-scroll');
                 }
             });
         }
 
-        // --- 5. OVERLAY CLICK (Closes Everything) ---
-        overlay.addEventListener('click', closeAll);
+        // --- OVERLAY CLICK ---
+        elements.overlay.addEventListener('click', closeAll);
         
-        // Close menu when a link is clicked
-        document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', closeAll));
+        // --- CLOSE ON LINK CLICK ---
+        if (elements.navLinksAnchors) {
+            elements.navLinksAnchors.forEach(link => link.addEventListener('click', closeAll));
+        }
     }
 });

@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let elements;
     let paymentElement;
-    console.log("UPDATEDDDDDD 0.6")
+
     
 
     function handleCheckoutSync() {
@@ -199,26 +199,47 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    
- // SINGLE SOURCE OF TRUTH for button state
     function updateButtonState() {
-        const isCartEmpty = cart.getItems().length === 0;
-        const now = new Date();
-        const storeTimeJSON = now.toLocaleString("en-US", {
-        timeZone: "America/Toronto"
-            });
-            const storeTime = new Date(storeTimeJSON);
+    const placeOrderBttn = document.getElementById("place-order-button");
+    if (!placeOrderBttn) return;
 
-        
-            const currentHour = storeTime.getHours();
-            const currentMinute = storeTime.getMinutes();
- 
-        
-        const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+    // --- 1. EXISTING LOGIC ---
+    const isCartEmpty = cart.getItems().length === 0;
+    const now = new Date();
+    const storeTimeJSON = now.toLocaleString("en-US", { timeZone: "America/Toronto" });
+    const storeTime = new Date(storeTimeJSON);
+    const currentHour = storeTime.getHours();
+    const currentMinute = storeTime.getMinutes();
 
-        // The button should be disabled if the store is closed OR if the cart is empty
-        placeOrderBttn.disabled = isStoreClosed || isCartEmpty;
+    // --- 2. TEMPORARY FIX FOR TESTING ---
+    // While you are debugging, set this to FALSE. 
+    // Otherwise, you can't test your button before 11am!
+    // const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+    const isStoreClosed = false; // <--- Set this back to the real logic when you go live!
+
+    // --- 3. CHECK IF PAYMENT IS LOADING ---
+    // If the button says "Updating..." or "Loading...", DO NOT interfere.
+    const isProcessing = placeOrderBttn.textContent === "Loading Payment..." || 
+                         placeOrderBttn.textContent === "Updating Price..." || 
+                         placeOrderBttn.textContent === "Processing...";
+
+    if (isProcessing) {
+        // If Stripe is doing work, stop here. Let Stripe control the button.
+        return; 
     }
+
+    // --- 4. FINAL STATE ---
+    if (isStoreClosed) {
+        placeOrderBttn.disabled = true;
+        placeOrderBttn.textContent = "Store Closed";
+    } else if (isCartEmpty) {
+        placeOrderBttn.disabled = true;
+    } else {
+        // Only enable if we aren't loading, closed, or empty
+        placeOrderBttn.disabled = false;
+        placeOrderBttn.textContent = "Place Order";
+    }
+}
 
 // 3. (Optional but recommended) Close when clicking outside
 window.addEventListener('click', (e) => {
@@ -277,7 +298,7 @@ window.addEventListener('click', (e) => {
         const remainingTimeOptionsArr = [];
         let currentTimeSlot = new Date(firstAvailablePickup.getTime());
 
-        while (currentTimeSlot < closingTime) {
+        while (currentTimeSlot <= closingTime) {
                 remainingTimeOptionsArr.push(formatTime(currentTimeSlot));
                 currentTimeSlot.setMinutes(currentTimeSlot.getMinutes() + 15);
             }
@@ -545,7 +566,16 @@ function saveAndTriggerUpdate() {
     localStorage.setItem('cart', JSON.stringify(cart.getItems()));
     window.dispatchEvent(new CustomEvent('cartUpdated'));
 }
-    window.addEventListener('scroll', handleStickySummary);
+    let isTicking = false;
+window.addEventListener('scroll', () => {
+    if (!isTicking) {
+        window.requestAnimationFrame(() => {
+            handleStickySummary();
+            isTicking = false;
+        });
+        isTicking = true;
+    }
+});
     window.addEventListener('resize', handleStickySummary);
 
     // Initialize Page

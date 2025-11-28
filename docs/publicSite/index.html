@@ -11,8 +11,8 @@
 
       
       <!-- Favicon links - CORRECTED -->
-      <link rel="icon" href="https://starchef.ca/graphics/favicon/favicon.ico" sizes="any" />
       <link rel="icon" type="image/png" sizes="96x96" href="graphics/favicon/favicon-96x96.png" />
+      <link rel="icon" href="https://starchef.ca/graphics/favicon/favicon.ico" sizes="any" />
       <link rel="icon" type="image/png" sizes="32x32" href="graphics/favicon/favicon-32x32.png">
       <link rel="icon" type="image/png" sizes="16x16" href="graphics/favicon/favicon-16x16.png">
       <link rel="icon" type="image/svg+xml" href="graphics/favicon/favicon.svg" />
@@ -60,8 +60,11 @@
       
       <header class="main-header">
          <nav class="main-nav">
-         <a href="index.html" class="logo-link">
-         <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
+        <a href="index.html" class="logo-link">
+            <picture>
+               <source srcset="graphics/Star-Chef-Logo.webp" type="image/webp">
+               <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
+            </picture>
          </a>
          <button class="menu-toggle" aria-label="Toggle menu">☰</button>
          <ul class="nav-links">
@@ -118,9 +121,37 @@
                           <div class="cart-item-total-price"></div>
                       </div>
                   </template>
+                  <div id="welcome-modal" class="welcome-modal">
+    <div class="welcome-card">
+        <!-- Close Button -->
+        <button id="close-welcome" class="close-minimal-btn">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="welcome-inner">
+            <h2 class="cursive-title">Star Chef</h2>
+            <p class="subtitle-text">Grand Website Opening</p>
+            
+            <div class="text-body">
+                <p>We are delighted to introduce our new online ordering experience.</p>
+                <p>Order your favorite authentic Hong Kong style dishes for pickup directly from our website.</p>
+            </div>
+
+            <a href="menu.html" style="text-decoration: none;">
+        <button id="enter-site-btn" class="gold-leaf-btn">ORDER NOW</button>
+    </a>
+    
+    <!-- SECONDARY ACTION: Just close the modal or go to Home -->
+    <div class="bottom-link">
+        <!-- If this modal is on the homepage, this link effectively acts as "Close Modal" -->
+        <a href="#" id="dismiss-link">ENTER WEBSITE</a>
+    </div>
+        </div>
+    </div>
+</div>
       <!-- STEP 1: Add this new wrapper div -->
       <div class="parallax-container">
-
+        
          <!-- Everything that scrolls now goes INSIDE this wrapper -->
          <div class="fixed-background">
             <div class="splash-image splash-index">
@@ -187,7 +218,14 @@
     </div>
     <!-- Assuming your image div is here -->
     <div class="location-img">
-      <img src="graphics/dimsum.jpg" alt="dish5" loading="lazy"/>
+      <picture>
+     
+     <source srcset="graphics/dimsum.webp" type="image/webp">
+     <img 
+       src="graphics/dimsum.jpg" 
+       loading="lazy"
+       decoding="async">
+  </picture>
     </div>
 </div>
          <div class="gallery-wrapper">
@@ -197,9 +235,23 @@
                </svg>
             </button>
             <div class="gallery">
-               <img src="graphics/tofu.jpg" alt="dish1" loading="lazy" />
-               <img src="graphics/handShrededChicken.jpg" alt="dish2" loading="lazy" />
-               <img src="graphics/chowmein.jpg" alt="dish3" loading="lazy" />
+               <!-- Item 1 -->
+               <picture>
+                  <source srcset="graphics/tofu.webp" type="image/webp">
+                  <img src="graphics/tofu.jpg" alt="dish1" loading="lazy" />
+               </picture>
+
+               <!-- Item 2 -->
+               <picture>
+                  <source srcset="graphics/handShrededChicken.webp" type="image/webp">
+                  <img src="graphics/handShrededChicken.jpg" alt="dish2" loading="lazy" />
+               </picture>
+
+               <!-- Item 3 -->
+               <picture>
+                  <source srcset="graphics/chowmein.webp" type="image/webp">
+                  <img src="graphics/chowmein.jpg" alt="dish3" loading="lazy" />
+               </picture>
             </div>
             <button id="next-btn" class="gallery-nav-btn" aria-label="Next image">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -210,7 +262,12 @@
          <div class="minor-splash-container">
             <div class="minor-splash-item">
                <div class="minor-splash-img">
-                  <img src="graphics/noodles.jpg" alt="dish4" loading="lazy"/>
+                  <picture>
+                     <!-- The browser tries this first -->
+                     <source srcset="graphics/noodles.webp" type="image/webp">
+                     <!-- The browser falls back to this if WebP isn't supported -->
+                     <img src="graphics/noodles.jpg" alt="dish4" loading="lazy"/>
+                  </picture>
                </div>
                <div class="awards-plaque">
                   <h2 class="plaque-title">WHAT THEY SAY</h2>
@@ -267,12 +324,15 @@
             <div class="footer-container">
                <div class="footer-column">
                   <h5>LOCATION</h5>
-                  <img src="graphics/locationInvert.png" alt="dish3" loading="lazy" class="footer-location"/>
+                  <picture>
+                     <source srcset="graphics/locationInvert.webp" type="image/webp">
+                     <img src="graphics/locationInvert.png" alt="dish3" loading="lazy" class="footer-location"/>
+                  </picture>
                   <address>
-                     9750 Markham Rd<br>
-                     Markham, ON L6E 0H7
+                  9750 Markham Rd<br>
+                  Markham, ON L6E 0H7
                   </address>
-               </div>
+            </div>
                <div class="footer-column">
                   <h5>HOURS</h5>
                   <p>
@@ -301,9 +361,8 @@
                   <h5>INFORMATION</h5>
                   <!-- These should be links to other pages -->
                   <nav class="footer-nav">
-                     <li><a href="index.html">Home</a></li>
-                     <li><a href="menu.html">Menu</a></li>
-                     <li><a href="about.html">About</a></li>
+                     <li><a href="privacyPolicy.html">Privacy Policy</a></li>
+                     <li><a href="terms&Conditions.html">Terms & Conditions</a></li>
                   </nav>
                </div>
             </div>

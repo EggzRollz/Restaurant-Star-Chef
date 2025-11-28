@@ -1,21 +1,22 @@
 const { onRequest } = require("firebase-functions/v2/https");
+const { onDocumentCreated } = require("firebase-functions/v2/firestore"); // <--- NEW IMPORT
 const { setGlobalOptions } = require("firebase-functions/v2/options");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
-const functions = require("firebase-functions");
 const nodemailer = require("nodemailer");
 const admin = require("firebase-admin");
 const Stripe = require("stripe");
 const { generateEmailHtml } = require('./emailTemplate'); 
+
 const menuCache = {}; 
 const CACHE_DURATION = 1000 * 60 * 10;
+
 if (!admin.apps.length) {
   admin.initializeApp();
 }
 
-// Set max instances to control costs
 setGlobalOptions({ maxInstances: 10 });
 
-// --- 1. SHARED MATH HELPER (Logic Logic) ---
+// --- 1. SHARED MATH HELPER ---
 function calculateVerifiedItemPrice(menuItem, orderItem) {
     if (!menuItem || !menuItem.pricing || menuItem.pricing.length === 0) return null;
 
@@ -60,12 +61,11 @@ function calculateVerifiedItemPrice(menuItem, orderItem) {
 }
 
 async function getMenuItemsBatch(itemIds) {
-    const uniqueIds = [...new Set(itemIds)]; // Remove duplicates
+    const uniqueIds = [...new Set(itemIds)]; 
     const now = Date.now();
     const missedIds = [];
-    const itemMap = {}; // Will hold { itemId: itemData }
+    const itemMap = {}; 
 
-    // 1. Check Cache first
     uniqueIds.forEach(id => {
         const cached = menuCache[id];
         if (cached && (now - cached.timestamp < CACHE_DURATION)) {
@@ -75,24 +75,16 @@ async function getMenuItemsBatch(itemIds) {
         }
     });
 
-    // 2. If we have everything in cache, return immediately
     if (missedIds.length === 0) return itemMap;
 
-    // 3. Fetch ONLY missing items in ONE Firestore call (batch read)
-    // Note: getAll supports passing a list of document references
     const refs = missedIds.map(id => admin.firestore().collection('menuItems').doc(id));
     
     if (refs.length > 0) {
         const snapshots = await admin.firestore().getAll(...refs);
-        
         snapshots.forEach(snap => {
             if (snap.exists) {
                 const data = snap.data();
-                // Important: Ensure the data has the ID attached for easy reference later
-                // (If your DB data doesn't have an 'id' field, this adds it safely)
                 if (!data.id) data.id = snap.id; 
-
-                // Save to Cache
                 menuCache[snap.id] = { data: data, timestamp: now };
                 itemMap[snap.id] = data;
             }
@@ -101,8 +93,7 @@ async function getMenuItemsBatch(itemIds) {
 
     return itemMap;
 }
-// --- 2. SHARED DB CALCULATION HELPER (Prevents Code Duplication) ---
-// This fixes the missing function error and ensures security across all endpoints
+
 async function calculateCartTotal(items) {
     let calculatedTotal = 0;
     let itemSummary = [];
@@ -111,21 +102,15 @@ async function calculateCartTotal(items) {
         return { subtotal: 0, tax: 0, totalWithTax: 0, amountInCents: 0, itemSummary: [] };
     }
 
-    // 1. Extract IDs from the cart
     const itemIds = items.map(i => i.id);
-
-    // 2. FETCH ALL ITEMS AT ONCE (Optimization: 1 Read vs N Reads)
     const dbItemMap = await getMenuItemsBatch(itemIds);
 
-    // 3. Calculate using the Map
     for (const item of items) {
         if (!item.quantity || item.quantity <= 0) continue; 
 
-        // Get data from our new map
         const dbData = dbItemMap[item.id];
 
         if (dbData) {
-            // Use your existing math helper
             const price = calculateVerifiedItemPrice(dbData, { customizations: item.options || {} });
 
             if (price !== null && !isNaN(price)) {
@@ -149,7 +134,7 @@ async function calculateCartTotal(items) {
     };
 }
 
-// --- 3. CREATE INTENT ---
+// --- 2. STRIPE ENDPOINTS ---
 exports.createPaymentIntent = onRequest(
   { secrets: ["STRIPE_SECRET"], cors: true },
   async (req, res) => {
@@ -158,7 +143,6 @@ exports.createPaymentIntent = onRequest(
       const { items } = req.body; 
       if (!items || items.length === 0) return res.status(400).send({ error: "Empty cart" });
 
-      // Use Shared Helper
       const calcResult = await calculateCartTotal(items);
 
       if (calcResult.amountInCents < 50) {
@@ -168,7 +152,8 @@ exports.createPaymentIntent = onRequest(
       const paymentIntent = await stripe.paymentIntents.create({
         amount: calcResult.amountInCents, 
         currency: "cad",
-        automatic_payment_methods: { enabled: true },
+        payment_method_types: ['card'], 
+
         metadata: {
             description: "Online Order",
             items: calcResult.itemSummary.join(", ").substring(0, 499),
@@ -176,7 +161,7 @@ exports.createPaymentIntent = onRequest(
             tax: `$${calcResult.tax.toFixed(2)}`,
             total_charged: `$${calcResult.totalWithTax.toFixed(2)}`
         }
-      });
+    });
 
       res.json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
@@ -186,10 +171,7 @@ exports.createPaymentIntent = onRequest(
   }
 );
 
-
-// --- 4. UPDATE INTENT (This was broken in your code) ---
 exports.updatePaymentIntent = onRequest(
-  // Added Configuration Object (Secrets + CORS)
   { secrets: ["STRIPE_SECRET"], cors: true },
   async (req, res) => {
     try {
@@ -198,14 +180,12 @@ exports.updatePaymentIntent = onRequest(
 
         if (!paymentIntentId || !items) return res.status(400).send({ error: "Missing ID or Items" });
 
-        // Use Shared Helper (Fixes the "calculateOrderAmount is undefined" crash)
         const calcResult = await calculateCartTotal(items);
 
         if (calcResult.amountInCents < 50) {
              return res.status(400).send({ error: "Total too low" });
         }
 
-        // Update Stripe
         const paymentIntent = await stripe.paymentIntents.update(
             paymentIntentId,
             { 
@@ -226,60 +206,8 @@ exports.updatePaymentIntent = onRequest(
   }
 );
 
-async function updateDailyStats(orderData) {
-    const db = admin.firestore();
-    // 1. Get today's date string (YYYY-MM-DD)
-    // Adjust timeZone if needed, assuming Eastern Time for now
-    const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
-    
-    const statsRef = db.collection("dailyStats").doc(todayStr);
-
-    const gross = parseFloat(orderData.totalPaid); // This is Total (inc tax)
-    const net = gross / 1.13; // Back out tax (approx)
-    const isOnline = orderData.paymentMethod === 'online';
-
-    // Calculate Fees (approx logic from your original code)
-    const estimatedFees = isOnline ? (gross * 0.029) + 0.30 : 0;
-
-    // Prepare atomic increments
-    const inc = admin.firestore.FieldValue.increment;
-
-    const updateData = {
-        date: todayStr, // Store date just in case
-        totalOrders: inc(1),
-        grossSales: inc(gross),
-        netSales: inc(net),
-        
-        // Nested metrics for Online vs Instore
-        "online.count": isOnline ? inc(1) : inc(0),
-        "online.gross": isOnline ? inc(gross) : inc(0),
-        "online.fees": isOnline ? inc(estimatedFees) : inc(0),
-        
-        "instore.count": !isOnline ? inc(1) : inc(0),
-        "instore.gross": !isOnline ? inc(gross) : inc(0),
-    };
-
-    // Update Item Counts (Atomic increment for every item in the cart)
-    if (orderData.items && Array.isArray(orderData.items)) {
-        orderData.items.forEach(item => {
-            // Field keys cannot contain dots, ensure ID is clean
-            const itemId = item.itemId; 
-            const qty = item.quantity || 1;
-            // Map structure: items.springRolls = 5
-            updateData[`items.${itemId}`] = inc(qty);
-            
-            // Optional: Store name so we don't have to look it up later
-            // Note: This overwrites the name every time, which is fine
-            updateData[`itemNames.${itemId}`] = item.customizations && Object.keys(item.customizations).length > 0 
-                ? `${item.itemId} (Custom)` 
-                : item.itemId; 
-        });
-    }
-
-    // Set with merge: true creates the doc if it doesn't exist, or updates it if it does
-    await statsRef.set(updateData, { merge: true });
-}
-// --- 5. VERIFY & CREATE ORDER ---
+// --- 3. VERIFY & CREATE ORDER (Online Only) ---
+// --- 3. VERIFY & CREATE ORDER (Online Only) ---
 exports.verifyAndCreateOrder = onRequest(
   { secrets: ["STRIPE_SECRET"], cors: true, maxInstances: 10 },
   async (req, res) => {
@@ -304,21 +232,18 @@ exports.verifyAndCreateOrder = onRequest(
         return res.status(200).send({ message: "Order already processed", orderId: orderQuery.docs[0].id });
       }
 
-      // 3. RE-CALCULATE PRICE (Using Shared Helper)
-      // This implicitly fixes the Negative Quantity security hole because the helper ignores quantity <= 0
+      // 3. Security Check
       const calcResult = await calculateCartTotal(cartItems);
-
-      // 4. Compare Totals
       const paidAmount = paymentIntent.amount;
-      // Allow 2 cent variance
       if (Math.abs(calcResult.amountInCents - paidAmount) > 2) {
-        console.error(`Fraud Warning: Calc $${calcResult.amountInCents} vs Paid $${paidAmount}`);
         return res.status(400).send({ error: "Cart content does not match payment amount." });
       }
 
-      // 5. Generate Order Number & Save
+      // 4. Generate Order Number
       const counterRef = admin.firestore().collection("counters").doc("orderCounter");
-      const todayStr = new Date().toISOString().split('T')[0]; 
+      const todayStr = new Date().toLocaleDateString("en-CA", { 
+            timeZone: "America/Toronto" 
+        });
 
       const newOrderNumber = await admin.firestore().runTransaction(async (transaction) => {
         const sfDoc = await transaction.get(counterRef);
@@ -334,7 +259,21 @@ exports.verifyAndCreateOrder = onRequest(
       });
 
       const now = new Date();
-      const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
+
+        // 1. Get Date part (YYYY-MM-DD) in Toronto time
+        const datePart = now.toLocaleDateString("en-CA", { 
+            timeZone: "America/Toronto" 
+        });
+
+        // 2. Get Time part (HH:mm:ss) in Toronto time 
+        // (We use 'en-GB' here because it guarantees 24-hour format like 19:05:00)
+        const timePart = now.toLocaleTimeString("en-GB", { 
+            timeZone: "America/Toronto",
+            hour12: false 
+        });
+
+        // 3. Combine them: "2025-11-26_19-30-00"
+        const formattedDate = `${datePart}_${timePart}`.replace(/:/g, '-'); 
       const customDocId = `${formattedDate}_${newOrderNumber}`;
 
       const orderData = {
@@ -354,11 +293,14 @@ exports.verifyAndCreateOrder = onRequest(
           paymentMethod: 'online',
           paymentStatus: 'paid',
           stripeId: paymentIntentId,
-          totalPaid: (paidAmount / 100).toFixed(2)
+          
+          // --- FIX IS HERE: Wrap in Number() ---
+          totalPaid: Number((paidAmount / 100).toFixed(2)) 
       };
 
+      // 5. Save Order (This will trigger onOrderCreated below)
       await admin.firestore().collection("orders").doc(customDocId).set(orderData);
-       updateDailyStats(orderData).catch(err => console.error("Stats Update Failed:", err));
+
       res.status(200).send({ success: true, orderNumber: newOrderNumber });
 
     } catch (error) {
@@ -368,92 +310,275 @@ exports.verifyAndCreateOrder = onRequest(
   }
 );
 
-// --- 6. REPORTING FUNCTIONS (UNCHANGED) ---
+// --- 4. NEW: AUTOMATIC STATS UPDATER (FIXED) ---
+exports.onOrderCreated = onDocumentCreated("orders/{orderId}", async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) return; 
+
+    const orderData = snapshot.data();
+    const db = admin.firestore();
+    
+    // 1. Determine Date (Use Toronto Time)
+    const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+    const statsRef = db.collection("dailyStats").doc(todayStr);
+
+    // 2. SAFE CHECK: Determine Payment Method
+    const rawMethod = (orderData.paymentMethod || '').toLowerCase();
+    const stripeId = orderData.stripeId;
+
+    // LOGIC: 
+    // It is Online IF: Method is 'online' OR (Method is NOT 'in-store' AND stripeId is valid)
+    // It is In-Store IF: Method is 'in-store' OR 'cash'
+    let isOnline = false;
+
+    if (rawMethod === 'in-store' || rawMethod === 'cash' || rawMethod === 'instore') {
+        isOnline = false;
+    } else if (rawMethod === 'online') {
+        isOnline = true;
+    } else {
+        // Fallback: If method is missing, look for a Stripe ID
+        isOnline = (!!stripeId && stripeId !== "null" && stripeId !== "");
+    }
+
+    console.log(`[STATS] Order: ${orderData.orderNumber} | Method: ${rawMethod} | StripeId: ${stripeId} | Result: ${isOnline ? 'ONLINE' : 'IN-STORE'}`);
+
+    // 3. Determine Amounts
+    const gross = parseFloat(orderData.totalPaid || 0); // Note: For In-Store unpaid orders, this might be 0. 
+    // If you want to track the *value* of in-store orders even if unpaid yet, use orderData.items calculation.
+    // Assuming 'totalPaid' is populated for in-store orders upon creation:
+    
+    const net = gross / 1.13;
+    const estimatedFees = isOnline ? (gross * 0.029) + 0.30 : 0;
+
+    const inc = admin.firestore.FieldValue.increment;
+
+    // 4. Prepare Update
+    const updateData = {
+        date: todayStr,
+        totalOrders: inc(1),
+        grossSales: inc(gross),
+        netSales: inc(net),
+        
+        // Online Stats
+        "online.count": isOnline ? inc(1) : inc(0),
+        "online.gross": isOnline ? inc(gross) : inc(0),
+        "online.fees": isOnline ? inc(estimatedFees) : inc(0),
+        
+        // In-Store Stats
+        "instore.count": !isOnline ? inc(1) : inc(0),
+        "instore.gross": !isOnline ? inc(gross) : inc(0),
+    };
+
+    // 5. Update Item Counts
+    if (orderData.items && Array.isArray(orderData.items)) {
+        orderData.items.forEach(item => {
+            const rawId = item.itemId || "unknown";
+            const cleanId = String(rawId).replace(/[\.\/\s\#\[\]\*]/g, "_");
+            const qty = item.quantity || 1;
+
+            updateData[`items.${cleanId}`] = inc(qty);
+            
+            const itemName = item.customizations && Object.keys(item.customizations).length > 0 
+                ? `${rawId} (Custom)` 
+                : rawId;
+            updateData[`itemNames.${cleanId}`] = itemName;
+        });
+    }
+
+    try {
+        await statsRef.set(updateData, { merge: true });
+        console.log(`[SUCCESS] Stats updated for Order ${orderData.orderNumber}`);
+    } catch (err) {
+        console.error("Failed to update daily stats:", err);
+    }
+});
+
+
+
+// --- 5. REPORTING (STRICT TIMEZONE FIX) ---
 async function generateAndSendReport(targetEmail) {
     if (!admin.apps.length) admin.initializeApp();
     const db = admin.firestore();
     
-    // Calculate Date Range
-    const now = new Date();
-    const pastDate = new Date();
-    pastDate.setDate(now.getDate() - 14); // Look back 14 days
-    const startDateStr = pastDate.toISOString().split('T')[0];
+    // === STEP 1: FORCE DATE TO TORONTO "YYYY-MM-DD" ===
+    // We do not care what time it is in UTC. We only want the date string in Toronto.
+    const nowRaw = new Date();
+    const torontoDateStr = nowRaw.toLocaleDateString("en-CA", { 
+        timeZone: "America/Toronto" 
+    }); 
+    // Result: "2025-11-26" (Even if it is Nov 27th in UTC)
 
-    // 1. OPTIMIZED READ: Query 'dailyStats' instead of 'orders'
-    // This reads maximum ~14 documents regardless of how many orders you have.
+    // === STEP 2: CREATE "ANCHOR" DATES ===
+    // We append "T12:00:00" (Noon) to ensure we are safely in the middle of the day.
+    // This prevents any timezone offset from shifting the date to the previous/next day.
+    const currentWeekEnd = new Date(torontoDateStr + "T12:00:00");
+    
+    const currentWeekStart = new Date(currentWeekEnd);
+    currentWeekStart.setDate(currentWeekEnd.getDate() - 7);
+    
+    const prevWeekStart = new Date(currentWeekEnd);
+    prevWeekStart.setDate(currentWeekEnd.getDate() - 14);
+
+    // === STEP 3: GENERATE DATABASE KEYS ===
+    // Helper to turn our Date objects back into "YYYY-MM-DD" strings for Firestore
+    const toYMD = (dateObj) => dateObj.toISOString().split('T')[0];
+
+    // Since we created the dates at Noon UTC (via the string constructor), 
+    // .toISOString() will return the correct date part.
+    const splitDateStr = toYMD(currentWeekStart); // "2025-11-19"
+    const startDateStr = toYMD(prevWeekStart);    // "2025-11-12"
+
+    console.log(`[REPORT DEBUG] Range: ${startDateStr} to ${torontoDateStr}`);
+
     const statsSnapshot = await db.collection("dailyStats")
         .where("date", ">=", startDateStr)
         .orderBy("date", "asc")
         .get();
 
+    // ... (Variables setup remains the same) ...
+    let currentWeek = { sales: 0, orders: 0 };
+    let prevWeek = { sales: 0, orders: 0 };
+    
     let metrics = {
-        orders: 0, grossSales: 0, netSales: 0,   
+        orders: 0, grossSales: 0, netSales: 0,
         online: { count: 0, gross: 0, feesEstimated: 0 },
-        instore: { count: 0, gross: 0 }, 
-        itemMap: {} 
+        instore: { count: 0, gross: 0 },
+        itemMap: {}
     };
 
-    // 2. Aggregate the Daily Summaries
+    let chartDataCurrent = []; 
+    let chartDataPrev = [];    
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
     statsSnapshot.forEach((doc) => {
         const day = doc.data();
+        const dateStr = day.date; 
         
-        metrics.orders += (day.totalOrders || 0);
-        metrics.grossSales += (day.grossSales || 0);
-        metrics.netSales += (day.netSales || 0);
+        // Use Noon to parse the DB date safely
+        const d = new Date(dateStr + "T12:00:00"); 
 
-        // Online Stats
-        if (day.online) {
-            metrics.online.count += (day.online.count || 0);
-            metrics.online.gross += (day.online.gross || 0);
-            metrics.online.feesEstimated += (day.online.fees || 0);
-        }
+        if (dateStr >= splitDateStr) {
+            // CURRENT WEEK
+            const dayOrders = (day.totalOrders || 0);
+            const dayGross = (day.grossSales || 0);
+            
+            metrics.orders += dayOrders;
+            metrics.grossSales += dayGross;
+            metrics.netSales += (day.netSales || 0);
 
-        // Instore Stats
-        if (day.instore) {
-            metrics.instore.count += (day.instore.count || 0);
-            metrics.instore.gross += (day.instore.gross || 0);
-        }
+            if (day.online) {
+                metrics.online.count += (day.online.count || 0);
+                metrics.online.gross += (day.online.gross || 0);
+                metrics.online.feesEstimated += (day.online.fees || 0);
+            }
 
-        // Combine Item Counts
-        if (day.items) {
-            Object.entries(day.items).forEach(([itemId, count]) => {
-                const name = (day.itemNames && day.itemNames[itemId]) ? day.itemNames[itemId] : itemId;
-                
-                if (!metrics.itemMap[itemId]) {
-                    metrics.itemMap[itemId] = { name: name, count: 0 };
-                }
-                metrics.itemMap[itemId].count += count;
-            });
+            // 2. Add In-Store Stats (If they exist)
+            if (day.instore) {
+                metrics.instore.count += (day.instore.count || 0);
+                metrics.instore.gross += (day.instore.gross || 0);
+            }
+
+
+            if (day.items) {
+                Object.entries(day.items).forEach(([itemId, count]) => {
+                    if (typeof count === 'number') {
+                        const name = (day.itemNames && day.itemNames[itemId]) ? day.itemNames[itemId] : itemId;
+                        if (!metrics.itemMap[itemId]) metrics.itemMap[itemId] = { name: name, count: 0 };
+                        metrics.itemMap[itemId].count += count;
+                    }
+                });
+            }
+
+            currentWeek.sales += dayGross;
+            currentWeek.orders += dayOrders;
+            chartDataCurrent[d.getDay()] = dayGross;
+
+        } else {
+            // PREV WEEK
+            prevWeek.sales += (day.grossSales || 0);
+            prevWeek.orders += (day.totalOrders || 0);
+            chartDataPrev[d.getDay()] = (day.grossSales || 0);
         }
     });
 
-    // 3. (UNCHANGED) Generate HTML Table for Top Items
+    // ... (Chart Logic remains the same) ...
+    const chartConfig = {
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'This Week',
+                    data: chartDataCurrent, 
+                    borderColor: '#2e7d32', 
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    fill: true
+                },
+                {
+                    label: 'Last Week',
+                    data: chartDataPrev,
+                    borderColor: '#999', 
+                    borderDash: [5, 5], 
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            legend: { position: 'bottom' },
+            title: { display: false },
+            scales: {
+                yAxes: [{ ticks: { callback: (val) => '$' + val } }]
+            }
+        }
+    };
+    
+    for(let i=0; i<7; i++) {
+        if(chartDataCurrent[i] === undefined) chartDataCurrent[i] = 0;
+        if(chartDataPrev[i] === undefined) chartDataPrev[i] = 0;
+    }
+    chartConfig.data.datasets[0].data = chartDataCurrent;
+    chartConfig.data.datasets[1].data = chartDataPrev;
+
+    const chartUrl = `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartConfig))}&w=500&h=300`;
+
     const topItemsRows = Object.entries(metrics.itemMap)
         .map(([id, data]) => ({ id, ...data }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 5)
         .map((item, index) => {
-            const bg = index % 2 === 0 ? '#f9f9f9' : '#ffffff';
             return `
-            <tr style="background-color: ${bg};">
-                <td style="padding: 10px; border-bottom: 1px solid #eee;">
-                    ${index + 1}. <span style="color: #999; font-family: monospace; font-size: 12px;">[${item.id}]</span> ${item.name}
+            <tr style="border-bottom: 1px solid #f0f0f0;">
+                <td style="padding: 10px;">
+                    <div style="font-weight: bold; color: #333;">
+                        <!-- NEW FORMAT: 1. [ID] Name -->
+                        ${index + 1}. <span style="color: #999; font-weight: normal; font-size: 12px;">[${item.id}]</span> ${item.name}
+                    </div>
                 </td>
-                <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold;">${item.count}</td>
+                <td style="padding: 10px; text-align: right; font-weight: bold; font-size: 14px;">${item.count}</td>
             </tr>`;
         }).join("");
 
-    // 4. (UNCHANGED) Send Email
+    // === STEP 4: STRICT DATE FORMATTING FOR EMAIL TEXT ===
+    // Because we created currentWeekEnd as "YYYY-MM-DD" + "T12:00:00",
+    // simple string formatting is now safe.
+    const simpleFormat = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
     const dataForTemplate = {
-        startDate: pastDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        endDate: now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        startDate: simpleFormat(currentWeekStart), // e.g. "Nov 19"
+        endDate: simpleFormat(currentWeekEnd),     // e.g. "Nov 26"
+        
         grossSales: metrics.grossSales.toFixed(2),
         netSales: metrics.netSales.toFixed(2),
         totalOrders: metrics.orders,
         avgOrderValue: metrics.orders > 0 ? (metrics.grossSales / metrics.orders).toFixed(2) : "0.00",
         onlineMetrics: { count: metrics.online.count, gross: metrics.online.gross.toFixed(2), fees: metrics.online.feesEstimated.toFixed(2) },
         instoreMetrics: { count: metrics.instore.count, gross: metrics.instore.gross.toFixed(2) },
-        topItemsRows: topItemsRows
+        topItemsRows: topItemsRows,
+        chartUrl: chartUrl,
+        comparisons: {
+            salesChange: calculatePercentChange(currentWeek.sales, prevWeek.sales),
+            ordersChange: calculatePercentChange(currentWeek.orders, prevWeek.orders)
+        }
     };
 
     const transporter = nodemailer.createTransport({
@@ -461,19 +586,19 @@ async function generateAndSendReport(targetEmail) {
         auth: { user: "eggrollzspam@gmail.com", pass: process.env.EMAIL_PASSWORD },
     });
 
-    const emailHtml = generateEmailHtml(dataForTemplate);
     await transporter.sendMail({
         from: '"Star Chef Reports" <eggrollzspam@gmail.com>',
         to: targetEmail,
-        subject: `📊 Weekly Report: ${dataForTemplate.startDate} - ${dataForTemplate.endDate}`,
-        html: emailHtml, 
+        subject: `📊 Weekly Report: $${Math.round(metrics.grossSales)} Sales (${dataForTemplate.comparisons.salesChange > 0 ? '+' : ''}${dataForTemplate.comparisons.salesChange.toFixed(0)}%)`,
+        html: generateEmailHtml(dataForTemplate), 
     });
 
     return { count: metrics.orders, revenue: metrics.grossSales };
 }
+
 const REPORT_RECIPIENTS = "connorlau@hotmail.com, jennifersun1123@gmail.com";
 
-exports.sendBiweeklyReport = onSchedule(
+exports.sendWeeklyReport = onSchedule(
   { schedule: "every monday 09:00", timeZone: "America/Toronto", secrets: ["EMAIL_PASSWORD"], maxInstances: 1 },
   async (event) => {
     try { await generateAndSendReport(REPORT_RECIPIENTS); } 
@@ -488,5 +613,122 @@ exports.manualReportTest = onRequest(
             const result = await generateAndSendReport(REPORT_RECIPIENTS);
             res.send(`Success! Sent. Found ${result.count} orders. Rev: $${result.revenue.toFixed(2)}`);
         } catch (error) { res.status(500).send("Error: " + error.message); }
+    }
+);
+
+const calculatePercentChange = (current, previous) => {
+    if (previous === 0) return current > 0 ? 100 : 0; 
+    return ((current - previous) / previous) * 100;
+};
+
+
+exports.recalculateStats = onRequest(
+    { cors: true, secrets: ["CORS_PASSWORD"] }, // Add secret
+    async (req, res) => {
+        // 1. Security Check
+        if (req.query.key !== process.env.CORS_PASSWORD) {
+            return res.status(403).send("Unauthorized");
+        }
+        const db = admin.firestore();
+        const dateStr = req.query.date; // Expects "2025-11-26"
+
+        if (!dateStr) return res.status(400).send("Please provide ?date=YYYY-MM-DD");
+
+        try {
+            console.log(`Recalculating for ${dateStr}...`);
+
+           const targetDate = new Date(dateStr + "T12:00:00"); 
+
+            // Calculate Midnight in Toronto
+            const startOfDay = new Date(targetDate.toLocaleString("en-US", { timeZone: "America/Toronto" }));
+            startOfDay.setHours(0, 0, 0, 0);
+
+            // Calculate End of Day in Toronto
+            const endOfDay = new Date(startOfDay);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            // --- 2. GET ORDERS ---
+            const ordersSnap = await db.collection('orders')
+                .where('orderDate', '>=', startOfDay)
+                .where('orderDate', '<=', endOfDay)
+                .get();
+
+            // --- 3. INITIALIZE ZERO STATS ---
+            // We do this BEFORE checking if empty, so we have a "Zero Template" ready.
+            let stats = {
+                date: dateStr, // Ensure date is inside the object
+                totalOrders: 0,
+                grossSales: 0,
+                netSales: 0,
+                online: { count: 0, gross: 0, fees: 0 },
+                instore: { count: 0, gross: 0 },
+                items: {},
+                itemNames: {}
+            };
+
+            // --- 4. AGGREGATE (Only runs if orders exist) ---
+            if (!ordersSnap.empty) {
+                ordersSnap.forEach(doc => {
+                    const data = doc.data();
+                    const total = parseFloat(data.totalPaid || 0);
+                    const net = total / 1.13; 
+                    
+                    // Determine Method
+                    const rawMethod = (data.paymentMethod || '').toLowerCase();
+                    const stripeId = data.stripeId;
+                    let isOnline = false;
+
+                    if (rawMethod === 'online') isOnline = true;
+                    else if (rawMethod === 'in-store' || rawMethod === 'cash') isOnline = false;
+                    else isOnline = (!!stripeId && stripeId !== "null" && stripeId !== "");
+
+                    // Add to totals
+                    stats.totalOrders += 1;
+                    stats.grossSales += total;
+                    stats.netSales += net;
+
+                    if (isOnline) {
+                        stats.online.count += 1;
+                        stats.online.gross += total;
+                        stats.online.fees += ((total * 0.029) + 0.30);
+                    } else {
+                        stats.instore.count += 1;
+                        stats.instore.gross += total;
+                    }
+
+                    // Count Items
+                    if (data.items && Array.isArray(data.items)) {
+                        data.items.forEach(item => {
+                            const cleanId = String(item.itemId).replace(/[\.\/\s\#\[\]\*]/g, "_");
+                            if (!stats.items[cleanId]) {
+                                stats.items[cleanId] = 0;
+                                stats.itemNames[cleanId] = item.title || item.itemId; 
+                            }
+                            stats.items[cleanId] += (item.quantity || 1);
+                        });
+                    }
+                });
+            } else {
+                console.log(`No orders found for ${dateStr}. Resetting stats to 0.`);
+            }
+
+            // --- 5. OVERWRITE DB (Even if 0) ---
+            const docRef = db.collection('dailyStats').doc(dateStr);
+            
+            // Use .set() to completely overwrite. 
+            // If you used .update(), it would fail if the doc didn't exist.
+            await docRef.set(stats);
+
+            res.send({ 
+                message: "Stats Recalculated Successfully", 
+                date: dateStr, 
+                foundOrders: stats.totalOrders, // Will be 0 if wiped
+                gross: stats.grossSales         // Will be 0 if wiped
+            });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
     }
 );

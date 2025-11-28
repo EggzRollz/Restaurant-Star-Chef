@@ -30,6 +30,7 @@
 />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="graphics/outsideRestaurant.webp" fetchpriority="high">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">    
 <script type="application/ld+json">
       {
@@ -50,14 +51,18 @@
         }
       }
       </script>
+      
   </head>
   <body>
     <div class="overlay"></div>
     <header class="main-header">
      <nav class="main-nav">
-         <a href="index.html" class="logo-link">
-         <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
-         </a>
+        <a href="index.html" class="logo-link">
+          <picture>
+              <source srcset="graphics/Star-Chef-Logo.webp" type="image/webp">
+              <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
+          </picture>
+        </a>
          <button class="menu-toggle" aria-label="Toggle menu">☰</button>
          <ul class="nav-links">
              <li class="close-btn-li"> 
@@ -149,7 +154,11 @@
       
   <div class="opening-hours-section">
     <div class="opening-hours-img">
-        <img src="graphics/cook.png" alt="dish4" loading="lazy"/>
+        <picture>
+        <source srcset="graphics/cook.avif" type="image/avif">
+        <source srcset="graphics/cook.webp" type="image/webp">
+        <img src="graphics/cook.png" alt="Restaurant Splash">
+    </picture>
     </div>
     <div class="opening-hours-text">
         <h2>OPENING HOURS</h2>
@@ -180,15 +189,24 @@
         </div>
     </div>
 </div>
-
-<!-- About spread (if you still need this) -->
 <div class="about-spread">
+    <!-- 1. The Optimized Background Image -->
+    <picture class="spread-bg">
+        <!-- Browser tries WebP first (Faster!) -->
+        <source srcset="graphics/longSpread.webp" type="image/webp">
+        
+        <!-- Fallback to PNG -->
+        <img src="graphics/longSpread.png" 
+             alt="Restaurant Atmosphere" 
+             loading="lazy">
+    </picture>
+
+    <!-- 2. Your Content (Sits on top) -->
     <div class="reservation">
         <h2>MAKE A RESERVATION</h2>
         <a href="tel:+1-905-209-8181" class="reservation-button">1+ (905) 209-8181</a>
-      </div>
+    </div>
 </div>
-
 <!-- About Us Section -->
 <div class="location-section">
     <div class="location-text">
@@ -216,12 +234,15 @@
     
     <div class="footer-column">
       <h5>LOCATION</h5>
-      <img src="graphics/locationInvert.png" alt="dish3" loading="lazy" class="footer-location"/>
+      <picture>
+         <source srcset="graphics/locationInvert.webp" type="image/webp">
+         <img src="graphics/locationInvert.png" alt="dish3" loading="lazy" class="footer-location"/>
+      </picture>
       <address>
         9750 Markham Rd<br>
         Markham, ON L6E 0H7
       </address>
-    </div>
+</div>
 
     <div class="footer-column">
       <h5>HOURS</h5>
@@ -249,7 +270,14 @@
         <li><a href="about.html">About</a></li>
       </nav>
     </div>
-
+     <div class="footer-column">
+                  <h5>INFORMATION</h5>
+                  <!-- These should be links to other pages -->
+                  <nav class="footer-nav">
+                     <li><a href="privacyPolicy.html">Privacy Policy</a></li>
+                     <li><a href="terms&Conditions.html">Terms & Conditions</a></li>
+                  </nav>
+               </div>
     
 
   </div>

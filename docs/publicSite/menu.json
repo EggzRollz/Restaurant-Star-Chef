@@ -5,7 +5,7 @@
       "category_name_english": "FISH SOUP NOODLES",
       "items": [     
         {
-          "id": "COMBO",
+          "id": "COMBO1",
           "name_chinese": "炸魚柳*****",
           "name_english": "Original Fish Soup Combo",
           "pricing": [
@@ -121,7 +121,7 @@
           ]
         },
         {
-          "id": "COMBO",
+          "id": "COMBO2",
           "name_chinese": "炸魚柳*****",
           "name_english": "Tomato & Pumpkin Fish Soup Combo",
           "pricing": [
@@ -237,7 +237,7 @@
           ]
         },
         {
-          "id": "COMBO",
+          "id": "COMBO3",
           "name_chinese": "炸魚柳*****",
           "name_english": "Parsley & Preserved Egg Fish Soup Combo",
           "pricing": [
@@ -353,7 +353,7 @@
           ]
         },
         {
-          "id": "COMBO",
+          "id": "COMBO4",
           "name_chinese": "炸魚柳*****",
           "name_english": "Ginko & Pepper Fish Soup Combo",
           "pricing": [
@@ -423,7 +423,7 @@
               "title": "Choose a Drink", 
               "choices": [               
                 { "addOnName": "HK Style Milk Tea" },
-                      { "addOnName": "Coffee"},
+                { "addOnName": "Coffee"},
                 { "addOnName": "Milk Tea & Coffee"},
                 { "addOnName": "Lemon Tea" },
                 { "addOnName": "Lemon Water"},
@@ -469,7 +469,7 @@
             {"type": "spicy"}     
           ]
         },{
-          "id": "COMBO",
+          "id": "COMBO5",
           "name_chinese": "炸魚柳*****",
           "name_english": "Chaozhou Style Dried Fish & Minced Pork Fish Soup Combo",
           "pricing": [
@@ -586,7 +586,7 @@
           ]
         },
         {
-          "id": "COMBO",
+          "id": "COMBO6",
           "name_chinese": "炸魚柳*****",
           "name_english": "Malay Laksa Fish Soup Combo",
           "pricing": [
@@ -703,7 +703,7 @@
             {"type": "spicy"} 
           ]
         },{
-          "id": "COMBO",
+          "id": "COMBO7",
           "name_chinese": "炸魚柳*****",
           "name_english": "Szezhuan Spicy Fish Soup Combo",
           "pricing": [
@@ -820,7 +820,7 @@
           ]
         },
         {
-          "id": "COMBO",
+          "id": "COMBO8",
           "name_chinese": "炸魚柳*****",
           "name_english": "Peanut Sauce & Chilli Fish Soup Combo",
           "pricing": [
@@ -938,7 +938,7 @@
           ]
         },
         {
-          "id": "COMBO",
+          "id": "COMBO9",
           "name_chinese": "炸魚柳*****",
           "name_english": "Thai Tom Yum Goong Fish Soup Combo",
           "pricing": [
@@ -1077,6 +1077,9 @@
               "temp": "Cold",
               "price": 4.99
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -1572,7 +1575,7 @@
         {
           "id": "K10",
           "name_chinese": "魚湯杞子豆苗",
-          "name_english": "Snow Pea leaves in Fish Soup with Wolfberry",
+          "name_english": "Snow Pea leaves in Fish Soup with Goji",
           "pricing": [
             {
               "size": "default",
@@ -1682,7 +1685,7 @@
         },
         {
           "id": "K16",
-          "name_chinese": "五柳/椒鹽/粟米班片******",
+          "name_chinese": "五柳/椒鹽/粟米班片",
           "name_english": "Sweet & Sour/Spicy & Salt/Sweet Corn sauce Garoupa Fillet",
           "pricing": [
             {
@@ -1725,6 +1728,9 @@
               "temp": "default",
               "price": 19.50
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -1782,19 +1788,28 @@
         {
           "id": "K21",
           "name_chinese": "豉椒雞/牛",
-          "name_english": "Chicken with Black Sauce on Sizzling Hot Plate",
+          "name_english": "Chicken or Beef with Black Sauce on Sizzling Hot Plate",
           "pricing": [
             {
               "size": "default",
               "temp": "default",
               "price": 18.50
             }
+          ],
+          "addOns": [
+            {
+              "title": "Choose a Protein",
+              "choices": [
+                { "addOnName": "Chicken" },
+                { "addOnName": "Beef" }
+              ]
+            }
           ]
         },
         {
           "id": "K22",
           "name_chinese": "雞/牛柳/豬扒(黑椒/蒜茸/中式/洋蔥)",
-          "name_english": "Chicken or Beef & Mushroom on Sizzling Hot Plate",
+          "name_english": "Chicken or Beef or Pork & Mushroom on Sizzling Hot Plate",
           "pricing": [
             {
               "size": "default",
@@ -1807,7 +1822,8 @@
               "title": "Choose a Protein",
               "choices": [
                 { "addOnName": "Chicken" },
-                { "addOnName": "Beef" }
+                { "addOnName": "Beef" },
+                { "addOnName": "Pork" }
               ]
             }
           ]
@@ -1865,6 +1881,9 @@
                 { "addOnName": "Chicken" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -2013,7 +2032,7 @@
         {
           "id": "K31",
           "name_chinese": "福建扒豆腐",
-          "name_english": "Fukien Style Steamed Bean Curd",
+          "name_english": "Fukien Style Steamed Tofu",
           "pricing": [
             {
               "size": "default",
@@ -2033,6 +2052,9 @@
               "temp": "default",
               "price": 16.99
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -2050,7 +2072,7 @@
         {
           "id": "K34",
           "name_chinese": "豉椒涼瓜牛肉/雞柳",
-          "name_english": "Beef or Chicken with Chili Black Bean Sauce",
+          "name_english": "Beef or Chicken with Bitter Melon and Chili Black Bean Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2104,7 +2126,7 @@
         },
         {
           "id": "K37",
-          "name_chinese": "欖菜肉鬆/蝦醬/XO醬/蒜茸/馬拉盞 通菜",
+          "name_chinese": "欖菜肉鬆/蝦醬/蒜茸/馬拉盞 通菜",
           "name_english": "Stir Fried Tung Choi with a Choice of Sauce",
           "pricing": [
             {
@@ -2380,6 +2402,9 @@
               "temp": "default",
               "price": 34.75
             }
+          ],
+          "tags": [
+            {"type": "popular"}
           ]
         },
         {
@@ -2408,9 +2433,7 @@
             }
           ],
           "tags": [
-            {
-              "type": "spicy"
-            }
+            {"type": "spicy"}
           ]
         },
         {
@@ -2493,7 +2516,7 @@
         {
           "id": "K55",
           "name_chinese": "XO醬帶子蘆筍鮮魷魚仔",
-          "name_english": "Stir Fried Scallops & Leek with XO Sauce",
+          "name_english": "Stir Fried White Bait & Leek with XO Sauce",
           "pricing": [
             {
               "size": "default",
@@ -2732,6 +2755,9 @@
                 { "addOnName": "Pork" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -2817,6 +2843,9 @@
               "temp": "default",
               "price": 12.25
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -2862,6 +2891,9 @@
               "temp": "default",
               "price": 12.50
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -3044,6 +3076,9 @@
               "temp": "default",
               "price": 18.99
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -3258,6 +3293,9 @@
                 { "addOnName": "Beef" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -3416,9 +3454,9 @@
             }
           ],
           "tags": [
-            {
-              "type": "spicy"
-            }
+            {"type": "popular"},
+            {"type": "spicy"}      
+
           ]
         },
         {
@@ -3722,6 +3760,9 @@
               "temp": "default",
               "price": 15.99
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -3743,6 +3784,9 @@
                 { "addOnName": "Beef" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -4246,6 +4290,9 @@
               "temp": "default",
               "price": 19.99
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {

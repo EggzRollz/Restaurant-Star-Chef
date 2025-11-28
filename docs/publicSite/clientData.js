@@ -1,11 +1,10 @@
 // --- 1. IMPORTS ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
-    getFirestore, collection, doc, runTransaction, writeBatch, serverTimestamp 
+    getFirestore, doc, runTransaction, writeBatch, serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "./config.js";
 import { validateCheckoutForm } from './checkout.js';
-import { updateCartQuantityDisplay } from './main.js'; // Ensure this path is correct
 import { Cart } from './cart.js'; // Ensure this path is correct
 
 // --- 2. INITIALIZE ---
@@ -68,39 +67,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize Stripe (Your Public Key)
     stripe = Stripe("pk_test_51SWctgGoQxdZDWdoSxxfc3aRRgygJUc69RP9vTzMQBCQrdkdmN0LZQS9iQxrkNsLZNciuqr4yJH7yP9v5O6Kg0b600lqhXMv4f");
+    
+    if (selectedPickupTimeInput) {
+    selectedPickupTimeInput.addEventListener('change', async () => {
+        const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
+        const isOnline = selectedOption && selectedOption.value === 'online';
+
+        // 1. If Paying In Store: FORCE ENABLE the button
+        if (!isOnline) {
+            placeOrderBttn.disabled = false;
+            placeOrderBttn.textContent = "Place Order";
+            return;
+        }
+
+        // 2. If Paying Online: Update Stripe with new time (Optional, prevents mismatches)
+        // If you want the time change to update the Stripe intent price/metadata:
+        if (isOnline && currentPaymentIntentId) {
+             await updateStripeTotal();
+        }
+    });
+}
 
     // --- 4. PAYMENT UI LOGIC ---
     async function togglePaymentSection() {
-        
         const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
         if (!selectedOption) return;
 
-        cart.loadFromStorage(); 
-        if (selectedOption.value === 'online' && cart.getItems().length > 0) {
-            onlinePaymentContainer.classList.remove('hidden');
-            
-            const cartItems = cart.getItems().map(item => ({
-                id: item.baseId || item.id.split('_')[0],
-                quantity: item.quantity || 1,
-                options: item.customizations || {} 
-            }));
+        const isOnline = selectedOption.value === 'online';
 
-            // Only initialize if we haven't already, OR if the cart changed (handled by listener below)
-            if (cartItems.length > 0 && !isStripeInitialized) {
-                placeOrderBttn.disabled = true;
-                placeOrderBttn.textContent = "Loading Payment...";
-                
-                await initializeStripeElement(cartItems);
-                
-                placeOrderBttn.disabled = false;
-                placeOrderBttn.textContent = "Place Order";
-                isStripeInitialized = true; 
-            }
-        } else {
+        // --- SCENARIO 1: PAY IN STORE (Instant Exit) ---
+        if (!isOnline) {
             onlinePaymentContainer.classList.add('hidden');
+            // Force enable immediately and stop the function
+            placeOrderBttn.disabled = false;
+            placeOrderBttn.textContent = "Place Order";
+            return; 
+        }
+
+        // --- SCENARIO 2: ONLINE PAYMENT (Only run heavy logic here) ---
+        onlinePaymentContainer.classList.remove('hidden');
+        cart.loadFromStorage(); 
+        
+        const cartItems = cart.getItems().map(item => ({
+            id: item.baseId || item.id.split('_')[0],
+            quantity: item.quantity || 1,
+            options: item.customizations || {} 
+        }));
+
+        // Only disable if we actually need to load Stripe
+        if (cartItems.length > 0 && !isStripeInitialized) {
+            placeOrderBttn.disabled = true;
+            placeOrderBttn.textContent = "Loading Payment...";
+            
+            await initializeStripeElement(cartItems);
+            
+            placeOrderBttn.disabled = false;
+            placeOrderBttn.textContent = "Place Order";
+            isStripeInitialized = true; 
         }
     }
-    
 
     async function initializeStripeElement(cartItems) {
         try {
@@ -143,20 +168,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 async function updateStripeTotal() {
+    const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+    if (selectedMethod !== 'online') return; 
     if (!currentPaymentIntentId) return;
 
-    // --- FIX: Create a local instance of Cart to avoid "ReferenceError" ---
-    // This ensures the function works no matter where it is placed in your file.
+    // --- FIX: Create a local instance of Cart ---
     const cart = new Cart(); 
     cart.loadFromStorage(); 
     
     const rawItems = cart.getItems();
 
-    // If cart is empty, don't update (let the listener handle unmounting)
+    // If cart is empty, don't update
     if (rawItems.length === 0) return;
 
     const placeOrderBttn = document.getElementById("place-order-button");
-    const originalText = placeOrderBttn.textContent;
+    
+    // --- REMOVED: const originalText = placeOrderBttn.textContent; --- 
+    // We don't want to capture "Calculating..."
     
     // Disable button while updating price
     placeOrderBttn.disabled = true;
@@ -194,62 +222,109 @@ async function updateStripeTotal() {
         alert("There was an error updating your cart total. Please refresh the page.");
     } finally {
         placeOrderBttn.disabled = false;
-        placeOrderBttn.textContent = originalText;
+        
+        // --- FIX: Hard reset to "Place Order" ---
+        placeOrderBttn.textContent = "Place Order"; 
     }
 }
 // --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
-// This runs AFTER payment is confirmed (or immediately for cash)
+// --- 5. SHARED: FINALIZE ORDER (Database + SMS + Redirect) ---
 async function finalizeOrderInDatabase(paymentDetails) {
-    // 1. Get Payload
-    const cartPayload = JSON.parse(localStorage.getItem('cart')).map(item => ({
-        itemId: item.baseId || item.id.split('_')[0], 
-        title: item.name || "Unknown Item", 
-        price: item.price || 0,
-        quantity: item.quantity,
-        customizations: item.customizations || {} 
-    }));
+    console.log("Starting finalizeOrderInDatabase..."); // DEBUG LOG
 
-    // 2. Get Order Number
-    const newOrderNumber = await getNextOrderNumber(db);
-    const now = new Date();
-    const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
-    const customDocId = `${formattedDate}_${newOrderNumber}`;
+    try {
+        // 1. Get Payload directly from LocalStorage
+        const rawCart = JSON.parse(localStorage.getItem('cart')) || [];
+        console.log("Raw Cart from Storage:", rawCart); // DEBUG LOG
 
-    // 3. Batch Write
-    const batch = writeBatch(db);
-    const newOrderRef = doc(db, "orders", customDocId); 
-    
-    let selectedTime = selectedPickupTimeInput.value;
-    if (!selectedTime || selectedTime === "") selectedTime = "ASAP"; 
-    
-    const orderData = {
-        orderId: newOrderRef.id,
-        orderNumber: newOrderNumber, 
-        customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
-        phoneNumber: '+1' + phone.value.replace(/\D/g, ''),
-        orderDate: serverTimestamp(), 
-        pickupTime: selectedTime,
-        status: 'new',
-        totalItems: cartPayload.length, 
-        items: cartPayload,
-        paymentMethod: paymentDetails.method, // 'online' or 'instore'
-        paymentStatus: paymentDetails.status, // 'paid' or 'unpaid'
-        stripeId: paymentDetails.stripeId || null
-    };
-    
-    batch.set(newOrderRef, orderData);
-    await batch.commit();
-    
-    // 4. Send SMS
-    
+        if (rawCart.length === 0) {
+            console.error("Cart is empty, aborting.");
+            return;
+        }
+        
+        // --- CALCULATE TOTAL HERE ---
+        let calculatedSubtotal = 0;
 
-    // 5. Cleanup & Redirect
-    localStorage.removeItem('cart');
-    const encodedPhoneNumber = encodeURIComponent(phone.value.trim()); 
-    const encodedTime = encodeURIComponent(selectedTime);
-    window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}&phone=${encodedPhoneNumber}`;
+        const cartPayload = rawCart.map((item, index) => {
+            // FIX: Handle price parsing explicitly and log it
+            const rawPrice = String(item.price);
+            // Remove any '$' or non-numeric characters except '.'
+            const cleanPrice = rawPrice.replace(/[^0-9.]/g, ''); 
+            const price = parseFloat(cleanPrice) || 0;
+            const qty = parseInt(item.quantity) || 1;
+            
+            console.log(`Item ${index} | Raw: ${rawPrice} | Clean: ${cleanPrice} | Final: ${price}`); // DEBUG LOG
+
+            // Add to running total
+            calculatedSubtotal += (price * qty);
+
+            return {
+                itemId: item.baseId || item.id.split('_')[0], 
+                title: item.name || "Unknown Item", 
+                price: price,
+                quantity: qty,
+                customizations: item.customizations || {} 
+            };
+        });
+
+        console.log("Calculated Subtotal:", calculatedSubtotal); // DEBUG LOG
+
+        // Calculate Tax & Final Total
+        const hstAmount = calculatedSubtotal * 0.13;
+        const finalTotal = calculatedSubtotal + hstAmount;
+        
+        console.log("Final Total to be saved:", finalTotal); // DEBUG LOG
+
+        // 2. Get Order Number
+        console.log("Fetching order number...");
+        const newOrderNumber = await getNextOrderNumber(db);
+        console.log("Order Number retrieved:", newOrderNumber);
+
+        const now = new Date();
+        const formattedDate = now.toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-'); 
+        const customDocId = `${formattedDate}_${newOrderNumber}`;
+
+        // 3. Batch Write
+        const batch = writeBatch(db);
+        const newOrderRef = doc(db, "orders", customDocId); 
+        
+        let selectedTime = selectedPickupTimeInput.value;
+        if (!selectedTime || selectedTime === "") selectedTime = "ASAP"; 
+        
+        const orderData = {
+            orderId: newOrderRef.id,
+            orderNumber: newOrderNumber, 
+            customerName: `${firstName.value.trim()} ${lastName.value.trim()}`,
+            phoneNumber: '+1' + phone.value.replace(/\D/g, ''),
+            orderDate: serverTimestamp(), 
+            pickupTime: selectedTime,
+            status: 'new',
+            totalItems: cartPayload.length, 
+            items: cartPayload,
+            paymentMethod: paymentDetails.method, 
+            paymentStatus: paymentDetails.status, 
+            stripeId: paymentDetails.stripeId || null,
+            totalPaid: parseFloat(finalTotal.toFixed(2)) // Ensure this is a number
+        };
+        
+        console.log("Attempting to write to DB with data:", orderData); // DEBUG LOG
+
+        batch.set(newOrderRef, orderData);
+        await batch.commit();
+
+        console.log("DB Write Successful"); // DEBUG LOG
+
+        // 4. Cleanup & Redirect
+        localStorage.removeItem('cart');
+        const encodedPhoneNumber = encodeURIComponent(phone.value.trim()); 
+        const encodedTime = encodeURIComponent(selectedTime);
+        window.location.href = `thank-you.html?order=${newOrderNumber}&time=${encodedTime}&phone=${encodedPhoneNumber}`;
+
+    } catch (e) {
+        console.error("CRITICAL ERROR in finalizeOrderInDatabase:", e);
+        alert("Error creating order. Check console for details.");
+    }
 }
-
 // --- 6. MAIN CLICK LISTENER ---
 if (placeOrderBttn) {
     placeOrderBttn.addEventListener("click", async (event) => {
@@ -361,14 +436,14 @@ try {
             window.location.href = `thank-you.html?order=${result.orderNumber}&phone=${encodedPhone}&time=${encodedTime}`;;
         }
     } 
-                // === PATH B: PAY IN STORE ===
                 else {
-                    await finalizeOrderInDatabase({
-                        method: 'in-store',
-                        status: 'unpaid',
-                        stripeId: null
-                    });
-                }
+        console.log("Selected In-Store Payment. Calling finalizeOrderInDatabase..."); // DEBUG LOG
+        await finalizeOrderInDatabase({
+            method: 'in-store',
+            status: 'unpaid',
+            stripeId: null
+        });
+    }
 
             } catch (error) {
                 console.error("Order Error: ", error);
@@ -386,61 +461,60 @@ try {
 let debounceTimer = null; // Variable to track the timer
 
 window.addEventListener('cartUpdated', async () => {
-    // 1. Cancel the previous timer immediately (Stop the pending API call)
-    if (debounceTimer) {
-        clearTimeout(debounceTimer);
-        debounceTimer = null;
-    }
+        // 1. Clear any pending online calculations
+        if (debounceTimer) {
+            clearTimeout(debounceTimer);
+            debounceTimer = null;
+        }
 
-    // Refresh cart data
-    cart.loadFromStorage();
-    const hasItems = cart.getItems().length > 0;
+        const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
+        const isOnline = selectedOption && selectedOption.value === 'online';
 
-    const selectedOption = document.querySelector('input[name="paymentMethod"]:checked');
-    const isOnline = selectedOption && selectedOption.value === 'online';
-    const placeOrderBttn = document.getElementById("place-order-button");
+        // --- SCENARIO 1: NOT PAYING ONLINE? STOP HERE. ---
+        if (!isOnline) {
+            // Just ensure button is ready to go, then exit.
+            placeOrderBttn.disabled = false;
+            placeOrderBttn.textContent = "Place Order";
+            onlinePaymentContainer.classList.add('hidden');
+            return; // Don't run any other logic!
+        }
 
-    // SCENARIO 1: Online, Initialized, and Cart has items -> UPDATE PRICE (DEBOUNCED)
-    if (isOnline && isStripeInitialized && hasItems) {
-        
-        // UX: Update button immediately so user knows something is happening
-        if (placeOrderBttn) {
+        // --- SCENARIO 2: PAYING ONLINE (Only now do we do the work) ---
+        cart.loadFromStorage();
+        const hasItems = cart.getItems().length > 0;
+
+        if (isStripeInitialized && hasItems) {
+            // Only disable to prevent user clicking while price updates
             placeOrderBttn.disabled = true;
             placeOrderBttn.textContent = "Calculating..."; 
+            
+            debounceTimer = setTimeout(async () => {
+                await updateStripeTotal(); 
+            }, 1000); 
         }
-
-        // START TIMER: Only call backend if user stops clicking for 1 second
-        debounceTimer = setTimeout(async () => {
-            await updateStripeTotal(); 
-        }, 1000); 
-    }
-    
-    // SCENARIO 2: Online, Not Initialized -> LOAD STRIPE (No debounce needed, runs once)
-    else if (isOnline && !isStripeInitialized && hasItems) {
-        togglePaymentSection();
-    }
-    
-    // SCENARIO 3: Cart is empty OR User switched to 'In-Store' -> CLEAN UP
-    else {
-        // Hide container
-        onlinePaymentContainer.classList.add('hidden');
-        
-        // If we have an element mounted, unmount it
-        if (paymentElement) {
-            paymentElement.unmount();
-            paymentElement = null;
+        else if (!isStripeInitialized && hasItems) {
+            togglePaymentSection();
         }
-        
-        // Reset state
-        isStripeInitialized = false;
-        currentPaymentIntentId = null;
-        document.getElementById('payment-element').innerHTML = "";
-        
-        // Reset button text since we aren't calculating anymore
-        if (placeOrderBttn) {
+        else {
+            // Online but cart is empty -> Reset
+            if (paymentElement) {
+                paymentElement.unmount();
+                paymentElement = null;
+            }
+            isStripeInitialized = false;
             placeOrderBttn.disabled = false;
             placeOrderBttn.textContent = "Place Order";
         }
+    });
+const initialMethod = document.querySelector('input[name="paymentMethod"]:checked');
+    
+    // If "In Store" is default (or nothing is checked), FORCE ENABLE immediately
+    if (!initialMethod || initialMethod.value !== 'online') {
+        placeOrderBttn.disabled = false;
+        placeOrderBttn.textContent = "Place Order";
+    } else {
+        // Only if "Online" is default do we trigger the loading logic
+        togglePaymentSection();
     }
-});
+
 });

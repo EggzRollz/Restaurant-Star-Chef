@@ -1,6 +1,6 @@
 import { Cart } from './cart.js';  
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, collection, getDocs, enableIndexedDbPersistence, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, enableIndexedDbPersistence, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { firebaseConfig } from "./config.js";
 
 
@@ -346,6 +346,13 @@ function createMenuItemElement(item) {
     const modifierContainer = document.createElement('div');
     modifierContainer.classList.add('modifier-container');
 
+    if (lowerCaseTags.includes('popular')) {
+        const popularBadge = document.createElement('span');
+        popularBadge.textContent = "Popular"; // Literally the word
+        popularBadge.classList.add('popular-badge'); // Style class
+        modifierContainer.appendChild(popularBadge);
+    }
+
     for (const modifierKey in MODIFIERS) {
         if (lowerCaseTags.includes(modifierKey)) {
             const icon = document.createElement('img');
@@ -378,7 +385,7 @@ function createMenuItemElement(item) {
 function renderAllItemsByCategory() {
   if (!menuContainer) return;
   menuContainer.innerHTML = '';
-
+  const fragment = document.createDocumentFragment();
   // Display order - Ensure these match the "category_name_english" in your JSON exactly
   const categoryOrder = [
     "Popular",      
@@ -422,9 +429,10 @@ function renderAllItemsByCategory() {
       filteredItems.forEach(item => list.appendChild(createMenuItemElement(item)));
       
       section.appendChild(list);
-      menuContainer.appendChild(section);
+      fragment.appendChild(section);
     }
   });
+  menuContainer.appendChild(fragment);
 }
 function renderSingleCategory(categoryName) {
   if (!menuContainer) return;
@@ -555,7 +563,7 @@ function openCustomizeModal(item) {
         radio.type = 'radio'; radio.name = optionGroupTitle;
         radio.value = priceOption[optionTypeKey]; radio.dataset.price = priceOption.price;
         if (index === 0) {
-            radio.checked = true;
+  
             basePrice = priceOption.price; 
         }
         label.appendChild(radio);
@@ -774,7 +782,7 @@ function openCustomizeModal(item) {
     if (amount <= 0 || !currentItem) {
       return;
     }
-    
+
     // Clear any old validation errors from a previous click
     const oldErrors = document.querySelectorAll('#customOptions .validation-error');
     oldErrors.forEach(error => error.remove());
@@ -857,16 +865,52 @@ function openCustomizeModal(item) {
 
     // 2. Fire the Signal! 
     // This tells the Preview and Checkout to update themselves immediately.
-    window.dispatchEvent(new CustomEvent('cartUpdated'));
+setTimeout(() => {
+    const toast = document.getElementById('toast-notification');
+    if (toast) {
+        // Optional: Customize message based on amount
+        const itemText = amount > 1 ? `${amount}x ${currentItem.name}` : currentItem.name;
+        toast.textContent = `Added ${itemText} to cart`;
+        
+        // Trigger the slide-up
+        toast.classList.add('show');
+        toast.classList.remove('hidden');
 
+        // Hide after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            // Allow animation to finish before hiding completely
+            setTimeout(() => toast.classList.add('hidden'), 500); 
+        }, 3000);
+    }
+}, 1300); // <--- 400ms DELAY before toast slides up
+// 2. Wait 800ms, then close modal (Keep your existing close logic)
+setTimeout(() => {
     closeCustomizeModal();
+}, 800);
   });
 }
 
 
   function closeCustomizeModal() {
-    if(customizeModal) customizeModal.classList.add('hidden');
-  }
+  const customizeModal = document.getElementById('customize');
+  if(!customizeModal) return;
+
+  // 1. Add the specific class to trigger the CSS Fade Out
+  customizeModal.classList.add('closing');
+
+  // 2. Wait for the animation to finish (300ms matches the CSS transition)
+  setTimeout(() => {
+      // 3. Now actually hide it (display: none) and clean up
+      customizeModal.classList.add('hidden');
+      customizeModal.classList.remove('closing');
+      
+      // Optional: Reset scroll position when fully closed so it's at top next time
+      const scrollArea = document.querySelector('.scroll-area');
+      if(scrollArea) scrollArea.scrollTop = 0;
+      
+  }, 300); 
+}
   
   function updateQuantityDisplay() {
     const quantityDisplay = document.getElementById('quantity-display');

@@ -52,6 +52,261 @@ body.no-scroll {
     overflow: hidden !important;
     height: 100vh; /* Locks the height to the screen size */
 }
+
+/* =========================================
+   "GOLD LEAF" MODAL (Blurred Background)
+   ========================================= */
+
+/* 1. LAYOUT & BLURRED BACKDROP */
+.welcome-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    
+    /* Flex Center */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* THE BLUR EFFECT */
+    background-color: rgba(0, 0, 0, 0.6); /* Darken the site behind */
+    backdrop-filter: blur(8px); /* Blur the site behind */
+    -webkit-backdrop-filter: blur(8px); /* Safari support */
+    
+    opacity: 1;
+    transition: opacity 0.4s ease;
+     perspective: 1000px;
+    overflow: hidden; /* Keep confetti inside */
+}
+
+.welcome-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none; 
+}
+
+/* 2. THE CARD (Based on your .login-container) */
+.welcome-card {
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    padding: 3rem 2.5rem;
+    
+    /* Elegant Dark BG */
+    background-color: #141414; 
+    
+    /* Sharp Gold Border */
+    border: 1px solid #a2956b; 
+    border-radius: 2px; /* Sharp corners */
+    
+    /* Sophisticated Shadow */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    text-align: center;
+    
+    /* Animation for entering */
+    animation: scaleIn 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(162, 149, 107, 0.1);
+}
+
+.cursive-title {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-size: 4.5rem;
+    
+    /* FIX 1: Script fonts need breathing room. 
+       Increased from 1 to 1.3 to stop the top from getting cut off. */
+    line-height: 1.3;
+    
+    /* FIX 2: Adds invisible space above the text to catch tall swashes */
+    padding-top: 10px;
+    padding-bottom: 10px; /* Optional: keeps it balanced */
+    
+    /* Adjusted margin to account for the new padding/height */
+    margin: 0 0 1rem 0;
+    
+    /* THE GRADIENT */
+    background: linear-gradient(to right, #bfb083, #a2956b, #e6d8a7, #a2956b);
+    background-size: 200% auto;
+    
+    /* FIX 3: Add the standard property to satisfy the IDE warning */
+    background-clip: text;
+    -webkit-background-clip: text;
+    
+    /* Ensure the text color is transparent so the gold shows through */
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    
+    /* Subtle glow around letters */
+    filter: drop-shadow(0 0 10px rgba(162, 149, 107, 0.2));
+    
+    /* Shimmer animation */
+    animation: shine 5s linear infinite;
+    
+    /* Ensures the element doesn't accidentally clip its own shadows/content */
+    overflow: visible;
+}
+
+
+.subtitle-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(244, 244, 244, 0.4);
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+
+/* Add a subtle line under subtitle */
+.subtitle-text::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background-color: #333;
+    margin: 10px auto 0 auto;
+}
+
+.text-body p {
+    font-family: 'Poppins', sans-serif;
+    color: #f4f4f4; /* var(--light-text) */
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-weight: 300;
+}
+
+/* 4. THE BUTTON (Your Gold Leaf Style) */
+.gold-leaf-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 1.5rem;
+    
+    background-color: #a2956b; /* Gold Background */
+    color: #111; /* Dark Text */
+    border: 1px solid #a2956b;
+    
+    border-radius: 2px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden; /* Important for the sheen */
+    background-color: #a2956b; 
+    color: #111; 
+    z-index: 1;
+}
+.gold-leaf-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent
+    );
+    transition: 0.5s;
+    animation: btnShimmer 3s infinite;
+}
+
+/* 5. FALLING GOLD LEAF PARTICLES (The Confetti) */
+.gold-leaf-particle {
+    position: absolute;
+    top: -20px;
+    background: #a2956b;
+    opacity: 0;
+    z-index: 9998; /* Behind the card, in front of backdrop */
+    pointer-events: none;
+    border-radius: 0% 40% 0% 40%; /* Leaf shape */
+    animation: fall linear forwards;
+}
+
+/* ANIMATIONS */
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+@keyframes btnShimmer {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; } /* Pause before restarting */
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) rotate(0deg) translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(105vh) rotate(360deg) translateX(50px);
+        opacity: 0;
+    }
+}
+.gold-leaf-btn:hover {
+    background-color: transparent;
+    color: #a2956b;
+}
+
+/* 5. LINKS (Based on your .bottom-text) */
+.bottom-link {
+    margin-top: 2rem;
+}
+
+.bottom-link a {
+    color: rgba(244, 244, 244, 0.4);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    transition: color 0.3s;
+}
+
+.bottom-link a:hover {
+    color: #a2956b;
+}
+
+/* 6. CLOSE BUTTON */
+.close-minimal-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: rgba(244, 244, 244, 0.3);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-minimal-btn:hover {
+    color: #a2956b;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
 main {
     position: relative;
     z-index: 2; /* Ensures it's layered on top of the parallax background */
@@ -356,6 +611,8 @@ main {
       margin-right: 0; /* We don't need margin when using absolute positioning */
     }
   
+
+    
     
   }
   .menu-toggle {
@@ -1713,12 +1970,14 @@ hr.divider {
     padding-bottom: 20px;
     
 }
+@media (min-width: 796px){
+
 
   .menu-nav-wrapper.scrolled .menu-nav {
    border-bottom-color: rgb(132, 132, 132);
 
   }
-
+}
 .menu-nav ul {
   display: flex;
   justify-content: space-between; /* This spreads items across available space */
@@ -2018,6 +2277,21 @@ hr.divider {
 
     vertical-align: middle; /* Aligns the icon nicely with the line of text */
 }
+.popular-badge {
+    display: inline-block;
+    background-color: transparent; /* No solid block background */
+    color: #D4AF37;                /* Matches a metallic gold */
+    border: 1px solid #D4AF37;     /* Thin gold border */
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 2px;            /* Sharper corners look more elegant */
+    margin-right: 8px;
+    vertical-align: middle;
+    text-transform: uppercase;     /* ALL CAPS looks more professional */
+    letter-spacing: 1px;           /* Spacing out letters adds elegance */
+}
+
 
 .modal-content h2,
 .modal-content h3 {
@@ -2057,6 +2331,60 @@ hr.divider {
   object-position: center; 
   overflow: hidden; 
 }
+
+
+#customize {
+  /* Keep your existing positioning/z-index */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 1;
+  visibility: visible;
+ 
+
+}
+
+#customize.closing {
+  opacity: 0;
+  visibility: hidden; /* Prevents clicks during fade out */
+  pointer-events: none;
+}
+
+#customize.closing .modal-content {
+  /* Shrink to 90% size */
+  transform: scale(0.9);
+  opacity: 0;
+}
+/* 4. ENSURE: The Hidden State */
+/* This must remain to actually remove it from the layout after animation */
+#customize.hidden {
+  display: none !important;
+}
+.toast {
+  position: fixed;
+  bottom: 30px; /* Final resting spot */
+  left: 50%;
+  /* Start position: Centered horizontally, but pushed DOWN by 100px */
+  transform: translateX(-50%) translateY(100px); 
+  background-color: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 3000; /* Ensure it's on top of everything */
+  opacity: 0;
+  visibility: hidden; /* Prevents clicking it when invisible */
+  /* Smooth easing for the slide */
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  pointer-events: none;
+}
+
+.toast.show {
+  /* End position: Centered horizontally, reset vertical slide */
+  transform: translateX(-50%) translateY(0); 
+  opacity: 1;
+  visibility: visible;
+}
+
+
 
 .modal {
   position: fixed;
@@ -2122,7 +2450,11 @@ hr.divider {
   max-width: 35%;     /* never goes beyond this on desktop */
   min-width: 35%;
   overflow: hidden; 
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  transform: scale(1);
+  opacity: 1;
 }
+
 .modal-image {
   width: calc(100% + 4rem); 
   height: 400px;
@@ -3130,7 +3462,7 @@ input.input-error::placeholder {
 /* MOBILE STYLES - EVERYTHING BELOW 768px */
 @media (max-width: 1000px) {
     .checkout-bar-container {
-        width: 75%;
+        width: 100%;
         font-size: 1em;
         font-family: "Noto Sans Display", sans-serif;
         font-weight: 400;
@@ -3416,14 +3748,17 @@ display: inline-block;
 position: relative;
 text-decoration: none;
 font-family: var(--font-header);
+background-color: rgba(0, 0, 0, 0.2);
+border: 1px solid rgba(255, 255, 255, 0.185);
+box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 font-size: 0.85rem;
 font-weight: 700;
 letter-spacing: 2px;
 text-transform: uppercase;
 color: var(--text-main);
-padding: 0.5rem 0; /* Minimal padding */
+padding: 0.5rem 0.5rem; /* Minimal padding */
 margin: 0 1rem;
-background: transparent;
+
 }
 
 .btn-keep-shopping::after {
@@ -3657,57 +3992,61 @@ box-shadow: 0 0 10px rgba(212, 175, 55, 1); /* Glow on the line */
   opacity: 1;
   transform: translateY(0);
 }
-
-/* ===== ABOUT SPREAD (Background Image Section) ===== */
 .about-spread {
+  position: relative; /* REQUIRED: Traps the absolute image inside */
   height: 80vh;
   max-height: 600px;
   width: 100%;
   margin-top: 25vh;
   margin-bottom: 25vh;
-  background-image: url('graphics/longSpread.png');
-  background-size: cover;
-  background-position: center;
+  
+  /* REMOVED: background-image, background-size, background-position */
+  
   display: flex;
-  justify-content: center; /* Horizontally centers the content */
-  align-items: center;     /* Vertically centers the content */
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensures image doesn't spill out if corners are rounded */
 }
 
-.about-spread img {
-  width: 100%;    
-  height: 100%;   
-  object-fit: cover; 
+/* ===== NEW CSS FOR THE IMAGE ===== */
+/* This makes the HTML image act exactly like 'background-size: cover' */
+.spread-bg img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* The Magic: Mimics background-size: cover */
+  object-position: center; /* Mimics background-position: center */
+  z-index: -1; /* Puts the image BEHIND the text */
 }
 
-
+/* Your Media Query (Just remove the background stuff here too) */
 @media (max-width: 786px){
   .about-spread {
-  height: 60vh;
-  max-height: 600px;
-  width: 100%;
-  margin-top: 10vh;
-  margin-bottom: 10vh;
-  background-image: url('graphics/longSpread.png');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center; /* Horizontally centers the content */
-  align-items: center;     /* Vertically centers the content */
+    height: 60vh;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    /* No need to redeclare background-image here anymore! */
+  }
 }
-}
+
 .reservation {
+    position: relative; /* Ensures text sits above the image */
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    z-index: 2; /* Safety number to keep text on top */
 }
-.reservation h2{
+
+.reservation h2 {
     font-family: "Asap Condensed", sans-serif;
     font-weight: 200;
     font-style: normal;
     color: white;
     font-size: 40px;
-   
+
 }
 .reservation-button {
     text-decoration: none;

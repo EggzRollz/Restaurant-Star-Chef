@@ -55,7 +55,10 @@
       <header class="main-header">
       <nav class="main-nav">
          <a href="index.html" class="logo-link">
-         <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
+            <picture>
+               <source srcset="graphics/Star-Chef-Logo.webp" type="image/webp">
+               <img src="graphics/Star-Chef-Logo.png" alt="Star Chef Logo" />
+            </picture>
          </a>
          <button class="menu-toggle" aria-label="Toggle menu">☰</button>
          <ul class="nav-links">
@@ -157,12 +160,15 @@
                <footer class="site-footer">
             <div class="footer-container">
                <div class="footer-column">
-                  <h5>LOCATION</h5>
-                  <img src="graphics/locationInvert.png" alt="dish3" loading="lazy" class="footer-location"/>
-                  <address>
+                     <h5>LOCATION</h5>
+                     <picture>
+                        <source srcset="graphics/locationInvert.webp" type="image/webp">
+                        <img src="graphics/locationInvert.png" alt="dish3" loading="lazy" class="footer-location"/>
+                     </picture>
+                     <address>
                      9750 Markham Rd<br>
                      Markham, ON L6E 0H7
-                  </address>
+                     </address>
                </div>
                <div class="footer-column">
                   <h5>HOURS</h5>
@@ -192,8 +198,8 @@
                   <h5>INFORMATION</h5>
                   <!-- These should be links to other pages -->
                   <nav class="footer-nav">
-                     <li><a >Terms & Conditions</a></li>
-                     <li><a >Privacy Policy</a></li>
+                     <li><a href="privacyPolicy.html">Privacy Policy</a></li>
+                     <li><a href="terms&Conditions.html">Terms & Conditions</a></li>
                   </nav>
                </div>
             </div>
@@ -243,6 +249,7 @@
             </div>
          
          </main>
+      <div id="toast-notification" class="toast hidden">Item added to cart</div>
       <script type="module" src="main.js"></script>
       <script type="module" src="cartPreview.js"></script>
       <script type="module" src="animation.js"></script>

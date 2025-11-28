@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot, setDoc, serverTimestamp,limit, where  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot,getDoc, setDoc, serverTimestamp,limit, where  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "./config.js";
 
 // --- 2. INITIALIZE ---
@@ -10,7 +10,7 @@ const db = getFirestore(app);
 
 
 // SOUND VARIABLES - Only ONE audio object needed
-let notificationAudio = new Audio("./sounds/yo_phone_linging.mp3");
+let notificationAudio = new Audio("./sounds/orderNotif.wav");
 let soundEnabled = localStorage.getItem('soundEnabled') === 'true'; // Load saved state
 
 
@@ -249,45 +249,39 @@ async function loadMenuData() {
 
 // --- 5. DELETE ORDER ---
 // UPDATED: Now requires 'orderId' (the Firestore document ID) AND 'orderNumber' (for the alert)
-// --- 5. DELETE ORDER ---
-// UPDATED: Now requires 'orderId' (the Firestore document ID) AND 'orderNumber' (for the alert)
 async function deleteOrder(orderId, orderNumber) {
     // 1. Confirm intention
     if (!confirm(`Mark Order #${orderNumber} as Completed?`)) return;
 
+    // 2. Remove UI Card (Optimistic)
     const cardToRemove = document.getElementById(`card-${orderId}`);
-
-    // 2. Perform Visual Animation (Optimistic UI)
     if (cardToRemove) {
-        // Step A: "Success" Flash (Visual confirmation)
         cardToRemove.classList.add('card-success');
-        
-        // Remove the 'pending' pulse animation so it doesn't conflict
         cardToRemove.style.animation = 'none'; 
-
         await new Promise(resolve => setTimeout(resolve, 200));
         cardToRemove.classList.add('card-removing');
-
         await new Promise(resolve => setTimeout(resolve, 500));
         cardToRemove.remove();
     }
 
-    // 3. Update Database in Background
+    // 3. Update Database (Simple Update)
     try {
         const orderRef = doc(db, "orders", orderId);
         
+        // We just mark it as resolved and ensure paymentStatus is paid.
+        // We do NOT touch 'totalPaid' because the client already set it.
         await updateDoc(orderRef, {
-            status: 'resolved'
+            status: 'resolved',
+            paymentStatus: 'paid' 
         });
-        
-        console.log(`Order #${orderNumber} marked as completed in DB.`);
-        
+
+        console.log(`Order #${orderNumber} marked as completed.`);
+
     } catch (error) {
         console.error("Error completing order:", error);
         alert("Error updating order. Check internet connection.");
     }
 }
-
 function renderCustomizationsFromObject(item) { 
     const customizationContainer = document.createElement('div');
     customizationContainer.className = 'item-customizations';
