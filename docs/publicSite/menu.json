@@ -1,12 +1,12 @@
 {
   "menu": [
     {
-      "category_name_chinese": "配菜",
-      "category_name_english": "FISH SOUP NOODLES",
+      "category_name_chinese": "鱼汤米线",
+      "category_name_english": "FISH SOUP NOODLE",
       "items": [     
         {
           "id": "COMBO1",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "原味魚湯",
           "name_english": "Original Fish Soup Combo",
           "pricing": [
             {
@@ -122,7 +122,7 @@
         },
         {
           "id": "COMBO2",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "蕃茄南瓜魚湯",
           "name_english": "Tomato & Pumpkin Fish Soup Combo",
           "pricing": [
             {
@@ -238,7 +238,7 @@
         },
         {
           "id": "COMBO3",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "芫荽皮蛋魚话",
           "name_english": "Parsley & Preserved Egg Fish Soup Combo",
           "pricing": [
             {
@@ -354,7 +354,7 @@
         },
         {
           "id": "COMBO4",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "銀杏胡椒魚湯",
           "name_english": "Ginko & Pepper Fish Soup Combo",
           "pricing": [
             {
@@ -470,7 +470,7 @@
           ]
         },{
           "id": "COMBO5",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "潮式方魚肉碎魚湯",
           "name_english": "Chaozhou Style Dried Fish & Minced Pork Fish Soup Combo",
           "pricing": [
             {
@@ -587,7 +587,7 @@
         },
         {
           "id": "COMBO6",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "馬來喇沙魚湯",
           "name_english": "Malay Laksa Fish Soup Combo",
           "pricing": [
             {
@@ -704,7 +704,7 @@
           ]
         },{
           "id": "COMBO7",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "麻辣魚湯",
           "name_english": "Szezhuan Spicy Fish Soup Combo",
           "pricing": [
             {
@@ -821,7 +821,7 @@
         },
         {
           "id": "COMBO8",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "擔擔魚湯",
           "name_english": "Peanut Sauce & Chilli Fish Soup Combo",
           "pricing": [
             {
@@ -939,7 +939,7 @@
         },
         {
           "id": "COMBO9",
-          "name_chinese": "炸魚柳*****",
+          "name_chinese": "冬陰功魚湯 ",
           "name_english": "Thai Tom Yum Goong Fish Soup Combo",
           "pricing": [
             {
@@ -1826,7 +1826,7 @@
         },
         {
           "id": "K23",
-          "name_chinese": "鐵板金菇牛柳",
+          "name_chinese": "鐵板金針菇牛肉/雞肉",
           "name_english": "Chicken or Beef with Enoki Mushroom on Sizzling Hot Plate",
           "pricing": [
             {
@@ -1847,7 +1847,7 @@
         },
         {
           "id": "K24",
-          "name_chinese": "鐵板中式牛扒",
+          "name_chinese": "通菜炒牛肉",
           "name_english": "Stir Fried Beef With Tung Choi",
           "pricing": [
             {
@@ -2103,7 +2103,7 @@
         },
         {
           "id": "K36",
-          "name_chinese": "粟米斑塊",
+          "name_chinese": "碧綠扒三菇",
           "name_english": "Stir Fried Vegetable with Mixed Mushroom",
           "image": "K36.webp",
           "pricing": [
@@ -2198,7 +2198,7 @@
         },
         {
           "id": "K40",
-          "name_chinese": "鹹魚肉鬆茄子煲",
+          "name_chinese": "蔥爆牛肉",
           "name_english": "Beef with Ginger & Green Onion",
           "pricing": [
             {
@@ -2210,7 +2210,7 @@
         },
         {
           "id": "K41",
-          "name_chinese": "魚香茄子",
+          "name_chinese": "魚香茄子煲",
           "name_english": "Stir-Fried Eggplant with Minced Pork & Salted Fish in Spicy Sauce",
           "image": "K41.webp",
           "pricing": [
@@ -2392,6 +2392,9 @@
               "temp": "default",
               "price": 34.75
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -2425,7 +2428,7 @@
         },
         {
           "id": "K51",
-          "name_chinese": "脆皮本地雞",
+          "name_chinese": "貴妃走地雞",
           "name_english": "Steamed Chicken",
           "image": "K51.webp",
           "pricing": [
@@ -2443,7 +2446,7 @@
         },
         {
           "id": "K52",
-          "name_chinese": "魚湯杞子浸貴妃雞",
+          "name_chinese": "魚湯杞子貴妃走地雞",
           "name_english": "Steamed Concubine Chicken in Fish Soup",
           "pricing": [
             {
@@ -2477,7 +2480,7 @@
         },
         {
           "id": "K54",
-          "name_chinese": "鎮江小排骨",
+          "name_chinese": "星廚小炒",
           "name_english": "House Special Chop Suey",
           "pricing": [
             {
@@ -2502,7 +2505,7 @@
         },
         {
           "id": "K55",
-          "name_chinese": "XO醬帶子蘆筍鮮魷魚仔",
+          "name_chinese": "XO醬韭菜花炒銀魚仔",
           "name_english": "Stir Fried White Bait & Leek with XO Sauce",
           "pricing": [
             {
@@ -2528,7 +2531,7 @@
         },
         {
           "id": "K56",
-          "name_chinese": "蝦子扒芥菜",
+          "name_chinese": "辣子雞/牛",
           "name_english": "Spicy Chicken or Beef",
           "pricing": [
             {
@@ -2596,7 +2599,7 @@
         },
         {
           "id": "K59",
-          "name_chinese": "水煮牛肉",
+          "name_chinese": "涼瓜煎蛋",
           "name_english": "Bitter Melon Beef Omelette",
           "pricing": [
             {
@@ -2724,7 +2727,7 @@
         },
         {
           "id": "K66",
-          "name_chinese": "味噌青/咕嚕肉",
+          "name_chinese": "咕嚕雞肉/咕嚕肉",
           "name_english": "Sweet & Sour Chicken or Pork",
           "image": "K66.webp",
           "pricing": [
@@ -2742,6 +2745,9 @@
                 { "addOnName": "Pork" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -2759,7 +2765,7 @@
         },
         {
           "id": "K68",
-          "name_chinese": "蕃茄炒蛋牛/雞柳",
+          "name_chinese": "滑旦炒雞片/牛肉",
           "name_english": "Stir Fried Beef or Chicken with Scrambled Eggs",
           "pricing": [
             {
@@ -2780,7 +2786,7 @@
         },
         {
           "id": "K69",
-          "name_chinese": "京都豬扒",
+          "name_chinese": "香炸豬扒",
           "name_english": "Deep Fried Pork Chop",
           "pricing": [
             {
@@ -2818,7 +2824,7 @@
         },
         {
           "id": "K71",
-          "name_chinese": "韭黃蝦春卷",
+          "name_chinese": "星洲蘿蔔糕",
           "name_english": "Fried Chili Turnip Patties",
           "image": "K71.webp",
           "pricing": [
@@ -2831,7 +2837,7 @@
         },
         {
           "id": "K72",
-          "name_chinese": "炸雲吞",
+          "name_chinese": "雜菜春卷",
           "name_english": "Vegetable Spring Rolls (3 rolls)",
           "pricing": [
             {
@@ -2843,7 +2849,7 @@
         },
         {
           "id": "K73",
-          "name_chinese": "炸兩/牛脷酥",
+          "name_chinese": "油條/牛脷酥",
           "name_english": "Deep Fried Dough Fritter/Sweet Cruller",
           "pricing": [
             {
@@ -2879,7 +2885,7 @@
         },
         {
           "id": "K75",
-          "name_chinese": "啫啫雞煲",
+          "name_chinese": "油條/牛脷酥",
           "name_english": "Fried Tofu with mixed Mushroom",
           "pricing": [
             {
@@ -2891,7 +2897,7 @@
         },
         {
           "id": "K76",
-          "name_chinese": "蜜椒牛柳粒",
+          "name_chinese": "三菇豆腐煲",
           "name_english": "Oyster with Honey Pepper Sauce",
           "pricing": [
             {
@@ -3064,7 +3070,7 @@
         },
         {
           "id": "E4",
-          "name_chinese": "干炒海鮮烏冬",
+          "name_chinese": "七彩新竹米粉",
           "name_english": "Taiwanese Vermicelli & Fried Seafood with Mixed Vegetable",
           "pricing": [
             {
@@ -3088,7 +3094,7 @@
         },
         {
           "id": "E6",
-          "name_chinese": "乾炒海鮮鴛鴦冬",
+          "name_chinese": "乾炒海鮮炒烏冬",
           "name_english": "Seafood Fried Udon Noodle",
           "pricing": [
             {
@@ -3150,7 +3156,7 @@
         },
         {
           "id": "E10",
-          "name_chinese": "菜遠肉絲炆米",
+          "name_chinese": "雪菜肉絲烄米",
           "name_english": "Braised Shredded Pork & Preserved Cabbage with Vermicelli",
           "pricing": [
             {
@@ -3162,7 +3168,7 @@
         },
         {
           "id": "E11",
-          "name_chinese": "乾燒牛伊麵",
+          "name_chinese": "乾炒牛肉烏冬",
           "name_english": "Fried U-Don Noodles with Beef and Soya Sauce",
           "pricing": [
             {
@@ -3219,7 +3225,7 @@
         },
         {
           "id": "E14",
-          "name_chinese": "星洲炒米",
+          "name_chinese": "潮式沙嗲牛/雞炒河粉",
           "name_english": "Chao Zhou Style Fried Rice Noodles with Chicken or Beef & Stay Sauce",
           "pricing": [
             {
@@ -3274,6 +3280,9 @@
                 { "addOnName": "Beef" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -3290,7 +3299,7 @@
         },
         {
           "id": "E18",
-          "name_chinese": "豉油王炒麵",
+          "name_chinese": "雞苯炒麵-",
           "name_english": "Mixed Vegetable Chow Mein",
           "pricing": [
             {
@@ -3323,7 +3332,7 @@
         },
         {
           "id": "E20",
-          "name_chinese": "羅漢齋炒麵",
+          "name_chinese": "時菜牛/雞河",
           "name_english": "Fried Rice Noodles with Chiecken or Beef with Vegetables",
           "pricing": [
             {
@@ -3356,7 +3365,7 @@
         },
         {
           "id": "E22",
-          "name_chinese": "蝦仁炒蛋麵",
+          "name_chinese": "乾炒牛/雞河",
           "name_english": "Fried Rice Noodles with Chicken or Beef with Soy Sauce",
           "pricing": [
             {
@@ -3373,6 +3382,9 @@
                 { "addOnName": "Beef" }
               ]
             }
+          ],
+          "tags": [
+            {"type": "popular"}      
           ]
         },
         {
@@ -3389,7 +3401,7 @@
         },
         {
           "id": "E24",
-          "name_chinese": "干燒蝦球伊麵",
+          "name_chinese": "上海粗炒",
           "name_english": "Shanghai Style Fried Thick Noodles with Shrimp & Pork",
           "pricing": [
             {
@@ -3413,7 +3425,7 @@
         },
         {
           "id": "E26",
-          "name_chinese": "貴刁(濕/乾)",
+          "name_chinese": "星洲炒米",
           "name_english": "Singapore Style Fried Vermicelli with Shrimp & Pork",
           "pricing": [
             {
@@ -3451,7 +3463,7 @@
         },
         {
           "id": "E28",
-          "name_chinese": "魚湯浸貴刁",
+          "name_chinese": "星洲炒貴刀",
           "name_english": "Singapore Style Fried Rice Noodles with Shrimp & Pork",
           "pricing": [
             {
@@ -3489,7 +3501,7 @@
         },
         {
           "id": "E30",
-          "name_chinese": "泰式炒河粉",
+          "name_chinese": "泰式炒河",
           "name_english": "Pad Tai with Shrimp & Chicken",
           "pricing": [
             {
@@ -3611,7 +3623,7 @@
         },
         {
           "id": "H4",
-          "name_chinese": "臘味炒飯",
+          "name_chinese": "闊佬炒飯",
           "name_english": "Fried Rice with Scallop, Shrimp, Pork Rind & Preserved Cabbage",
           "pricing": [
             {
@@ -3745,7 +3757,7 @@
         },
         {
           "id": "H14",
-          "name_chinese": "生炒雞絲/牛肉飯",
+          "name_chinese": "生炒雞絲/牛松飯",
           "name_english": "Chicken or Beef Fried Rice",
           "pricing": [
             {
@@ -3923,7 +3935,7 @@
         },
         {
           "id": "H21",
-          "name_chinese": "羅漢齋飯",
+          "name_chinese": "雜菜炒飯",
           "name_english": "Mixed Vegetables Fried Rice",
           "pricing": [
             {
@@ -4377,7 +4389,7 @@
         },
         {
           "id": "B9",
-          "name_chinese": "魚片豬潤粥",
+          "name_chinese": "魚片豬膶粥 ",
           "name_english": "Sliced Fish & Pork Liver Congee",
           "pricing": [
             {
@@ -4476,7 +4488,7 @@
         },
         {
           "id": "B14",
-          "name_chinese": "雞茸粟米粥",
+          "name_chinese": "雜菜粟米粥",
           "name_english": "Mixed Vegetables & Corn Congee",
           "pricing": [
             {
@@ -4598,7 +4610,7 @@
         },
         {
           "id": "D3",
-          "name_chinese": "雞茸粟米羹",
+          "name_chinese": "蟹肉粟米羹-",
           "name_english": "Crab & Corn Thick Soup",
           "image": "D3.webp",
           "pricing": [
@@ -4650,7 +4662,7 @@
         },
         {
           "id": "D6",
-          "name_chinese": "雞茸蘑菇羹",
+          "name_chinese": "雞茸粟米羹",
           "name_english": "Minced Chicken & Corn Thick Soup",
           "pricing": [
             {

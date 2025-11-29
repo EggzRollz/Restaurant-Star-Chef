@@ -205,14 +205,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById('welcome-modal');
-    document.getElementById('dismiss-link').addEventListener('click', function(e) {
-    e.preventDefault(); // Stop it from jumping to top of page
-    document.getElementById('welcome-modal').classList.add('hidden');
-});
+    const dismissLink = document.getElementById('dismiss-link');
+
+    // We only add the listener IF the element actually exists
+    if (dismissLink) {
+        dismissLink.addEventListener('click', function(e) {
+            e.preventDefault(); 
+            if(modal) modal.classList.add('hidden');
+        });
+    }
+    // -----------------------
+
     // Only run if modal is visible
     if(modal && !modal.classList.contains('hidden')) {
         createGoldLeaves();
     }
+
 
     function createGoldLeaves() {
         const particleCount = 60; // Number of flakes

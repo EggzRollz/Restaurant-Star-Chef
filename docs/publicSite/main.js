@@ -335,7 +335,7 @@ function createMenuItemElement(item) {
         // Safe fallback for category name
         const catName = item.category || "Misc";
         const categoryFileName = catName.replace(/ \/ /g, '-');
-        itemImg.src = `graphics/category_fallback/${categoryFileName}.png`; 
+        itemImg.src = `graphics/category_fallback/${categoryFileName}.webp`; 
         itemImg.alt = `A placeholder image for the ${catName} category`;
     }
 
@@ -521,7 +521,7 @@ function openCustomizeModal(item) {
     // Safe fallback for category name
     const catName = item.category || "Misc";
     const categoryFileName = catName.replace(/ \/ /g, '-');
-    modalImage.src = `graphics/category_fallback/${categoryFileName}.png`; 
+    modalImage.src = `graphics/category_fallback/${categoryFileName}.webp`; 
     modalImage.alt = `A placeholder image for the ${catName} category`;
   }
   
