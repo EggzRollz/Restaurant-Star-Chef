@@ -339,7 +339,7 @@ if (placeOrderBttn) {
             }
             return; // Stop here if personal info is missing
         }
-
+            
         const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
         if (cartItems.length === 0) {
             alert("Your cart is empty.");

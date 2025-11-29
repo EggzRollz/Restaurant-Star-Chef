@@ -675,7 +675,67 @@ button:hover {
     }
 }
 
+/* History Stats Dashboard */
+.stats-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
 
+.stat-card {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.stat-card h4 {
+    margin: 0 0 10px 0;
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.main-stat .stat-value {
+    color: #27ae60; /* Green for revenue */
+    font-size: 1.8rem;
+}
+
+.stat-sub {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.breakdown-card {
+    text-align: left;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+}
+
+.breakdown-row:last-child {
+    border-bottom: none;
+}
 
 
 

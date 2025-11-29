@@ -22,7 +22,6 @@
     <li><a href="index.html">ORDERS</a></li>
     <li><a href="history.html">HISTORY</a></li>
     <li><a href="login.html" id="logout-btn">LOGOUT</a></li>
-        
 </header>
 <body>
     
@@ -31,29 +30,34 @@
             <h1>Order History Archive</h1>
         </div>
     </header>
-     <div class="controls-container">
-            <div class="control-group">
-                <label for="history-date-picker">Filter by Date:</label>
-                <input type="date" id="history-date-picker">
-            </div>
 
-            <button id="reset-history-btn" class="secondary-btn">
-                Show Latest 50
-            </button>
-            
-            <div id="active-filter-label" class="status-label">
-                Viewing: Latest Orders
-            </div>
+     <div class="controls-container">
+        <div class="control-group">
+            <label for="history-date-picker">Filter by Date:</label>
+            <input type="date" id="history-date-picker">
         </div>
 
+        <button id="reset-history-btn" class="secondary-btn">
+            Show Latest 50
+        </button>
+        
+        <div id="active-filter-label" class="status-label">
+            Viewing: Latest Orders
+        </div>
+    </div>
+
     <main>
-        <!-- The JS will inject the cards specifically into this div -->
+        <!-- NEW: Section for Totals -->
+        <div id="stats-container" style="display:none;">
+            <!-- Stats will be injected here by JS -->
+        </div>
+
+        <!-- Order Cards Grid -->
         <div id="history-orders-container" class="orders-grid">
             <p class="loading-text">Loading history...</p>
         </div>
     </main>
 
-    <!-- Link to your JS file -->
     <script type="module" src="history.js"></script>
 </body>
 </html>

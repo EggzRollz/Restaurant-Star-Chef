@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function createGoldLeaves() {
-        const particleCount = 40; // Number of flakes
+        const particleCount = 60; // Number of flakes
         
         for (let i = 0; i < particleCount; i++) {
             const leaf = document.createElement('div');
@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
             leaf.style.animationDuration = duration + 's';
             
             // Random animation delay
-            leaf.style.animationDelay = Math.random() * 5 + 's';
+            leaf.style.animationDelay = Math.random() * 7.5 + 's';
             
             // Random size for depth
             const size = Math.random() * 8 + 4; // 4px to 12px

@@ -83,25 +83,24 @@ function setupCalendarControls() {
     });
 }
 
-// --- MAIN QUERY HANDLER ---
 function fetchHistoryQuery(mode, dateString = null) {
     const container = document.getElementById('history-orders-container');
+    const statsContainer = document.getElementById('stats-container');
     const filterLabel = document.getElementById('active-filter-label');
 
-    // Stop previous listener
     if (currentUnsubscribe) {
         currentUnsubscribe();
         currentUnsubscribe = null;
     }
 
     container.innerHTML = "<p>Loading orders...</p>";
+    if(statsContainer) statsContainer.style.display = 'none'; // Hide stats while loading
 
     let historyQuery;
     const ordersRef = collection(db, "orders");
 
     if (mode === "DATE" && dateString) {
         const [year, month, day] = dateString.split('-').map(Number);
-
         
         const start = new Date(year, month - 1, day);
         start.setHours(0, 0, 0, 0);
@@ -122,7 +121,6 @@ function fetchHistoryQuery(mode, dateString = null) {
             orderBy("orderDate", "desc")
         );
     } else {
-        // Default: Last 50
         if (filterLabel) filterLabel.textContent = "Viewing: Latest Orders";
         historyQuery = query(
             ordersRef, 
@@ -132,40 +130,152 @@ function fetchHistoryQuery(mode, dateString = null) {
         );
     }
 
-    // Start Listener
-   currentUnsubscribe = onSnapshot(historyQuery, async (snapshot) => {
-    container.innerHTML = ""; 
-    
-    if (snapshot.empty) {
-        container.innerHTML = `
-            <div style="text-align:center; padding: 20px; color: #666;">
-                <h3>No orders found.</h3>
-                <p>${mode === 'DATE' ? 'No resolved orders on this date.' : 'History is empty.'}</p>
-            </div>`;
-        return;
-    }
-
-    // FIX: Fetch each document individually to get ALL fields
-    for (const docSnapshot of snapshot.docs) {
-        const fullDoc = await getDoc(doc(db, "orders", docSnapshot.id));
-        if (fullDoc.exists()) {
-            createHistoryCard(fullDoc.id, fullDoc.data(), container);
+    currentUnsubscribe = onSnapshot(historyQuery, async (snapshot) => {
+        container.innerHTML = ""; 
+        
+        if (snapshot.empty) {
+            if(statsContainer) statsContainer.style.display = 'none';
+            container.innerHTML = `
+                <div style="text-align:center; padding: 20px; color: #666;">
+                    <h3>No orders found.</h3>
+                    <p>${mode === 'DATE' ? 'No resolved orders on this date.' : 'History is empty.'}</p>
+                </div>`;
+            return;
         }
-    }
-}, (error) => {
-    console.error("Firestore Error:", error);
-    if (error.code === 'failed-precondition' || error.message.includes("index")) {
-        container.innerHTML = `
-            <div style="padding:15px; border: 1px solid red; background: #fff0f0; color: red;">
-                <strong>System Requirement:</strong> This search requires a Firestore Index.<br>
-                Open your browser console (F12) and click the link provided by Firebase to create it automatically.
-            </div>`;
-    } else {
-        container.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
-    }
-});
-}
 
+        // --- PREPARE DATA FOR STATS ---
+        const allOrdersData = [];
+
+        // Fetch all docs
+        snapshot.forEach((docSnapshot) => {
+            const orderData = docSnapshot.data(); // Data is already here!
+            orderData.id = docSnapshot.id;
+            
+            allOrdersData.push(orderData);
+            createHistoryCard(docSnapshot.id, orderData, container);
+        });
+
+        // --- RENDER TOTALS SECTION ---
+        renderDailySummary(allOrdersData, statsContainer);
+
+    }, (error) => {
+        console.error("Firestore Error:", error);
+        if (error.code === 'failed-precondition' || error.message.includes("index")) {
+            container.innerHTML = `
+                <div style="padding:15px; border: 1px solid red; background: #fff0f0; color: red;">
+                    <strong>System Requirement:</strong> This search requires a Firestore Index.<br>
+                    Open your browser console (F12) and click the link provided by Firebase to create it automatically.
+                </div>`;
+        } else {
+            container.innerHTML = `<p class="error-text">Error: ${error.message}</p>`;
+        }
+    });
+}
+function renderDailySummary(orders, container) {
+    if (!container || orders.length === 0) return;
+
+    let totalGross = 0;
+    let totalNet = 0;
+    
+    let onlineCount = 0;
+    let onlineGross = 0;
+    let totalStripeFees = 0; // Track Stripe Fees
+    
+    let storeCount = 0;
+    let storeGross = 0;
+
+    orders.forEach(order => {
+        // Calculate Order Value
+        const itemsArray = order.items || [];
+        let orderSubtotal = 0;
+
+        itemsArray.forEach(item => {
+            const menuItem = menuItemsMap[item.itemId];
+            let verifiedPrice = item.price;
+            if (menuItem) {
+                verifiedPrice = calculateVerifiedItemPrice(menuItem, item) || item.price;
+            }
+            orderSubtotal += (verifiedPrice * item.quantity);
+        });
+
+        const orderTax = orderSubtotal * 0.13;
+        const orderTotal = orderSubtotal + orderTax;
+
+        // Aggregate Global Totals
+        totalNet += orderSubtotal;
+        totalGross += orderTotal;
+
+        // Split by Type
+        const isOnlineOrder = order.paymentMethod === 'online' || (order.paymentStatus === 'paid' && !order.paymentMethod);
+
+        if (isOnlineOrder) {
+            // Online
+            onlineCount++;
+            onlineGross += orderTotal;
+
+            // --- STRIPE FEE CALCULATION ---
+            const currentFee = (orderTotal * 0.029) + 0.30;
+            totalStripeFees += currentFee;
+
+        } else {
+            // In Store (Cash, Debit at counter, etc.)
+            storeCount++;
+            storeGross += orderTotal;
+        }
+    });
+
+    const avgOrderValue = orders.length > 0 ? (totalGross / orders.length) : 0;
+    // Calculate what you actually pocket from online orders (Gross - Fees)
+    const netOnline = onlineGross - totalStripeFees;
+
+    // HTML Template for the Dashboard
+    container.style.display = 'block';
+    container.innerHTML = `
+        <div class="stats-dashboard">
+            <div class="stat-card main-stat">
+                <h4>Gross Revenue</h4>
+                <p class="stat-value">$${totalGross.toFixed(2)}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Net Sales</h4>
+                <p class="stat-value">$${totalNet.toFixed(2)}</p>
+                <span class="stat-sub">Tax: $${(totalGross - totalNet).toFixed(2)}</span>
+            </div>
+            <div class="stat-card">
+                <h4>Total Orders</h4>
+                <p class="stat-value">${orders.length}</p>
+                <span class="stat-sub">Avg: $${avgOrderValue.toFixed(2)}/order</span>
+            </div>
+            <div class="stat-card breakdown-card">
+                <h4>Breakdown</h4>
+                
+                <!-- Online Section -->
+                <div class="breakdown-row">
+                    <span>💳 Online (${onlineCount}):</span>
+                    <strong>$${onlineGross.toFixed(2)}</strong>
+                </div>
+                
+                <!-- Stripe Fees Row (Indented and Red) -->
+                <div class="breakdown-row" style="color: #c0392b; font-size: 0.85rem; background-color: #fff0f0;">
+                    <span>&nbsp;&nbsp;↳ Stripe Fees:</span>
+                    <span>-$${totalStripeFees.toFixed(2)}</span>
+                </div>
+                
+                <!-- Online Net (Optional, helpful to see real payout) -->
+                <div class="breakdown-row" style="font-size: 0.85rem; color: #7f8c8d; border-bottom: 2px solid #eee;">
+                    <span>&nbsp;&nbsp;↳ Net Payout:</span>
+                    <span>$${netOnline.toFixed(2)}</span>
+                </div>
+
+                <!-- In-Store Section -->
+                <div class="breakdown-row" style="margin-top: 5px;">
+                    <span>💵 In-Store (${storeCount}):</span>
+                    <strong>$${storeGross.toFixed(2)}</strong>
+                </div>
+            </div>
+        </div>
+    `;
+}
 // --- CARD CREATOR ---
 // --- CARD CREATOR (MODIFIED) ---
 // --- CARD CREATOR (FIXED) ---
@@ -184,30 +294,33 @@ async function createHistoryCard(orderId, order, container) {
         dateString = jsDate.toLocaleDateString();
         timeString = jsDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
     }
-
+   
     // Extract pickup time ONCE for the entire order
     let displayTime = "ASAP";
     if (order.pickupTime && order.pickupTime.trim() !== "") {
         displayTime = order.pickupTime;
     }
 
-    let paymentMethod = '';
-    if (order.paymentStatus === 'paid') {
-        paymentMethod = "online";
-    }else{
-        paymentMethod = "in-store"
+    let displayPaymentMethod = "In-Store"; // Default fallback
+
+    // 1. Check if the database explicitly names the method (e.g., "cash", "in-store", "online")
+    if (order.paymentMethod) {
+        displayPaymentMethod = order.paymentMethod; 
+    } 
+    // 2. If no method is stored, try to guess based on status (Legacy support)
+    else if (order.paymentStatus === 'paid') {
+        displayPaymentMethod = "Online";
     }
 
     headerDiv.innerHTML = `
         <h3>Order #${order.orderNumber || orderId}</h3>
         <p><strong>Customer:</strong> ${order.customerName || 'N/A'}</p>
         <p><strong>Phone:</strong> ${order.phoneNumber || 'N/A'}</p>
-        <p><strong>Payment:</strong> ${paymentMethod}</p>
+        <p><strong>Payment:</strong> <span style="text-transform: capitalize;">${displayPaymentMethod}</span></p> 
         <p><strong>Date:</strong> ${dateString}</p>
         <p><strong>Time:</strong> ${timeString}</p>
         <p><strong>Pickup Time:</strong> ${displayTime}</p>
     `;
-
     card.appendChild(headerDiv);
     
     const itemsUl = document.createElement('ul');

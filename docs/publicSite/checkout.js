@@ -214,8 +214,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 2. TEMPORARY FIX FOR TESTING ---
     // While you are debugging, set this to FALSE. 
     // Otherwise, you can't test your button before 11am!
-    // const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
-    const isStoreClosed = false; // <--- Set this back to the real logic when you go live!
+    const isStoreClosed = (currentHour < 11) || (currentHour === 21 && currentMinute >= 30) || (currentHour > 21);
+    //const isStoreClosed = false; // <--- Set this back to the real logic when you go live!
 
     // --- 3. CHECK IF PAYMENT IS LOADING ---
     // If the button says "Updating..." or "Loading...", DO NOT interfere.
@@ -277,7 +277,7 @@ window.addEventListener('click', (e) => {
     
     // This logic seems reversed, I've flipped it to what I think you intend:
     // This block should run if the store is OPEN.
-    if (!(isBeforeOpening || isAfterClosing)) {
+    if ((isBeforeOpening || isAfterClosing)) {
         if (timeBoxElement) timeBoxElement.classList.remove('store-closed');
         if (pickupDropdownContainer) pickupDropdownContainer.classList.remove('hidden');
         

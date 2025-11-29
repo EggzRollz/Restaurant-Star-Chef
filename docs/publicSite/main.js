@@ -862,7 +862,7 @@ function openCustomizeModal(item) {
     // Your cart.addItem call is perfect. It will now receive the correct customizations.
     cart.addItem(currentItem.name, currentItem.name_chinese, currentItem.id, currentPrice, amount, customizations);
     
-
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
     // 2. Fire the Signal! 
     // This tells the Preview and Checkout to update themselves immediately.
 setTimeout(() => {
